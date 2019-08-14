@@ -44,6 +44,7 @@
   "graphTooltip": 1,
   "refresh": "1m",
   "schemaVersion": 1,
+  "tags": ["kubernetes", "DevOpsProdigy", "daemonset", "KubeGraf"],
   "time": {
     "from": "now-30m",
     "to": "now"

@@ -67,6 +67,7 @@
       "30d"
     ]
   },
+  "tags": ["kubernetes", "DevOpsProdigy", "node", "KubeGraf"],
   "timezone": "browser",
   "title": "DevOpsProdigy KubeGraf Node's Dashboard",
   "templating": {

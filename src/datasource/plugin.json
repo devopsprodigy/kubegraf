@@ -3,10 +3,21 @@
   "id"          : "devopsprodidy-kubegraf-datasource",
   "type"        : "datasource",
   "info": {
+    "description" : "DevOpsProdigy KubeGraf datasource",
+    "author"      : {
+      "name"  : "DevOpsProdigy",
+      "url"   : "https://devopsprodigy.com/"
+    },
     "logos": {
       "small": "img/grafanaLogo.png",
       "large": "img/grafanaLogo.png"
-    }
+    },
+    "links" : [
+      {"name" : "GitHub", "url" : "https://github.com/devopsprodigy/kubegraf"},
+      {"name" : "License", "url": "https://github.com/devopsprodigy/kubegraf/blob/master/LICENSE"}
+    ],
+    "version": "1.0.0",
+    "updated" : "2019-08-14"
   },
   "staticRoot": ".",
   "metrics": true,

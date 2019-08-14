@@ -73,6 +73,7 @@
       "30d"
     ]
   },
+  "tags": ["kubernetes", "DevOpsProdigy", "statefulset", "KubeGraf"],
   "timezone": "browser",
   "title": "DevOpsProdigy KubeGraf Statefulset's Dashboard",
   "templating": {
