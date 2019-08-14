@@ -1,0 +1,31 @@
+export declare class DOPK8SDatasource {
+    private backendSrv;
+    private templateSrv;
+    name: string;
+    url: string;
+    prometheus: string;
+    nodesPromise: any;
+    deploymentsPromise: any;
+    daemonsetsPromise: any;
+    statefulsetsPromise: any;
+    constructor(instanceSettings: any, backendSrv: any, templateSrv: any);
+    testDatasource(): any;
+    metricFindQuery(query: any): any;
+    __get(url: any): any;
+    __parseContainers(items: any, queryData: any): any[];
+    __addNamespace(namespace: any): string;
+    getNamespaces(): any;
+    getDeployments(namespace?: any): any;
+    getStatefulsets(namespace?: any): any;
+    getDaemonsets(namespace?: any): any;
+    getPods(namespace: any): any;
+    getServices(namespace: any): any;
+    getComponents(): any;
+    getNodesSingletone(): any;
+    getDeploymentsSingletone(namespace?: any): any;
+    getDaemonsetsSingletone(namespace?: any): any;
+    getStateFulSetsSingletone(namespace?: any): any;
+    getNodes(): any;
+    getJobs(): any;
+    getCronJobs(): any;
+}

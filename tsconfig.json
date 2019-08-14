@@ -1,0 +1,16 @@
+{
+  "compileOnSave": false,
+  "compilerOptions": {
+      "target": "ES5",
+      "module": "system",
+      "sourceMap": true,
+      "declaration": true,
+      "emitDecoratorMetadata": true,
+      "experimentalDecorators": true,
+      "noImplicitAny": false,
+      "moduleResolution": "node"
+  },
+  "exclude": [
+      "./node_modules/**"
+  ]
+}

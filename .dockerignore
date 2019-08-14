@@ -1,0 +1,11 @@
+.idea
+yarn.lock
+node_modules
+package-lock.json
+
+forward_grafana
+mount_grafana
+prometheus
+start
+s_start
+test

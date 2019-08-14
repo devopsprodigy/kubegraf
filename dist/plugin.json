@@ -1,0 +1,105 @@
+{
+  "type": "app",
+  "name": "DevOpsProdigy KubeGraf",
+  "id"  : "devopsprodigy-kubegraf",
+
+  "info"  : {
+    "description" : "",
+    "author"      : {
+      "name"  : "DevOpsProdigy",
+      "url"   : "https://devopsprodigy.com/"
+    },
+    "logos": {
+      "small": "img/grafanaLogo.png",
+      "large": "img/grafanaLogo.png"
+    },
+    "links" : [
+      {"name" :  "DevOpsProdigy", "url" :  "https://devopsprodigy.com/"}
+    ],
+    "screenshots": [
+      {"name": "Deployments dashboard", "path": "img/deployments_dashboard.png"},
+      {"name": "Pod resources dashboard", "path": "img/pods_dashboard.png"},
+      {"name": "Node dashboard", "path": "img/node_dashboard_2.png"},
+      {"name": "Node dashboard", "path": "img/node_dashboard_1.png"},
+      {"name": "Nodes overview", "path": "img/node_overview.png"},
+      {"name": "Application overview", "path": "img/application_overview_1.png"},
+      {"name": "Application overview", "path": "img/application_overview_2.png"},
+      {"name": "Cluster status", "path": "img/cluster_status.png"}
+    ],
+    "version": "1.0.3"
+  },
+
+  "includes"  : [
+    {
+      "type"      : "page",
+      "name"      : "Clusters",
+      "component" : "ClustersList",
+      "role"      : "Viewer",
+      "addToNav"  : true,
+      "defaultNav": true
+    },
+    {
+      "type"      : "page",
+      "name"      : "Cluster config",
+      "component" : "ClusterConfig",
+      "role"      : "Viewer",
+      "addToNav"  : false
+    },
+    {
+      "type"      : "page",
+      "name"      : "Cluster Overview",
+      "component" : "ClusterOverview",
+      "addToNav"  : false,
+      "role"      : "Viewer"
+    },
+    {
+      "type"      : "page",
+      "name"      : "Nodes Overview",
+      "component" : "NodesOverview",
+      "addToNav"  : false,
+      "role"      : "Viewer"
+    },
+    {
+      "type"      : "page",
+      "name"      : "Cluster Status",
+      "component" : "ClusterAlerts",
+      "addToNav"  : false,
+      "role"      : "Viewer"
+    },
+    {
+      "type"      : "datasource",
+      "name"      : "DOP KubeGraf DS"
+    },
+    {
+      "type"      : "dashboard",
+      "name"      : "DOP Node's Dashboard",
+      "path"      : "dashboards/node.json",
+      "addToNav"  : false
+    },
+    {
+      "type"      : "dashboard",
+      "name"      : "DOP Pod's Dashboard",
+      "path"      : "dashboards/pod-resources.json",
+      "addToNav"  : false
+    },
+    {
+      "type"      : "dashboard",
+      "name"      : "DOP Deployment's Dashboard",
+      "path"      : "dashboards/deployment.json",
+      "addToNav"  : false
+    },
+    {
+      "type"      : "dashboard",
+      "name"      : "DOP Daemonset's Dashboard",
+      "path"      : "dashboards/daemonset.json",
+      "addToNav"  : false
+    },
+    {
+      "type"      : "dashboard",
+      "name"      : "DOP Statefulset's Dashboard",
+      "path"      : "dashboards/statefulset.json",
+      "addToNav"  : false
+    }
+  ]
+}
+

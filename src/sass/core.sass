@@ -1,0 +1,135 @@
+.page-container
+  &--override
+    width: 90vw
+    position: relative
+    left: calc(50% - 45vw)
+.card-item-label
+  margin-left: 8px
+  position: relative
+
+.override--
+  &pod_status
+    display: block
+    width: 10px
+    height: 10px
+    border-radius: 100%
+    position: absolute
+    top: 5px
+    left: 0
+    &_error
+      background: red
+    &_warning
+      background: yellow
+    &_success
+      background: #18e018
+    &_terminating
+      background: #056b11
+  &node_status
+    display: inline-block
+    width: 10px
+    height: 10px
+    border-radius: 100%
+    margin-left: 15px
+  &nodeTable_status
+    display: block
+    width: 10px
+    height: 10px
+    border-radius: 100%
+  &borderBottom
+    border-bottom: 1px solid
+    padding-bottom: 10px
+    &:last-child
+      border-bottom: none
+  &borderRight
+    border-right: 1px solid
+    &:last-child
+      border-right: none
+  &table
+    width: 100%
+    tr
+      width: 100%
+      th:nth-child(1)
+        width: 15%
+      th:nth-child(2)
+        width: 35%
+      th:nth-child(3)
+        width: 25%
+      th:nth-child(4)
+        width: 25%
+      td:nth-child(1)
+        width: 15%
+      td:nth-child(2)
+        width: 35%
+      td:nth-child(3)
+        width: 25%
+      td:nth-child(4)
+        width: 25%
+  &table_ns
+    width: 100%
+    tr
+      width: 100%
+      th:nth-child(1)
+        width: 5%
+      th:nth-child(2)
+        width: 45%
+      th:nth-child(3)
+        width: 25%
+      th:nth-child(4)
+        width: 25%
+      td:nth-child(1)
+        width: 5%
+      td:nth-child(2)
+        width: 45%
+      td:nth-child(3)
+        width: 25%
+      td:nth-child(4)
+        width: 25%
+  &table_ns_6
+    width: 100%
+    tr
+      width: 100%
+      th:nth-child(1)
+        width: 5%
+      th:nth-child(2)
+        width: 45%
+      th:nth-child(3)
+        width: 12.5%
+      th:nth-child(4)
+        width: 12.5%
+      th:nth-child(5)
+        width: 12.5%
+      th:nth-child(6)
+        width: 12.5%
+      td:nth-child(1)
+        width: 5%
+      td:nth-child(2)
+        width: 45%
+      td:nth-child(3)
+        width: 12.5%
+      td:nth-child(4)
+        width: 12.5%
+      td:nth-child(5)
+        width: 12.5%
+      td:nth-child(6)
+        width: 12.5%
+  &card-item
+    display: inline-block
+    padding: 5px
+    margin-right: 5px
+    margin-bottom: 5px
+    &:last-child
+      margin-right: 0
+  &full-width
+    width: 100%
+
+.pulse
+  animation-duration: 1s
+  animation-name: pulse
+  animation-iteration-count: infinite
+  animation-direction: alternate
+
+@keyframes pulse
+  @for $i from 0 through 100
+    #{$i}%
+      opacity: calc(1 - #{$i}/100)
+

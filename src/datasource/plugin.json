@@ -1,0 +1,14 @@
+{
+  "name"        : "DevOpsProdigy KubeGraf DS",
+  "id"          : "devopsprodidy-kubegraf-datasource",
+  "type"        : "datasource",
+  "info": {
+    "logos": {
+      "small": "img/grafanaLogo.png",
+      "large": "img/grafanaLogo.png"
+    }
+  },
+  "staticRoot": ".",
+  "metrics": true,
+  "annotations" : false
+}
