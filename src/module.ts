@@ -8,8 +8,8 @@ import {DOPKubeGrafAppConfig} from "./config/config";
 import {loadPluginCss} from 'app/plugins/sdk';
 
 loadPluginCss({
-    dark: 'plugins/devopsprodigy-kubegraf/css/dark.css',
-    light: 'plugins/devopsprodigy-kubegraf/css/light.css'
+    dark: 'plugins/devopsprodigy-kubegraf-app/css/dark.css',
+    light: 'plugins/devopsprodigy-kubegraf-app/css/light.css'
 });
 
 export {

@@ -17,7 +17,7 @@ System.register([], function(exports_1) {
                     return this.appEditCtrl.importDashboards().then(function () {
                         _this.enabled = true;
                         return {
-                            url: "plugins/devopsprodigy-kubegraf/page/clusters",
+                            url: "plugins/devopsprodigy-kubegraf-app/page/clusters",
                             message: "DevOpsProdigy KubeGraf enabled!"
                         };
                     });

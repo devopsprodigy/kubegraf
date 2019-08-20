@@ -1,7 +1,7 @@
 {
   "type": "app",
   "name": "DevOpsProdigy KubeGraf",
-  "id"  : "devopsprodigy-kubegraf",
+  "id"  : "devopsprodigy-kubegraf-app",
 
   "info"  : {
     "description" : "An updated version of the Grafana App for Kubernetes plugin, this plugin allows you to visualize and analyze your Kubernetes cluster’s performance. It demonstrates in graphics the main service metrics and characteristics of the Kubernetes cluster. It also makes it easier to examine the application’s life cycle and error logs.",

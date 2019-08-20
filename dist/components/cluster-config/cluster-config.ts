@@ -60,7 +60,7 @@ export class ClusterConfig{
         this.busy = true;
         return this.saveDatasource()
             .then((res) => {
-                window.location.href = 'plugins/devopsprodigy-kubegraf/page/clusters';
+                window.location.href = 'plugins/devopsprodigy-kubegraf-app/page/clusters';
             },err => {
                 this.busy = false;
             });

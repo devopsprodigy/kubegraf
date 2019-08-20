@@ -56,7 +56,7 @@ System.register([], function(exports_1) {
                     this.busy = true;
                     return this.saveDatasource()
                         .then(function (res) {
-                        window.location.href = 'plugins/devopsprodigy-kubegraf/page/clusters';
+                        window.location.href = 'plugins/devopsprodigy-kubegraf-app/page/clusters';
                     }, function (err) {
                         _this.busy = false;
                     });

@@ -16,7 +16,7 @@ export class DOPKubeGrafAppConfig {
         return this.appEditCtrl.importDashboards().then(() => {
             this.enabled = true;
             return {
-                url: "plugins/devopsprodigy-kubegraf/page/clusters",
+                url: "plugins/devopsprodigy-kubegraf-app/page/clusters",
                 message: "DevOpsProdigy KubeGraf enabled!"
             };
         });

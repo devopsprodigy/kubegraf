@@ -25,8 +25,8 @@ System.register(["./components/clusters-list/clusters-list", "./components/clust
             }],
         execute: function() {
             sdk_1.loadPluginCss({
-                dark: 'plugins/devopsprodigy-kubegraf/css/dark.css',
-                light: 'plugins/devopsprodigy-kubegraf/css/light.css'
+                dark: 'plugins/devopsprodigy-kubegraf-app/css/dark.css',
+                light: 'plugins/devopsprodigy-kubegraf-app/css/light.css'
             });
             exports_1("ClustersList", clusters_list_1.ClustersList);
             exports_1("ClusterConfig", cluster_config_1.ClusterConfig);
