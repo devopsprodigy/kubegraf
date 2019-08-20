@@ -86,11 +86,11 @@ Install by using git-clone.
 	
 2. Copy repository:
 
-	`git clone https://  /var/lib/grafana/plugins`
+	`git clone https://github.com/devopsprodigy/kubegraf  /var/lib/grafana/plugins`
 	 
 	or
 	 
-	`grafana-cli plugins install devopsprodigy-kubegraf`
+	`grafana-cli plugins install devopsprodigy-kubegraf-app`
 	
 3. Go to /configuration-plugins in Grafana and click on the plugin. Then click “enable”.
 
