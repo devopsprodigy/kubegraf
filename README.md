@@ -78,7 +78,6 @@ The above three dashboards show the number of available / unavailable applicatio
 
 ### Installation
 
-Install by using git-clone.
 
 1. Go to the plugins directory in Grafana:
 
@@ -86,7 +85,7 @@ Install by using git-clone.
 	
 2. Copy repository:
 
-	`git clone https://github.com/devopsprodigy/kubegraf  /var/lib/grafana/plugins`
+	`git clone https://github.com/devopsprodigy/kubegraf  /var/lib/grafana/plugins` and restart grafana-server
 	 
 	or
 	 
