@@ -45,19 +45,19 @@ The plugin consists of three main info pages with detailed information about the
 
 *Pic. 3: Nodes overview*
 
-###Dashboards
+### Dashboards
 
 Besides providing general information on the main pages, the plugin allows you to track a cluster’s performance in graphs, which are located on five dashboards.
 
-- ** node dashboard**
+- **node dashboard**
 
 This is a dashboard with node metrics. It displays the employment of resources like CPU utilization, memory consumption, percentage of CPU time in idle / iowait modes, and disk and network status.
 
 ![](https://devopsprodigy.com/img/dop-kubegraf/node_dashboard_1.png)
 
-*Pic. 4: Node dashboard *
+*Pic. 4: Node dashboard*
 
-- **pod resources **
+- **pod resources**
 
 Displays how much of the resources the selected pod has used.
 
@@ -65,14 +65,14 @@ Displays how much of the resources the selected pod has used.
 
 *Pic. 5: Pod resources*
 
-- **deployment dashboard **
+- **deployment dashboard**
 
 ![](https://devopsprodigy.com/img/dop-kubegraf/deployment_dashboard.png)
 
 *Pic. 6: Deployment dashboard*
 
-- **statefulsets dashboard **
-- **daemonsets dashboard **
+- **statefulsets dashboard**
+- **daemonsets dashboard**
 
 The above three dashboards show the number of available / unavailable application replicas and the status of containers in the pods of these applications, and trace containers’ restarts.
 
