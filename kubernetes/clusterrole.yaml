@@ -1,0 +1,27 @@
+apiVersion: rbac.authorization.k8s.io/v1beta1
+kind: ClusterRole
+metadata:
+  name: grafana-kubegraf
+rules:
+  - apiGroups: [""]
+    resources:
+      - namespaces
+      - pods
+      - services
+      - componentstatuses
+      - nodes
+    verbs: ["get", "list", "watch"]
+  - apiGroups: ["batch"]
+    resources:
+      - jobs
+      - cronjobs
+    verbs: ["get", "list", "watch"]
+  - apiGroups: ["extensions"]
+    resources:
+      - deployments
+      - daemonsets
+    verbs: ["get", "list", "watch"]
+  - apiGroups: ["apps"]
+    resources:
+      - statefulsets
+    verbs: ["get", "list", "watch"]
