@@ -45,19 +45,19 @@ The plugin consists of three main info pages with detailed information about the
 
 *Pic. 3: Nodes overview*
 
-###Dashboards
+### Dashboards
 
 Besides providing general information on the main pages, the plugin allows you to track a cluster’s performance in graphs, which are located on five dashboards.
 
-- ** node dashboard**
+- **node dashboard**
 
 This is a dashboard with node metrics. It displays the employment of resources like CPU utilization, memory consumption, percentage of CPU time in idle / iowait modes, and disk and network status.
 
 ![](https://devopsprodigy.com/img/dop-kubegraf/node_dashboard_1.png)
 
-*Pic. 4: Node dashboard *
+*Pic. 4: Node dashboard*
 
-- **pod resources **
+- **pod resources**
 
 Displays how much of the resources the selected pod has used.
 
@@ -65,14 +65,14 @@ Displays how much of the resources the selected pod has used.
 
 *Pic. 5: Pod resources*
 
-- **deployment dashboard **
+- **deployment dashboard**
 
 ![](https://devopsprodigy.com/img/dop-kubegraf/deployment_dashboard.png)
 
 *Pic. 6: Deployment dashboard*
 
-- **statefulsets dashboard **
-- **daemonsets dashboard **
+- **statefulsets dashboard**
+- **daemonsets dashboard**
 
 The above three dashboards show the number of available / unavailable application replicas and the status of containers in the pods of these applications, and trace containers’ restarts.
 
@@ -90,6 +90,8 @@ The above three dashboards show the number of available / unavailable applicatio
 	or
 	 
 	`grafana-cli plugins install devopsprodigy-kubegraf-app`
+
+	and restart Grafana.
 	
 3. Go to /configuration-plugins in Grafana and click on the plugin. Then click “enable”.
 
@@ -98,3 +100,24 @@ The above three dashboards show the number of available / unavailable applicatio
 5. Enter the settings of http-access to the Kubernetes api server.
 
 6. Open the “additional datasources” drop-down list and select the prometheus that is used in this cluster.
+
+### Setting up cluster authentication and permissons
+
+This procedure can be used to create a Kubernetes user account with only
+minimal permissions required by KubeGraf.
+
+* Create `grafana-kubegraf` user private key and certificate on one of the
+  master nodes
+  ```
+  openssl genrsa -out ~/grafana-kubegraf.key 2048
+  openssl req -new -key ~/grafana-kubegraf.key -out ~/grafana-kubegraf.csr -subj "/CN=grafana-kubegraf/O=monitoring"
+  openssl x509 -req -in ~/grafana-kubegraf.csr -CA /etc/kubernetes/pki/ca.crt -CAkey /etc/kubernetes/pki/ca.key -out /etc/kubernetes/pki/grafana-kubegraf.crt -CAcreateserial
+  ```
+* Copy /etc/kubernetes/pki/grafana-kubegraf.crt to all other master nodes.
+* Apply Kubernetes manifests in [kubernetes/](kubernetes/) directory to give
+  required permissions to `grafana-kubegraf` user:
+  ```
+  kubectl apply -f kubernetes/
+  ```
+* Use generated certificate and key from the first step to authenticate
+  KubeGraf plugin to your cluster.

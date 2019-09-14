@@ -111,7 +111,7 @@ minimal permissions required by KubeGraf.
   ```
   openssl genrsa -out ~/grafana-kubegraf.key 2048
   openssl req -new -key ~/grafana-kubegraf.key -out ~/grafana-kubegraf.csr -subj "/CN=grafana-kubegraf/O=monitoring"
-  sudo openssl x509 -req -in ~/grafana-kubegraf.csr -CA /etc/kubernetes/pki/ca.crt -CAkey /etc/kubernetes/pki/ca.key -out /etc/kubernetes/pki/grafana-kubegraf.crt -CAcreateserial
+  openssl x509 -req -in ~/grafana-kubegraf.csr -CA /etc/kubernetes/pki/ca.crt -CAkey /etc/kubernetes/pki/ca.key -out /etc/kubernetes/pki/grafana-kubegraf.crt -CAcreateserial
   ```
 * Copy /etc/kubernetes/pki/grafana-kubegraf.crt to all other master nodes.
 * Apply Kubernetes manifests in [kubernetes/](kubernetes/) directory to give
