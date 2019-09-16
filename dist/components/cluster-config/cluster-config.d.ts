@@ -8,6 +8,8 @@ export declare class ClusterConfig {
     busy: boolean;
     $scope: any;
     pageReady: boolean;
+    tokenAccessConst: string;
+    httpAccessConst: string;
     static templateUrl: string;
     constructor($scope: any, $injector: any, backendSrv: any, alertSrv: any, $q: any, $location: any);
     getCluster(): void;

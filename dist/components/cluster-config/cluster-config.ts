@@ -1,3 +1,5 @@
+import {CLUSTER_ACCESS_HTTP, CLUSTER_ACCESS_TOKEN} from "../../common/constants";
+
 const TYPE_PROMETHEUS = "prometheus";
 
 export class ClusterConfig{
@@ -6,6 +8,8 @@ export class ClusterConfig{
     busy: boolean;
     $scope: any;
     pageReady: boolean;
+    tokenAccessConst: string;
+    httpAccessConst: string;
 
     static templateUrl = 'components/cluster-config/cluster-config.html';
 
@@ -14,6 +18,8 @@ export class ClusterConfig{
 
         this.$scope = $scope;
         this.busy = false;
+        this.tokenAccessConst = CLUSTER_ACCESS_TOKEN.toString();
+        this.httpAccessConst = CLUSTER_ACCESS_HTTP.toString();
         this.getCluster();
     }
 
@@ -31,7 +37,8 @@ export class ClusterConfig{
                 type: 'devopsprodidy-kubegraf-datasource',
                 access: 'proxy',
                 jsonData: {
-                    refresh_pods_rate: '60'
+                    refresh_pods_rate: '60',
+                    access_type: this.httpAccessConst
                 }
 
             };
@@ -106,6 +113,9 @@ export class ClusterConfig{
 
                 if(!(result.jsonData.refresh_pods_rate))
                     result.jsonData.refresh_pods_rate = 60;
+
+                if(!(result.jsonData.access_type))
+                    result.jsonData.access_type = this.httpAccessConst;
 
                 this.cluster = result;
             })

@@ -1,7 +1,11 @@
-System.register([], function(exports_1) {
+System.register(["../../common/constants"], function(exports_1) {
+    var constants_1;
     var TYPE_PROMETHEUS, ClusterConfig;
     return {
-        setters:[],
+        setters:[
+            function (constants_1_1) {
+                constants_1 = constants_1_1;
+            }],
         execute: function() {
             TYPE_PROMETHEUS = "prometheus";
             ClusterConfig = (function () {
@@ -13,6 +17,8 @@ System.register([], function(exports_1) {
                     this.pageReady = false;
                     this.$scope = $scope;
                     this.busy = false;
+                    this.tokenAccessConst = constants_1.CLUSTER_ACCESS_TOKEN.toString();
+                    this.httpAccessConst = constants_1.CLUSTER_ACCESS_HTTP.toString();
                     this.getCluster();
                 }
                 ClusterConfig.prototype.getCluster = function () {
@@ -29,7 +35,8 @@ System.register([], function(exports_1) {
                             type: 'devopsprodidy-kubegraf-datasource',
                             access: 'proxy',
                             jsonData: {
-                                refresh_pods_rate: '60'
+                                refresh_pods_rate: '60',
+                                access_type: this.httpAccessConst
                             }
                         };
                         document.title = 'DevOpsProdigy KubeGraf | New cluster';
@@ -100,6 +107,8 @@ System.register([], function(exports_1) {
                             result.jsonData.prom_name = '';
                         if (!(result.jsonData.refresh_pods_rate))
                             result.jsonData.refresh_pods_rate = 60;
+                        if (!(result.jsonData.access_type))
+                            result.jsonData.access_type = _this.httpAccessConst;
                         _this.cluster = result;
                     });
                 };
