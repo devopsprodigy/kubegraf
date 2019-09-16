@@ -1,6 +1,5 @@
-import {CLUSTER_ACCESS_HTTP, CLUSTER_ACCESS_TOKEN} from "../../common/constants";
+import {CLUSTER_ACCESS_HTTP, CLUSTER_ACCESS_TOKEN, TYPE_PROMETHEUS} from "../../common/constants";
 
-const TYPE_PROMETHEUS = "prometheus";
 
 export class ClusterConfig{
     cluster: any;
@@ -21,6 +20,18 @@ export class ClusterConfig{
         this.tokenAccessConst = CLUSTER_ACCESS_TOKEN.toString();
         this.httpAccessConst = CLUSTER_ACCESS_HTTP.toString();
         this.getCluster();
+
+        $scope.onDefaultChange = e => console.log(e);
+        $scope.setIsDefault = e => console.log(e);
+    }
+
+    onDefaultChange(e){
+        console.log(e);
+    }
+
+
+    setIsDefault(e){
+        console.log(e);
     }
 
     getCluster(){
@@ -38,7 +49,8 @@ export class ClusterConfig{
                 access: 'proxy',
                 jsonData: {
                     refresh_pods_rate: '60',
-                    access_type: this.httpAccessConst
+                    access_type: this.httpAccessConst,
+                    prom_name: ''
                 }
 
             };
@@ -58,7 +70,13 @@ export class ClusterConfig{
             .then(datasources => {
                 this.prometheusList = datasources.filter(item => {
                     return item.type === TYPE_PROMETHEUS;
-                })
+                });
+                let defProm = this.prometheusList.filter(item =>
+                    item.isDefault
+                );
+                if(defProm.length > 0 && this.cluster.jsonData.prom_name == ''){
+                    this.cluster.jsonData.prom_name = defProm[0].name;
+                }
             })
     }
 
@@ -112,7 +130,7 @@ export class ClusterConfig{
                     result.jsonData.prom_name = '';
 
                 if(!(result.jsonData.refresh_pods_rate))
-                    result.jsonData.refresh_pods_rate = 60;
+                    result.jsonData.refresh_pods_rate = '60';
 
                 if(!(result.jsonData.access_type))
                     result.jsonData.access_type = this.httpAccessConst;

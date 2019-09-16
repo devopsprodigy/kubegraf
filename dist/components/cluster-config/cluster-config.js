@@ -1,13 +1,12 @@
 System.register(["../../common/constants"], function(exports_1) {
     var constants_1;
-    var TYPE_PROMETHEUS, ClusterConfig;
+    var ClusterConfig;
     return {
         setters:[
             function (constants_1_1) {
                 constants_1 = constants_1_1;
             }],
         execute: function() {
-            TYPE_PROMETHEUS = "prometheus";
             ClusterConfig = (function () {
                 function ClusterConfig($scope, $injector, backendSrv, alertSrv, $q, $location) {
                     this.backendSrv = backendSrv;
@@ -20,7 +19,15 @@ System.register(["../../common/constants"], function(exports_1) {
                     this.tokenAccessConst = constants_1.CLUSTER_ACCESS_TOKEN.toString();
                     this.httpAccessConst = constants_1.CLUSTER_ACCESS_HTTP.toString();
                     this.getCluster();
+                    $scope.onDefaultChange = function (e) { return console.log(e); };
+                    $scope.setIsDefault = function (e) { return console.log(e); };
                 }
+                ClusterConfig.prototype.onDefaultChange = function (e) {
+                    console.log(e);
+                };
+                ClusterConfig.prototype.setIsDefault = function (e) {
+                    console.log(e);
+                };
                 ClusterConfig.prototype.getCluster = function () {
                     var _this = this;
                     var promises = [];
@@ -36,7 +43,8 @@ System.register(["../../common/constants"], function(exports_1) {
                             access: 'proxy',
                             jsonData: {
                                 refresh_pods_rate: '60',
-                                access_type: this.httpAccessConst
+                                access_type: this.httpAccessConst,
+                                prom_name: ''
                             }
                         };
                         document.title = 'DevOpsProdigy KubeGraf | New cluster';
@@ -52,8 +60,14 @@ System.register(["../../common/constants"], function(exports_1) {
                     return this.backendSrv.get('/api/datasources')
                         .then(function (datasources) {
                         _this.prometheusList = datasources.filter(function (item) {
-                            return item.type === TYPE_PROMETHEUS;
+                            return item.type === constants_1.TYPE_PROMETHEUS;
                         });
+                        var defProm = _this.prometheusList.filter(function (item) {
+                            return item.isDefault;
+                        });
+                        if (defProm.length > 0 && _this.cluster.jsonData.prom_name == '') {
+                            _this.cluster.jsonData.prom_name = defProm[0].name;
+                        }
                     });
                 };
                 ClusterConfig.prototype.saveCluster = function () {
@@ -106,7 +120,7 @@ System.register(["../../common/constants"], function(exports_1) {
                         if (!(result.jsonData.prom_name))
                             result.jsonData.prom_name = '';
                         if (!(result.jsonData.refresh_pods_rate))
-                            result.jsonData.refresh_pods_rate = 60;
+                            result.jsonData.refresh_pods_rate = '60';
                         if (!(result.jsonData.access_type))
                             result.jsonData.access_type = _this.httpAccessConst;
                         _this.cluster = result;

@@ -12,6 +12,8 @@ export declare class ClusterConfig {
     httpAccessConst: string;
     static templateUrl: string;
     constructor($scope: any, $injector: any, backendSrv: any, alertSrv: any, $q: any, $location: any);
+    onDefaultChange(e: any): void;
+    setIsDefault(e: any): void;
     getCluster(): void;
     getPrometheusList(): any;
     saveCluster(): any;
