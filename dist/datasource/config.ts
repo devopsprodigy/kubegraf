@@ -1,7 +1,7 @@
 import {CLUSTER_ACCESS_TOKEN, CLUSTER_ACCESS_HTTP, TYPE_PROMETHEUS} from "../common/constants";
 
 export class DOPK8SConfig{
-    static templateUrl = 'datasource/partials/config.html'
+    static templateUrl = 'datasource/partials/config.html';
 
     current: any;
     httpAccessConst : string;
