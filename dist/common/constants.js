@@ -1,5 +1,5 @@
 System.register([], function(exports_1) {
-    var ERROR, WARNING, TERMINATING, SUCCESS, COLOR_YELLOW, COLOR_RED, COLOR_GREEN, PODS_LIMIT, CLUSTER_ACCESS_TOKEN, CLUSTER_ACCESS_HTTP, TYPE_PROMETHEUS;
+    var ERROR, WARNING, TERMINATING, SUCCESS, COLOR_YELLOW, COLOR_RED, COLOR_GREEN, PODS_LIMIT, TYPE_PROMETHEUS;
     return {
         setters:[],
         execute: function() {
@@ -11,8 +11,6 @@ System.register([], function(exports_1) {
             COLOR_RED = '#a52a2a';
             COLOR_GREEN = '#299c46';
             PODS_LIMIT = 10;
-            CLUSTER_ACCESS_TOKEN = 1;
-            CLUSTER_ACCESS_HTTP = 2;
             TYPE_PROMETHEUS = "prometheus";
             exports_1("ERROR", ERROR);
             exports_1("WARNING", WARNING);
@@ -22,8 +20,6 @@ System.register([], function(exports_1) {
             exports_1("COLOR_RED", COLOR_RED);
             exports_1("COLOR_GREEN", COLOR_GREEN);
             exports_1("PODS_LIMIT", PODS_LIMIT);
-            exports_1("CLUSTER_ACCESS_HTTP", CLUSTER_ACCESS_HTTP);
-            exports_1("CLUSTER_ACCESS_TOKEN", CLUSTER_ACCESS_TOKEN);
             exports_1("TYPE_PROMETHEUS", TYPE_PROMETHEUS);
         }
     }

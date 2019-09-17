@@ -1,23 +1,16 @@
-import {CLUSTER_ACCESS_TOKEN, CLUSTER_ACCESS_HTTP, TYPE_PROMETHEUS} from "../common/constants";
+import {TYPE_PROMETHEUS} from "../common/constants";
 
 export class DOPK8SConfig{
     static templateUrl = 'datasource/partials/config.html';
 
     current: any;
-    httpAccessConst : string;
-    tokenAccessConst: string;
     prometheusList: Array<any>;
     pageReady: boolean;
 
     constructor($scope, $injector, private backendSrv){
-        this.httpAccessConst = CLUSTER_ACCESS_HTTP.toString();
-        this.tokenAccessConst = CLUSTER_ACCESS_TOKEN.toString();
         this.pageReady = false;
 
         if(this.current.id){
-            if(!(this.current.jsonData.access_type))
-                this.current.jsonData.access_type = this.httpAccessConst;
-
             if(!(this.current.jsonData.prom_name))
                 this.current.jsonData.prom_name = '';
 
@@ -30,7 +23,7 @@ export class DOPK8SConfig{
                 access: 'proxy',
                 jsonData: {
                     refresh_pods_rate: '60',
-                    access_type: this.httpAccessConst,
+                    access_via_token: false,
                     prom_name: ''
                 }
 

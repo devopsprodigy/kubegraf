@@ -16,18 +16,8 @@ System.register(["../../common/constants"], function(exports_1) {
                     this.pageReady = false;
                     this.$scope = $scope;
                     this.busy = false;
-                    this.tokenAccessConst = constants_1.CLUSTER_ACCESS_TOKEN.toString();
-                    this.httpAccessConst = constants_1.CLUSTER_ACCESS_HTTP.toString();
                     this.getCluster();
-                    $scope.onDefaultChange = function (e) { return console.log(e); };
-                    $scope.setIsDefault = function (e) { return console.log(e); };
                 }
-                ClusterConfig.prototype.onDefaultChange = function (e) {
-                    console.log(e);
-                };
-                ClusterConfig.prototype.setIsDefault = function (e) {
-                    console.log(e);
-                };
                 ClusterConfig.prototype.getCluster = function () {
                     var _this = this;
                     var promises = [];
@@ -43,7 +33,7 @@ System.register(["../../common/constants"], function(exports_1) {
                             access: 'proxy',
                             jsonData: {
                                 refresh_pods_rate: '60',
-                                access_type: this.httpAccessConst,
+                                access_via_token: false,
                                 prom_name: ''
                             }
                         };
@@ -121,8 +111,6 @@ System.register(["../../common/constants"], function(exports_1) {
                             result.jsonData.prom_name = '';
                         if (!(result.jsonData.refresh_pods_rate))
                             result.jsonData.refresh_pods_rate = '60';
-                        if (!(result.jsonData.access_type))
-                            result.jsonData.access_type = _this.httpAccessConst;
                         _this.cluster = result;
                     });
                 };

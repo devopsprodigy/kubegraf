@@ -11,12 +11,8 @@ System.register(["../common/constants"], function(exports_1) {
                 function DOPK8SConfig($scope, $injector, backendSrv) {
                     var _this = this;
                     this.backendSrv = backendSrv;
-                    this.httpAccessConst = constants_1.CLUSTER_ACCESS_HTTP.toString();
-                    this.tokenAccessConst = constants_1.CLUSTER_ACCESS_TOKEN.toString();
                     this.pageReady = false;
                     if (this.current.id) {
-                        if (!(this.current.jsonData.access_type))
-                            this.current.jsonData.access_type = this.httpAccessConst;
                         if (!(this.current.jsonData.prom_name))
                             this.current.jsonData.prom_name = '';
                         if (!(this.current.jsonData.refresh_pods_rate))
@@ -28,7 +24,7 @@ System.register(["../common/constants"], function(exports_1) {
                             access: 'proxy',
                             jsonData: {
                                 refresh_pods_rate: '60',
-                                access_type: this.httpAccessConst,
+                                access_via_token: false,
                                 prom_name: ''
                             }
                         };
