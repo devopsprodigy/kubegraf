@@ -136,6 +136,23 @@
   animation-iteration-count: infinite;
   animation-direction: alternate; }
 
+input.toggle-checkbox {
+  display: none; }
+
+input[type=checkbox].toggle-checkbox:checked + label:before {
+  background: url(/public/img/checkbox.png) 0 -18px no-repeat; }
+
+label.toggle-checkbox {
+  display: flex;
+  cursor: pointer; }
+  label.toggle-checkbox:before {
+    content: '';
+    display: inline-block;
+    width: 22px;
+    min-width: 22px;
+    height: 18px;
+    background: url(/public/img/checkbox.png) 0 0 no-repeat; }
+
 @keyframes pulse {
   0% {
     opacity: calc(1 - 0/100); }
