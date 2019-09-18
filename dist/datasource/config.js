@@ -17,6 +17,7 @@ System.register(["../common/constants"], function(exports_1) {
                             this.current.jsonData.prom_name = '';
                         if (!(this.current.jsonData.refresh_pods_rate))
                             this.current.jsonData.refresh_pods_rate = '60';
+                        this.current.jsonData.cluster_url = this.current.url;
                     }
                     else {
                         this.current = {
@@ -33,7 +34,13 @@ System.register(["../common/constants"], function(exports_1) {
                         .then(function () {
                         _this.pageReady = true;
                     });
+                    $scope.$watch('ctrl.current', function () {
+                        _this.setUrl();
+                    });
                 }
+                DOPK8SConfig.prototype.setUrl = function () {
+                    this.current.jsonData.cluster_url = this.current.url;
+                };
                 DOPK8SConfig.prototype.getPrometheusList = function () {
                     var _this = this;
                     return this.backendSrv.get('/api/datasources')

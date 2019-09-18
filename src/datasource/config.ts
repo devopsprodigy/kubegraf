@@ -9,7 +9,6 @@ export class DOPK8SConfig{
 
     constructor($scope, $injector, private backendSrv){
         this.pageReady = false;
-
         if(this.current.id){
             if(!(this.current.jsonData.prom_name))
                 this.current.jsonData.prom_name = '';
@@ -17,6 +16,7 @@ export class DOPK8SConfig{
             if(!(this.current.jsonData.refresh_pods_rate))
                 this.current.jsonData.refresh_pods_rate = '60';
 
+            this.current.jsonData.cluster_url = this.current.url;
         }else{
             this.current = {
                 type: 'devopsprodidy-kubegraf-datasource',
@@ -32,7 +32,15 @@ export class DOPK8SConfig{
         this.getPrometheusList()
             .then(() => {
                 this.pageReady = true;
-            })
+            });
+
+        $scope.$watch('ctrl.current', () => {
+            this.setUrl();
+        });
+    }
+
+    setUrl(){
+        this.current.jsonData.cluster_url = this.current.url;
     }
 
     getPrometheusList(){

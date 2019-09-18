@@ -66,6 +66,7 @@ System.register(["../../common/constants"], function(exports_1) {
                     if (this.busy)
                         return;
                     this.busy = true;
+                    this.cluster.jsonData.cluster_url = this.cluster.url;
                     return this.saveDatasource()
                         .then(function (res) {
                         window.location.href = 'plugins/devopsprodigy-kubegraf-app/page/clusters';

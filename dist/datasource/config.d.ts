@@ -5,5 +5,6 @@ export declare class DOPK8SConfig {
     prometheusList: Array<any>;
     pageReady: boolean;
     constructor($scope: any, $injector: any, backendSrv: any);
+    setUrl(): void;
     getPrometheusList(): any;
 }

@@ -69,6 +69,7 @@ export class ClusterConfig{
     saveCluster(){
         if(this.busy) return;
         this.busy = true;
+        this.cluster.jsonData.cluster_url = this.cluster.url;
         return this.saveDatasource()
             .then((res) => {
                 window.location.href = 'plugins/devopsprodigy-kubegraf-app/page/clusters';
