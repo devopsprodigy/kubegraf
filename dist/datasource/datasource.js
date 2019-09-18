@@ -17,13 +17,25 @@ System.register([], function(exports_1) {
                     this.accessViaToken = instanceSettings.jsonData.access_via_token;
                 }
                 DOPK8SDatasource.prototype.testDatasource = function () {
+                    var url = '/api/v1/namespaces';
+                    var _url = this.url;
+                    if (this.accessViaToken)
+                        _url += '/__proxy';
+                    _url += url;
                     return this.backendSrv.datasourceRequest({
-                        url: this.url + '/',
-                        method: "GET"
-                    }).then(function (response) {
+                        url: _url,
+                        method: "GET",
+                        headers: { "Content-Type": 'application/json' }
+                    })
+                        .then(function (response) {
                         if (response.status === 200) {
-                            return { status: "success", message: "Data source is working", title: "Success" };
+                            return { status: "success", message: "Data source is OK", title: "Success" };
                         }
+                        else {
+                            return { status: "error", message: "Data source is not OK", title: "Error" };
+                        }
+                    }, function (error) {
+                        return { status: "error", message: "Data source is not OK", title: "Error" };
                     });
                 };
                 DOPK8SDatasource.prototype.metricFindQuery = function (query) {

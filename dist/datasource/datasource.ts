@@ -20,14 +20,25 @@ export class DOPK8SDatasource {
     }
 
     testDatasource(){
+        let url = '/api/v1/namespaces';
+        let _url = this.url;
+        if(this.accessViaToken)
+            _url += '/__proxy';
+        _url += url;
         return this.backendSrv.datasourceRequest({
-            url: this.url + '/',
-            method: "GET"
-        }).then(response => {
-            if (response.status === 200) {
-                return { status: "success", message: "Data source is working", title: "Success" };
-            }
+            url: _url,
+            method: "GET",
+            headers: {"Content-Type": 'application/json'}
         })
+            .then(response => {
+                if (response.status === 200) {
+                    return {status: "success", message: "Data source is OK", title: "Success"};
+                }else{
+                    return {status: "error", message: "Data source is not OK", title: "Error"};
+                }
+            }, error => {
+                return {status: "error", message: "Data source is not OK", title: "Error"};
+            })
     }
 
     metricFindQuery(query){
