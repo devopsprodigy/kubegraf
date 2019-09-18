@@ -42,11 +42,12 @@ export class ClusterConfig{
             document.title = 'DevOpsProdigy KubeGraf | New cluster';
         }
 
-        promises.push(this.getPrometheusList());
 
         this.$q.all(promises)
             .then(() => {
-                this.pageReady = true;
+                this.getPrometheusList().then(() => {
+                    this.pageReady = true;
+                });
             })
     }
 
