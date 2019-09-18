@@ -39,10 +39,11 @@ System.register(["../../common/constants"], function(exports_1) {
                         };
                         document.title = 'DevOpsProdigy KubeGraf | New cluster';
                     }
-                    promises.push(this.getPrometheusList());
                     this.$q.all(promises)
                         .then(function () {
-                        _this.pageReady = true;
+                        _this.getPrometheusList().then(function () {
+                            _this.pageReady = true;
+                        });
                     });
                 };
                 ClusterConfig.prototype.getPrometheusList = function () {

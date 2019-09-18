@@ -14,6 +14,7 @@ System.register([], function(exports_1) {
                     this.deploymentsPromise = null;
                     this.daemonsetsPromise = null;
                     this.statefulsetsPromise = null;
+                    this.accessViaToken = instanceSettings.jsonData.access_via_token;
                 }
                 DOPK8SDatasource.prototype.testDatasource = function () {
                     return this.backendSrv.datasourceRequest({
@@ -117,8 +118,12 @@ System.register([], function(exports_1) {
                     }
                 };
                 DOPK8SDatasource.prototype.__get = function (url) {
+                    var _url = this.url;
+                    if (this.accessViaToken)
+                        _url += '/__proxy';
+                    _url += url;
                     return this.backendSrv.datasourceRequest({
-                        url: this.url + url,
+                        url: _url,
                         method: "GET",
                         headers: { "Content-Type": 'application/json' }
                     })

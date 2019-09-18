@@ -6,6 +6,7 @@ export class DOPK8SDatasource {
     deploymentsPromise: any;
     daemonsetsPromise: any;
     statefulsetsPromise: any;
+    accessViaToken: boolean;
 
     constructor(instanceSettings, private backendSrv, private templateSrv){
         this.name = instanceSettings.name;
@@ -15,6 +16,7 @@ export class DOPK8SDatasource {
         this.deploymentsPromise = null;
         this.daemonsetsPromise = null;
         this.statefulsetsPromise = null;
+        this.accessViaToken = instanceSettings.jsonData.access_via_token;
     }
 
     testDatasource(){
@@ -133,8 +135,12 @@ export class DOPK8SDatasource {
     }
 
     __get(url){
+        let _url = this.url;
+        if(this.accessViaToken)
+            _url += '/__proxy';
+        _url += url;
         return this.backendSrv.datasourceRequest({
-            url: this.url + url,
+            url: _url,
             method: "GET",
             headers: {"Content-Type": 'application/json'}
         })
