@@ -8,15 +8,15 @@
 
 <div ng-if="ctrl.isReady">
     <div class="row">
-        <div class="col-md-10">
+        <div class="col-xs-6">
             <a class="btn btn-success" href="plugins/devopsprodigy-kubegraf-app/page/cluster-config">
-                <i class="fa fa-plus"></i>
+                <i class="fa fa-fw fa-plus"></i>&nbsp;
                 Add New Cluster
             </a>
         </div>
-        <div class="col-md-2">
-            <a class="btn btn-secondary timepicker-rangestring" href="plugins/devopsprodigy-kubegraf-app/edit">
-                <i class="fa fa-cog"/>
+        <div class="col-xs-6">
+            <a class="btn btn-secondary timepicker-rangestring pull-right" href="plugins/devopsprodigy-kubegraf-app/edit">
+                <i class="fa fa-fw fa-cog"/>&nbsp;
                 Plugin Config
             </a>
         </div>
@@ -33,23 +33,23 @@
                    <hr/>
                    <div class="card-item-body">
                        <a class="btn btn-success" href="plugins/devopsprodigy-kubegraf-app/page/cluster-status?clusterId={{cluster.id}}">
-                           <i class="fa fa-eye"/>
+                           <i class="fa fa-fw fa-eye"/>&nbsp;
                            Cluster Status
                        </a>&nbsp;
                        <a class="btn btn-success timepicker-rangestring" href="plugins/devopsprodigy-kubegraf-app/page/cluster-overview?clusterId={{cluster.id}}">
-                           <i class="fa fa-eye"/>
+                           <i class="fa fa-fw fa-eye"/>&nbsp;
                            Applications Overview
                        </a>&nbsp;
                        <a class="btn btn-success timepicker-rangestring" href="plugins/devopsprodigy-kubegraf-app/page/nodes-overview?clusterId={{cluster.id}}">
-                           <i class="fa fa-eye"/>
+                           <i class="fa fa-fw fa-eye"/>&nbsp;
                            Nodes Overview
                        </a>&nbsp;
                        <a class="btn btn-secondary timepicker-rangestring" href="plugins/devopsprodigy-kubegraf-app/page/cluster-config?clusterId={{cluster.id}}">
-                           <i class="fa fa-cog"/>
+                           <i class="fa fa-fw fa-cog"/>&nbsp;
                            Edit
                        </a>&nbsp;
                        <a class="btn btn-danger timepicker-rangestring" ng-click="ctrl.deleteCluster(cluster)">
-                           <i class="fa fa-trash"/>
+                           <i class="fa fa-fw fa-trash"/>&nbsp;
                            Delete
                        </a>
                    </div>

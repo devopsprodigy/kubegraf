@@ -8,11 +8,11 @@
             </nav>
             <div class="col-md-3">
                 <a class="btn btn-secondary timepicker-rangestring" target="_self" href="plugins/devopsprodigy-kubegraf-app/edit">
-                    <i class="fa fa-cog"/>
+                    <i class="override--fa fa fa-fw fa-cog"/>&nbsp;
                     Plugin Config
                 </a>
                 <a class="btn btn-secondary" target="_self" href="plugins/devopsprodigy-kubegraf-app/page/cluster-config?clusterId={{ctrl.cluster.id}}">
-                    <i class="fa fa-cog"></i>
+                    <i class="override--fa fa fa-fw fa-cog"></i>&nbsp;
                     Edit
                 </a>
             </div>
@@ -116,7 +116,7 @@
                     </div>
 
                     <a class="btn btn-success" href="{{ctrl.getNodeDashboardLink(node)}}" target="_blank">
-                        <i class="fa fa-eye"/>
+                        <i class="fa fa-fw fa-eye"/>&nbsp;
                         Open Dashboard
                     </a>
                     <div class="btn btn-secondary" ng-if="!node.hideNs" ng-click="ctrl.toggleNsList(node)">
@@ -168,34 +168,34 @@
                                         </td>
                                         <td>
                                             <span ng-bind="pod.metrics.cpuUsed"/>
-                                            <span class="btn gicon gicon-question card-item-label"
+                                            <span class="gicon gicon-question card-item-label"
                                                   bs-tooltip="pod.NaMessage"
                                                   data-placement="right"
-                                                  ng-if="pod.metrics.cpuUsed === 'N-A' || pod.metrics.cpuRequested === 'N-A'"
+                                                  ng-if="pod.metrics.cpuUsed === 'N-A'"
                                             ></span>
                                         </td>
                                         <td>
                                             <span ng-bind="pod.metrics.cpuRequested"/>
-                                            <span class="btn gicon gicon-question card-item-label"
+                                            <span class="gicon gicon-question card-item-label"
                                                   bs-tooltip="pod.NaMessage"
                                                   data-placement="right"
-                                                  ng-if="pod.metrics.cpuUsed === 'N-A' || pod.metrics.cpuRequested === 'N-A'"
+                                                  ng-if="pod.metrics.cpuRequested === 'N-A'"
                                             ></span>
                                         </td>
                                         <td>
                                             <span ng-bind="pod.metrics.memoryUsed" />
-                                            <span class="btn gicon gicon-question card-item-label"
+                                            <span class="gicon gicon-question card-item-label"
                                                   bs-tooltip="pod.NaMessage"
                                                   data-placement="right"
-                                                  ng-if="pod.metrics.memoryUsed === 'N-A' || pod.metrics.memoryRequested === 'N-A'"
+                                                  ng-if="pod.metrics.memoryUsed === 'N-A'"
                                             ></span>
                                         </td>
                                         <td>
                                             <span ng-bind="pod.metrics.memoryRequested"/>
-                                            <span class="btn gicon gicon-question card-item-label"
+                                            <span class="gicon gicon-question card-item-label"
                                                   bs-tooltip="pod.NaMessage"
                                                   data-placement="right"
-                                                  ng-if="pod.metrics.memoryUsed === 'N-A' || pod.metrics.memoryRequested === 'N-A'"
+                                                  ng-if="pod.metrics.memoryRequested === 'N-A'"
                                             ></span>
                                         </td>
                                     </tr>
