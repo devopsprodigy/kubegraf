@@ -294,7 +294,11 @@ System.register(["../helpers", '../../common/store', '../../common/types/traits/
                     }
                 };
                 Node.prototype.__getBytes = function (str) {
-                    return this.__parseInt(str) * 1024;
+                    var bytes = this.__parseInt(str) * 1024;
+                    if (str.indexOf('Mi') > -1) {
+                        bytes = bytes * 1024;
+                    }
+                    return bytes;
                 };
                 Node.prototype.__parseInt = function (str) {
                     return parseInt(str);
