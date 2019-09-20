@@ -6,6 +6,7 @@ export class DOPK8SDatasource {
     deploymentsPromise: any;
     daemonsetsPromise: any;
     statefulsetsPromise: any;
+    accessViaToken: boolean;
 
     constructor(instanceSettings, private backendSrv, private templateSrv){
         this.name = instanceSettings.name;
@@ -15,17 +16,29 @@ export class DOPK8SDatasource {
         this.deploymentsPromise = null;
         this.daemonsetsPromise = null;
         this.statefulsetsPromise = null;
+        this.accessViaToken = instanceSettings.jsonData.access_via_token;
     }
 
     testDatasource(){
+        let url = '/api/v1/namespaces';
+        let _url = this.url;
+        if(this.accessViaToken)
+            _url += '/__proxy';
+        _url += url;
         return this.backendSrv.datasourceRequest({
-            url: this.url + '/',
-            method: "GET"
-        }).then(response => {
-            if (response.status === 200) {
-                return { status: "success", message: "Data source is working", title: "Success" };
-            }
+            url: _url,
+            method: "GET",
+            headers: {"Content-Type": 'application/json'}
         })
+            .then(response => {
+                if (response.status === 200) {
+                    return {status: "success", message: "Data source is OK", title: "Success"};
+                }else{
+                    return {status: "error", message: "Data source is not OK", title: "Error"};
+                }
+            }, error => {
+                return {status: "error", message: "Data source is not OK", title: "Error"};
+            })
     }
 
     metricFindQuery(query){
@@ -133,8 +146,12 @@ export class DOPK8SDatasource {
     }
 
     __get(url){
+        let _url = this.url;
+        if(this.accessViaToken)
+            _url += '/__proxy';
+        _url += url;
         return this.backendSrv.datasourceRequest({
-            url: this.url + url,
+            url: _url,
             method: "GET",
             headers: {"Content-Type": 'application/json'}
         })
@@ -193,7 +210,7 @@ export class DOPK8SDatasource {
     }
 
     getDeployments(namespace = null){
-        return this.__get('/apis/extensions/v1beta1/' + this.__addNamespace(namespace) + 'deployments')
+        return this.__get('/apis/apps/v1/' + this.__addNamespace(namespace) + 'deployments')
             .then(result => {
                 return result.items;
             });
@@ -207,7 +224,7 @@ export class DOPK8SDatasource {
     }
 
     getDaemonsets(namespace = null){
-        return this.__get('/apis/extensions/v1beta1/' + this.__addNamespace(namespace) + 'daemonsets')
+        return this.__get('/apis/apps/v1/' + this.__addNamespace(namespace) + 'daemonsets')
             .then(result => {
                 return result.items;
             })
@@ -247,7 +264,7 @@ export class DOPK8SDatasource {
 
     getDeploymentsSingletone(namespace = null){
         if(!this.deploymentsPromise){
-            this.deploymentsPromise = this.__get('/apis/extensions/v1beta1/' + this.__addNamespace(namespace) + 'deployments')
+            this.deploymentsPromise = this.__get('/apis/apps/v1/' + this.__addNamespace(namespace) + 'deployments')
                 .then(result => {
                     return result.items;
                 });
@@ -258,7 +275,7 @@ export class DOPK8SDatasource {
 
     getDaemonsetsSingletone(namespace = null){
         if(!this.daemonsetsPromise){
-            this.daemonsetsPromise = this.__get('/apis/extensions/v1beta1/' + this.__addNamespace(namespace) + 'daemonsets')
+            this.daemonsetsPromise = this.__get('/apis/apps/v1/' + this.__addNamespace(namespace) + 'daemonsets')
                 .then(result => {
                     return result.items;
                 });

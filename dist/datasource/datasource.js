@@ -14,15 +14,28 @@ System.register([], function(exports_1) {
                     this.deploymentsPromise = null;
                     this.daemonsetsPromise = null;
                     this.statefulsetsPromise = null;
+                    this.accessViaToken = instanceSettings.jsonData.access_via_token;
                 }
                 DOPK8SDatasource.prototype.testDatasource = function () {
+                    var url = '/api/v1/namespaces';
+                    var _url = this.url;
+                    if (this.accessViaToken)
+                        _url += '/__proxy';
+                    _url += url;
                     return this.backendSrv.datasourceRequest({
-                        url: this.url + '/',
-                        method: "GET"
-                    }).then(function (response) {
+                        url: _url,
+                        method: "GET",
+                        headers: { "Content-Type": 'application/json' }
+                    })
+                        .then(function (response) {
                         if (response.status === 200) {
-                            return { status: "success", message: "Data source is working", title: "Success" };
+                            return { status: "success", message: "Data source is OK", title: "Success" };
                         }
+                        else {
+                            return { status: "error", message: "Data source is not OK", title: "Error" };
+                        }
+                    }, function (error) {
+                        return { status: "error", message: "Data source is not OK", title: "Error" };
                     });
                 };
                 DOPK8SDatasource.prototype.metricFindQuery = function (query) {
@@ -117,8 +130,12 @@ System.register([], function(exports_1) {
                     }
                 };
                 DOPK8SDatasource.prototype.__get = function (url) {
+                    var _url = this.url;
+                    if (this.accessViaToken)
+                        _url += '/__proxy';
+                    _url += url;
                     return this.backendSrv.datasourceRequest({
-                        url: this.url + url,
+                        url: _url,
                         method: "GET",
                         headers: { "Content-Type": 'application/json' }
                     })
@@ -167,7 +184,7 @@ System.register([], function(exports_1) {
                 };
                 DOPK8SDatasource.prototype.getDeployments = function (namespace) {
                     if (namespace === void 0) { namespace = null; }
-                    return this.__get('/apis/extensions/v1beta1/' + this.__addNamespace(namespace) + 'deployments')
+                    return this.__get('/apis/apps/v1/' + this.__addNamespace(namespace) + 'deployments')
                         .then(function (result) {
                         return result.items;
                     });
@@ -181,7 +198,7 @@ System.register([], function(exports_1) {
                 };
                 DOPK8SDatasource.prototype.getDaemonsets = function (namespace) {
                     if (namespace === void 0) { namespace = null; }
-                    return this.__get('/apis/extensions/v1beta1/' + this.__addNamespace(namespace) + 'daemonsets')
+                    return this.__get('/apis/apps/v1/' + this.__addNamespace(namespace) + 'daemonsets')
                         .then(function (result) {
                         return result.items;
                     });
@@ -216,7 +233,7 @@ System.register([], function(exports_1) {
                 DOPK8SDatasource.prototype.getDeploymentsSingletone = function (namespace) {
                     if (namespace === void 0) { namespace = null; }
                     if (!this.deploymentsPromise) {
-                        this.deploymentsPromise = this.__get('/apis/extensions/v1beta1/' + this.__addNamespace(namespace) + 'deployments')
+                        this.deploymentsPromise = this.__get('/apis/apps/v1/' + this.__addNamespace(namespace) + 'deployments')
                             .then(function (result) {
                             return result.items;
                         });
@@ -226,7 +243,7 @@ System.register([], function(exports_1) {
                 DOPK8SDatasource.prototype.getDaemonsetsSingletone = function (namespace) {
                     if (namespace === void 0) { namespace = null; }
                     if (!this.daemonsetsPromise) {
-                        this.daemonsetsPromise = this.__get('/apis/extensions/v1beta1/' + this.__addNamespace(namespace) + 'daemonsets')
+                        this.daemonsetsPromise = this.__get('/apis/apps/v1/' + this.__addNamespace(namespace) + 'daemonsets')
                             .then(function (result) {
                             return result.items;
                         });

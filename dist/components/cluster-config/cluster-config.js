@@ -1,9 +1,12 @@
-System.register([], function(exports_1) {
-    var TYPE_PROMETHEUS, ClusterConfig;
+System.register(["../../common/constants"], function(exports_1) {
+    var constants_1;
+    var ClusterConfig;
     return {
-        setters:[],
+        setters:[
+            function (constants_1_1) {
+                constants_1 = constants_1_1;
+            }],
         execute: function() {
-            TYPE_PROMETHEUS = "prometheus";
             ClusterConfig = (function () {
                 function ClusterConfig($scope, $injector, backendSrv, alertSrv, $q, $location) {
                     this.backendSrv = backendSrv;
@@ -29,15 +32,18 @@ System.register([], function(exports_1) {
                             type: 'devopsprodidy-kubegraf-datasource',
                             access: 'proxy',
                             jsonData: {
-                                refresh_pods_rate: '60'
+                                refresh_pods_rate: '60',
+                                access_via_token: false,
+                                prom_name: ''
                             }
                         };
                         document.title = 'DevOpsProdigy KubeGraf | New cluster';
                     }
-                    promises.push(this.getPrometheusList());
                     this.$q.all(promises)
                         .then(function () {
-                        _this.pageReady = true;
+                        _this.getPrometheusList().then(function () {
+                            _this.pageReady = true;
+                        });
                     });
                 };
                 ClusterConfig.prototype.getPrometheusList = function () {
@@ -45,8 +51,14 @@ System.register([], function(exports_1) {
                     return this.backendSrv.get('/api/datasources')
                         .then(function (datasources) {
                         _this.prometheusList = datasources.filter(function (item) {
-                            return item.type === TYPE_PROMETHEUS;
+                            return item.type === constants_1.TYPE_PROMETHEUS;
                         });
+                        var defProm = _this.prometheusList.filter(function (item) {
+                            return item.isDefault;
+                        });
+                        if (defProm.length > 0 && _this.cluster.jsonData.prom_name == '') {
+                            _this.cluster.jsonData.prom_name = defProm[0].name;
+                        }
                     });
                 };
                 ClusterConfig.prototype.saveCluster = function () {
@@ -54,6 +66,7 @@ System.register([], function(exports_1) {
                     if (this.busy)
                         return;
                     this.busy = true;
+                    this.cluster.jsonData.cluster_url = this.cluster.url;
                     return this.saveDatasource()
                         .then(function (res) {
                         window.location.href = 'plugins/devopsprodigy-kubegraf-app/page/clusters';
@@ -99,7 +112,7 @@ System.register([], function(exports_1) {
                         if (!(result.jsonData.prom_name))
                             result.jsonData.prom_name = '';
                         if (!(result.jsonData.refresh_pods_rate))
-                            result.jsonData.refresh_pods_rate = 60;
+                            result.jsonData.refresh_pods_rate = '60';
                         _this.cluster = result;
                     });
                 };
