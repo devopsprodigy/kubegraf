@@ -210,7 +210,7 @@ export class DOPK8SDatasource {
     }
 
     getDeployments(namespace = null){
-        return this.__get('/apis/extensions/v1beta1/' + this.__addNamespace(namespace) + 'deployments')
+        return this.__get('/apis/apps/v1/' + this.__addNamespace(namespace) + 'deployments')
             .then(result => {
                 return result.items;
             });
@@ -224,7 +224,7 @@ export class DOPK8SDatasource {
     }
 
     getDaemonsets(namespace = null){
-        return this.__get('/apis/extensions/v1beta1/' + this.__addNamespace(namespace) + 'daemonsets')
+        return this.__get('/apis/apps/v1/' + this.__addNamespace(namespace) + 'daemonsets')
             .then(result => {
                 return result.items;
             })
@@ -264,7 +264,7 @@ export class DOPK8SDatasource {
 
     getDeploymentsSingletone(namespace = null){
         if(!this.deploymentsPromise){
-            this.deploymentsPromise = this.__get('/apis/extensions/v1beta1/' + this.__addNamespace(namespace) + 'deployments')
+            this.deploymentsPromise = this.__get('/apis/apps/v1/' + this.__addNamespace(namespace) + 'deployments')
                 .then(result => {
                     return result.items;
                 });
@@ -275,7 +275,7 @@ export class DOPK8SDatasource {
 
     getDaemonsetsSingletone(namespace = null){
         if(!this.daemonsetsPromise){
-            this.daemonsetsPromise = this.__get('/apis/extensions/v1beta1/' + this.__addNamespace(namespace) + 'daemonsets')
+            this.daemonsetsPromise = this.__get('/apis/apps/v1/' + this.__addNamespace(namespace) + 'daemonsets')
                 .then(result => {
                     return result.items;
                 });

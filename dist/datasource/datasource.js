@@ -184,7 +184,7 @@ System.register([], function(exports_1) {
                 };
                 DOPK8SDatasource.prototype.getDeployments = function (namespace) {
                     if (namespace === void 0) { namespace = null; }
-                    return this.__get('/apis/extensions/v1beta1/' + this.__addNamespace(namespace) + 'deployments')
+                    return this.__get('/apis/apps/v1/' + this.__addNamespace(namespace) + 'deployments')
                         .then(function (result) {
                         return result.items;
                     });
@@ -198,7 +198,7 @@ System.register([], function(exports_1) {
                 };
                 DOPK8SDatasource.prototype.getDaemonsets = function (namespace) {
                     if (namespace === void 0) { namespace = null; }
-                    return this.__get('/apis/extensions/v1beta1/' + this.__addNamespace(namespace) + 'daemonsets')
+                    return this.__get('/apis/apps/v1/' + this.__addNamespace(namespace) + 'daemonsets')
                         .then(function (result) {
                         return result.items;
                     });
@@ -233,7 +233,7 @@ System.register([], function(exports_1) {
                 DOPK8SDatasource.prototype.getDeploymentsSingletone = function (namespace) {
                     if (namespace === void 0) { namespace = null; }
                     if (!this.deploymentsPromise) {
-                        this.deploymentsPromise = this.__get('/apis/extensions/v1beta1/' + this.__addNamespace(namespace) + 'deployments')
+                        this.deploymentsPromise = this.__get('/apis/apps/v1/' + this.__addNamespace(namespace) + 'deployments')
                             .then(function (result) {
                             return result.items;
                         });
@@ -243,7 +243,7 @@ System.register([], function(exports_1) {
                 DOPK8SDatasource.prototype.getDaemonsetsSingletone = function (namespace) {
                     if (namespace === void 0) { namespace = null; }
                     if (!this.daemonsetsPromise) {
-                        this.daemonsetsPromise = this.__get('/apis/extensions/v1beta1/' + this.__addNamespace(namespace) + 'daemonsets')
+                        this.daemonsetsPromise = this.__get('/apis/apps/v1/' + this.__addNamespace(namespace) + 'daemonsets')
                             .then(function (result) {
                             return result.items;
                         });
