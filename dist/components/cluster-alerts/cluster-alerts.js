@@ -1,4 +1,4 @@
-System.register(['../../components/k8s-page'], function(exports_1) {
+System.register(['../k8s-page'], function(exports_1) {
     var __extends = (this && this.__extends) || function (d, b) {
         for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
         function __() { this.constructor = d; }
@@ -38,19 +38,14 @@ System.register(['../../components/k8s-page'], function(exports_1) {
                         });
                     });
                 }
-                ClusterAlerts.prototype.clusterNoProblem = function () {
+                ClusterAlerts.prototype.clusterProblem = function () {
                     var node = this.getWarningNodes().length === 0;
                     var usedCpu = this.getAlertsNodesByCPU().length === 0;
                     var usedMemory = this.getAlertsNodesByMemory().length === 0;
                     var usedPods = this.getAlertsNodesByPods().length === 0;
                     var failPods = this.getWarningPods().length === 0;
                     var components = this.getAlertsComponents.length === 0;
-                    if (node && usedCpu && usedMemory && usedPods && failPods && components) {
-                        return true;
-                    }
-                    else {
-                        return false;
-                    }
+                    return !(node && usedCpu && usedMemory && usedPods && failPods && components);
                 };
                 ;
                 ClusterAlerts.templateUrl = 'components/cluster-alerts/cluster-alerts.html';

@@ -8,31 +8,55 @@
             <div class="gf-form-inline">
                 <div class="gf-form">
                     <span class="gf-form-label width-10">Name</span>
-                    <input class="gf-form-input max-width-21" type="text" ng-model="ctrl.cluster.name" placeholder="Enter your cluster's name" required/>
+                    <input class="gf-form-input width-20" type="text" ng-model="ctrl.cluster.name" placeholder="Enter your cluster's name" required/>
                 </div>
             </div>
         </div>
 
-        <datasource-http-settings current="ctrl.cluster" suggest-url="https://localhost:8443">
+        <datasource-http-settings
+                current="ctrl.cluster"
+                suggest-url="https://localhost:8443">
         </datasource-http-settings>
 
         <div class="gf-form-group">
+            <h3 class="page-heading">Bearer token access</h3>
+
+            <div class="gf-form-inline">
+                <gf-form-checkbox
+                        class="gf-form"
+                        label="Access via token"
+                        checked="ctrl.cluster.jsonData.access_via_token"
+                        label-class="width-10"
+                        switch-class="max-width-6">
+                </gf-form-checkbox>
+            </div>
+            <div class="gf-form-inline" ng-if="ctrl.cluster.jsonData.access_via_token">
+                <div class="gf-form">
+                    <span class="gf-form-label width-10">Token</span>
+
+                    <input type="password" class="gf-form-input width-20" ng-model='ctrl.cluster.secureJsonData.access_token' placeholder="Token"></input>
+
+                </div>
+            </div>
+        </div>
+        <hr>
+        <div class="gf-form-group">
+            <h3 class="page-heading">Additional</h3>
+
             <div class="gf-form-inline">
                 <div class="gf-form">
                     <span class="gf-form-label width-20">Additional Prometheus datasource</span>
-                    <select class="gf-form-input"
+                    <select class="gf-form-input width-10"
                         ng-model="ctrl.cluster.jsonData.prom_name"
                         ng-options="prom.name as prom.name for prom in ctrl.prometheusList"
                     ></select>
                 </div>
             </div>
-        </div>
 
-        <div class="gf-form-group">
             <div class="gf-form-inline">
                 <div class="gf-form">
                     <span class="gf-form-label width-20">Refresh pods' rate</span>
-                    <select class="gf-form-input"
+                    <select class="gf-form-input width-10"
                         required
                         ng-model="ctrl.cluster.jsonData.refresh_pods_rate"
                     >

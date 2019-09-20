@@ -237,7 +237,11 @@ export class Node extends  BaseModel{
     }
 
     __getBytes(str: string): number{
-        return this.__parseInt(str) * 1024;
+        let bytes = this.__parseInt(str) * 1024;
+        if (str.indexOf('Mi') > -1) {
+            bytes = bytes * 1024;
+        }
+        return bytes;
     }
 
     __parseInt(str: string): number{

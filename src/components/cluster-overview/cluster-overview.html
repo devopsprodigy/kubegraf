@@ -35,16 +35,18 @@
                 <div class="row">
                     <span class="col-md-3" ng-repeat="(npKey, namespace) in ctrl.namespaceMap">
                         <input
-                                type="checkbox" class="cr1"
+                                type="checkbox" class="toggle-checkbox"
                                 id="{{npKey}}"
                                 ng-click="namespace.toggle()"
                                 ng-checked="namespace.open"
                         >
-                        <label class="cr1" for="{{npKey}}" ng-bind="namespace.name" />
+                        <label class="toggle-checkbox" for="{{npKey}}" ng-bind="namespace.name" />
                     </span>
                 </div>
                 <div class="row explore-panel" style="justify-content: flex-end; margin-top: 8px">
-                    <span class="col-md-2 btn btn-secondary filter-table" ng-click="ctrl.__showAll()">SHOW ALL</span>
+                    <div class="col-md-3">
+                        <span class="btn btn-secondary" ng-click="ctrl.__showAll()">SHOW ALL</span>
+                    </div>
                 </div>
             </div>
         </div>

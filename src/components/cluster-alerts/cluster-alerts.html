@@ -25,7 +25,7 @@
         </div>
     </div>
     <br />
-    <section ng-if="!ctrl.clusterNoProblem()">
+    <section ng-if="ctrl.nodesMapReady && ctrl.clusterProblem()">
         <div class="row">
             <div class="col-md-6">
                 <div class="markdown-html explore-panel">
@@ -133,7 +133,7 @@
             </div>
         </div>
     </section>
-    <section ng-if="ctrl.clusterNoProblem()">
+    <section ng-if="ctrl.nodesMapReady && !ctrl.clusterProblem()">
         <div class="pointer card-item-label col-md-12">
             <span class="override--pod_status override--pod_status_success"></span>
             <h3>YOUR CLUSTER IS OKAY</h3>
