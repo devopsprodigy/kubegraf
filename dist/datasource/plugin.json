@@ -21,5 +21,18 @@
   },
   "staticRoot": ".",
   "metrics": true,
-  "annotations" : false
+  "annotations" : false,
+  "routes": [
+    {
+      "path": "__proxy",
+      "method": "GET",
+      "url": "{{ .JsonData.cluster_url }}",
+      "headers": [
+        {
+          "name": "Authorization",
+          "content": "Bearer {{.SecureJsonData.access_token}}"
+        }
+      ]
+    }
+  ]
 }

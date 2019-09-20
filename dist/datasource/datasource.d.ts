@@ -8,6 +8,7 @@ export declare class DOPK8SDatasource {
     deploymentsPromise: any;
     daemonsetsPromise: any;
     statefulsetsPromise: any;
+    accessViaToken: boolean;
     constructor(instanceSettings: any, backendSrv: any, templateSrv: any);
     testDatasource(): any;
     metricFindQuery(query: any): any;

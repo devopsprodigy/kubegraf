@@ -24,4 +24,6 @@ rules:
   - apiGroups: ["apps"]
     resources:
       - statefulsets
+      - deployments
+      - daemonsets
     verbs: ["get", "list", "watch"]
