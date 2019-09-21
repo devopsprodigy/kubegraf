@@ -27,3 +27,5 @@ rules:
       - deployments
       - daemonsets
     verbs: ["get", "list", "watch"]
+  - nonResourceURLs: ['/']
+    verbs: ["get"]
