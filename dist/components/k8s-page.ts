@@ -48,6 +48,9 @@ export  class K8sPage {
     storeDaemonSets: Array<Daemonset> = [];
     namespaceMap: Array<Namespace> = [];
     nodesMap: Array<Node> = [];
+    nodesError: Boolean|Error = false;
+    podsError: Boolean|Error = false;
+    componentsError: Boolean|Error = false;
 
 
     updatePods(pods){
@@ -203,21 +206,26 @@ export  class K8sPage {
                     nodeStore = getStore;
                 }
 
-                nodes.forEach(node => {
+                if(nodes instanceof Array) {
+                    this.nodesError = false;
+                    nodes.forEach(node => {
 
-                    let nd = new Node(node);
-                    this.nodesMap.push(nd);
+                        let nd = new Node(node);
+                        this.nodesMap.push(nd);
 
-                    let index = nodeStore.findIndex(item => item.name === nd.name);
+                        let index = nodeStore.findIndex(item => item.name === nd.name);
 
-                    if(index > -1){
-                        nd.open = nodeStore[index].open;
-                    }else{
-                        nodeStore.push({name: nd.name, open: nd.open});
-                    }
+                        if (index > -1) {
+                            nd.open = nodeStore[index].open;
+                        } else {
+                            nodeStore.push({name: nd.name, open: nd.open});
+                        }
 
-                });
-                store.setObject('nodeStore', nodeStore);
+                    });
+                    store.setObject('nodeStore', nodeStore);
+                } else if (nodes instanceof Error){
+                    this.nodesError = nodes;
+                }
             })
     }
 
@@ -721,11 +729,15 @@ export  class K8sPage {
     getPods(skipEmptyHost = false){
         return this.clusterDS.getPods()
             .then(pods => {
+                if(pods instanceof Array) {
+                    this.podsError = false;
+                    if(skipEmptyHost)
+                        pods = pods.filter(pod => pod.status.hostIP != undefined);
 
-                if(skipEmptyHost)
-                    pods = pods.filter(pod => pod.status.hostIP != undefined);
-
-                this.storePods = pods.map(pod => new Pod(pod));
+                    this.storePods = pods.map(pod => new Pod(pod));
+                } else if (pods instanceof Error){
+                    this.podsError = pods;
+                }
 
                 this.timeout(() => {
                     this.refreshPods(skipEmptyHost);
@@ -739,32 +751,38 @@ export  class K8sPage {
 
         this.clusterDS.getPods()
             .then(pods => {
-                if(skipEmptyHost)
-                    pods = pods.filter(pod => pod.status.hostIP != undefined);
+                if(pods instanceof Array) {
+                    this.podsError = false;
 
-                this.storePods.filter(pod => {
-                    return !pod.is_deleted;
-                }).forEach(issetPod => {
-                    let equalPod = pods.filter(item => {
-                        return item.metadata.uid === issetPod.data.metadata.uid
+                    if (skipEmptyHost)
+                        pods = pods.filter(pod => pod.status.hostIP != undefined);
+
+                    this.storePods.filter(pod => {
+                        return !pod.is_deleted;
+                    }).forEach(issetPod => {
+                        let equalPod = pods.filter(item => {
+                            return item.metadata.uid === issetPod.data.metadata.uid
+                        });
+                        if (equalPod.length > 0) {
+                            equalPod = equalPod[0];
+                        } else {
+                            equalPod = false;
+                        }
+
+                        if (equalPod !== false) {
+                            issetPod.update(equalPod);
+                            pods.splice(pods.indexOf(equalPod), 1);
+                        } else {
+                            issetPod.destroy();
+                        }
+
                     });
-                    if(equalPod.length > 0){
-                        equalPod = equalPod[0];
-                    }else{
-                        equalPod = false;
-                    }
-
-                    if(equalPod !== false){
-                        issetPod.update(equalPod);
-                        pods.splice(pods.indexOf(equalPod), 1);
-                    }else{
-                        issetPod.destroy();
-                    }
-
-                });
-                pods = pods.map(pod => new Pod(pod));
-                this.storePods = this.storePods.concat(pods);
-                this.updatePods(pods);
+                    pods = pods.map(pod => new Pod(pod));
+                    this.storePods = this.storePods.concat(pods);
+                    this.updatePods(pods);
+                } else if (pods instanceof Error){
+                    this.podsError = pods;
+                }
            });
 
         this.timeout(() => {
@@ -775,7 +793,14 @@ export  class K8sPage {
     getClusterComponents(){
         this.clusterDS.getComponents()
             .then(components => {
-                this.storeComponents = components.map(component => new Component(component));
+
+                if(components instanceof Array) {
+                    this.componentsError = false;
+                    this.storeComponents = components.map(component => new Component(component));
+                } else if (components instanceof Error){
+                    this.componentsError = components;
+                }
+
                 this.timeout(() => {
                     this.refreshClusterComponents();
                 },this.refreshRate);
@@ -785,7 +810,14 @@ export  class K8sPage {
     refreshClusterComponents() {
         this.clusterDS.getComponents()
             .then(components => {
-                this.storeComponents = components.map(component => new Component(component));
+
+                if(components instanceof Array) {
+                    this.componentsError = false;
+                    this.storeComponents = components.map(component => new Component(component));
+                } else if (components instanceof Error){
+                    this.componentsError = components;
+                }
+
                 this.timeout(() => {
                     this.refreshClusterComponents();
                 }, this.refreshRate);

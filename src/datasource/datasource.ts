@@ -1,3 +1,5 @@
+import appEvents from "app/core/app_events";
+
 export class DOPK8SDatasource {
     name: string;
     url: string;
@@ -205,6 +207,10 @@ export class DOPK8SDatasource {
     getNamespaces(){
         return this.__get('/api/v1/namespaces')
             .then(result => {
+                if(!result.items){
+                    appEvents.emit('alert-error', [`Namespaces not received`], 100);
+                    return [];
+                }
                 return result.items;
             });
     }
@@ -212,6 +218,10 @@ export class DOPK8SDatasource {
     getDeployments(namespace = null){
         return this.__get('/apis/apps/v1/' + this.__addNamespace(namespace) + 'deployments')
             .then(result => {
+                if(!result.items){
+                    appEvents.emit('alert-error', [`Deployments not received`]);
+                    return [];
+                }
                 return result.items;
             });
     }
@@ -219,6 +229,10 @@ export class DOPK8SDatasource {
     getStatefulsets(namespace = null){
         return this.__get('/apis/apps/v1/' + this.__addNamespace(namespace) + 'statefulsets')
             .then(result => {
+                if(!result.items){
+                    appEvents.emit('alert-error', [`Statefulsets not received`]);
+                    return [];
+                }
                 return result.items;
             })
     }
@@ -226,6 +240,10 @@ export class DOPK8SDatasource {
     getDaemonsets(namespace = null){
         return this.__get('/apis/apps/v1/' + this.__addNamespace(namespace) + 'daemonsets')
             .then(result => {
+                if(!result.items){
+                    appEvents.emit('alert-error', [`Daemonsets not received`]);
+                    return [];
+                }
                 return result.items;
             })
     }
@@ -233,6 +251,11 @@ export class DOPK8SDatasource {
     getPods(namespace){
         return this.__get('/api/v1/' + this.__addNamespace(namespace) + 'pods')
             .then(result => {
+                if(!result.items){
+                    const message = `Pods not received`;
+                    appEvents.emit('alert-error', [message]);
+                    return new Error(message);
+                }
                 return result.items;
             })
     }
@@ -240,6 +263,10 @@ export class DOPK8SDatasource {
     getServices(namespace){
         return this.__get('/api/v1/' + this.__addNamespace(namespace) + 'services')
             .then(result => {
+                if(!result.items){
+                    appEvents.emit('alert-error', [`Services not received`]);
+                    return [];
+                }
                 return result.items;
             })
     }
@@ -247,6 +274,11 @@ export class DOPK8SDatasource {
     getComponents(){
         return this.__get('/api/v1/componentstatuses')
             .then(result => {
+                if(!result.items){
+                    const message = `Component statuses not received`;
+                    appEvents.emit('alert-error', [message]);
+                    return new Error(message);
+                }
                 return result.items;
             })
     }
@@ -254,8 +286,12 @@ export class DOPK8SDatasource {
     getNodesSingletone(){
         if(!this.nodesPromise){
             this.nodesPromise = this.__get('/api/v1/nodes')
-                .then(nodes => {
-                    return nodes.items;
+                .then(result => {
+                    if(!result.items){
+                        appEvents.emit('alert-error', [`Nodes (singleton) not received`]);
+                        return [];
+                    }
+                    return result.items;
                 })
         }
         return this.nodesPromise;
@@ -266,6 +302,10 @@ export class DOPK8SDatasource {
         if(!this.deploymentsPromise){
             this.deploymentsPromise = this.__get('/apis/apps/v1/' + this.__addNamespace(namespace) + 'deployments')
                 .then(result => {
+                    if(!result.items){
+                        appEvents.emit('alert-error', [`Deployments (singleton) not received`]);
+                        return [];
+                    }
                     return result.items;
                 });
         }
@@ -277,6 +317,10 @@ export class DOPK8SDatasource {
         if(!this.daemonsetsPromise){
             this.daemonsetsPromise = this.__get('/apis/apps/v1/' + this.__addNamespace(namespace) + 'daemonsets')
                 .then(result => {
+                    if(!result.items){
+                        appEvents.emit('alert-error', [`Daemonsets (singleton) not received`]);
+                        return [];
+                    }
                     return result.items;
                 });
         }
@@ -288,6 +332,10 @@ export class DOPK8SDatasource {
         if(!this.statefulsetsPromise){
             this.statefulsetsPromise = this.__get('/apis/apps/v1/' + this.__addNamespace(namespace) + 'statefulsets')
                 .then(result => {
+                    if(!result.items){
+                        appEvents.emit('alert-error', [`Statefulsets (singleton) not received`]);
+                        return [];
+                    }
                     return result.items;
                 });
         }
@@ -297,20 +345,33 @@ export class DOPK8SDatasource {
 
     getNodes(){
         return this.__get('/api/v1/nodes')
-            .then(nodes => {
-                return nodes.items;
+            .then(result => {
+                if(!result.items){
+                    const message = 'Nodes not received';
+                    appEvents.emit('alert-error', [message]);
+                    return new Error(message);
+                }
+                return result.items;
             })
     }
 
     getJobs(){
         return this.__get('/apis/batch/v1/jobs')
             .then(result => {
+                if(!result.items){
+                    appEvents.emit('alert-error', [`Jobs not received`]);
+                    return [];
+                }
                 return result.items;
             })
     }
     getCronJobs(){
         return this.__get('/apis/batch/v1beta1/cronjobs')
             .then(result => {
+                if(!result.items){
+                    appEvents.emit('alert-error', [`CronJobs not received`]);
+                    return [];
+                }
                 return result.items;
             })
     }

@@ -33,6 +33,9 @@ export declare class K8sPage {
     storeDaemonSets: Array<Daemonset>;
     namespaceMap: Array<Namespace>;
     nodesMap: Array<Node>;
+    nodesError: Boolean | Error;
+    podsError: Boolean | Error;
+    componentsError: Boolean | Error;
     updatePods(pods: any): void;
     constructor($scope: any, backendSrv: any, datasourceSrv: any, $location: any, timeout: any, $q: any);
     getNodeDashboardLink(node: any): string;

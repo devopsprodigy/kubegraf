@@ -1,7 +1,11 @@
-System.register([], function(exports_1) {
+System.register(["app/core/app_events"], function(exports_1) {
+    var app_events_1;
     var DOPK8SDatasource;
     return {
-        setters:[],
+        setters:[
+            function (app_events_1_1) {
+                app_events_1 = app_events_1_1;
+            }],
         execute: function() {
             DOPK8SDatasource = (function () {
                 function DOPK8SDatasource(instanceSettings, backendSrv, templateSrv) {
@@ -179,6 +183,10 @@ System.register([], function(exports_1) {
                 DOPK8SDatasource.prototype.getNamespaces = function () {
                     return this.__get('/api/v1/namespaces')
                         .then(function (result) {
+                        if (!result.items) {
+                            app_events_1.default.emit('alert-error', ["Namespaces not received"], 100);
+                            return [];
+                        }
                         return result.items;
                     });
                 };
@@ -186,6 +194,10 @@ System.register([], function(exports_1) {
                     if (namespace === void 0) { namespace = null; }
                     return this.__get('/apis/apps/v1/' + this.__addNamespace(namespace) + 'deployments')
                         .then(function (result) {
+                        if (!result.items) {
+                            app_events_1.default.emit('alert-error', ["Deployments not received"]);
+                            return [];
+                        }
                         return result.items;
                     });
                 };
@@ -193,6 +205,10 @@ System.register([], function(exports_1) {
                     if (namespace === void 0) { namespace = null; }
                     return this.__get('/apis/apps/v1/' + this.__addNamespace(namespace) + 'statefulsets')
                         .then(function (result) {
+                        if (!result.items) {
+                            app_events_1.default.emit('alert-error', ["Statefulsets not received"]);
+                            return [];
+                        }
                         return result.items;
                     });
                 };
@@ -200,32 +216,54 @@ System.register([], function(exports_1) {
                     if (namespace === void 0) { namespace = null; }
                     return this.__get('/apis/apps/v1/' + this.__addNamespace(namespace) + 'daemonsets')
                         .then(function (result) {
+                        if (!result.items) {
+                            app_events_1.default.emit('alert-error', ["Daemonsets not received"]);
+                            return [];
+                        }
                         return result.items;
                     });
                 };
                 DOPK8SDatasource.prototype.getPods = function (namespace) {
                     return this.__get('/api/v1/' + this.__addNamespace(namespace) + 'pods')
                         .then(function (result) {
+                        if (!result.items) {
+                            var message = "Pods not received";
+                            app_events_1.default.emit('alert-error', [message]);
+                            return new Error(message);
+                        }
                         return result.items;
                     });
                 };
                 DOPK8SDatasource.prototype.getServices = function (namespace) {
                     return this.__get('/api/v1/' + this.__addNamespace(namespace) + 'services')
                         .then(function (result) {
+                        if (!result.items) {
+                            app_events_1.default.emit('alert-error', ["Services not received"]);
+                            return [];
+                        }
                         return result.items;
                     });
                 };
                 DOPK8SDatasource.prototype.getComponents = function () {
                     return this.__get('/api/v1/componentstatuses')
                         .then(function (result) {
+                        if (!result.items) {
+                            var message = "Component statuses not received";
+                            app_events_1.default.emit('alert-error', [message]);
+                            return new Error(message);
+                        }
                         return result.items;
                     });
                 };
                 DOPK8SDatasource.prototype.getNodesSingletone = function () {
                     if (!this.nodesPromise) {
                         this.nodesPromise = this.__get('/api/v1/nodes')
-                            .then(function (nodes) {
-                            return nodes.items;
+                            .then(function (result) {
+                            if (!result.items) {
+                                app_events_1.default.emit('alert-error', ["Nodes (singleton) not received"]);
+                                return [];
+                            }
+                            return result.items;
                         });
                     }
                     return this.nodesPromise;
@@ -235,6 +273,10 @@ System.register([], function(exports_1) {
                     if (!this.deploymentsPromise) {
                         this.deploymentsPromise = this.__get('/apis/apps/v1/' + this.__addNamespace(namespace) + 'deployments')
                             .then(function (result) {
+                            if (!result.items) {
+                                app_events_1.default.emit('alert-error', ["Deployments (singleton) not received"]);
+                                return [];
+                            }
                             return result.items;
                         });
                     }
@@ -245,6 +287,10 @@ System.register([], function(exports_1) {
                     if (!this.daemonsetsPromise) {
                         this.daemonsetsPromise = this.__get('/apis/apps/v1/' + this.__addNamespace(namespace) + 'daemonsets')
                             .then(function (result) {
+                            if (!result.items) {
+                                app_events_1.default.emit('alert-error', ["Daemonsets (singleton) not received"]);
+                                return [];
+                            }
                             return result.items;
                         });
                     }
@@ -255,6 +301,10 @@ System.register([], function(exports_1) {
                     if (!this.statefulsetsPromise) {
                         this.statefulsetsPromise = this.__get('/apis/apps/v1/' + this.__addNamespace(namespace) + 'statefulsets')
                             .then(function (result) {
+                            if (!result.items) {
+                                app_events_1.default.emit('alert-error', ["Statefulsets (singleton) not received"]);
+                                return [];
+                            }
                             return result.items;
                         });
                     }
@@ -262,19 +312,32 @@ System.register([], function(exports_1) {
                 };
                 DOPK8SDatasource.prototype.getNodes = function () {
                     return this.__get('/api/v1/nodes')
-                        .then(function (nodes) {
-                        return nodes.items;
+                        .then(function (result) {
+                        if (!result.items) {
+                            var message = 'Nodes not received';
+                            app_events_1.default.emit('alert-error', [message]);
+                            return new Error(message);
+                        }
+                        return result.items;
                     });
                 };
                 DOPK8SDatasource.prototype.getJobs = function () {
                     return this.__get('/apis/batch/v1/jobs')
                         .then(function (result) {
+                        if (!result.items) {
+                            app_events_1.default.emit('alert-error', ["Jobs not received"]);
+                            return [];
+                        }
                         return result.items;
                     });
                 };
                 DOPK8SDatasource.prototype.getCronJobs = function () {
                     return this.__get('/apis/batch/v1beta1/cronjobs')
                         .then(function (result) {
+                        if (!result.items) {
+                            app_events_1.default.emit('alert-error', ["CronJobs not received"]);
+                            return [];
+                        }
                         return result.items;
                     });
                 };

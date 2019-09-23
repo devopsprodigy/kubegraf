@@ -35,6 +35,36 @@
                             <th>Entity</th>
                             <th>Error message</th>
                         </tr>
+                        <tr ng-if="ctrl.nodesError"><td colspan="3"><b>Node</b></td></tr>
+                        <tr ng-if="ctrl.nodesError">
+                            <td>
+                                <span class="override--nodeTable_status override--pod_status_error"></span>
+                            </td>
+                            <td class="pointer">
+                                <span>K8S API Request</span>
+                            </td>
+                            <td ng-bind="ctrl.nodesError.message"></td>
+                        </tr>
+                        <tr ng-if="ctrl.podsError"><td colspan="3"><b>Pods</b></td></tr>
+                        <tr ng-if="ctrl.podsError">
+                            <td>
+                                <span class="override--nodeTable_status override--pod_status_error"></span>
+                            </td>
+                            <td class="pointer">
+                                <span>K8S API Request</span>
+                            </td>
+                            <td ng-bind="ctrl.podsError.message"></td>
+                        </tr>
+                        <tr ng-if="ctrl.componentsError"><td colspan="3"><b>Services</b></td></tr>
+                        <tr ng-if="ctrl.componentsError">
+                            <td>
+                                <span class="override--nodeTable_status override--pod_status_error"></span>
+                            </td>
+                            <td class="pointer">
+                                <span>K8S API Request</span>
+                            </td>
+                            <td ng-bind="ctrl.componentsError.message"></td>
+                        </tr>
                         <!--services problem-->
                         <tr ng-if="ctrl.getAlertsComponents.length > 0"><td>Services</td></tr>
                         <tr ng-repeat="component in ctrl.getAlertsComponents">

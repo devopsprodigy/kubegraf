@@ -65,6 +65,9 @@ System.register(["app/core/app_events", "../common/types/pod", "../common/proxie
                     this.storeDaemonSets = [];
                     this.namespaceMap = [];
                     this.nodesMap = [];
+                    this.nodesError = false;
+                    this.podsError = false;
+                    this.componentsError = false;
                     this.$q = $q;
                     this.$scope = $scope;
                     this.pageReady = false;
@@ -187,18 +190,24 @@ System.register(["app/core/app_events", "../common/types/pod", "../common/proxie
                         if (getStore) {
                             nodeStore = getStore;
                         }
-                        nodes.forEach(function (node) {
-                            var nd = new node_1.Node(node);
-                            _this.nodesMap.push(nd);
-                            var index = nodeStore.findIndex(function (item) { return item.name === nd.name; });
-                            if (index > -1) {
-                                nd.open = nodeStore[index].open;
-                            }
-                            else {
-                                nodeStore.push({ name: nd.name, open: nd.open });
-                            }
-                        });
-                        store_1.default.setObject('nodeStore', nodeStore);
+                        if (nodes instanceof Array) {
+                            _this.nodesError = false;
+                            nodes.forEach(function (node) {
+                                var nd = new node_1.Node(node);
+                                _this.nodesMap.push(nd);
+                                var index = nodeStore.findIndex(function (item) { return item.name === nd.name; });
+                                if (index > -1) {
+                                    nd.open = nodeStore[index].open;
+                                }
+                                else {
+                                    nodeStore.push({ name: nd.name, open: nd.open });
+                                }
+                            });
+                            store_1.default.setObject('nodeStore', nodeStore);
+                        }
+                        else if (nodes instanceof Error) {
+                            _this.nodesError = nodes;
+                        }
                     });
                 };
                 K8sPage.prototype.getPodsMetrics = function () {
@@ -638,9 +647,15 @@ System.register(["app/core/app_events", "../common/types/pod", "../common/proxie
                     if (skipEmptyHost === void 0) { skipEmptyHost = false; }
                     return this.clusterDS.getPods()
                         .then(function (pods) {
-                        if (skipEmptyHost)
-                            pods = pods.filter(function (pod) { return pod.status.hostIP != undefined; });
-                        _this.storePods = pods.map(function (pod) { return new pod_1.Pod(pod); });
+                        if (pods instanceof Array) {
+                            _this.podsError = false;
+                            if (skipEmptyHost)
+                                pods = pods.filter(function (pod) { return pod.status.hostIP != undefined; });
+                            _this.storePods = pods.map(function (pod) { return new pod_1.Pod(pod); });
+                        }
+                        else if (pods instanceof Error) {
+                            _this.podsError = pods;
+                        }
                         _this.timeout(function () {
                             _this.refreshPods(skipEmptyHost);
                         }, _this.refreshRate);
@@ -651,31 +666,37 @@ System.register(["app/core/app_events", "../common/types/pod", "../common/proxie
                     if (skipEmptyHost === void 0) { skipEmptyHost = false; }
                     this.clusterDS.getPods()
                         .then(function (pods) {
-                        if (skipEmptyHost)
-                            pods = pods.filter(function (pod) { return pod.status.hostIP != undefined; });
-                        _this.storePods.filter(function (pod) {
-                            return !pod.is_deleted;
-                        }).forEach(function (issetPod) {
-                            var equalPod = pods.filter(function (item) {
-                                return item.metadata.uid === issetPod.data.metadata.uid;
+                        if (pods instanceof Array) {
+                            _this.podsError = false;
+                            if (skipEmptyHost)
+                                pods = pods.filter(function (pod) { return pod.status.hostIP != undefined; });
+                            _this.storePods.filter(function (pod) {
+                                return !pod.is_deleted;
+                            }).forEach(function (issetPod) {
+                                var equalPod = pods.filter(function (item) {
+                                    return item.metadata.uid === issetPod.data.metadata.uid;
+                                });
+                                if (equalPod.length > 0) {
+                                    equalPod = equalPod[0];
+                                }
+                                else {
+                                    equalPod = false;
+                                }
+                                if (equalPod !== false) {
+                                    issetPod.update(equalPod);
+                                    pods.splice(pods.indexOf(equalPod), 1);
+                                }
+                                else {
+                                    issetPod.destroy();
+                                }
                             });
-                            if (equalPod.length > 0) {
-                                equalPod = equalPod[0];
-                            }
-                            else {
-                                equalPod = false;
-                            }
-                            if (equalPod !== false) {
-                                issetPod.update(equalPod);
-                                pods.splice(pods.indexOf(equalPod), 1);
-                            }
-                            else {
-                                issetPod.destroy();
-                            }
-                        });
-                        pods = pods.map(function (pod) { return new pod_1.Pod(pod); });
-                        _this.storePods = _this.storePods.concat(pods);
-                        _this.updatePods(pods);
+                            pods = pods.map(function (pod) { return new pod_1.Pod(pod); });
+                            _this.storePods = _this.storePods.concat(pods);
+                            _this.updatePods(pods);
+                        }
+                        else if (pods instanceof Error) {
+                            _this.podsError = pods;
+                        }
                     });
                     this.timeout(function () {
                         _this.refreshPods(skipEmptyHost);
@@ -685,7 +706,13 @@ System.register(["app/core/app_events", "../common/types/pod", "../common/proxie
                     var _this = this;
                     this.clusterDS.getComponents()
                         .then(function (components) {
-                        _this.storeComponents = components.map(function (component) { return new component_1.Component(component); });
+                        if (components instanceof Array) {
+                            _this.componentsError = false;
+                            _this.storeComponents = components.map(function (component) { return new component_1.Component(component); });
+                        }
+                        else if (components instanceof Error) {
+                            _this.componentsError = components;
+                        }
                         _this.timeout(function () {
                             _this.refreshClusterComponents();
                         }, _this.refreshRate);
@@ -695,7 +722,13 @@ System.register(["app/core/app_events", "../common/types/pod", "../common/proxie
                     var _this = this;
                     this.clusterDS.getComponents()
                         .then(function (components) {
-                        _this.storeComponents = components.map(function (component) { return new component_1.Component(component); });
+                        if (components instanceof Array) {
+                            _this.componentsError = false;
+                            _this.storeComponents = components.map(function (component) { return new component_1.Component(component); });
+                        }
+                        else if (components instanceof Error) {
+                            _this.componentsError = components;
+                        }
                         _this.timeout(function () {
                             _this.refreshClusterComponents();
                         }, _this.refreshRate);

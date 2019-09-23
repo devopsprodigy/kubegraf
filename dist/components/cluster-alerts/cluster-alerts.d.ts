@@ -7,5 +7,5 @@ export declare class ClusterAlerts extends K8sPage {
     $timeout: any;
     static templateUrl: string;
     constructor($scope: any, $injector: any, $q: any, backendSrv: any, datasourceSrv: any, $location: any, $timeout: any);
-    clusterProblem(): boolean;
+    clusterProblem(): Boolean | Error;
 }

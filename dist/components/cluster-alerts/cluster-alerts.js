@@ -45,7 +45,7 @@ System.register(['../k8s-page'], function(exports_1) {
                     var usedPods = this.getAlertsNodesByPods().length === 0;
                     var failPods = this.getWarningPods().length === 0;
                     var components = this.getAlertsComponents.length === 0;
-                    return !(node && usedCpu && usedMemory && usedPods && failPods && components);
+                    return this.nodesError || this.componentsError || this.podsError || !(node && usedCpu && usedMemory && usedPods && failPods && components);
                 };
                 ;
                 ClusterAlerts.templateUrl = 'components/cluster-alerts/cluster-alerts.html';

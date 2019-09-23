@@ -44,6 +44,6 @@ export class ClusterAlerts extends K8sPage{
         let failPods = this.getWarningPods().length === 0;
         let components = this.getAlertsComponents.length === 0;
 
-        return !(node && usedCpu && usedMemory && usedPods && failPods && components);
+        return this.nodesError || this.componentsError || this.podsError || !(node && usedCpu && usedMemory && usedPods && failPods && components);
     };
 }
