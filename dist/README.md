@@ -89,35 +89,38 @@ The above three dashboards show the number of available / unavailable applicatio
 	 
 	or
 	 
-	`grafana-cli plugins install devopsprodigy-kubegraf-app`
-
-	and restart Grafana.
+	`grafana-cli plugins install devopsprodigy-kubegraf-app` and restart grafana-server.
 	
-3. Go to /configuration-plugins in Grafana and click on the plugin. Then click “enable”.
+3. Apply Kubernetes manifests in [kubernetes/](kubernetes/) directory to give
+     required permissions to `grafana-kubegraf` user:
+     ```
+     kubectl apply -f kubernetes/
+     ```
+     
+4.  Create `grafana-kubegraf` user private key and certificate on one of the
+      master nodes
+      ```
+      openssl genrsa -out ~/grafana-kubegraf.key 2048
+      openssl req -new -key ~/grafana-kubegraf.key -out ~/grafana-kubegraf.csr -subj "/CN=grafana-kubegraf/O=monitoring"
+      openssl x509 -req -in ~/grafana-kubegraf.csr -CA /etc/kubernetes/pki/ca.crt -CAkey /etc/kubernetes/pki/ca.key -out /etc/kubernetes/pki/grafana-kubegraf.crt -CAcreateserial
+      ```
+     Copy /etc/kubernetes/pki/grafana-kubegraf.crt to all other master nodes.
+    
+    or 
+    
+    Get token
+    ```
+    kubectl describe secret grafana-kubegraf-secret
+    ```
+	
+5. Go to /configuration-plugins in Grafana and click on the plugin. Then click “enable”.
 
-4. Go to the plugin and select “create cluster”.
+6. Go to the plugin and select “create cluster”.
 
-5. Enter the settings of http-access to the Kubernetes api server.
+7. Enter the settings of http-access to the Kubernetes api server:
+    * Kubernetes master's url from `kubectl cluster-info`
+    * Enter Certificate and key from step #4  "TLS Client Auth" section 
+      Or
+      Token from step #4 in "Bearer token access" section
 
-6. Open the “additional datasources” drop-down list and select the prometheus that is used in this cluster.
-
-### Setting up cluster authentication and permissons
-
-This procedure can be used to create a Kubernetes user account with only
-minimal permissions required by KubeGraf.
-
-* Create `grafana-kubegraf` user private key and certificate on one of the
-  master nodes
-  ```
-  openssl genrsa -out ~/grafana-kubegraf.key 2048
-  openssl req -new -key ~/grafana-kubegraf.key -out ~/grafana-kubegraf.csr -subj "/CN=grafana-kubegraf/O=monitoring"
-  openssl x509 -req -in ~/grafana-kubegraf.csr -CA /etc/kubernetes/pki/ca.crt -CAkey /etc/kubernetes/pki/ca.key -out /etc/kubernetes/pki/grafana-kubegraf.crt -CAcreateserial
-  ```
-* Copy /etc/kubernetes/pki/grafana-kubegraf.crt to all other master nodes.
-* Apply Kubernetes manifests in [kubernetes/](kubernetes/) directory to give
-  required permissions to `grafana-kubegraf` user:
-  ```
-  kubectl apply -f kubernetes/
-  ```
-* Use generated certificate and key from the first step to authenticate
-  KubeGraf plugin to your cluster.
+8. Open the “additional datasources” drop-down list and select the prometheus that is used in this cluster.

@@ -52,7 +52,7 @@
       "type"      : "page",
       "name"      : "Cluster config",
       "component" : "ClusterConfig",
-      "role"      : "Viewer",
+      "role"      : "Editor",
       "addToNav"  : false
     },
     {
