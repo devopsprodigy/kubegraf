@@ -2,7 +2,7 @@
 
 ### New features
 * **k8s v1.16 support** (Deployments, Daemonsets and Statefulsets migrate to use the apps/v1 API)
-* Bearer token access [#5](https://github.com/devopsprodigy/kubegraf/issues/5) [#4](https://github.com/devopsprodigy/kubegraf/issues/4)
+* **Bearer token access** (restart your grafana-server after update) [#5](https://github.com/devopsprodigy/kubegraf/issues/5) [#4](https://github.com/devopsprodigy/kubegraf/issues/4)
 
 ### Bug Fixes 
 * Node._getBytes now works with Mi [#7](https://github.com/devopsprodigy/kubegraf/pull/7)
