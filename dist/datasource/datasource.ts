@@ -2,6 +2,7 @@ import appEvents from "app/core/app_events";
 
 export class DOPK8SDatasource {
     name: string;
+    id: number;
     url: string;
     prometheus: string;
     nodesPromise: any;
@@ -14,6 +15,7 @@ export class DOPK8SDatasource {
     constructor(instanceSettings, private backendSrv, private templateSrv){
         this.name = instanceSettings.name;
         this.url = instanceSettings.url;
+        this.id = instanceSettings.id;
         this.prometheus = instanceSettings.jsonData.prom_name;
         this.refreshRate = instanceSettings.jsonData.refresh_pods_rate;
         this.nodesPromise = null;
