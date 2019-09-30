@@ -6,15 +6,16 @@ export class ClusterConfig{
     busy: boolean;
     $scope: any;
     pageReady: boolean;
+    version: number;
 
     static templateUrl = 'components/cluster-config/cluster-config.html';
 
-    constructor($scope, $injector, private backendSrv, private alertSrv, private $q, private $location){
+    constructor($scope, $injector, private backendSrv, private alertSrv, private $q, private $location, private $window){
         this.pageReady = false;
-
         this.$scope = $scope;
         this.busy = false;
         this.getCluster();
+        this.setGrafanaVersion($window);
 
     }
 
@@ -64,6 +65,11 @@ export class ClusterConfig{
                     this.cluster.jsonData.prom_name = defProm[0].name;
                 }
             })
+    }
+
+    setGrafanaVersion(window){
+        let _v = window.grafanaBootData.settings.buildInfo.version.split('.')[0];
+        this.version = _v;
     }
 
     saveCluster(){

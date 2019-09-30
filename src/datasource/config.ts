@@ -6,8 +6,9 @@ export class DOPK8SConfig{
     current: any;
     prometheusList: Array<any>;
     pageReady: boolean;
+    version: number;
 
-    constructor($scope, $injector, private backendSrv){
+    constructor($scope, $injector, private backendSrv, private $window){
         this.pageReady = false;
         if(this.current.id){
             if(!(this.current.jsonData.prom_name))
@@ -29,6 +30,7 @@ export class DOPK8SConfig{
 
             };
         }
+        this.setGrafanaVersion($window);
         this.getPrometheusList()
             .then(() => {
                 this.pageReady = true;
@@ -37,6 +39,12 @@ export class DOPK8SConfig{
         $scope.$watch('ctrl.current', () => {
             this.setUrl();
         });
+    }
+
+    setGrafanaVersion(window){
+        let _v = window.grafanaBootData.settings.buildInfo.version.split('.')[0];
+        console.log(_v);
+        this.version = _v;
     }
 
     setUrl(){
