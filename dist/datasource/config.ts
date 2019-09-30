@@ -42,8 +42,13 @@ export class DOPK8SConfig{
     }
 
     setGrafanaVersion(window){
-        let _v = window.grafanaBootData.settings.buildInfo.version.split('.')[0];
-        console.log(_v);
+        let _v;
+        try{
+            _v = window.grafanaBootData.settings.buildInfo.version.split('.')[0];
+        }catch (e) {
+            console.error(e);
+            _v = 5;
+        }
         this.version = _v;
     }
 

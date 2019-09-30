@@ -41,8 +41,14 @@ System.register(["../common/constants"], function(exports_1) {
                     });
                 }
                 DOPK8SConfig.prototype.setGrafanaVersion = function (window) {
-                    var _v = window.grafanaBootData.settings.buildInfo.version.split('.')[0];
-                    console.log(_v);
+                    var _v;
+                    try {
+                        _v = window.grafanaBootData.settings.buildInfo.version.split('.')[0];
+                    }
+                    catch (e) {
+                        console.error(e);
+                        _v = 5;
+                    }
                     this.version = _v;
                 };
                 DOPK8SConfig.prototype.setUrl = function () {
