@@ -18,12 +18,13 @@ System.register(["../../common/store", "../k8s-page"], function(exports_1) {
         execute: function() {
             ClusterOverview = (function (_super) {
                 __extends(ClusterOverview, _super);
-                function ClusterOverview($scope, $injector, $q, backendSrv, datasourceSrv, $location, $timeout) {
+                function ClusterOverview($scope, $injector, $q, backendSrv, datasourceSrv, contextSrv, $location, $timeout) {
                     var _this = this;
-                    _super.call(this, $scope, backendSrv, datasourceSrv, $location, $timeout, $q);
+                    _super.call(this, $scope, backendSrv, datasourceSrv, contextSrv, $location, $timeout, $q);
                     this.$q = $q;
                     this.backendSrv = backendSrv;
                     this.datasourceSrv = datasourceSrv;
+                    this.contextSrv = contextSrv;
                     this.$location = $location;
                     this.$timeout = $timeout;
                     this.pageReady = false;

@@ -6,7 +6,7 @@
                 <div class="gf-tabs-item"><a class="gf-tabs-link" target="_self" href="plugins/devopsprodigy-kubegraf-app/page/cluster-overview?clusterName={{ctrl.cluster.name}}">Applications Overview</a></div>
                 <div class="gf-tabs-item"><a class="gf-tabs-link active" target="_self" href="plugins/devopsprodigy-kubegraf-app/page/nodes-overview?clusterName={{ctrl.cluster.name}}">Nodes Overview</a></div>
             </nav>
-            <div class="col-md-3">
+            <div class="col-md-3"  ng-if="ctrl.isAdmin">
                 <a class="btn btn-secondary timepicker-rangestring" target="_self" href="plugins/devopsprodigy-kubegraf-app/edit">
                     <i class="override--fa fa fa-fw fa-cog"/>&nbsp;
                     Plugin Config

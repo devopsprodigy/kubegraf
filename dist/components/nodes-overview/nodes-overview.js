@@ -17,12 +17,13 @@ System.register(["../k8s-page", "../../common/store"], function(exports_1) {
         execute: function() {
             NodesOverview = (function (_super) {
                 __extends(NodesOverview, _super);
-                function NodesOverview($scope, $injector, $q, backendSrv, datasourceSrv, $location, $timeout) {
+                function NodesOverview($scope, $injector, $q, backendSrv, datasourceSrv, contextSrv, $location, $timeout) {
                     var _this = this;
-                    _super.call(this, $scope, backendSrv, datasourceSrv, $location, $timeout, $q);
+                    _super.call(this, $scope, backendSrv, datasourceSrv, contextSrv, $location, $timeout, $q);
                     this.$q = $q;
                     this.backendSrv = backendSrv;
                     this.datasourceSrv = datasourceSrv;
+                    this.contextSrv = contextSrv;
                     this.$location = $location;
                     this.$timeout = $timeout;
                     this.pageReady = false;

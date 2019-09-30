@@ -28,10 +28,11 @@ export  class K8sPage {
     $scope: any;
     cluster: any;
     prometheusDS: any;
-
+    isAdmin: boolean;
     location: any;
     backendSrv: any;
     datasourceSrv: any;
+    contextSrv: any;
     timeout: any;
     refreshRate: number;
     $q: any;
@@ -60,6 +61,7 @@ export  class K8sPage {
         $scope,
         backendSrv,
         datasourceSrv,
+        contextSrv,
         $location,
         timeout,
         $q
@@ -69,8 +71,15 @@ export  class K8sPage {
         this.pageReady = false;
         this.location = $location;
         this.backendSrv = backendSrv;
+        this.contextSrv = contextSrv;
         this.datasourceSrv = datasourceSrv;
         this.timeout = timeout;
+        try{
+            this.isAdmin = this.contextSrv.isGrafanaAdmin;
+        }catch (e) {
+            console.error(e);
+            this.isAdmin = false;
+        }
         if( ! ("clusterName" in $location.search())){
             appEvents.emit('alert-error', ['Cluster not specified']);
 

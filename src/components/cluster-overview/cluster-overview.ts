@@ -21,10 +21,11 @@ export class ClusterOverview extends K8sPage{
         public $q,
         public backendSrv,
         public datasourceSrv,
+        public contextSrv,
         public $location,
         public $timeout
     ){
-        super($scope, backendSrv, datasourceSrv, $location, $timeout, $q);
+        super($scope, backendSrv, datasourceSrv, contextSrv, $location, $timeout, $q);
         this.pageReady = false;
 
 

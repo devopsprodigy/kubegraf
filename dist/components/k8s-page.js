@@ -52,7 +52,7 @@ System.register(["app/core/app_events", "../common/types/pod", "../common/proxie
         execute: function() {
             REFRESH_RATE_DEFAULT = 60000;
             K8sPage = (function () {
-                function K8sPage($scope, backendSrv, datasourceSrv, $location, timeout, $q) {
+                function K8sPage($scope, backendSrv, datasourceSrv, contextSrv, $location, timeout, $q) {
                     this.nodesMapReady = false;
                     //common store
                     this.storePods = [];
@@ -73,8 +73,16 @@ System.register(["app/core/app_events", "../common/types/pod", "../common/proxie
                     this.pageReady = false;
                     this.location = $location;
                     this.backendSrv = backendSrv;
+                    this.contextSrv = contextSrv;
                     this.datasourceSrv = datasourceSrv;
                     this.timeout = timeout;
+                    try {
+                        this.isAdmin = this.contextSrv.isGrafanaAdmin;
+                    }
+                    catch (e) {
+                        console.error(e);
+                        this.isAdmin = false;
+                    }
                     if (!("clusterName" in $location.search())) {
                         app_events_1.default.emit('alert-error', ['Cluster not specified']);
                         return;

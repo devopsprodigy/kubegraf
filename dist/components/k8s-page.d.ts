@@ -16,9 +16,11 @@ export declare class K8sPage {
     $scope: any;
     cluster: any;
     prometheusDS: any;
+    isAdmin: boolean;
     location: any;
     backendSrv: any;
     datasourceSrv: any;
+    contextSrv: any;
     timeout: any;
     refreshRate: number;
     $q: any;
@@ -36,7 +38,7 @@ export declare class K8sPage {
     podsError: Boolean | Error;
     componentsError: Boolean | Error;
     updatePods(pods: any): void;
-    constructor($scope: any, backendSrv: any, datasourceSrv: any, $location: any, timeout: any, $q: any);
+    constructor($scope: any, backendSrv: any, datasourceSrv: any, contextSrv: any, $location: any, timeout: any, $q: any);
     getNodeDashboardLink(node: any): string;
     getPodDashboardLink(pod: any): string;
     getEntityDashboardLink(entity: any, name: any): string;

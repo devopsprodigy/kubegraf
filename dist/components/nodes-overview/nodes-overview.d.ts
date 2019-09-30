@@ -3,10 +3,11 @@ export declare class NodesOverview extends K8sPage {
     $q: any;
     backendSrv: any;
     datasourceSrv: any;
+    contextSrv: any;
     $location: any;
     $timeout: any;
     static templateUrl: string;
-    constructor($scope: any, $injector: any, $q: any, backendSrv: any, datasourceSrv: any, $location: any, $timeout: any);
+    constructor($scope: any, $injector: any, $q: any, backendSrv: any, datasourceSrv: any, contextSrv: any, $location: any, $timeout: any);
     showAllPodsNS(ns: any): void;
     toggleNsList(node: any): void;
     updatePods(newPods: any): void;
