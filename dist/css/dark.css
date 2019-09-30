@@ -43,7 +43,8 @@
 
 .override--borderBottom {
   border-bottom: 1px solid;
-  padding-bottom: 10px; }
+  padding-bottom: 10px;
+  padding-top: 10px; }
   .override--borderBottom:last-child {
     border-bottom: none; }
 
