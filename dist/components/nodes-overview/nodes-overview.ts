@@ -18,10 +18,6 @@ export class NodesOverview extends K8sPage{
     ){
         super($scope, backendSrv, datasourceSrv, $location, $timeout, $q);
         this.pageReady = false;
-        console.log('start');
-        console.log(this.datasourceSrv);
-        this.datasourceSrv.get('MazaFaka')
-            .then(res => console.log(res));
 
         this.__prepareDS().then(() => {
             this.getNodeMap().then(() => {

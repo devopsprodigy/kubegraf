@@ -5,6 +5,7 @@ export class DOPK8SDatasource {
     url: string;
     prometheus: string;
     nodesPromise: any;
+    refreshRate: number;
     deploymentsPromise: any;
     daemonsetsPromise: any;
     statefulsetsPromise: any;
@@ -14,6 +15,7 @@ export class DOPK8SDatasource {
         this.name = instanceSettings.name;
         this.url = instanceSettings.url;
         this.prometheus = instanceSettings.jsonData.prom_name;
+        this.refreshRate = instanceSettings.jsonData.refresh_pods_rate;
         this.nodesPromise = null;
         this.deploymentsPromise = null;
         this.daemonsetsPromise = null;

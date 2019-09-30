@@ -15,7 +15,6 @@ export declare class K8sPage {
     nodesMapReady: boolean;
     $scope: any;
     cluster: any;
-    clusterDS: any;
     prometheusDS: any;
     location: any;
     backendSrv: any;
@@ -70,8 +69,6 @@ export declare class K8sPage {
     __findPodsBySelector(filter: any, namespace: any, pods?: Pod[]): Pod[];
     __findServices(entity: any): Service[];
     __prepareDS(): any;
-    getClusterDS(id: any): any;
-    getK8SDatasource(name: any): any;
     getPrometheusDS(name: any): any;
     getPods(skipEmptyHost?: boolean): any;
     refreshPods(skipEmptyHost?: boolean): void;

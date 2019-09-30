@@ -5,6 +5,7 @@ export declare class DOPK8SDatasource {
     url: string;
     prometheus: string;
     nodesPromise: any;
+    refreshRate: number;
     deploymentsPromise: any;
     daemonsetsPromise: any;
     statefulsetsPromise: any;

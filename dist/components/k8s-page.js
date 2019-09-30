@@ -75,7 +75,7 @@ System.register(["app/core/app_events", "../common/types/pod", "../common/proxie
                     this.backendSrv = backendSrv;
                     this.datasourceSrv = datasourceSrv;
                     this.timeout = timeout;
-                    if (!("clusterId" in $location.search())) {
+                    if (!("clusterName" in $location.search())) {
                         app_events_1.default.emit('alert-error', ['Cluster not specified']);
                         return;
                     }
@@ -183,7 +183,7 @@ System.register(["app/core/app_events", "../common/types/pod", "../common/proxie
                 };
                 K8sPage.prototype.getNodes = function () {
                     var _this = this;
-                    return this.clusterDS.getNodes()
+                    return this.cluster.getNodes()
                         .then(function (nodes) {
                         var nodeStore = [];
                         var getStore = store_1.default.getObject('nodeStore');
@@ -302,7 +302,7 @@ System.register(["app/core/app_events", "../common/types/pod", "../common/proxie
                 };
                 K8sPage.prototype.refreshNodes = function () {
                     var _this = this;
-                    this.clusterDS.getNodes()
+                    this.cluster.getNodes()
                         .then(function (nodes) {
                         return _this.nodesMap.forEach(function (issetNode) {
                             var equalNode = nodes.filter(function (item) {
@@ -322,7 +322,7 @@ System.register(["app/core/app_events", "../common/types/pod", "../common/proxie
                 };
                 K8sPage.prototype.getNamespaceMap = function () {
                     var _this = this;
-                    this.clusterDS.getNamespaces()
+                    this.cluster.getNamespaces()
                         .then(function (namespaces) {
                         var namespaceStore = [];
                         var getStore = store_1.default.getObject('namespaceStore');
@@ -364,7 +364,7 @@ System.register(["app/core/app_events", "../common/types/pod", "../common/proxie
                 };
                 K8sPage.prototype.attachDeployments = function () {
                     var _this = this;
-                    return this.clusterDS.getDeployments()
+                    return this.cluster.getDeployments()
                         .then(function (deployments) {
                         deployments.forEach(function (item) {
                             var deploy = new deployment_1.Deployment(item);
@@ -378,7 +378,7 @@ System.register(["app/core/app_events", "../common/types/pod", "../common/proxie
                 };
                 K8sPage.prototype.refreshDeployments = function () {
                     var _this = this;
-                    this.clusterDS.getDeployments()
+                    this.cluster.getDeployments()
                         .then(function (newDeployments) {
                         _this.storeDeployments.filter(function (deployment) {
                             return !deployment.is_deleted;
@@ -413,7 +413,7 @@ System.register(["app/core/app_events", "../common/types/pod", "../common/proxie
                 ;
                 K8sPage.prototype.attachStatefulsets = function () {
                     var _this = this;
-                    return this.clusterDS.getStatefulsets()
+                    return this.cluster.getStatefulsets()
                         .then(function (statefulsets) {
                         statefulsets.forEach(function (item) {
                             var _ns = _this.__getNamespace(item.metadata.namespace);
@@ -427,7 +427,7 @@ System.register(["app/core/app_events", "../common/types/pod", "../common/proxie
                 };
                 K8sPage.prototype.refreshStatefulsets = function () {
                     var _this = this;
-                    this.clusterDS.getStatefulsets()
+                    this.cluster.getStatefulsets()
                         .then(function (Statefulsets) {
                         _this.storeStatefulSets.filter(function (statefulset) {
                             return !statefulset.is_deleted;
@@ -462,7 +462,7 @@ System.register(["app/core/app_events", "../common/types/pod", "../common/proxie
                 ;
                 K8sPage.prototype.attachDaemonsets = function () {
                     var _this = this;
-                    return this.clusterDS.getDaemonsets()
+                    return this.cluster.getDaemonsets()
                         .then(function (daemonsets) {
                         daemonsets.forEach(function (item) {
                             var _ns = _this.__getNamespace(item.metadata.namespace);
@@ -476,7 +476,7 @@ System.register(["app/core/app_events", "../common/types/pod", "../common/proxie
                 };
                 K8sPage.prototype.refreshDaemonsets = function () {
                     var _this = this;
-                    this.clusterDS.getDaemonsets()
+                    this.cluster.getDaemonsets()
                         .then(function (Daemonsets) {
                         _this.storeDaemonSets.filter(function (daemonset) {
                             return !daemonset.is_deleted;
@@ -611,28 +611,16 @@ System.register(["app/core/app_events", "../common/types/pod", "../common/proxie
                 };
                 K8sPage.prototype.__prepareDS = function () {
                     var _this = this;
-                    return this.getClusterDS(this.location.search().clusterId)
-                        .then(function () {
-                        _this.pageReady = true;
-                    });
-                };
-                K8sPage.prototype.getClusterDS = function (id) {
-                    var _this = this;
-                    return this.backendSrv.get('/api/datasources/' + id)
-                        .then(function (datasource) {
-                        _this.cluster = datasource;
-                        _this.__setRefreshRate(datasource.jsonData.refresh_pods_rate);
-                        var _promises = [];
-                        _promises.push(_this.getK8SDatasource(datasource.name));
-                        _promises.push(_this.getPrometheusDS(datasource.jsonData.prom_name));
-                        return _this.$q.all(_promises);
-                    });
-                };
-                K8sPage.prototype.getK8SDatasource = function (name) {
-                    var _this = this;
-                    return this.datasourceSrv.get(name)
+                    return this.datasourceSrv.get(this.location.search().clusterName)
                         .then(function (ds) {
-                        _this.clusterDS = ds;
+                        _this.cluster = ds;
+                        _this.__setRefreshRate(_this.cluster.refreshRate);
+                    })
+                        .then(function () {
+                        _this.getPrometheusDS(_this.cluster.prometheus)
+                            .then(function () {
+                            _this.pageReady = true;
+                        });
                     });
                 };
                 K8sPage.prototype.getPrometheusDS = function (name) {
@@ -645,7 +633,7 @@ System.register(["app/core/app_events", "../common/types/pod", "../common/proxie
                 K8sPage.prototype.getPods = function (skipEmptyHost) {
                     var _this = this;
                     if (skipEmptyHost === void 0) { skipEmptyHost = false; }
-                    return this.clusterDS.getPods()
+                    return this.cluster.getPods()
                         .then(function (pods) {
                         if (pods instanceof Array) {
                             _this.podsError = false;
@@ -664,7 +652,7 @@ System.register(["app/core/app_events", "../common/types/pod", "../common/proxie
                 K8sPage.prototype.refreshPods = function (skipEmptyHost) {
                     var _this = this;
                     if (skipEmptyHost === void 0) { skipEmptyHost = false; }
-                    this.clusterDS.getPods()
+                    this.cluster.getPods()
                         .then(function (pods) {
                         if (pods instanceof Array) {
                             _this.podsError = false;
@@ -704,7 +692,7 @@ System.register(["app/core/app_events", "../common/types/pod", "../common/proxie
                 };
                 K8sPage.prototype.getClusterComponents = function () {
                     var _this = this;
-                    this.clusterDS.getComponents()
+                    this.cluster.getComponents()
                         .then(function (components) {
                         if (components instanceof Array) {
                             _this.componentsError = false;
@@ -720,7 +708,7 @@ System.register(["app/core/app_events", "../common/types/pod", "../common/proxie
                 };
                 K8sPage.prototype.refreshClusterComponents = function () {
                     var _this = this;
-                    this.clusterDS.getComponents()
+                    this.cluster.getComponents()
                         .then(function (components) {
                         if (components instanceof Array) {
                             _this.componentsError = false;
@@ -736,28 +724,28 @@ System.register(["app/core/app_events", "../common/types/pod", "../common/proxie
                 };
                 K8sPage.prototype.getAllServices = function () {
                     var _this = this;
-                    return this.clusterDS.getServices()
+                    return this.cluster.getServices()
                         .then(function (services) {
                         _this.storeServices = services.map(function (service) { return new service_1.Service(service); });
                     });
                 };
                 K8sPage.prototype.getClusterJobs = function () {
                     var _this = this;
-                    return this.clusterDS.getJobs()
+                    return this.cluster.getJobs()
                         .then(function (jobs) {
                         _this.storeJobs = jobs.map(function (job) { return new job_1.Job(job); });
                     });
                 };
                 K8sPage.prototype.getClusterCronJobs = function () {
                     var _this = this;
-                    return this.clusterDS.getCronJobs()
+                    return this.cluster.getCronJobs()
                         .then(function (cronjobs) {
                         _this.storeCronJobs = cronjobs.map(function (cronjob) { return new cronjob_1.Cronjob(cronjob); });
                     });
                 };
                 K8sPage.prototype.refreshJobs = function () {
                     var _this = this;
-                    return this.clusterDS.getJobs()
+                    return this.cluster.getJobs()
                         .then(function (newJobs) {
                         _this.storeJobs.filter(function (job) {
                             return !job.is_deleted;

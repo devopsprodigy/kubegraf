@@ -14,6 +14,7 @@ System.register(["app/core/app_events"], function(exports_1) {
                     this.name = instanceSettings.name;
                     this.url = instanceSettings.url;
                     this.prometheus = instanceSettings.jsonData.prom_name;
+                    this.refreshRate = instanceSettings.jsonData.refresh_pods_rate;
                     this.nodesPromise = null;
                     this.deploymentsPromise = null;
                     this.daemonsetsPromise = null;
