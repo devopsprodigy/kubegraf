@@ -703,8 +703,6 @@ export  class K8sPage {
             .then(ds => {
                 this.cluster = ds;
                 this.__setRefreshRate(this.cluster.refreshRate);
-            })
-            .then(() => {
                 this.getPrometheusDS(this.cluster.prometheus)
                     .then(() => {
                         this.pageReady = true;

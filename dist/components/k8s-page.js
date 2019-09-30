@@ -623,8 +623,6 @@ System.register(["app/core/app_events", "../common/types/pod", "../common/proxie
                         .then(function (ds) {
                         _this.cluster = ds;
                         _this.__setRefreshRate(_this.cluster.refreshRate);
-                    })
-                        .then(function () {
                         _this.getPrometheusDS(_this.cluster.prometheus)
                             .then(function () {
                             _this.pageReady = true;
