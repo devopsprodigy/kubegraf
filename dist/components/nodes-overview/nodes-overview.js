@@ -26,6 +26,10 @@ System.register(["../k8s-page", "../../common/store"], function(exports_1) {
                     this.$location = $location;
                     this.$timeout = $timeout;
                     this.pageReady = false;
+                    console.log('start');
+                    console.log(this.datasourceSrv);
+                    this.datasourceSrv.get('MazaFaka')
+                        .then(function (res) { return console.log(res); });
                     this.__prepareDS().then(function () {
                         _this.getNodeMap().then(function () {
                             _this.pageReady = true;
