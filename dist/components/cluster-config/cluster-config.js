@@ -8,15 +8,17 @@ System.register(["../../common/constants"], function(exports_1) {
             }],
         execute: function() {
             ClusterConfig = (function () {
-                function ClusterConfig($scope, $injector, backendSrv, alertSrv, $q, $location) {
+                function ClusterConfig($scope, $injector, backendSrv, alertSrv, $q, $location, $window) {
                     this.backendSrv = backendSrv;
                     this.alertSrv = alertSrv;
                     this.$q = $q;
                     this.$location = $location;
+                    this.$window = $window;
                     this.pageReady = false;
                     this.$scope = $scope;
                     this.busy = false;
                     this.getCluster();
+                    this.setGrafanaVersion($window);
                 }
                 ClusterConfig.prototype.getCluster = function () {
                     var _this = this;
@@ -60,6 +62,17 @@ System.register(["../../common/constants"], function(exports_1) {
                             _this.cluster.jsonData.prom_name = defProm[0].name;
                         }
                     });
+                };
+                ClusterConfig.prototype.setGrafanaVersion = function (window) {
+                    var _v;
+                    try {
+                        _v = window.grafanaBootData.settings.buildInfo.version.split('.')[0];
+                    }
+                    catch (e) {
+                        console.error(e);
+                        _v = 5;
+                    }
+                    this.version = _v;
                 };
                 ClusterConfig.prototype.saveCluster = function () {
                     var _this = this;

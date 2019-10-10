@@ -23,12 +23,21 @@
 
             <div class="gf-form-inline">
                 <gf-form-checkbox
+                        ng-if="ctrl.version >= 6"
                         class="gf-form"
                         label="Access via token"
                         checked="ctrl.cluster.jsonData.access_via_token"
                         label-class="width-10"
                         switch-class="max-width-6">
                 </gf-form-checkbox>
+                <gf-form-switch
+                        ng-if="ctrl.version < 6"
+                        class="gf-form"
+                        label="Access via token"
+                        checked="ctrl.cluster.jsonData.access_via_token"
+                        label-class="width-10"
+                        switch-class="max-width-6">
+                </gf-form-switch>
             </div>
             <div class="gf-form-inline" ng-if="ctrl.cluster.jsonData.access_via_token">
                 <div class="gf-form">

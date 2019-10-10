@@ -2,9 +2,11 @@ export declare class DOPK8SDatasource {
     private backendSrv;
     private templateSrv;
     name: string;
+    id: number;
     url: string;
     prometheus: string;
     nodesPromise: any;
+    refreshRate: number;
     deploymentsPromise: any;
     daemonsetsPromise: any;
     statefulsetsPromise: any;

@@ -9,6 +9,7 @@
 
         <div class="gf-form-inline">
             <gf-form-checkbox
+                    ng-if="ctrl.version >= 6"
                     class="gf-form"
                     label="Access via token"
                     checked="ctrl.current.jsonData.access_via_token"
@@ -16,6 +17,15 @@
                     ng-click="ctrl.setUrl()"
                     switch-class="max-width-6">
             </gf-form-checkbox>
+            <gf-form-switch
+                    ng-if="ctrl.version < 6"
+                    class="gf-form"
+                    label="Access via token"
+                    checked="ctrl.current.jsonData.access_via_token"
+                    label-class="width-10"
+                    ng-click="ctrl.setUrl()"
+                    switch-class="max-width-6">
+            </gf-form-switch>
         </div>
         <div class="gf-form-inline" ng-if="ctrl.current.jsonData.access_via_token">
             <div class="gf-form">

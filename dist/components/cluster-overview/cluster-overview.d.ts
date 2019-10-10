@@ -4,6 +4,7 @@ export declare class ClusterOverview extends K8sPage {
     $q: any;
     backendSrv: any;
     datasourceSrv: any;
+    contextSrv: any;
     $location: any;
     $timeout: any;
     columnNames: Array<{
@@ -12,7 +13,7 @@ export declare class ClusterOverview extends K8sPage {
     }>;
     hideAllWarningPods: boolean;
     static templateUrl: string;
-    constructor($scope: any, $injector: any, $q: any, backendSrv: any, datasourceSrv: any, $location: any, $timeout: any);
+    constructor($scope: any, $injector: any, $q: any, backendSrv: any, datasourceSrv: any, contextSrv: any, $location: any, $timeout: any);
     __showAll(): void;
     updatePods(newPods: any): void;
     toggleAllWarningPods(): void;

@@ -7,7 +7,7 @@
 </div>
 
 <div ng-if="ctrl.isReady">
-    <div class="row">
+    <div class="row" ng-if="ctrl.isAdmin">
         <div class="col-xs-6">
             <a class="btn btn-success" href="plugins/devopsprodigy-kubegraf-app/page/cluster-config">
                 <i class="fa fa-fw fa-plus"></i>&nbsp;
@@ -32,23 +32,23 @@
                    </div>
                    <hr/>
                    <div class="card-item-body">
-                       <a class="btn btn-success" href="plugins/devopsprodigy-kubegraf-app/page/cluster-status?clusterId={{cluster.id}}">
+                       <a class="btn btn-success" href="plugins/devopsprodigy-kubegraf-app/page/cluster-status?clusterName={{cluster.name}}">
                            <i class="fa fa-fw fa-eye"/>&nbsp;
                            Cluster Status
                        </a>&nbsp;
-                       <a class="btn btn-success timepicker-rangestring" href="plugins/devopsprodigy-kubegraf-app/page/cluster-overview?clusterId={{cluster.id}}">
+                       <a class="btn btn-success timepicker-rangestring" href="plugins/devopsprodigy-kubegraf-app/page/cluster-overview?clusterName={{cluster.name}}">
                            <i class="fa fa-fw fa-eye"/>&nbsp;
                            Applications Overview
                        </a>&nbsp;
-                       <a class="btn btn-success timepicker-rangestring" href="plugins/devopsprodigy-kubegraf-app/page/nodes-overview?clusterId={{cluster.id}}">
+                       <a class="btn btn-success timepicker-rangestring" href="plugins/devopsprodigy-kubegraf-app/page/nodes-overview?clusterName={{cluster.name}}">
                            <i class="fa fa-fw fa-eye"/>&nbsp;
                            Nodes Overview
-                       </a>&nbsp;
-                       <a class="btn btn-secondary timepicker-rangestring" href="plugins/devopsprodigy-kubegraf-app/page/cluster-config?clusterId={{cluster.id}}">
+                       </a>
+                       &nbsp;<a ng-if="ctrl.isAdmin" class="btn btn-secondary timepicker-rangestring" href="plugins/devopsprodigy-kubegraf-app/page/cluster-config?clusterId={{cluster.id}}">
                            <i class="fa fa-fw fa-cog"/>&nbsp;
                            Edit
                        </a>&nbsp;
-                       <a class="btn btn-danger timepicker-rangestring" ng-click="ctrl.deleteCluster(cluster)">
+                       <a ng-if="ctrl.isAdmin" class="btn btn-danger timepicker-rangestring" ng-click="ctrl.deleteCluster(cluster)">
                            <i class="fa fa-fw fa-trash"/>&nbsp;
                            Delete
                        </a>

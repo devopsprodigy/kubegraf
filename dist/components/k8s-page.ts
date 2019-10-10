@@ -27,12 +27,12 @@ export  class K8sPage {
     nodesMapReady: boolean = false;
     $scope: any;
     cluster: any;
-    clusterDS: any;
     prometheusDS: any;
-
+    isAdmin: boolean;
     location: any;
     backendSrv: any;
     datasourceSrv: any;
+    contextSrv: any;
     timeout: any;
     refreshRate: number;
     $q: any;
@@ -61,6 +61,7 @@ export  class K8sPage {
         $scope,
         backendSrv,
         datasourceSrv,
+        contextSrv,
         $location,
         timeout,
         $q
@@ -70,9 +71,16 @@ export  class K8sPage {
         this.pageReady = false;
         this.location = $location;
         this.backendSrv = backendSrv;
+        this.contextSrv = contextSrv;
         this.datasourceSrv = datasourceSrv;
         this.timeout = timeout;
-        if( ! ("clusterId" in $location.search())){
+        try{
+            this.isAdmin = this.contextSrv.isGrafanaAdmin;
+        }catch (e) {
+            console.error(e);
+            this.isAdmin = false;
+        }
+        if( ! ("clusterName" in $location.search())){
             appEvents.emit('alert-error', ['Cluster not specified']);
 
             return;
@@ -196,7 +204,7 @@ export  class K8sPage {
     }
 
     getNodes(){
-        return this.clusterDS.getNodes()
+        return this.cluster.getNodes()
             .then(nodes => {
 
                 let nodeStore = [];
@@ -343,7 +351,7 @@ export  class K8sPage {
 
 
     refreshNodes(){
-        this.clusterDS.getNodes()
+        this.cluster.getNodes()
             .then(nodes => {
                 return this.nodesMap.forEach(issetNode => {
                     let equalNode = nodes.filter(item => {
@@ -363,7 +371,7 @@ export  class K8sPage {
     }
 
     getNamespaceMap(){
-        this.clusterDS.getNamespaces()
+        this.cluster.getNamespaces()
             .then(namespaces => {
                 let namespaceStore = [];
                 let getStore = store.getObject('namespaceStore');
@@ -408,7 +416,7 @@ export  class K8sPage {
     }
 
     attachDeployments(){
-        return this.clusterDS.getDeployments()
+        return this.cluster.getDeployments()
             .then(deployments => {
                 deployments.forEach(item => {
                     let deploy = new Deployment(item);
@@ -424,7 +432,7 @@ export  class K8sPage {
     }
 
     refreshDeployments(){
-        this.clusterDS.getDeployments()
+        this.cluster.getDeployments()
             .then( newDeployments => {
                 this.storeDeployments.filter(deployment => {
                     return !deployment.is_deleted;
@@ -460,7 +468,7 @@ export  class K8sPage {
     };
 
     attachStatefulsets(){
-        return this.clusterDS.getStatefulsets()
+        return this.cluster.getStatefulsets()
             .then(statefulsets => {
                 statefulsets.forEach(item => {
                     let _ns = this.__getNamespace(item.metadata.namespace);
@@ -476,7 +484,7 @@ export  class K8sPage {
     }
 
     refreshStatefulsets(){
-        this.clusterDS.getStatefulsets()
+        this.cluster.getStatefulsets()
             .then( Statefulsets => {
                 this.storeStatefulSets.filter(statefulset => {
                     return !statefulset.is_deleted;
@@ -512,7 +520,7 @@ export  class K8sPage {
     };
 
     attachDaemonsets(){
-        return this.clusterDS.getDaemonsets()
+        return this.cluster.getDaemonsets()
             .then(daemonsets => {
                 daemonsets.forEach(item => {
                     let _ns = this.__getNamespace(item.metadata.namespace);
@@ -528,7 +536,7 @@ export  class K8sPage {
     }
 
     refreshDaemonsets(){
-        this.clusterDS.getDaemonsets()
+        this.cluster.getDaemonsets()
             .then( Daemonsets => {
                 this.storeDaemonSets.filter(daemonset => {
                     return !daemonset.is_deleted;
@@ -691,30 +699,14 @@ export  class K8sPage {
     }
 
     __prepareDS(){
-        return this.getClusterDS(this.location.search().clusterId)
-            .then(() => {
-                this.pageReady = true;
-            });
-    }
-
-
-    getClusterDS(id){
-        return this.backendSrv.get('/api/datasources/' + id)
-            .then(datasource => {
-                this.cluster = datasource;
-                this.__setRefreshRate(datasource.jsonData.refresh_pods_rate);
-                let _promises = [];
-                _promises.push(this.getK8SDatasource(datasource.name));
-                _promises.push(this.getPrometheusDS(datasource.jsonData.prom_name));
-
-                return this.$q.all(_promises);
-            });
-    }
-
-    getK8SDatasource(name){
-        return this.datasourceSrv.get(name)
+        return this.datasourceSrv.get(this.location.search().clusterName)
             .then(ds => {
-                this.clusterDS = ds;
+                this.cluster = ds;
+                this.__setRefreshRate(this.cluster.refreshRate);
+                this.getPrometheusDS(this.cluster.prometheus)
+                    .then(() => {
+                        this.pageReady = true;
+                    })
             })
     }
 
@@ -727,7 +719,7 @@ export  class K8sPage {
 
 
     getPods(skipEmptyHost = false){
-        return this.clusterDS.getPods()
+        return this.cluster.getPods()
             .then(pods => {
                 if(pods instanceof Array) {
                     this.podsError = false;
@@ -749,7 +741,7 @@ export  class K8sPage {
 
     refreshPods(skipEmptyHost = false){
 
-        this.clusterDS.getPods()
+        this.cluster.getPods()
             .then(pods => {
                 if(pods instanceof Array) {
                     this.podsError = false;
@@ -791,7 +783,7 @@ export  class K8sPage {
     }
 
     getClusterComponents(){
-        this.clusterDS.getComponents()
+        this.cluster.getComponents()
             .then(components => {
 
                 if(components instanceof Array) {
@@ -808,7 +800,7 @@ export  class K8sPage {
     }
 
     refreshClusterComponents() {
-        this.clusterDS.getComponents()
+        this.cluster.getComponents()
             .then(components => {
 
                 if(components instanceof Array) {
@@ -826,7 +818,7 @@ export  class K8sPage {
 
 
     getAllServices(){
-        return this.clusterDS.getServices()
+        return this.cluster.getServices()
             .then(services => {
                 this.storeServices = services.map(service => new Service(service));
             });
@@ -835,14 +827,14 @@ export  class K8sPage {
 
 
     getClusterJobs(){
-        return this.clusterDS.getJobs()
+        return this.cluster.getJobs()
             .then( jobs => {
                 this.storeJobs = jobs.map(job => new Job(job));
             });
     }
 
     getClusterCronJobs(){
-        return this.clusterDS.getCronJobs()
+        return this.cluster.getCronJobs()
             .then( cronjobs => {
                 this.storeCronJobs = cronjobs.map(cronjob => new Cronjob(cronjob));
             });
@@ -850,7 +842,7 @@ export  class K8sPage {
 
 
     refreshJobs() {
-        return this.clusterDS.getJobs()
+        return this.cluster.getJobs()
             .then( newJobs => {
                 this.storeJobs.filter(job => {
                     return !job.is_deleted;

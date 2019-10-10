@@ -6,25 +6,37 @@ export class ClustersList {
     isReady: boolean;
     clusters: Array<any>;
     $scope: any;
+    isAdmin: boolean;
 
     static templateUrl = 'components/clusters-list/clusters-list.html';
 
-    constructor($scope, $injector, private backendSrv, private utilSrv){
+    constructor($scope, $injector, private backendSrv, private datasourceSrv, private contextSrv, private utilSrv){
         this.isReady = false;
         this.$scope = $scope;
         document.title = 'DevOpsProdigy KubeGraf';
-        this.getClusters().then(() => {
+        try{
+            this.getClusters();
+        }catch (e) {
+            console.error(e);
+        }finally {
             this.isReady = true;
-        });
+        }
+        try{
+            this.isAdmin = this.contextSrv.isGrafanaAdmin;
+        }catch (e) {
+            console.error(e);
+            this.isAdmin = false;
+        }
     }
 
     getClusters(){
-        return this.backendSrv.get('/api/datasources')
-            .then(res => {
-                this.clusters = res.filter(item => {
-                    return item.type === 'devopsprodidy-kubegraf-datasource'
-                });
-            })
+
+        let list = this.datasourceSrv.getAll();
+
+        this.clusters = list.filter(item => {
+            return item.type === 'devopsprodidy-kubegraf-datasource'
+        });
+
     }
 
     deleteCluster(cluster){

@@ -8,9 +8,10 @@ System.register(["../common/constants"], function(exports_1) {
             }],
         execute: function() {
             DOPK8SConfig = (function () {
-                function DOPK8SConfig($scope, $injector, backendSrv) {
+                function DOPK8SConfig($scope, $injector, backendSrv, $window) {
                     var _this = this;
                     this.backendSrv = backendSrv;
+                    this.$window = $window;
                     this.pageReady = false;
                     if (this.current.id) {
                         if (!(this.current.jsonData.prom_name))
@@ -30,6 +31,7 @@ System.register(["../common/constants"], function(exports_1) {
                             }
                         };
                     }
+                    this.setGrafanaVersion($window);
                     this.getPrometheusList()
                         .then(function () {
                         _this.pageReady = true;
@@ -38,6 +40,17 @@ System.register(["../common/constants"], function(exports_1) {
                         _this.setUrl();
                     });
                 }
+                DOPK8SConfig.prototype.setGrafanaVersion = function (window) {
+                    var _v;
+                    try {
+                        _v = window.grafanaBootData.settings.buildInfo.version.split('.')[0];
+                    }
+                    catch (e) {
+                        console.error(e);
+                        _v = 5;
+                    }
+                    this.version = _v;
+                };
                 DOPK8SConfig.prototype.setUrl = function () {
                     this.current.jsonData.cluster_url = this.current.url;
                 };

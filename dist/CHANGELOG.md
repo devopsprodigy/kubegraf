@@ -1,3 +1,8 @@
+# 1.1.1 (2019-09-30)
+### Bug Fixes
+* Bearer token access on Grafana version 5.x.x [#10](https://github.com/devopsprodigy/kubegraf/issues/10)
+* Viewer & editor modes' fix
+
 # 1.1.0 (2019-09-25)
 
 ### New features

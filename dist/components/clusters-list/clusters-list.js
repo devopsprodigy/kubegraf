@@ -9,24 +9,35 @@ System.register(["app/core/app_events"], function(exports_1) {
             }],
         execute: function() {
             ClustersList = (function () {
-                function ClustersList($scope, $injector, backendSrv, utilSrv) {
-                    var _this = this;
+                function ClustersList($scope, $injector, backendSrv, datasourceSrv, contextSrv, utilSrv) {
                     this.backendSrv = backendSrv;
+                    this.datasourceSrv = datasourceSrv;
+                    this.contextSrv = contextSrv;
                     this.utilSrv = utilSrv;
                     this.isReady = false;
                     this.$scope = $scope;
                     document.title = 'DevOpsProdigy KubeGraf';
-                    this.getClusters().then(function () {
-                        _this.isReady = true;
-                    });
+                    try {
+                        this.getClusters();
+                    }
+                    catch (e) {
+                        console.error(e);
+                    }
+                    finally {
+                        this.isReady = true;
+                    }
+                    try {
+                        this.isAdmin = this.contextSrv.isGrafanaAdmin;
+                    }
+                    catch (e) {
+                        console.error(e);
+                        this.isAdmin = false;
+                    }
                 }
                 ClustersList.prototype.getClusters = function () {
-                    var _this = this;
-                    return this.backendSrv.get('/api/datasources')
-                        .then(function (res) {
-                        _this.clusters = res.filter(function (item) {
-                            return item.type === 'devopsprodidy-kubegraf-datasource';
-                        });
+                    var list = this.datasourceSrv.getAll();
+                    this.clusters = list.filter(function (item) {
+                        return item.type === 'devopsprodidy-kubegraf-datasource';
                     });
                 };
                 ClustersList.prototype.deleteCluster = function (cluster) {

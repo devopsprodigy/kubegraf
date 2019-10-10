@@ -14,12 +14,13 @@ System.register(['../k8s-page'], function(exports_1) {
         execute: function() {
             ClusterAlerts = (function (_super) {
                 __extends(ClusterAlerts, _super);
-                function ClusterAlerts($scope, $injector, $q, backendSrv, datasourceSrv, $location, $timeout) {
+                function ClusterAlerts($scope, $injector, $q, backendSrv, datasourceSrv, contextSrv, $location, $timeout) {
                     var _this = this;
-                    _super.call(this, $scope, backendSrv, datasourceSrv, $location, $timeout, $q);
+                    _super.call(this, $scope, backendSrv, datasourceSrv, contextSrv, $location, $timeout, $q);
                     this.$q = $q;
                     this.backendSrv = backendSrv;
                     this.datasourceSrv = datasourceSrv;
+                    this.contextSrv = contextSrv;
                     this.$location = $location;
                     this.$timeout = $timeout;
                     this.pageReady = false;

@@ -83,7 +83,7 @@ The above three dashboards show the number of available / unavailable applicatio
 
 	`cd $GRAFANA_PATH/data/plugins`
 	
-2. Copy repository:
+2. Copy the repository:
 
 	`git clone https://github.com/devopsprodigy/kubegraf  /var/lib/grafana/plugins` and restart grafana-server
 	 
@@ -92,13 +92,13 @@ The above three dashboards show the number of available / unavailable applicatio
 	`grafana-cli plugins install devopsprodigy-kubegraf-app` and restart grafana-server.
 	
 3. Apply Kubernetes manifests in [kubernetes/](kubernetes/) directory to give
-     required permissions to `grafana-kubegraf` user:
+     required permissions to the user `grafana-kubegraf`:
      ```
      kubectl apply -f kubernetes/
      ```
      
-4.  Create `grafana-kubegraf` user private key and certificate on one of the
-      master nodes
+4.  Create a `grafana-kubegraf` user private key and certificate on one of the
+      master nodes:
       ```
       openssl genrsa -out ~/grafana-kubegraf.key 2048
       openssl req -new -key ~/grafana-kubegraf.key -out ~/grafana-kubegraf.csr -subj "/CN=grafana-kubegraf/O=monitoring"
@@ -108,7 +108,7 @@ The above three dashboards show the number of available / unavailable applicatio
     
     or 
     
-    Get token
+    Get the token
     ```
     kubectl describe secret grafana-kubegraf-secret
     ```
@@ -119,8 +119,8 @@ The above three dashboards show the number of available / unavailable applicatio
 
 7. Enter the settings of http-access to the Kubernetes api server:
     * Kubernetes master's url from `kubectl cluster-info`
-    * Enter Certificate and key from step #4  "TLS Client Auth" section 
+    * Enter the certificate and key from step #4  "TLS Client Auth" section 
       Or
-      Token from step #4 in "Bearer token access" section
+      The token from step #4 in "Bearer token access" section
 
 8. Open the “additional datasources” drop-down list and select the prometheus that is used in this cluster.
