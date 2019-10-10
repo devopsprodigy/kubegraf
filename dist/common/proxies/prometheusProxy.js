@@ -25,8 +25,11 @@ System.register(['moment'], function(exports_1) {
                         legendFormat: '{{' + query.legend + '}}',
                         interval: '15s'
                     };
-                    return this.ds.query(body)
-                        .then(function (res) {
+                    var res = this.ds.query(body);
+                    if (typeof res.then !== "function") {
+                        res = res.toPromise();
+                    }
+                    return res.then(function (res) {
                         if (res && res.data) {
                             return _this.formData(res.data, query);
                         }

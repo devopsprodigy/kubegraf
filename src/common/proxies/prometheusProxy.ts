@@ -14,14 +14,20 @@ export class PrometheusProxy {
             legendFormat: '{{' + query.legend + '}}',
             interval: '15s'
         };
-        return this.ds.query(body)
-            .then(res => {
-                if (res  && res.data){
-                    return  this.formData(res.data, query);
-                }else{
-                    return {}
-                }
-            })
+
+        let res = this.ds.query(body)
+
+        if (typeof res.then !== "function") {
+            res = res.toPromise()
+        }
+
+        return res.then(res => {
+            if (res && res.data){
+                return  this.formData(res.data, query);
+            }else{
+                return {}
+            }
+        })
     }
 
     formData(data, query){
