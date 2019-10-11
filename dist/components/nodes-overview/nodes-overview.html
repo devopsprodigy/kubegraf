@@ -37,8 +37,14 @@
                 </div>
                 <div class="row explore-panel" style="justify-content: flex-end; margin-top: 8px">
                     <div class="col-md-12">
+
+                        <span class="btn btn-secondary" ng-click="ctrl.__hideAll()" data-toggle="tooltip"
+                              title="Use Ctrl+Click to select only one Node" data-placement="bottom" bs-tooltip="">
+                            HIDE ALL
+                            <span class="gicon gicon-question card-item-label"></span>
+                        </span>
                         <span class="btn btn-secondary" ng-click="ctrl.__showAll()">SHOW ALL</span>
-                        <span class="btn btn-secondary" ng-click="ctrl.__hideAll()">HIDE ALL</span>
+
                     </div>
                 </div>
             </div>
@@ -171,11 +177,7 @@
                                         </td>
                                         <td>
                                             <span ng-bind="pod.metrics.cpuUsed"/>
-                                            <span class="gicon gicon-question card-item-label"
-                                                  bs-tooltip="pod.NaMessage"
-                                                  data-placement="right"
-                                                  ng-if="pod.metrics.cpuUsed === 'N-A'"
-                                            ></span>
+
                                         </td>
                                         <td>
                                             <span ng-bind="pod.metrics.cpuRequested"/>
