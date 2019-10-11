@@ -66,4 +66,14 @@ export class NodesOverview extends K8sPage{
         });
         store.setObject('namespaceStore', nodeStore);
     }
+
+    __hideAll(){
+        store.delete('nodeStore');
+        let nodeStore = [];
+        this.nodesMap.map(ns => {
+            ns.open = false;
+            nodeStore.push({name: ns.name, open: ns.open});
+        });
+        store.setObject('namespaceStore', nodeStore);
+    }
 }

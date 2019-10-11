@@ -15,6 +15,7 @@ export declare class ClusterOverview extends K8sPage {
     static templateUrl: string;
     constructor($scope: any, $injector: any, $q: any, backendSrv: any, datasourceSrv: any, contextSrv: any, $location: any, $timeout: any);
     __showAll(): void;
+    __hideAll(): void;
     updatePods(newPods: any): void;
     toggleAllWarningPods(): void;
 }

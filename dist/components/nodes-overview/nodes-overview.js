@@ -65,6 +65,15 @@ System.register(["../k8s-page", "../../common/store"], function(exports_1) {
                     });
                     store_1.default.setObject('namespaceStore', nodeStore);
                 };
+                NodesOverview.prototype.__hideAll = function () {
+                    store_1.default.delete('nodeStore');
+                    var nodeStore = [];
+                    this.nodesMap.map(function (ns) {
+                        ns.open = false;
+                        nodeStore.push({ name: ns.name, open: ns.open });
+                    });
+                    store_1.default.setObject('namespaceStore', nodeStore);
+                };
                 NodesOverview.templateUrl = 'components/nodes-overview/nodes-overview.html';
                 return NodesOverview;
             })(k8s_page_1.K8sPage);

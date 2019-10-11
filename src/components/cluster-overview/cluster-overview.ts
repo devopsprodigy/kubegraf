@@ -74,6 +74,16 @@ export class ClusterOverview extends K8sPage{
         store.setObject('namespaceStore', namespaceStore);
     }
 
+    __hideAll(){
+        store.delete('namespaceStore');
+        let namespaceStore = [];
+        this.namespaceMap.map(ns => {
+            ns.open = false;
+            namespaceStore.push({name: ns.name, open: ns.open});
+        });
+        store.setObject('namespaceStore', namespaceStore);
+    }
+
     updatePods(newPods): void {
         this.updateJobs();
         this.namespaceMap.forEach(ns => {
