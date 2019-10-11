@@ -29,7 +29,7 @@
                         <input
                                 type="checkbox" class="toggle-checkbox"
                                 id="{{npKey}}"
-                                ng-click="node.toggle()"
+                                ng-click="ctrl.nodeClick($event, node)"
                                 ng-checked="node.open"
                         >
                         <label class="toggle-checkbox" for="{{npKey}}" ng-bind="node.name" />

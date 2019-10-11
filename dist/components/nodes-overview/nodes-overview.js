@@ -56,6 +56,23 @@ System.register(["../k8s-page", "../../common/store"], function(exports_1) {
                 NodesOverview.prototype.updatePods = function (newPods) {
                     this.insertPodsToNodesMap(newPods);
                 };
+                NodesOverview.prototype.nodeClick = function (event, node) {
+                    if (event.ctrlKey) {
+                        if (node.open) {
+                            event.preventDefault();
+                        }
+                        store_1.default.delete('nodeStore');
+                        var nodeStore = [];
+                        this.nodesMap.map(function (ns) {
+                            ns.open = node.name === ns.name;
+                            nodeStore.push({ name: ns.name, open: ns.open });
+                        });
+                        store_1.default.setObject('nodeStore', nodeStore);
+                    }
+                    else {
+                        node.toggle();
+                    }
+                };
                 NodesOverview.prototype.__showAll = function () {
                     store_1.default.delete('nodeStore');
                     var nodeStore = [];
@@ -63,7 +80,7 @@ System.register(["../k8s-page", "../../common/store"], function(exports_1) {
                         ns.open = true;
                         nodeStore.push({ name: ns.name, open: ns.open });
                     });
-                    store_1.default.setObject('namespaceStore', nodeStore);
+                    store_1.default.setObject('nodeStore', nodeStore);
                 };
                 NodesOverview.templateUrl = 'components/nodes-overview/nodes-overview.html';
                 return NodesOverview;
