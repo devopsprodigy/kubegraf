@@ -13,4 +13,5 @@ export declare class NodesOverview extends K8sPage {
     updatePods(newPods: any): void;
     nodeClick(event: any, node: any): void;
     __showAll(): void;
+    __hideAll(): void;
 }
