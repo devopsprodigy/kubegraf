@@ -111,13 +111,41 @@ export class NodesOverview extends K8sPage {
         return 'N-A'
     }
 
-    __showAll() {
+    nodeClick(event, node) {
+        if (event.ctrlKey) {
+            if(node.open) {
+                event.preventDefault();
+            }
+
+            store.delete('nodeStore');
+            let nodeStore = [];
+            this.nodesMap.map(ns => {
+                ns.open = node.name === ns.name;
+                nodeStore.push({name: ns.name, open: ns.open});
+            });
+            store.setObject('nodeStore', nodeStore);
+        } else {
+            node.toggle();
+        }
+    }
+
+    __showAll(){
         store.delete('nodeStore');
         let nodeStore = [];
         this.nodesMap.map(ns => {
             ns.open = true;
             nodeStore.push({name: ns.name, open: ns.open});
         });
-        store.setObject('namespaceStore', nodeStore);
+        store.setObject('nodeStore', nodeStore);
+    }
+
+    __hideAll(){
+        store.delete('nodeStore');
+        let nodeStore = [];
+        this.nodesMap.map(ns => {
+            ns.open = false;
+            nodeStore.push({name: ns.name, open: ns.open});
+        });
+        store.setObject('nodeStore', nodeStore);
     }
 }

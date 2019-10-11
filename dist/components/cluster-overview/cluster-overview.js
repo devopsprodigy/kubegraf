@@ -69,6 +69,32 @@ System.register(["../../common/store", "../k8s-page"], function(exports_1) {
                     });
                     store_1.default.setObject('namespaceStore', namespaceStore);
                 };
+                ClusterOverview.prototype.__hideAll = function () {
+                    store_1.default.delete('namespaceStore');
+                    var namespaceStore = [];
+                    this.namespaceMap.map(function (ns) {
+                        ns.open = false;
+                        namespaceStore.push({ name: ns.name, open: ns.open });
+                    });
+                    store_1.default.setObject('namespaceStore', namespaceStore);
+                };
+                ClusterOverview.prototype.namespaceClick = function (event, namespace) {
+                    if (event.ctrlKey) {
+                        if (namespace.open) {
+                            event.preventDefault();
+                        }
+                        store_1.default.delete('namespaceStore');
+                        var namespaceStore = [];
+                        this.namespaceMap.map(function (ns) {
+                            ns.open = namespace.name === ns.name;
+                            namespaceStore.push({ name: ns.name, open: ns.open });
+                        });
+                        store_1.default.setObject('namespaceStore', namespaceStore);
+                    }
+                    else {
+                        namespace.toggle();
+                    }
+                };
                 ClusterOverview.prototype.updatePods = function (newPods) {
                     var _this = this;
                     this.updateJobs();
