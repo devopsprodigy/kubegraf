@@ -56,6 +56,58 @@ System.register(["../k8s-page", "../../common/store"], function(exports_1) {
                 NodesOverview.prototype.updatePods = function (newPods) {
                     this.insertPodsToNodesMap(newPods);
                 };
+                NodesOverview.prototype.summary = function (ns, metric) {
+                    var res = 0;
+                    var postfix = null;
+                    if (ns.pods) {
+                        res = ns.pods.reduce(function (prevValue, pod) {
+                            if (pod.metrics[metric] && pod.metrics[metric] !== 'N-A') {
+                                var match = pod.metrics[metric].match(/([a-zA-Z]+)$/);
+                                var value = 0;
+                                if (match[1]) {
+                                    switch (match[1]) {
+                                        case ('m'):
+                                            value = parseInt(pod.metrics[metric], 10);
+                                            postfix = 'm';
+                                            break;
+                                        case ('MiB'):
+                                            value = parseFloat(pod.metrics[metric]);
+                                            if (postfix === 'GiB') {
+                                                value = value / 1024;
+                                            }
+                                            else {
+                                                postfix = 'MiB';
+                                            }
+                                            break;
+                                        case ('GiB'):
+                                            value = parseFloat(pod.metrics[metric]);
+                                            if (postfix === 'MiB') {
+                                                prevValue = prevValue / 1024;
+                                            }
+                                            postfix = 'GiB';
+                                            break;
+                                    }
+                                }
+                                return prevValue + value;
+                            }
+                            return prevValue;
+                        }, 0);
+                    }
+                    if (res !== 0) {
+                        switch (postfix) {
+                            case "m":
+                                return res + postfix;
+                            case "GiB":
+                                return Math.round(res * 1000) / 1000 + ' ' + postfix;
+                            case "MiB":
+                                if (res / 1024 > 1) {
+                                    return Math.round((res / 1024) * 1000) / 1000 + ' GiB';
+                                }
+                                return Math.round(res * 1000) / 1000 + ' ' + postfix;
+                        }
+                    }
+                    return 'N-A';
+                };
                 NodesOverview.prototype.__showAll = function () {
                     store_1.default.delete('nodeStore');
                     var nodeStore = [];

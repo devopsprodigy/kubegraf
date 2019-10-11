@@ -3,7 +3,7 @@ import {Node} from "../../common/types/node";
 import store from "../../common/store";
 import {__convertToGB, __roundCpu, __convertToMicro} from "../../common/helpers";
 
-export class NodesOverview extends K8sPage{
+export class NodesOverview extends K8sPage {
 
     static templateUrl = 'components/nodes-overview/nodes-overview.html';
 
@@ -16,7 +16,7 @@ export class NodesOverview extends K8sPage{
         public contextSrv,
         public $location,
         public $timeout
-    ){
+    ) {
         super($scope, backendSrv, datasourceSrv, contextSrv, $location, $timeout, $q);
         this.pageReady = false;
 
@@ -24,29 +24,29 @@ export class NodesOverview extends K8sPage{
             this.getNodeMap().then(() => {
                 this.pageReady = true;
             })
-            .then(() => {
-                this.getResourcesMetrics().then(() => {
+                .then(() => {
+                    this.getResourcesMetrics().then(() => {
 
-                })
-            });
+                    })
+                });
         });
 
     }
 
-    showAllPodsNS(ns){
+    showAllPodsNS(ns) {
         ns.limit = false;
     }
 
-    toggleNsList(node){
+    toggleNsList(node) {
 
         node.hideNs = !node.hideNs;
 
         let key = node.name + 'NsList';
         let state = store.get(key);
 
-        if(state === 'false'){
+        if (state === 'false') {
             state = false;
-        }else if(state === 'true'){
+        } else if (state === 'true') {
             state = true;
         }
 
@@ -57,7 +57,61 @@ export class NodesOverview extends K8sPage{
         this.insertPodsToNodesMap(newPods);
     }
 
-    __showAll(){
+    summary(ns, metric) {
+        let res = 0;
+        let postfix = null;
+        if (ns.pods) {
+            res = ns.pods.reduce((prevValue, pod) => {
+                if (pod.metrics[metric] && pod.metrics[metric] !== 'N-A') {
+                    const match = pod.metrics[metric].match(/([a-zA-Z]+)$/)
+                    let value = 0
+                    if (match[1]) {
+                        switch (match[1]) {
+                            case('m'):
+                                value = parseInt(pod.metrics[metric], 10);
+                                postfix = 'm';
+                                break;
+                            case('MiB'):
+                                value = parseFloat(pod.metrics[metric]);
+                                if (postfix === 'GiB') {
+                                    value = value / 1024;
+                                } else {
+                                    postfix = 'MiB';
+                                }
+                                break;
+                            case('GiB'):
+                                value = parseFloat(pod.metrics[metric]);
+                                if (postfix === 'MiB') {
+                                    prevValue = prevValue / 1024
+                                }
+                                postfix = 'GiB';
+                                break;
+                        }
+                    }
+                    return prevValue + value
+                }
+                return prevValue
+            }, 0)
+        }
+
+        if (res !== 0) {
+            switch (postfix) {
+                case "m":
+                    return res + postfix;
+                case "GiB":
+                    return Math.round(res * 1000) / 1000 + ' ' + postfix;
+                case "MiB":
+                    if(res / 1024 > 1){
+                        return Math.round((res / 1024) * 1000) / 1000 + ' GiB';
+                    }
+                    return Math.round(res * 1000) / 1000 + ' ' + postfix;
+            }
+        }
+
+        return 'N-A'
+    }
+
+    __showAll() {
         store.delete('nodeStore');
         let nodeStore = [];
         this.nodesMap.map(ns => {

@@ -201,6 +201,26 @@
                                             ></span>
                                         </td>
                                     </tr>
+                                    <tr ng-if="ns.pods">
+                                        <td>
+                                            <span class="override--nodeTable_status"></span>
+                                        </td>
+                                        <td>
+                                            <span class="pull-right">Summary</span>
+                                        </td>
+                                        <td>
+                                            <span ng-bind="ctrl.summary(ns, 'cpuUsed')"/>
+                                        </td>
+                                        <td>
+                                            <span ng-bind="ctrl.summary(ns, 'cpuRequested')"/>
+                                        </td>
+                                        <td>
+                                            <span ng-bind="ctrl.summary(ns, 'memoryUsed')" />
+                                        </td>
+                                        <td>
+                                            <span ng-bind="ctrl.summary(ns, 'memoryRequested')"/>
+                                        </td>
+                                    </tr>
                                 </table>
                             </div>
                         </div>
