@@ -92,6 +92,6 @@ export class NodesOverview extends K8sPage{
             ns.open = false;
             nodeStore.push({name: ns.name, open: ns.open});
         });
-        store.setObject('namespaceStore', nodeStore);
+        store.setObject('nodeStore', nodeStore);
     }
 }

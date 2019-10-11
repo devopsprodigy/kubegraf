@@ -89,7 +89,7 @@ System.register(["../k8s-page", "../../common/store"], function(exports_1) {
                         ns.open = false;
                         nodeStore.push({ name: ns.name, open: ns.open });
                     });
-                    store_1.default.setObject('namespaceStore', nodeStore);
+                    store_1.default.setObject('nodeStore', nodeStore);
                 };
                 NodesOverview.templateUrl = 'components/nodes-overview/nodes-overview.html';
                 return NodesOverview;
