@@ -1,3 +1,7 @@
+# 1.1.1.1 (2019-10-10)
+### Bug Fixes
+* Grafana v6.4.x support
+
 # 1.1.1 (2019-09-30)
 ### Bug Fixes
 * Bearer token access on Grafana version 5.x.x [#10](https://github.com/devopsprodigy/kubegraf/issues/10)
@@ -18,3 +22,4 @@
 
 ### Bug Fixes
 * Readonly access via cert and key [#6](https://github.com/devopsprodigy/kubegraf/pull/6)
+``
