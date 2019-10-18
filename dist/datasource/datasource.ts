@@ -10,6 +10,7 @@ export class DOPK8SDatasource {
     deploymentsPromise: any;
     daemonsetsPromise: any;
     statefulsetsPromise: any;
+    podsPromise: any;
     accessViaToken: boolean;
 
     constructor(instanceSettings, private backendSrv, private templateSrv){
@@ -133,8 +134,13 @@ export class DOPK8SDatasource {
                     case 'statefulset':
                         promise = this.getStateFulSetsSingletone();
                         break;
+                    case 'pod':
+                        promise = this.getPodsSingleton();
+                        break;
                 }
-                return promise.then(items => this.__parseContainers(items, queryData));
+                return promise.then(items => {
+                    return this.__parseContainers(items, queryData)
+                });
 
             case 'nodeHost':
                 return this.getNodesSingletone()
@@ -179,9 +185,17 @@ export class DOPK8SDatasource {
             }];
         }
         _item = _item[0];
-        let containers = _item.spec.template.spec.containers.map(
-            cont => cont.name
-        );
+
+        let containers = [];
+        if(_item.spec.template){
+            containers = _item.spec.template.spec.containers.map(
+                cont => cont.name
+            );
+        } else if (_item.spec.containers){
+            containers = _item.spec.containers.map(
+                cont => cont.name
+            );
+        }
 
         let result = [];
 
@@ -345,6 +359,21 @@ export class DOPK8SDatasource {
         }
 
         return this.statefulsetsPromise;
+    }
+
+    getPodsSingleton(namespace = null){
+        if(!this.podsPromise){
+            this.podsPromise = this.__get('/api/v1/' + this.__addNamespace(namespace) + 'pods')
+                .then(result => {
+                    if(!result.items){
+                        appEvents.emit('alert-error', [`Pods (singleton) not received`]);
+                        return [];
+                    }
+                    return result.items;
+                });
+        }
+
+        return this.podsPromise;
     }
 
     getNodes(){

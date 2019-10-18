@@ -10,6 +10,7 @@ export declare class DOPK8SDatasource {
     deploymentsPromise: any;
     daemonsetsPromise: any;
     statefulsetsPromise: any;
+    podsPromise: any;
     accessViaToken: boolean;
     constructor(instanceSettings: any, backendSrv: any, templateSrv: any);
     testDatasource(): any;
@@ -28,6 +29,7 @@ export declare class DOPK8SDatasource {
     getDeploymentsSingletone(namespace?: any): any;
     getDaemonsetsSingletone(namespace?: any): any;
     getStateFulSetsSingletone(namespace?: any): any;
+    getPodsSingleton(namespace?: any): any;
     getNodes(): any;
     getJobs(): any;
     getCronJobs(): any;

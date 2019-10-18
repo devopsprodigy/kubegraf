@@ -119,8 +119,13 @@ System.register(["app/core/app_events"], function(exports_1) {
                                 case 'statefulset':
                                     promise = this.getStateFulSetsSingletone();
                                     break;
+                                case 'pod':
+                                    promise = this.getPodsSingleton();
+                                    break;
                             }
-                            return promise.then(function (items) { return _this.__parseContainers(items, queryData); });
+                            return promise.then(function (items) {
+                                return _this.__parseContainers(items, queryData);
+                            });
                         case 'nodeHost':
                             return this.getNodesSingletone()
                                 .then(function (nodes) {
@@ -162,7 +167,13 @@ System.register(["app/core/app_events"], function(exports_1) {
                             }];
                     }
                     _item = _item[0];
-                    var containers = _item.spec.template.spec.containers.map(function (cont) { return cont.name; });
+                    var containers = [];
+                    if (_item.spec.template) {
+                        containers = _item.spec.template.spec.containers.map(function (cont) { return cont.name; });
+                    }
+                    else if (_item.spec.containers) {
+                        containers = _item.spec.containers.map(function (cont) { return cont.name; });
+                    }
                     var result = [];
                     if (containers.length > 1) {
                         var names = containers.join('|');
@@ -311,6 +322,20 @@ System.register(["app/core/app_events"], function(exports_1) {
                         });
                     }
                     return this.statefulsetsPromise;
+                };
+                DOPK8SDatasource.prototype.getPodsSingleton = function (namespace) {
+                    if (namespace === void 0) { namespace = null; }
+                    if (!this.podsPromise) {
+                        this.podsPromise = this.__get('/api/v1/' + this.__addNamespace(namespace) + 'pods')
+                            .then(function (result) {
+                            if (!result.items) {
+                                app_events_1.default.emit('alert-error', ["Pods (singleton) not received"]);
+                                return [];
+                            }
+                            return result.items;
+                        });
+                    }
+                    return this.podsPromise;
                 };
                 DOPK8SDatasource.prototype.getNodes = function () {
                     return this.__get('/api/v1/nodes')

@@ -12,5 +12,7 @@ export declare class NodesOverview extends K8sPage {
     toggleNsList(node: any): void;
     updatePods(newPods: any): void;
     summary(ns: any, metric: any): any;
+    nodeClick(event: any, node: any): void;
     __showAll(): void;
+    __hideAll(): void;
 }
