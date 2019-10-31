@@ -106,11 +106,18 @@ The above three dashboards show the number of available / unavailable applicatio
       ```
      Copy /etc/kubernetes/pki/grafana-kubegraf.crt to all other master nodes.
     
-    or 
-    
+    or
+
+    Create a `grafana-kubegraf` Service Account
+    ```
+    kubectl apply -f https://raw.githubusercontent.com/devopsprodigy/kubegraf/master/kubernetes/serviceaccount.yaml
+    kubectl apply -f https://raw.githubusercontent.com/devopsprodigy/kubegraf/master/kubernetes/clusterrole.yaml
+    kubectl apply -f https://raw.githubusercontent.com/devopsprodigy/kubegraf/master/kubernetes/clusterrolebinding.yaml
+    kubectl apply -f https://raw.githubusercontent.com/devopsprodigy/kubegraf/master/kubernetes/secret.yaml
+    ```
     Get the token
     ```
-    kubectl describe secret grafana-kubegraf-secret
+    kubectl get secret grafana-kubegraf-secret -o jsonpath={.data.token} | base64 -d
     ```
 	
 5. Go to /configuration-plugins in Grafana and click on the plugin. Then click “enable”.
