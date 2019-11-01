@@ -93,14 +93,14 @@ The above three dashboards show the number of available / unavailable applicatio
 
 3. Apply Kubernetes manifests from [kubernetes/](kubernetes/) directory to give
      required permissions to the user `grafana-kubegraf`:
-```
-kubectl apply -f https://raw.githubusercontent.com/devopsprodigy/kubegraf/master/kubernetes/serviceaccount.yaml
-kubectl apply -f https://raw.githubusercontent.com/devopsprodigy/kubegraf/master/kubernetes/clusterrole.yaml
-kubectl apply -f https://raw.githubusercontent.com/devopsprodigy/kubegraf/master/kubernetes/clusterrolebinding.yaml
-kubectl apply -f https://raw.githubusercontent.com/devopsprodigy/kubegraf/master/kubernetes/secret.yaml
-```
+      ```
+      kubectl apply -f https://raw.githubusercontent.com/devopsprodigy/kubegraf/master/kubernetes/serviceaccount.yaml
+      kubectl apply -f https://raw.githubusercontent.com/devopsprodigy/kubegraf/master/kubernetes/clusterrole.yaml
+      kubectl apply -f https://raw.githubusercontent.com/devopsprodigy/kubegraf/master/kubernetes/clusterrolebinding.yaml
+      kubectl apply -f https://raw.githubusercontent.com/devopsprodigy/kubegraf/master/kubernetes/secret.yaml
+      ```
 
-4.  Create a `grafana-kubegraf` user private key and certificate on one of the
+4. Create a `grafana-kubegraf` user private key and certificate on one of the
       master nodes:
       ```
       openssl genrsa -out ~/grafana-kubegraf.key 2048
