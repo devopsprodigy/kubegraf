@@ -156,9 +156,9 @@ export  class K8sPage {
 
     __getCpuMetricsUsed(){
         const promQuery = {
-            expr: 'sum(rate(container_cpu_usage_seconds_total[1m])) by (node)',
+            expr: 'sum(rate(container_cpu_usage_seconds_total{id="/", job="kubelet"}[1m])) by (node)',
             legend: 'node'
-        };
+        }
         return this.prometheusDS.query(promQuery)
             .then(res => res)
     }
@@ -185,7 +185,7 @@ export  class K8sPage {
 
     __getMemoryMetricsUsed(){
         const promQuery = {
-            expr: 'sum(container_memory_usage_bytes{container_name!="POD",container_name!=""})by(node)',
+            expr: 'sum(node:node_memory_bytes_total:sum) by (node) - sum(node:node_memory_bytes_available:sum) by (node)',
             legend: 'node'
         };
 
