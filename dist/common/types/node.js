@@ -261,7 +261,7 @@ System.register(["../helpers", '../../common/store', '../../common/types/traits/
                     this.metrics.memoryRequested = this.__getLastMetric(memoryReq);
                     this.metrics.podsCount = this.__getLastMetric(pods);
                     this.metrics.cpuUsed = this.__getLastMetric(cpuUsed);
-                    this.metrics.memoryUsed = this.__getLastMetric(memoryUsed);
+                    this.metrics.memoryUsed = this.__getLastMetricByInstance(memoryUsed);
                     currentCpuStatus !== undefined && currentCpuStatus != this.cpuStatus && this.setCpuMetricIndicated();
                     currentCpuStatus !== undefined && currentMemoryStatus != this.memoryStatus && this.setMemoryMetricIndicated();
                     currentCpuStatus !== undefined && currentPodsStatus != this.podsStatus && this.setPodsMetricIndicated();
@@ -280,6 +280,18 @@ System.register(["../helpers", '../../common/store', '../../common/types/traits/
                     var _this = this;
                     this.podsIndicate = true;
                     setTimeout(function () { _this.podsIndicate = false; }, 10000);
+                };
+                Node.prototype.__getLastMetricByInstance = function (metrics) {
+                    var _this = this;
+                    var datapoints = metrics.filter(function (item) {
+                        return item.target.includes(_this.hostIp);
+                    })[0];
+                    if (datapoints !== undefined) {
+                        return datapoints.datapoint;
+                    }
+                    else {
+                        return 'N/A';
+                    }
                 };
                 Node.prototype.__getLastMetric = function (metrics) {
                     var _this = this;

@@ -272,8 +272,13 @@
           "expr": "sum(rate(container_cpu_usage_seconds_total{namespace=\"$namespace\", pod_name=~\"$pod\"}[1m])) by (pod_name)",
           "format": "time_series",
           "intervalFactor": 1,
-          "legendFormat": "{{pod_name}}",
+          "legendFormat": "Usage",
           "refId": "A"
+        },
+        {
+          "expr": "sum(kube_pod_container_resource_requests_cpu_cores{namespace=\"$namespace\", pod=~\"$pod\"})",
+          "legendFormat": "Requested",
+          "refId": "B"
         }
       ],
       "thresholds": [],

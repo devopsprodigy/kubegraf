@@ -190,7 +190,7 @@
       "tableColumn": "",
       "targets": [
         {
-          "expr": "(sum(rate(container_cpu_usage_seconds_total{node=~\"$node\"}[1m])) / sum(kube_node_status_allocatable_cpu_cores{node=~\"$node\"})) * 100",
+          "expr": "(sum(rate(container_cpu_usage_seconds_total{node=~'$node', id='/', job='kubelet'}[1m])) / sum(kube_node_status_allocatable_cpu_cores{node=~'$node'})) * 100",
           "format": "time_series",
           "intervalFactor": 1,
           "refId": "A"
@@ -273,7 +273,7 @@
       "tableColumn": "",
       "targets": [
         {
-          "expr": "(sum(container_memory_usage_bytes{container_name!=\"POD\", container_name!=\"\", node=~\"$node\"}) / sum(kube_node_status_allocatable_memory_bytes{node=~\"$node\"})) * 100",
+          "expr": "(1 - (sum(node_memory_MemAvailable_bytes{job='node-exporter', instance=~'$nodeHost.*'}) by (instance) / sum(node_memory_MemTotal_bytes{job='node-exporter', instance=~'$nodeHost.*'}) by (instance))) * 100",
           "format": "time_series",
           "intervalFactor": 1,
           "refId": "A"
@@ -436,7 +436,7 @@
           "refId": "C"
         },
         {
-          "expr": "sum(rate(container_cpu_usage_seconds_total{node=~\"$node\"}[1m]))",
+          "expr": "sum(rate(container_cpu_usage_seconds_total{node=~'$node', id='/', job='kubelet'}[1m])) by (node)",
           "format": "time_series",
           "intervalFactor": 1,
           "legendFormat": "Usage",
@@ -544,7 +544,7 @@
           "refId": "C"
         },
         {
-          "expr": "sum(container_memory_usage_bytes{container_name!=\"POD\", container_name!=\"\", node=\"$node\"}) ",
+          "expr": "sum(node_memory_MemTotal_bytes{job='node-exporter'}) by (instance) - sum(node_memory_MemAvailable_bytes{job='node-exporter'}) by (instance)",
           "format": "time_series",
           "intervalFactor": 1,
           "legendFormat": "Usage",
