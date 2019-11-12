@@ -436,7 +436,7 @@
           "refId": "C"
         },
         {
-          "expr": "sum(rate(container_cpu_usage_seconds_total{node=~\"$node\"}[1m]))",
+          "expr": "sum(rate(container_cpu_usage_seconds_total{node=~'$node', id='/', job='kubelet'}[1m])) by (node)",
           "format": "time_series",
           "intervalFactor": 1,
           "legendFormat": "Usage",
@@ -544,7 +544,7 @@
           "refId": "C"
         },
         {
-          "expr": "sum(container_memory_usage_bytes{container_name!=\"POD\", container_name!=\"\", node=\"$node\"}) ",
+          "expr": "sum(node_memory_MemTotal_bytes{job='node-exporter'}) by (instance) - sum(node_memory_MemAvailable_bytes{job='node-exporter'}) by (instance)",
           "format": "time_series",
           "intervalFactor": 1,
           "legendFormat": "Usage",
