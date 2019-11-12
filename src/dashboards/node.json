@@ -273,7 +273,7 @@
       "tableColumn": "",
       "targets": [
         {
-          "expr": "node:node_memory_utilisation:{node=~'$node'} * 100",
+          "expr": "(1 - (sum(node_memory_MemAvailable_bytes{job='node-exporter', instance=~'$nodeHost.*'}) by (instance) / sum(node_memory_MemTotal_bytes{job='node-exporter', instance=~'$nodeHost.*'}) by (instance))) * 100",
           "format": "time_series",
           "intervalFactor": 1,
           "refId": "A"
