@@ -186,7 +186,7 @@ export  class K8sPage {
     __getMemoryMetricsUsed(){
         const promQuery = {
             expr: 'sum(node_memory_MemTotal_bytes{job="node-exporter"}) by (instance) - sum(node_memory_MemAvailable_bytes{job="node-exporter"}) by (instance)',
-            legend: 'node'
+            legend: 'instance'
         };
 
         return this.prometheusDS.query(promQuery)

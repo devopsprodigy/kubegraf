@@ -176,7 +176,7 @@ System.register(["app/core/app_events", "../common/types/pod", "../common/proxie
                 K8sPage.prototype.__getMemoryMetricsUsed = function () {
                     var promQuery = {
                         expr: 'sum(node_memory_MemTotal_bytes{job="node-exporter"}) by (instance) - sum(node_memory_MemAvailable_bytes{job="node-exporter"}) by (instance)',
-                        legend: 'node'
+                        legend: 'instance'
                     };
                     return this.prometheusDS.query(promQuery)
                         .then(function (res) { return res; });

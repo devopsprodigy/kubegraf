@@ -46,6 +46,7 @@ export declare class Node extends BaseModel {
     setCpuMetricIndicated(): void;
     setMemoryMetricIndicated(): void;
     setPodsMetricIndicated(): void;
+    __getLastMetricByInstance(metrics: any): any;
     __getLastMetric(metrics: any): any;
     __getBytes(str: string): number;
     __parseInt(str: string): number;
