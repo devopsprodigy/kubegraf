@@ -202,7 +202,7 @@ export class Node extends  BaseModel{
         this.metrics.memoryRequested = this.__getLastMetric(memoryReq);
         this.metrics.podsCount = this.__getLastMetric(pods);
         this.metrics.cpuUsed = this.__getLastMetric(cpuUsed);
-        this.metrics.memoryUsed = this.__getLastMetric(memoryUsed);
+        this.metrics.memoryUsed = this.__getLastMetricByInstance(memoryUsed);
 
         currentCpuStatus !== undefined && currentCpuStatus != this.cpuStatus && this.setCpuMetricIndicated();
         currentCpuStatus !== undefined && currentMemoryStatus != this.memoryStatus && this.setMemoryMetricIndicated();
@@ -222,6 +222,17 @@ export class Node extends  BaseModel{
     setPodsMetricIndicated(){
         this.podsIndicate = true;
         setTimeout(() =>{this.podsIndicate = false}, 10000);
+    }
+
+    __getLastMetricByInstance(metrics){
+        let datapoints = metrics.filter(item => {
+            return item.target.includes(this.hostIp);
+        })[0];
+        if(datapoints !== undefined){
+            return datapoints.datapoint;
+        }else{
+            return 'N/A';
+        }
     }
 
     __getLastMetric(metrics){

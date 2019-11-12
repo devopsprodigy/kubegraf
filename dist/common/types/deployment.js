@@ -1,4 +1,4 @@
-System.register(['../../common/types/traits/baseModel'], function(exports_1) {
+System.register(['./traits/baseModel'], function(exports_1) {
     var __extends = (this && this.__extends) || function (d, b) {
         for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
         function __() { this.constructor = d; }
@@ -17,6 +17,7 @@ System.register(['../../common/types/traits/baseModel'], function(exports_1) {
                 function Deployment(data) {
                     _super.call(this, data);
                     this.pods = [];
+                    this.services = [];
                 }
                 return Deployment;
             })(baseModel_1.BaseModel);
