@@ -556,7 +556,7 @@
       "tableColumn": "",
       "targets": [
         {
-          "expr": "sum(kube_pod_container_status_restarts_total{namespace=\"$namespace\", container=~\"$containers\"})",
+          "expr": "sum(kube_pod_container_status_restarts_total{namespace=\"$namespace\", container=~\"$containers\", pod=\"$pod\"})",
           "refId": "A"
         }
       ],
@@ -573,7 +573,7 @@
           "value": "null"
         }
       ],
-      "valueName": "avg"
+      "valueName": "current"
     },
     {
       "aliasColors": {},
@@ -616,7 +616,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "kube_pod_container_status_restarts_total{namespace=\"$namespace\", container=~\"$containers\"}",
+          "expr": "kube_pod_container_status_restarts_total{namespace=\"$namespace\", container=~\"$containers\", pod=\"$pod\"}",
           "legendFormat": "Restarts [{{pod}} / {{ container}} ]",
           "refId": "A"
         }
