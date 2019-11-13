@@ -130,17 +130,6 @@
         "options": [],
         "refresh": 1,
         "regex": ""
-      },
-      {
-        "datasource": "$cluster",
-        "type": "query",
-        "name": "containers",
-        "query": "containers $namespace daemonset $daemonset",
-        "hide": 0,
-        "label": null,
-        "options": [],
-        "refresh": 1,
-        "regex": ""
       }
     ]
   },
@@ -171,7 +160,7 @@
       "fontSize": "80%",
       "format": "short",
       "gridPos": {
-        "h": 8,
+        "h": 5,
         "w": 12,
         "x": 0,
         "y": 0
@@ -218,7 +207,7 @@
       "datasource": "$PromDs",
       "fill": 1,
       "gridPos": {
-        "h": 8,
+        "h": 5,
         "w": 12,
         "x": 12,
         "y": 0
@@ -340,28 +329,28 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "kube_pod_container_status_ready{namespace=\"$namespace\", container=~\"$containers\"}",
+          "expr": "kube_pod_container_status_ready{namespace=\"$namespace\", pod=~\"$daemonset-.*\"}",
           "format": "time_series",
           "intervalFactor": 1,
           "legendFormat": "Ready [$daemonset / {{pod}} / {{container}}]",
           "refId": "A"
         },
         {
-          "expr": "kube_pod_container_status_running{namespace=\"$namespace\", container=~\"$containers\"}",
+          "expr": "kube_pod_container_status_running{namespace=\"$namespace\", pod=~\"$daemonset-.*\"}",
           "format": "time_series",
           "intervalFactor": 1,
           "legendFormat": "Running [$daemonset / {{pod}} / {{container}}]",
           "refId": "B"
         },
         {
-          "expr": "kube_pod_container_status_waiting{namespace=\"$namespace\", container=~\"$containers\"}",
+          "expr": "kube_pod_container_status_waiting{namespace=\"$namespace\", pod=~\"$daemonset-.*\"}",
           "format": "time_series",
           "intervalFactor": 1,
           "legendFormat": "Waiting [$daemonset / {{pod}} / {{container}}]",
           "refId": "C"
         },
         {
-          "expr": "kube_pod_container_status_terminated{namespace=\"$namespace\", container=~\"$containers\"}",
+          "expr": "kube_pod_container_status_terminated{namespace=\"$namespace\", pod=~\"$daemonset-.*\"}",
           "format": "time_series",
           "intervalFactor": 1,
           "legendFormat": "Terminated [$daemonset / {{pod}} / {{container}}]",
@@ -607,11 +596,12 @@
       },
       "id": null,
       "legend": {
+        "alignAsTable": true,
         "avg": false,
         "current": false,
         "max": false,
         "min": false,
-        "rightSide": false,
+        "rightSide": true,
         "show": true,
         "total": false,
         "values": false
@@ -632,7 +622,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "sum (container_memory_usage_bytes{namespace=\"$namespace\", pod_name=~\"$daemonset-.*\", container_name!=\"\", container_name!=\"POD\", container_name=~\"$containers\"}) by (pod_name)",
+          "expr": "sum (container_memory_usage_bytes{namespace=\"$namespace\", pod_name=~\"$daemonset-.*\", container_name!=\"\", container_name!=\"POD\"}) by (pod_name)",
           "legendFormat": "Used: {{pod_name}}",
           "refId": "A"
         },
@@ -647,7 +637,7 @@
       "timeFrom": null,
       "timeRegions": [],
       "timeShift": null,
-      "title": "Memory usege",
+      "title": "Memory usage",
       "tooltip": {
         "shared": true,
         "sort": 0,
@@ -700,8 +690,10 @@
       },
       "id": null,
       "legend": {
+        "alignAsTable": true,
         "avg": false,
         "current": false,
+        "rightSide": true,
         "max": false,
         "min": false,
         "show": true,
@@ -724,9 +716,14 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "sum(rate(container_cpu_usage_seconds_total{namespace=\"$namespace\", pod_name=~\"$daemonset-.*\", container_name=~\"$containers\"}[5m])) by (pod_name)",
-          "legendFormat": "{{pod_name}}",
+          "expr": "sum(rate(container_cpu_usage_seconds_total{namespace=\"$namespace\", pod_name=~\"$daemonset-.*\"}[5m])) by (pod_name)",
+          "legendFormat": "Used: {{pod_name}}",
           "refId": "A"
+        },
+        {
+          "expr": "kube_pod_container_resource_requests_cpu_cores{namespace=\"$namespace\", pod=~\"$daemonset-.*\"}",
+          "legendFormat": "Requested: {{pod}}",
+          "refId": "B"
         }
       ],
       "thresholds": [],
@@ -786,10 +783,12 @@
       },
       "id": null,
       "legend": {
+        "alignAsTable": true,
         "avg": false,
         "current": false,
         "max": false,
         "min": false,
+        "rightSide": true,
         "show": true,
         "total": false,
         "values": false
@@ -811,7 +810,7 @@
       "targets": [
         {
           "expr": "irate(container_network_transmit_bytes_total{namespace=\"$namespace\", pod_name=~\"$daemonset-.*\"}[5m])",
-          "legendFormat": "{{interface}}",
+          "legendFormat": "{{interface}} : [{{pod_name}}]",
           "refId": "A"
         }
       ],
@@ -872,10 +871,12 @@
       },
       "id": null,
       "legend": {
+        "alignAsTable": true,
         "avg": false,
         "current": false,
         "max": false,
         "min": false,
+        "rightSide": true,
         "show": true,
         "total": false,
         "values": false
@@ -897,7 +898,7 @@
       "targets": [
         {
           "expr": "irate(container_network_receive_bytes_total{namespace=\"$namespace\", pod_name=~\"$daemonset-.*\"}[5m])",
-          "legendFormat": "{{interface}}",
+          "legendFormat": "{{interface}} : [{{pod_name}}]",
           "refId": "A"
         }
       ],
