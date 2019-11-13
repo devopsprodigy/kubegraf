@@ -156,7 +156,7 @@
       "datasource": "$PromDs",
       "fill": 1,
       "gridPos": {
-        "h": 8,
+        "h": 5,
         "w": 24,
         "x": 0,
         "y": 0
@@ -422,7 +422,7 @@
       "tableColumn": "",
       "targets": [
         {
-          "expr": "sum(kube_pod_container_status_restarts_total{namespace=\"$namespace\", container=~\"$containers\"})",
+          "expr": "sum(kube_pod_container_status_restarts_total{namespace=\"$namespace\", pod=~\"$statefulset-.*\"})",
           "format": "time_series",
           "intervalFactor": 1,
           "refId": "A"
@@ -441,7 +441,7 @@
           "value": "null"
         }
       ],
-      "valueName": "current"
+      "valueName": "max"
     },
     {
       "aliasColors": {},
@@ -481,7 +481,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "kube_pod_container_status_restarts_total{namespace=\"$namespace\", container=~\"$containers\"}",
+          "expr": "kube_pod_container_status_restarts_total{namespace=\"$namespace\", pod=~\"$statefulset-.*\"}",
           "format": "time_series",
           "intervalFactor": 1,
           "legendFormat": "Restarts [$statefulset / {{pod}} / {{ container}} ]",
