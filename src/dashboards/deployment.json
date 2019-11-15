@@ -130,6 +130,32 @@
         "options": [],
         "refresh": 1,
         "regex": ""
+      },
+      {
+        "allValue": null,
+        "current": {
+          "tags": [],
+          "text": "All",
+          "value": "$__all"
+        },
+        "datasource": "$PromDs",
+        "definition": "label_values(container_memory_usage_bytes{namespace=\"$namespace\", pod_name=~\"$deployment-.*\", container_name!=\"\", container_name!=\"POD\"}, container)",
+        "hide": 0,
+        "includeAll": true,
+        "label": null,
+        "multi": false,
+        "name": "container",
+        "options": [],
+        "query": "label_values(container_memory_usage_bytes{namespace=\"$namespace\", pod_name=~\"$deployment-.*\", container_name!=\"\", container_name!=\"POD\"}, container)",
+        "refresh": 2,
+        "regex": "",
+        "skipUrlSync": false,
+        "sort": 1,
+        "tagValuesQuery": "",
+        "tags": [],
+        "tagsQuery": "",
+        "type": "query",
+        "useTags": false
       }
     ]
   },
@@ -333,28 +359,28 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "kube_pod_container_status_ready{namespace=\"$namespace\", pod=~\"$deployment-.*\"}",
+          "expr": "kube_pod_container_status_ready{namespace=\"$namespace\", pod=~\"$deployment-.*\", container=~\"$container\"}",
           "format": "time_series",
           "intervalFactor": 1,
           "legendFormat": "Ready [$deployment / {{pod}} / {{container}}]",
           "refId": "A"
         },
         {
-          "expr": "kube_pod_container_status_running{namespace=\"$namespace\", pod=~\"$deployment-.*\"}",
+          "expr": "kube_pod_container_status_running{namespace=\"$namespace\", pod=~\"$deployment-.*\", container=~\"$container\"}",
           "format": "time_series",
           "intervalFactor": 1,
           "legendFormat": "Running [$deployment / {{pod}} / {{container}}]",
           "refId": "B"
         },
         {
-          "expr": "kube_pod_container_status_waiting{namespace=\"$namespace\", pod=~\"$deployment-.*\"}",
+          "expr": "kube_pod_container_status_waiting{namespace=\"$namespace\", pod=~\"$deployment-.*\", container=~\"$container\"}",
           "format": "time_series",
           "intervalFactor": 1,
           "legendFormat": "Waiting [$deployment / {{pod}} / {{container}}]",
           "refId": "C"
         },
         {
-          "expr": "kube_pod_container_status_terminated{namespace=\"$namespace\", pod=~\"$deployment-.*\"}",
+          "expr": "kube_pod_container_status_terminated{namespace=\"$namespace\", pod=~\"$deployment-.*\", container=~\"$container\"}",
           "format": "time_series",
           "intervalFactor": 1,
           "legendFormat": "Terminated [$deployment / {{pod}} / {{container}}]",
@@ -463,7 +489,7 @@
       "tableColumn": "",
       "targets": [
         {
-          "expr": "sum(kube_pod_container_status_restarts_total{namespace=\"$namespace\", pod=~\"$deployment-.*\"})",
+          "expr": "sum(kube_pod_container_status_restarts_total{namespace=\"$namespace\", pod=~\"$deployment-.*\", container=~\"$container\"})",
           "format": "time_series",
           "intervalFactor": 1,
           "refId": "A"
@@ -522,7 +548,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "kube_pod_container_status_restarts_total{namespace=\"$namespace\", pod=~\"$deployment-.*\"}",
+          "expr": "kube_pod_container_status_restarts_total{namespace=\"$namespace\", pod=~\"$deployment-.*\", container=~\"$container\"}",
           "format": "time_series",
           "intervalFactor": 1,
           "legendFormat": "Restarts [$deployment / {{pod}} / {{ container}} ]",
@@ -626,14 +652,14 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "sum (container_memory_usage_bytes{namespace=\"$namespace\", pod_name=~\"$deployment-.*\", container_name!=\"\", container_name!=\"POD\"}) by (pod_name)",
-          "legendFormat": "Used: {{pod_name}}",
+          "expr": "sum (container_memory_usage_bytes{namespace=\"$namespace\", pod_name=~\"$deployment-.*\", container_name!=\"\", container_name!=\"POD\", container_name=~\"$container\"}) by (pod_name)",
+          "legendFormat": "Used: {{pod_name}} / {{$container}}",
           "refId": "A"
         },
         {
-          "expr": "sum (kube_pod_container_resource_requests_memory_bytes{ namespace=\"$namespace\", pod=~\"$deployment-.*\"}) by (pod)",
+          "expr": "sum (kube_pod_container_resource_requests_memory_bytes{ namespace=\"$namespace\", pod=~\"$deployment-.*\", container=~\"$container\"}) by (pod)",
           "hide": false,
-          "legendFormat": "Requested: {{pod}}",
+          "legendFormat": "Requested: {{pod}} / {{$container}}",
           "refId": "B"
         }
       ],
@@ -661,7 +687,7 @@
           "label": null,
           "logBase": 1,
           "max": null,
-          "min": null,
+          "min": 0,
           "show": true
         },
         {
@@ -720,13 +746,13 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "sum(rate(container_cpu_usage_seconds_total{namespace=\"$namespace\", pod_name=~\"$deployment-.*\"}[5m])) by (pod_name)",
-          "legendFormat": "Used: {{pod_name}}",
+          "expr": "sum(rate(container_cpu_usage_seconds_total{namespace=\"$namespace\", pod_name=~\"$deployment-.*\", container=~\"$container\"}[5m])) by (pod_name)",
+          "legendFormat": "Used: {{pod_name}} / {{$container}}",
           "refId": "A"
         },
         {
-          "expr": "kube_pod_container_resource_requests_cpu_cores{namespace=\"$namespace\", pod=~\"$deployment-.*\"}",
-          "legendFormat": "Requested: {{pod}}",
+          "expr": "kube_pod_container_resource_requests_cpu_cores{namespace=\"$namespace\", pod=~\"$deployment-.*\", container=~\"$container\"}",
+          "legendFormat": "Requested: {{pod}} / {{$container}}",
           "refId": "B"
         }
       ],
@@ -754,7 +780,7 @@
           "label": null,
           "logBase": 1,
           "max": null,
-          "min": null,
+          "min": 0,
           "show": true
         },
         {
