@@ -628,6 +628,7 @@
         "max": false,
         "min": false,
         "rightSide": true,
+        "sideWidth": 300,
         "show": true,
         "total": false,
         "values": false
@@ -720,6 +721,7 @@
         "avg": false,
         "current": false,
         "rightSide": true,
+        "sideWidth": 300,
         "max": false,
         "min": false,
         "show": true,

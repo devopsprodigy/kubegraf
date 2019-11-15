@@ -591,7 +591,7 @@
         "max": false,
         "min": false,
         "rightSide": true,
-        "sideWidth": 250,
+        "sideWidth": 300,
         "show": true,
         "total": false,
         "values": false
@@ -686,7 +686,7 @@
         "max": false,
         "min": false,
         "rightSide": true,
-        "sideWidth": 250,
+        "sideWidth": 300,
         "show": true,
         "total": false,
         "values": false
@@ -712,7 +712,7 @@
           "refId": "A"
         },
         {
-          "expr": "kube_pod_container_resource_requests_cpu_cores{namespace=\"$namespace\", pod=~\"$statefulset-.*\", container=~\"$container\"}",
+          "expr": "sum(kube_pod_container_resource_requests_cpu_cores{namespace=\"$namespace\", pod=~\"$statefulset-.*\", container=~\"$container\"}) by (pod)",
           "legendFormat": "Requested: {{pod}} / {{$container}}",
           "refId": "B"
         }
