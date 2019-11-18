@@ -1,3 +1,21 @@
+# 1.2.0 (2019-11-18)
+
+### New features
+* Navigation improvement: 
+    * Hide all button (for nodes and namespaces)
+    * Show one node or namespace (by click with ctrl)
+* Summary-row in namespace section in nodes-overview page
+* Add restarts to pod's resource dashboard
+* Add resource graphs to deployment's, daemonset's & statefulset's dashboards
+* Add sidecars' resources to pod's, deployment's, daemonset's & statefulset's dashboards
+
+### Bug Fixes
+* Plugin's config link
+* Node's cpu usage correct value
+* Node's memory usage correct value
+* N/A labels in nodes-overview page
+
+
 # 1.1.1.1 (2019-10-10)
 ### Bug Fixes
 * Grafana v6.4.x support
