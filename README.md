@@ -1,5 +1,4 @@
 # DevOpsProdigy KubeGraf
-[![Telegram Url](https://img.shields.io/badge/Telegram-chat-blue)](https://t.me/kubegraf)
 [![Slack Url](https://img.shields.io/badge/Slack-channel-red)](https://join.slack.com/t/devopsprodigygroup/shared_invite/enQtODM0Nzc2NjkwNzkwLTgwMGUwYzFiMDU1N2Y2OWM2NjdiYTc2YjU2NDFmYjQ1NDY5YzM1OGYwMDRjOWZmNDYxOTMxODYzZjc0Mjg3MDc)
 [![Change Log](https://img.shields.io/badge/change-log-blue.svg?style=flat)](https://github.com/devopsprodigy/kubegraf/blob/master/CHANGELOG.md)
 ## Kubernetes plugin for Grafana
