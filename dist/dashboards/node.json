@@ -273,7 +273,7 @@
       "tableColumn": "",
       "targets": [
         {
-          "expr": "(1 - (sum(node_memory_MemAvailable_bytes{job='node-exporter', instance=~'$nodeHost.*'}) by (instance) / sum(node_memory_MemTotal_bytes{job='node-exporter', instance=~'$nodeHost.*'}) by (instance))) * 100",
+          "expr": "(1 - (sum(node_memory_MemAvailable_bytes{instance=~'$nodeHost.*'}) by (instance) / sum(node_memory_MemTotal_bytes{instance=~'$nodeHost.*'}) by (instance))) * 100",
           "format": "time_series",
           "intervalFactor": 1,
           "refId": "A"
@@ -544,7 +544,7 @@
           "refId": "C"
         },
         {
-          "expr": "sum(node_memory_MemTotal_bytes{job='node-exporter'}) by (instance) - sum(node_memory_MemAvailable_bytes{job='node-exporter'}) by (instance)",
+          "expr": "sum(node_memory_MemTotal_bytes) by (instance) - sum(node_memory_MemAvailable_bytes) by (instance)",
           "format": "time_series",
           "intervalFactor": 1,
           "legendFormat": "Usage",
