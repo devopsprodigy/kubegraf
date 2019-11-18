@@ -190,7 +190,7 @@
       "tableColumn": "",
       "targets": [
         {
-          "expr": "(sum(rate(container_cpu_usage_seconds_total{node=~'$node', id='/', job='kubelet'}[1m])) / sum(kube_node_status_allocatable_cpu_cores{node=~'$node'})) * 100",
+          "expr": "(sum(rate(container_cpu_usage_seconds_total{node=~'$node', id='/'}[1m])) / sum(kube_node_status_allocatable_cpu_cores{node=~'$node'})) * 100",
           "format": "time_series",
           "intervalFactor": 1,
           "refId": "A"
@@ -436,7 +436,7 @@
           "refId": "C"
         },
         {
-          "expr": "sum(rate(container_cpu_usage_seconds_total{node=~'$node', id='/', job='kubelet'}[1m])) by (node)",
+          "expr": "sum(rate(container_cpu_usage_seconds_total{node=~'$node', id='/'}[1m])) by (node)",
           "format": "time_series",
           "intervalFactor": 1,
           "legendFormat": "Usage",

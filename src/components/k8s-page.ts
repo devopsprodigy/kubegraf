@@ -156,7 +156,7 @@ export  class K8sPage {
 
     __getCpuMetricsUsed(){
         const promQuery = {
-            expr: 'sum(rate(container_cpu_usage_seconds_total{id="/", job="kubelet"}[1m])) by (node)',
+            expr: 'sum(rate(container_cpu_usage_seconds_total{id="/"}[1m])) by (node)',
             legend: 'node'
         }
         return this.prometheusDS.query(promQuery)
