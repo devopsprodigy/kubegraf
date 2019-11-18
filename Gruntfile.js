@@ -77,7 +77,7 @@ module.exports = function(grunt) {
     },
 
     watch: {
-      files: ['src/**/*.ts', 'src/**/*.html', 'src/**/*.sass', 'src/images/*.*', 'src/dashboards/*.json', 'src/plugin.json', 'README.md', 'src/query_help.md', 'src/datasource/plugin.json'],
+      files: ['src/**/*.ts', 'src/**/*.html', 'src/**/*.sass', 'src/images/*.*', 'src/dashboards/*.json', 'src/plugin.json', 'README.md', 'CHANGELOG.md', 'src/query_help.md', 'src/datasource/plugin.json'],
       tasks: ['default'],
       options: {
         debounceDelay: 250,
