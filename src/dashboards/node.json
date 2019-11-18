@@ -544,7 +544,7 @@
           "refId": "C"
         },
         {
-          "expr": "sum(node_memory_MemTotal_bytes) by (instance) - sum(node_memory_MemAvailable_bytes) by (instance)",
+          "expr": "node_memory_MemTotal_bytes{instance=~\"$nodeHost.*\"} - node_memory_MemAvailable_bytes{instance=~\"$nodeHost.*\"}",
           "format": "time_series",
           "intervalFactor": 1,
           "legendFormat": "Usage",
