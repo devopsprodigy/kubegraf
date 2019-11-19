@@ -190,7 +190,7 @@
       "tableColumn": "",
       "targets": [
         {
-          "expr": "(sum(rate(container_cpu_usage_seconds_total{node=~'$node', id='/'}[5m])) / sum(kube_node_status_allocatable_cpu_cores{node=~'$node'})) * 100",
+          "expr": "(sum(rate(container_cpu_usage_seconds_total{node=~'$node', id='/'}[1m])) / sum(kube_node_status_allocatable_cpu_cores{node=~'$node'})) * 100",
           "format": "time_series",
           "intervalFactor": 1,
           "refId": "A"
@@ -436,7 +436,7 @@
           "refId": "C"
         },
         {
-          "expr": "sum(rate(container_cpu_usage_seconds_total{node=~'$node', id='/'}[5m])) by (node)",
+          "expr": "sum(rate(container_cpu_usage_seconds_total{node=~'$node', id='/'}[1m])) by (node)",
           "format": "time_series",
           "intervalFactor": 1,
           "legendFormat": "Usage",
@@ -727,7 +727,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "(sum without(cpu)(rate(node_cpu_seconds_total{instance=~\"$nodeHost.*\"}[5m])) / ignoring(mode) group_left sum without(mode, cpu)(rate(node_cpu_seconds_total{instance=~\"$nodeHost.*\"}[5m])))*100",
+          "expr": "(sum without(cpu)(rate(node_cpu_seconds_total{instance=~\"$nodeHost.*\"}[1m])) / ignoring(mode) group_left sum without(mode, cpu)(rate(node_cpu_seconds_total{instance=~\"$nodeHost.*\"}[1m])))*100",
           "format": "time_series",
           "intervalFactor": 1,
           "legendFormat": "{{mode}}",
@@ -1011,14 +1011,14 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "rate(node_disk_read_bytes_total{instance=~\"$nodeHost.*\"}[5m])",
+          "expr": "rate(node_disk_read_bytes_total{instance=~\"$nodeHost.*\"}[1m])",
           "format": "time_series",
           "intervalFactor": 1,
           "legendFormat": "Read. {{device}}",
           "refId": "A"
         },
         {
-          "expr": "rate(node_disk_written_bytes_total{instance=~\"$nodeHost.*\"}[5m])",
+          "expr": "rate(node_disk_written_bytes_total{instance=~\"$nodeHost.*\"}[1m])",
           "format": "time_series",
           "intervalFactor": 1,
           "legendFormat": "Write. {{device}}",
@@ -1103,14 +1103,14 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "rate(node_disk_reads_completed_total{instance=~\"$nodeHost.*\"}[5m])",
+          "expr": "rate(node_disk_reads_completed_total{instance=~\"$nodeHost.*\"}[1m])",
           "format": "time_series",
           "intervalFactor": 1,
           "legendFormat": "Read. {{device}}",
           "refId": "A"
         },
         {
-          "expr": "rate(node_disk_writes_completed_total{instance=~\"$nodeHost.*\"}[5m])",
+          "expr": "rate(node_disk_writes_completed_total{instance=~\"$nodeHost.*\"}[1m])",
           "format": "time_series",
           "intervalFactor": 1,
           "legendFormat": "Write. {{device}}",
@@ -1195,14 +1195,14 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "rate(node_network_receive_bytes_total{instance=~\"$nodeHost.*\", device!~\"veth.*\"}[5m])",
+          "expr": "rate(node_network_receive_bytes_total{instance=~\"$nodeHost.*\", device!~\"veth.*\"}[1m])",
           "format": "time_series",
           "intervalFactor": 1,
           "legendFormat": "Recieve. {{device}}",
           "refId": "A"
         },
         {
-          "expr": "rate(node_network_transmit_bytes_total{instance=~\"$nodeHost.*\", device!~\"veth.*\"}[5m])",
+          "expr": "rate(node_network_transmit_bytes_total{instance=~\"$nodeHost.*\", device!~\"veth.*\"}[1m])",
           "format": "time_series",
           "intervalFactor": 1,
           "legendFormat": "Transmit. {{device}}",
@@ -1379,14 +1379,14 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "rate(node_network_receive_packets_total{instance=~\"$nodeHost.*\", device!~\"veth.*\"}[5m])",
+          "expr": "rate(node_network_receive_packets_total{instance=~\"$nodeHost.*\", device!~\"veth.*\"}[1m])",
           "format": "time_series",
           "intervalFactor": 1,
           "legendFormat": "Receive. {{device}}",
           "refId": "A"
         },
         {
-          "expr": "rate(node_network_transmit_packets_total{instance=~\"$nodeHost.*\", device!~\"veth.*\"}[5m])",
+          "expr": "rate(node_network_transmit_packets_total{instance=~\"$nodeHost.*\", device!~\"veth.*\"}[1m])",
           "format": "time_series",
           "intervalFactor": 1,
           "legendFormat": "Transmit. {{device}}",
