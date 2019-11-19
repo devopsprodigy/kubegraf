@@ -269,7 +269,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "sum(rate(container_cpu_usage_seconds_total{namespace=\"$namespace\", pod_name=~\"$pod\", container_name!=\"\", container_name!=\"POD\", container_name=~\"$containers\"}[1m])) by (pod_name)",
+          "expr": "sum(rate(container_cpu_usage_seconds_total{namespace=\"$namespace\", pod_name=~\"$pod\", container_name!=\"\", container_name!=\"POD\", container_name=~\"$containers\"}[5m])) by (pod_name)",
           "format": "time_series",
           "intervalFactor": 1,
           "legendFormat": "Used",
