@@ -744,12 +744,12 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "sum(rate(container_cpu_usage_seconds_total{namespace=\"$namespace\", pod_name=~\"$daemonset-.*\", container=~\"$container\"}[5m])) by (pod_name)",
+          "expr": "sum(rate(container_cpu_usage_seconds_total{namespace=\"$namespace\", pod_name=~\"$daemonset-.*\", container_name=~\"$container\"}[5m])) by (pod_name)",
           "legendFormat": "Used: {{pod_name}} / {{$container}}",
           "refId": "A"
         },
         {
-          "expr": "kube_pod_container_resource_requests_cpu_cores{namespace=\"$namespace\", pod=~\"$daemonset-.*\", container=~\"$container\"}",
+          "expr": "kube_pod_container_resource_requests_cpu_cores{namespace=\"$namespace\", pod=~\"$daemonset-.*\", container_name=~\"$container\"}",
           "legendFormat": "Requested: {{pod}} / {{$container}}",
           "refId": "B"
         }
