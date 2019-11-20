@@ -284,7 +284,7 @@ System.register(["../helpers", '../../common/store', '../../common/types/traits/
                 Node.prototype.__getLastMetricByInstance = function (metrics) {
                     var _this = this;
                     var datapoints = metrics.filter(function (item) {
-                        return item.target.includes(_this.hostIp);
+                        return item.target.includes(_this.hostIp) || item.target.includes(_this.name);
                     })[0];
                     if (datapoints !== undefined) {
                         return datapoints.datapoint;

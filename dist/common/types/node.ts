@@ -226,7 +226,7 @@ export class Node extends  BaseModel{
 
     __getLastMetricByInstance(metrics){
         let datapoints = metrics.filter(item => {
-            return item.target.includes(this.hostIp);
+            return item.target.includes(this.hostIp) || item.target.includes(this.name);
         })[0];
         if(datapoints !== undefined){
             return datapoints.datapoint;

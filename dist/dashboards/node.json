@@ -273,7 +273,7 @@
       "tableColumn": "",
       "targets": [
         {
-          "expr": "(1 - (sum(node_memory_MemAvailable_bytes{instance=~'$nodeHost.*'}) by (instance) / sum(node_memory_MemTotal_bytes{instance=~'$nodeHost.*'}) by (instance))) * 100",
+          "expr": "(1 - (sum(node_memory_MemAvailable_bytes{instance=~'$node|$nodeHost.*'}) by (instance) / sum(node_memory_MemTotal_bytes{instance=~'$node|$nodeHost.*'}) by (instance))) * 100",
           "format": "time_series",
           "intervalFactor": 1,
           "refId": "A"
@@ -544,7 +544,7 @@
           "refId": "C"
         },
         {
-          "expr": "node_memory_MemTotal_bytes{instance=~\"$nodeHost.*\"} - node_memory_MemAvailable_bytes{instance=~\"$nodeHost.*\"}",
+          "expr": "node_memory_MemTotal_bytes{instance=~\"$node|$nodeHost.*\"} - node_memory_MemAvailable_bytes{instance=~\"$node|$nodeHost.*\"}",
           "format": "time_series",
           "intervalFactor": 1,
           "legendFormat": "Usage",
@@ -727,7 +727,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "(sum without(cpu)(rate(node_cpu_seconds_total{instance=~\"$nodeHost.*\"}[1m])) / ignoring(mode) group_left sum without(mode, cpu)(rate(node_cpu_seconds_total{instance=~\"$nodeHost.*\"}[1m])))*100",
+          "expr": "(sum without(cpu)(rate(node_cpu_seconds_total{instance=~\"$node|$nodeHost.*\"}[1m])) / ignoring(mode) group_left sum without(mode, cpu)(rate(node_cpu_seconds_total{instance=~\"$node|$nodeHost.*\"}[1m])))*100",
           "format": "time_series",
           "intervalFactor": 1,
           "legendFormat": "{{mode}}",
@@ -813,28 +813,28 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "max(node_memory_Cached_bytes{instance=~\"$nodeHost.*\"})",
+          "expr": "max(node_memory_Cached_bytes{instance=~\"$node|$nodeHost.*\"})",
           "format": "time_series",
           "intervalFactor": 1,
           "legendFormat": "Cached",
           "refId": "A"
         },
         {
-          "expr": "max(node_memory_MemFree_bytes{instance=~\"$nodeHost.*\"})",
+          "expr": "max(node_memory_MemFree_bytes{instance=~\"$node|$nodeHost.*\"})",
           "format": "time_series",
           "intervalFactor": 1,
           "legendFormat": "Free",
           "refId": "B"
         },
         {
-          "expr": "max(node_memory_Buffers_bytes{instance=~\"$nodeHost.*\"})",
+          "expr": "max(node_memory_Buffers_bytes{instance=~\"$node|$nodeHost.*\"})",
           "format": "time_series",
           "intervalFactor": 1,
           "legendFormat": "Buffer",
           "refId": "C"
         },
         {
-          "expr": "max(node_memory_MemTotal_bytes{instance=~\"$nodeHost.*\"} - node_memory_MemFree_bytes{instance=~\"$nodeHost.*\"} - node_memory_Buffers_bytes{instance=~\"$nodeHost.*\"} - node_memory_Cached_bytes{instance=~\"$nodeHost.*\"})",
+          "expr": "max(node_memory_MemTotal_bytes{instance=~\"$node|$nodeHost.*\"} - node_memory_MemFree_bytes{instance=~\"$node|$nodeHost.*\"} - node_memory_Buffers_bytes{instance=~\"$node|$nodeHost.*\"} - node_memory_Cached_bytes{instance=~\"$node|$nodeHost.*\"})",
           "format": "time_series",
           "intervalFactor": 1,
           "legendFormat": "Used",
@@ -919,14 +919,14 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "node_filesystem_free_bytes{instance=~\"$nodeHost.*\"}",
+          "expr": "node_filesystem_free_bytes{instance=~\"$node|$nodeHost.*\"}",
           "format": "time_series",
           "intervalFactor": 1,
           "legendFormat": "Filesystem free. {{device}}",
           "refId": "A"
         },
         {
-          "expr": "node_filesystem_size_bytes{instance=~\"$nodeHost.*\"}",
+          "expr": "node_filesystem_size_bytes{instance=~\"$node|$nodeHost.*\"}",
           "format": "time_series",
           "intervalFactor": 1,
           "legendFormat": "Filesystem size. {{device}}",
@@ -1011,14 +1011,14 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "rate(node_disk_read_bytes_total{instance=~\"$nodeHost.*\"}[1m])",
+          "expr": "rate(node_disk_read_bytes_total{instance=~\"$node|$nodeHost.*\"}[1m])",
           "format": "time_series",
           "intervalFactor": 1,
           "legendFormat": "Read. {{device}}",
           "refId": "A"
         },
         {
-          "expr": "rate(node_disk_written_bytes_total{instance=~\"$nodeHost.*\"}[1m])",
+          "expr": "rate(node_disk_written_bytes_total{instance=~\"$node|$nodeHost.*\"}[1m])",
           "format": "time_series",
           "intervalFactor": 1,
           "legendFormat": "Write. {{device}}",
@@ -1103,14 +1103,14 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "rate(node_disk_reads_completed_total{instance=~\"$nodeHost.*\"}[1m])",
+          "expr": "rate(node_disk_reads_completed_total{instance=~\"$node|$nodeHost.*\"}[1m])",
           "format": "time_series",
           "intervalFactor": 1,
           "legendFormat": "Read. {{device}}",
           "refId": "A"
         },
         {
-          "expr": "rate(node_disk_writes_completed_total{instance=~\"$nodeHost.*\"}[1m])",
+          "expr": "rate(node_disk_writes_completed_total{instance=~\"$node|$nodeHost.*\"}[1m])",
           "format": "time_series",
           "intervalFactor": 1,
           "legendFormat": "Write. {{device}}",
@@ -1195,14 +1195,14 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "rate(node_network_receive_bytes_total{instance=~\"$nodeHost.*\", device!~\"veth.*\"}[1m])",
+          "expr": "rate(node_network_receive_bytes_total{instance=~\"$node|$nodeHost.*\", device!~\"veth.*\"}[1m])",
           "format": "time_series",
           "intervalFactor": 1,
           "legendFormat": "Recieve. {{device}}",
           "refId": "A"
         },
         {
-          "expr": "rate(node_network_transmit_bytes_total{instance=~\"$nodeHost.*\", device!~\"veth.*\"}[1m])",
+          "expr": "rate(node_network_transmit_bytes_total{instance=~\"$node|$nodeHost.*\", device!~\"veth.*\"}[1m])",
           "format": "time_series",
           "intervalFactor": 1,
           "legendFormat": "Transmit. {{device}}",
@@ -1287,14 +1287,14 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "node_network_receive_errs_total{instance=~\"$nodeHost.*\", device!~\"veth.*\"}",
+          "expr": "node_network_receive_errs_total{instance=~\"$node|$nodeHost.*\", device!~\"veth.*\"}",
           "format": "time_series",
           "intervalFactor": 1,
           "legendFormat": "Receive. {{device}}",
           "refId": "A"
         },
         {
-          "expr": "node_network_transmit_errs_total{instance=~\"$nodeHost.*\", device!~\"veth.*\"}",
+          "expr": "node_network_transmit_errs_total{instance=~\"$node|$nodeHost.*\", device!~\"veth.*\"}",
           "format": "time_series",
           "intervalFactor": 1,
           "legendFormat": "Transmit. {{device}}",
@@ -1379,14 +1379,14 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "rate(node_network_receive_packets_total{instance=~\"$nodeHost.*\", device!~\"veth.*\"}[1m])",
+          "expr": "rate(node_network_receive_packets_total{instance=~\"$node|$nodeHost.*\", device!~\"veth.*\"}[1m])",
           "format": "time_series",
           "intervalFactor": 1,
           "legendFormat": "Receive. {{device}}",
           "refId": "A"
         },
         {
-          "expr": "rate(node_network_transmit_packets_total{instance=~\"$nodeHost.*\", device!~\"veth.*\"}[1m])",
+          "expr": "rate(node_network_transmit_packets_total{instance=~\"$node|$nodeHost.*\", device!~\"veth.*\"}[1m])",
           "format": "time_series",
           "intervalFactor": 1,
           "legendFormat": "Transmit. {{device}}",
