@@ -25,6 +25,7 @@
       {"name" : "GitHub", "url" : "https://github.com/devopsprodigy/kubegraf"},
       {"name" : "ChangeLog", "url" : "https://github.com/devopsprodigy/kubegraf/blob/master/CHANGELOG.md"},
       {"name" : "License", "url": "https://github.com/devopsprodigy/kubegraf/blob/master/LICENSE"},
+      {"name" : "Telegram", "url": "https://t.me/kubegraf"},
       {"name": "Slack", "url": "https://join.slack.com/t/devopsprodigygroup/shared_invite/enQtODM0Nzc2NjkwNzkwLTgwMGUwYzFiMDU1N2Y2OWM2NjdiYTc2YjU2NDFmYjQ1NDY5YzM1OGYwMDRjOWZmNDYxOTMxODYzZjc0Mjg3MDc"}
     ],
     "screenshots": [
