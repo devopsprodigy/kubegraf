@@ -23,7 +23,7 @@ The plugin consists of three main info pages with detailed information about the
 - Visual presentation of the application’s life cycle and its basic characteristics;
 - Description of the ports that allow access services in the cluster.
 
-![](https://devopsprodigy.com/img/dop-kubegraf/applications_overview_1.png)
+![](https://devopsprodigy.com/img/dop-kubegraf/v120/applications_overview_2.png)
 
 *Pic. 1:  Applications overview*
 
@@ -33,7 +33,7 @@ The plugin consists of three main info pages with detailed information about the
 - Details of monitoring the application’s life cycle;
 - Visual presentation of where the services in the cluster servers are located.
 
-![](https://devopsprodigy.com/img/dop-kubegraf/cluster_status.png)
+![](https://devopsprodigy.com/img/dop-kubegraf/v120/cluster_status_1.png)
 
 *Pic. 2: Cluster status*
 
@@ -43,7 +43,7 @@ The plugin consists of three main info pages with detailed information about the
 - Information about used and allocated resources (RAM, CPU utilization) and the number of pods;
 - Physical distribution of pods.
 
-![](https://devopsprodigy.com/img/dop-kubegraf/nodes_overview.png)
+![](https://devopsprodigy.com/img/dop-kubegraf/v120/node_overview.png)
 
 *Pic. 3: Nodes overview*
 
@@ -55,7 +55,7 @@ Besides providing general information on the main pages, the plugin allows you t
 
 This is a dashboard with node metrics. It displays the employment of resources like CPU utilization, memory consumption, percentage of CPU time in idle / iowait modes, and disk and network status.
 
-![](https://devopsprodigy.com/img/dop-kubegraf/node_dashboard_1.png)
+![](https://devopsprodigy.com/img/dop-kubegraf/v120/node_dashboard_1.png)
 
 *Pic. 4: Node dashboard*
 
@@ -63,15 +63,18 @@ This is a dashboard with node metrics. It displays the employment of resources l
 
 Displays how much of the resources the selected pod has used.
 
-![](https://devopsprodigy.com/img/dop-kubegraf/pod_resources_dashboard.png)
+![](https://devopsprodigy.com/img/dop-kubegraf/v120/pods_dashboard.png)
 
 *Pic. 5: Pod resources*
 
 - **deployment dashboard**
 
-![](https://devopsprodigy.com/img/dop-kubegraf/deployment_dashboard.png)
+![](https://devopsprodigy.com/img/dop-kubegraf/v120/deployments_dashboard_1.png)
 
 *Pic. 6: Deployment dashboard*
+![](https://devopsprodigy.com/img/dop-kubegraf/v120/deployments_dashboard_2.png)
+
+*Pic. 7: Deployment dashboard*
 
 - **statefulsets dashboard**
 - **daemonsets dashboard**
