@@ -28,14 +28,16 @@
       {"name": "Slack", "url": "https://join.slack.com/t/devopsprodigygroup/shared_invite/enQtODM0Nzc2NjkwNzkwLTgwMGUwYzFiMDU1N2Y2OWM2NjdiYTc2YjU2NDFmYjQ1NDY5YzM1OGYwMDRjOWZmNDYxOTMxODYzZjc0Mjg3MDc"}
     ],
     "screenshots": [
-      {"name": "Deployments dashboard", "path": "img/deployments_dashboard.png"},
+      {"name": "Deployments dashboard", "path": "img/deployments_dashboard_1.png"},
+      {"name": "Deployments dashboard", "path": "img/deployments_dashboard_2.png"},
       {"name": "Pod resources dashboard", "path": "img/pods_dashboard.png"},
-      {"name": "Node dashboard", "path": "img/node_dashboard_2.png"},
       {"name": "Node dashboard", "path": "img/node_dashboard_1.png"},
+      {"name": "Node dashboard", "path": "img/node_dashboard_2.png"},
       {"name": "Nodes overview", "path": "img/node_overview.png"},
-      {"name": "Application overview", "path": "img/application_overview_1.png"},
-      {"name": "Application overview", "path": "img/application_overview_2.png"},
-      {"name": "Cluster status", "path": "img/cluster_status.png"}
+      {"name": "Application overview", "path": "img/applications_overview_1.png"},
+      {"name": "Application overview", "path": "img/applications_overview_2.png"},
+      {"name": "Cluster status", "path": "img/cluster_status_1.png"},
+      {"name": "Cluster status", "path": "img/cluster_status_2.png"}
     ],
     "version": "1.2.0",
     "updated" : "2019-11-18"
