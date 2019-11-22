@@ -29,14 +29,22 @@ export class ClustersList {
         }
     }
 
-    getClusters(){
+    getClusters() {
+        const list = this.datasourceSrv.getAll();
 
-        let list = this.datasourceSrv.getAll();
-
-        this.clusters = list.filter(item => {
-            return item.type === 'devopsprodidy-kubegraf-datasource'
-        });
-
+        if (Array.isArray(list)) {
+            this.clusters = list.filter(item => {
+                return item.type === 'devopsprodidy-kubegraf-datasource'
+            });
+        } else {
+            let clusters = [];
+            Object.keys(list).forEach(key => {
+                if (list[key].type === 'devopsprodidy-kubegraf-datasource') {
+                    clusters.push(list[key])
+                }
+            });
+            this.clusters = clusters;
+        }
     }
 
     deleteCluster(cluster){

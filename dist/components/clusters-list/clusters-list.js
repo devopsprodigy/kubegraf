@@ -36,9 +36,20 @@ System.register(["app/core/app_events"], function(exports_1) {
                 }
                 ClustersList.prototype.getClusters = function () {
                     var list = this.datasourceSrv.getAll();
-                    this.clusters = list.filter(function (item) {
-                        return item.type === 'devopsprodidy-kubegraf-datasource';
-                    });
+                    if (Array.isArray(list)) {
+                        this.clusters = list.filter(function (item) {
+                            return item.type === 'devopsprodidy-kubegraf-datasource';
+                        });
+                    }
+                    else {
+                        var clusters = [];
+                        Object.keys(list).forEach(function (key) {
+                            if (list[key].type === 'devopsprodidy-kubegraf-datasource') {
+                                clusters.push(list[key]);
+                            }
+                        });
+                        this.clusters = clusters;
+                    }
                 };
                 ClustersList.prototype.deleteCluster = function (cluster) {
                     var _this = this;
