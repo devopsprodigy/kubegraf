@@ -31,15 +31,16 @@ export class ClustersList {
 
     getClusters() {
         const list = this.datasourceSrv.getAll();
+        const type = 'devopsprodidy-kubegraf-datasource';
 
         if (Array.isArray(list)) {
             this.clusters = list.filter(item => {
-                return item.type === 'devopsprodidy-kubegraf-datasource'
+                return item.type === type
             });
         } else {
             let clusters = [];
             Object.keys(list).forEach(key => {
-                if (list[key].type === 'devopsprodidy-kubegraf-datasource') {
+                if (list[key].type === type) {
                     clusters.push(list[key])
                 }
             });
