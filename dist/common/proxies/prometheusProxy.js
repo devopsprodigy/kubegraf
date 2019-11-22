@@ -31,7 +31,6 @@ System.register(['moment'], function(exports_1) {
                     }
                     return res.then(function (res) {
                         if (res && res.data) {
-                            console.log(res);
                             return _this.formData(res.data, query);
                         }
                         else {

@@ -23,7 +23,6 @@ export class PrometheusProxy {
 
         return res.then(res => {
             if (res && res.data){
-                console.log(res);
                 return  this.formData(res.data, query);
             }else{
                 return {}
