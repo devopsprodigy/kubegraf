@@ -151,7 +151,7 @@ System.register(["app/core/app_events", "../common/types/pod", "../common/proxie
                 };
                 K8sPage.prototype.__getCpuMetricsUsed = function () {
                     var promQuery = {
-                        expr: 'sum(rate(container_cpu_usage_seconds_total{id="/"}[1m])) by (node)',
+                        expr: 'sum(rate(container_cpu_usage_seconds_total{id="/"}[2m])) by (instance)',
                         legend: 'node'
                     };
                     return this.prometheusDS.query(promQuery)
@@ -183,7 +183,7 @@ System.register(["app/core/app_events", "../common/types/pod", "../common/proxie
                 };
                 K8sPage.prototype.__getPodsCountMetrics = function () {
                     var promQuery = {
-                        expr: 'sum(kubelet_running_pod_count) by (node)',
+                        expr: 'sum(kubelet_running_pod_count) by (instance)',
                         legend: 'node'
                     };
                     return this.prometheusDS.query(promQuery)

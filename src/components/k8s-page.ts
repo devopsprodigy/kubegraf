@@ -156,7 +156,7 @@ export  class K8sPage {
 
     __getCpuMetricsUsed(){
         const promQuery = {
-            expr: 'sum(rate(container_cpu_usage_seconds_total{id="/"}[1m])) by (node)',
+            expr: 'sum(rate(container_cpu_usage_seconds_total{id="/"}[2m])) by (instance)',
             legend: 'node'
         }
         return this.prometheusDS.query(promQuery)
@@ -195,7 +195,7 @@ export  class K8sPage {
 
     __getPodsCountMetrics(){
         const promQuery = {
-            expr: 'sum(kubelet_running_pod_count) by (node)',
+            expr: 'sum(kubelet_running_pod_count) by (instance)',
             legend: 'node'
         };
 
