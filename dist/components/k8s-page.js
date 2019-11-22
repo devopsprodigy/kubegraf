@@ -256,7 +256,7 @@ System.register(["app/core/app_events", "../common/types/pod", "../common/proxie
                 };
                 K8sPage.prototype.__getPodsUsedCpu = function () {
                     var podsUsedCpu = {
-                        expr: 'sum(rate(container_cpu_usage_seconds_total{pod_name!="", container_name!="", container_name!="POD"}[1m])) by (pod_name)',
+                        expr: 'sum(rate(container_cpu_usage_seconds_total{pod_name!="", container_name!="", container_name!="POD"}[2m])) by (pod_name)',
                         legend: 'pod_name'
                     };
                     return this.prometheusDS.query(podsUsedCpu)
