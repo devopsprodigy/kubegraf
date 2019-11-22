@@ -190,7 +190,7 @@
       "tableColumn": "",
       "targets": [
         {
-          "expr": "(sum(rate(container_cpu_usage_seconds_total{node=~'$node', id='/'}[1m])) / sum(kube_node_status_allocatable_cpu_cores{node=~'$node'})) * 100",
+          "expr": "(sum(rate(container_cpu_usage_seconds_total{instance=~'$node|$nodeHost.*', id='/'}[2m])) / sum(kube_node_status_allocatable_cpu_cores{node=~'$node'})) * 100",
           "format": "time_series",
           "intervalFactor": 1,
           "refId": "A"
@@ -356,7 +356,7 @@
       "tableColumn": "",
       "targets": [
         {
-          "expr": "(sum(kubelet_running_pod_count{node=~\"$node\"}) / sum(kube_node_status_allocatable_pods{node=~\"$node\"})) * 100",
+          "expr": "(sum(kubelet_running_pod_count{instance=~\"$node|$nodeHost.*\"}) / sum(kube_node_status_allocatable_pods{node=~\"$node\"})) * 100",
           "format": "time_series",
           "intervalFactor": 1,
           "refId": "A"
@@ -436,10 +436,10 @@
           "refId": "C"
         },
         {
-          "expr": "sum(rate(container_cpu_usage_seconds_total{node=~'$node', id='/'}[1m])) by (node)",
+          "expr": "sum(rate(container_cpu_usage_seconds_total{instance=~'$node|$nodeHost.*', id='/'}[2m])) by (instance)",
           "format": "time_series",
           "intervalFactor": 1,
-          "legendFormat": "Usage",
+          "legendFormat": "Used",
           "refId": "D"
         }
       ],
@@ -547,7 +547,7 @@
           "expr": "node_memory_MemTotal_bytes{instance=~\"$node|$nodeHost.*\"} - node_memory_MemAvailable_bytes{instance=~\"$node|$nodeHost.*\"}",
           "format": "time_series",
           "intervalFactor": 1,
-          "legendFormat": "Usage",
+          "legendFormat": "Used",
           "refId": "D"
         }
       ],
@@ -643,7 +643,7 @@
           "refId": "B"
         },
         {
-          "expr": "sum(kubelet_running_pod_count{node=~\"$node\"})",
+          "expr": "sum(kubelet_running_pod_count{instance=~\"$node|$nodeHost.*\"})",
           "format": "time_series",
           "intervalFactor": 1,
           "legendFormat": "Used",
