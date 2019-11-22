@@ -9,7 +9,7 @@ export class PrometheusProxy {
 
     query(query: any){
         let body = {
-            range: { from: moment().subtract(5, 'minute'), to: moment() },
+            range: { from: moment().subtract(2, 'minute'), to: moment() },
             targets: [{expr: query.expr, format: 'time_series'}],
             legendFormat: '{{' + query.legend + '}}',
             interval: '15s'
@@ -23,6 +23,7 @@ export class PrometheusProxy {
 
         return res.then(res => {
             if (res && res.data){
+                console.log(res);
                 return  this.formData(res.data, query);
             }else{
                 return {}
