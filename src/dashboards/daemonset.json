@@ -744,7 +744,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "sum(rate(container_cpu_usage_seconds_total{namespace=\"$namespace\", pod_name=~\"$daemonset-.*\", container_name=~\"$container\"}[1m])) by (pod_name)",
+          "expr": "sum(rate(container_cpu_usage_seconds_total{namespace=\"$namespace\", pod_name=~\"$daemonset-.*\", container_name=~\"$container\"}[2m])) by (pod_name)",
           "legendFormat": "Used: {{pod_name}} / {{$container}}",
           "refId": "A"
         },
@@ -837,7 +837,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "irate(container_network_transmit_bytes_total{namespace=\"$namespace\", pod_name=~\"$daemonset-.*\"}[1m])",
+          "expr": "irate(container_network_transmit_bytes_total{namespace=\"$namespace\", pod_name=~\"$daemonset-.*\"}[2m])",
           "legendFormat": "{{interface}} : [{{pod_name}}]",
           "refId": "A"
         }
@@ -925,7 +925,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "irate(container_network_receive_bytes_total{namespace=\"$namespace\", pod_name=~\"$daemonset-.*\"}[1m])",
+          "expr": "irate(container_network_receive_bytes_total{namespace=\"$namespace\", pod_name=~\"$daemonset-.*\"}[2m])",
           "legendFormat": "{{interface}} : [{{pod_name}}]",
           "refId": "A"
         }
