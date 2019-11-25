@@ -97,7 +97,7 @@ System.register(["../helpers", '../../common/store', '../../common/types/traits/
                 });
                 Object.defineProperty(Node.prototype, "cpuStatus", {
                     get: function () {
-                        var cpu = this.data.status.capacity.cpu;
+                        var cpu = this.data.status.allocatable.cpu;
                         if (cpu.indexOf('m') > -1) {
                             cpu = parseInt(cpu) / 1000;
                         }
@@ -108,14 +108,14 @@ System.register(["../helpers", '../../common/store', '../../common/types/traits/
                 });
                 Object.defineProperty(Node.prototype, "memoryStatus", {
                     get: function () {
-                        return this.__getStatus(this.metrics.memoryUsed, this.__getBytes(this.data.status.capacity.memory));
+                        return this.__getStatus(this.metrics.memoryUsed, this.__getBytes(this.data.status.allocatable.memory));
                     },
                     enumerable: true,
                     configurable: true
                 });
                 Object.defineProperty(Node.prototype, "podsStatus", {
                     get: function () {
-                        return this.__getStatus(this.metrics.podsCount, this.data.status.capacity.pods);
+                        return this.__getStatus(this.metrics.podsCount, this.data.status.allocatable.pods);
                     },
                     enumerable: true,
                     configurable: true
@@ -155,7 +155,7 @@ System.register(["../helpers", '../../common/store', '../../common/types/traits/
                 Object.defineProperty(Node.prototype, "memoryUsedFormatted", {
                     /*used format*/
                     get: function () {
-                        return helpers_1.__convertToGB(this.metrics.memoryUsed) + ' (' + helpers_1.__percentUsed(this.metrics.memoryUsed, this.__getBytes(this.data.status.capacity.memory)) + ')';
+                        return helpers_1.__convertToGB(this.metrics.memoryUsed) + ' (' + helpers_1.__percentUsed(this.metrics.memoryUsed, this.__getBytes(this.data.status.allocatable.memory)) + ')';
                     },
                     enumerable: true,
                     configurable: true
@@ -169,7 +169,7 @@ System.register(["../helpers", '../../common/store', '../../common/types/traits/
                 });
                 Object.defineProperty(Node.prototype, "cpuUsedFormatted", {
                     get: function () {
-                        var cpu = this.data.status.capacity.cpu;
+                        var cpu = this.data.status.allocatable.cpu;
                         if (cpu.indexOf('m') > -1) {
                             cpu = parseInt(cpu) / 1000;
                         }
@@ -187,7 +187,7 @@ System.register(["../helpers", '../../common/store', '../../common/types/traits/
                 });
                 Object.defineProperty(Node.prototype, "podsUsedFormatted", {
                     get: function () {
-                        return this.metrics.podsCount + ' (' + helpers_1.__percentUsed(this.metrics.podsCount, this.data.status.capacity.pods) + ')';
+                        return this.metrics.podsCount + ' (' + helpers_1.__percentUsed(this.metrics.podsCount, this.data.status.allocatable.pods) + ')';
                     },
                     enumerable: true,
                     configurable: true
@@ -202,11 +202,11 @@ System.register(["../helpers", '../../common/store', '../../common/types/traits/
                 Object.defineProperty(Node.prototype, "cpuPercentUsed", {
                     /*percent used*/
                     get: function () {
-                        var cpu = this.data.status.capacity.cpu;
+                        var cpu = this.data.status.allocatable.cpu;
                         if (cpu.indexOf('m') > -1) {
                             cpu = parseInt(cpu) / 1000;
                         }
-                        return helpers_1.__roundCpu(this.metrics.cpuUsed) + ' / ' + this.data.status.capacity.cpu + ' ( ' + helpers_1.__percentUsed(this.metrics.cpuUsed, cpu) + ' )';
+                        return helpers_1.__roundCpu(this.metrics.cpuUsed) + ' / ' + this.data.status.allocatable.cpu + ' ( ' + helpers_1.__percentUsed(this.metrics.cpuUsed, cpu) + ' )';
                     },
                     enumerable: true,
                     configurable: true
@@ -214,9 +214,9 @@ System.register(["../helpers", '../../common/store', '../../common/types/traits/
                 Object.defineProperty(Node.prototype, "memoryPercentUsed", {
                     get: function () {
                         var used = this.metrics.memoryUsed;
-                        var capacity = this.__getBytes(this.data.status.capacity.memory);
-                        var percent = helpers_1.__percentUsed(used, capacity);
-                        return helpers_1.__convertToGB(used) + ' / ' + helpers_1.__convertToGB(capacity) + ' ( ' + percent + ' ) ';
+                        var allocatable = this.__getBytes(this.data.status.allocatable.memory);
+                        var percent = helpers_1.__percentUsed(used, allocatable);
+                        return helpers_1.__convertToGB(used) + ' / ' + helpers_1.__convertToGB(allocatable) + ' ( ' + percent + ' ) ';
                     },
                     enumerable: true,
                     configurable: true
@@ -224,9 +224,9 @@ System.register(["../helpers", '../../common/store', '../../common/types/traits/
                 Object.defineProperty(Node.prototype, "podsPercentUsed", {
                     get: function () {
                         var used = this.metrics.podsCount;
-                        var capacity = this.data.status.capacity.pods;
-                        var percent = helpers_1.__percentUsed(used, capacity);
-                        return used + ' / ' + capacity + ' ( ' + percent + ' ) ';
+                        var allocatable = this.data.status.allocatable.pods;
+                        var percent = helpers_1.__percentUsed(used, allocatable);
+                        return used + ' / ' + allocatable + ' ( ' + percent + ' ) ';
                     },
                     enumerable: true,
                     configurable: true

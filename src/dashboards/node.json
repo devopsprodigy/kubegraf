@@ -190,7 +190,7 @@
       "tableColumn": "",
       "targets": [
         {
-          "expr": "(sum(rate(container_cpu_usage_seconds_total{instance=~'$node|$nodeHost.*', id='/'}[2m])) / sum(kube_node_status_capacity_cpu_cores{node=~'$node'})) * 100",
+          "expr": "(sum(rate(container_cpu_usage_seconds_total{instance=~'$node|$nodeHost.*', id='/'}[2m])) / sum(kube_node_status_allocatable_cpu_cores{node=~'$node'})) * 100",
           "format": "time_series",
           "intervalFactor": 1,
           "refId": "A"
@@ -273,7 +273,7 @@
       "tableColumn": "",
       "targets": [
         {
-          "expr": "(node_memory_MemTotal_bytes{instance=~\"$node|$nodeHost.*\"} - node_memory_MemFree_bytes{instance=~\"$node|$nodeHost.*\"} - node_memory_Buffers_bytes{instance=~\"$node|$nodeHost.*\"} - node_memory_Cached_bytes{instance=~\"$node|$nodeHost.*\"}) / node_memory_MemTotal_bytes{instance=~\"$node|$nodeHost.*\"} * 100",
+          "expr": "sum(node_memory_MemTotal_bytes{instance=~\"$node|$nodeHost.*\"} - node_memory_MemFree_bytes{instance=~\"$node|$nodeHost.*\"} - node_memory_Buffers_bytes{instance=~\"$node|$nodeHost.*\"} - node_memory_Cached_bytes{instance=~\"$node|$nodeHost.*\"}) / sum(kube_node_status_allocatable_memory_bytes{node=~\"$node\"}) * 100",
           "format": "time_series",
           "intervalFactor": 1,
           "refId": "A"
