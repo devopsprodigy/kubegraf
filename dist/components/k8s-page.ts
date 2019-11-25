@@ -185,7 +185,7 @@ export  class K8sPage {
 
     __getMemoryMetricsUsed(){
         const promQuery = {
-            expr: 'sum(node_memory_MemTotal_bytes) by (instance) - sum(node_memory_MemAvailable_bytes) by (instance)',
+            expr: 'sum(node_memory_MemTotal_bytes) by (instance) - sum(node_memory_MemFree_bytes) by (instance) - sum(node_memory_Buffers_bytes) by (instance) - sum(node_memory_Cached_bytes) by (instance) ',
             legend: 'instance'
         };
 
