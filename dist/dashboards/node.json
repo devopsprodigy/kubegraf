@@ -273,7 +273,7 @@
       "tableColumn": "",
       "targets": [
         {
-          "expr": "(1 - (sum(node_memory_MemAvailable_bytes{instance=~'$node|$nodeHost.*'}) by (instance) / sum(node_memory_MemTotal_bytes{instance=~'$node|$nodeHost.*'}) by (instance))) * 100",
+          "expr": "(node_memory_MemTotal_bytes{instance=~\"$node|$nodeHost.*\"} - node_memory_MemFree_bytes{instance=~\"$node|$nodeHost.*\"} - node_memory_Buffers_bytes{instance=~\"$node|$nodeHost.*\"} - node_memory_Cached_bytes{instance=~\"$node|$nodeHost.*\"}) / node_memory_MemTotal_bytes{instance=~\"$node|$nodeHost.*\"} * 100",
           "format": "time_series",
           "intervalFactor": 1,
           "refId": "A"
@@ -544,7 +544,7 @@
           "refId": "C"
         },
         {
-          "expr": "node_memory_MemTotal_bytes{instance=~\"$node|$nodeHost.*\"} - node_memory_MemAvailable_bytes{instance=~\"$node|$nodeHost.*\"}",
+          "expr": "max(node_memory_MemTotal_bytes{instance=~\"$node|$nodeHost.*\"} - node_memory_MemFree_bytes{instance=~\"$node|$nodeHost.*\"} - node_memory_Buffers_bytes{instance=~\"$node|$nodeHost.*\"} - node_memory_Cached_bytes{instance=~\"$node|$nodeHost.*\"})",
           "format": "time_series",
           "intervalFactor": 1,
           "legendFormat": "Used",
