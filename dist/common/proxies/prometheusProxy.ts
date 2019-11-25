@@ -9,7 +9,7 @@ export class PrometheusProxy {
 
     query(query: any){
         let body = {
-            range: { from: moment().subtract(5, 'minute'), to: moment() },
+            range: { from: moment().subtract(2, 'minute'), to: moment() },
             targets: [{expr: query.expr, format: 'time_series'}],
             legendFormat: '{{' + query.legend + '}}',
             interval: '15s'

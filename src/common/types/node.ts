@@ -87,7 +87,7 @@ export class Node extends  BaseModel{
     }
 
     get cpuStatus(){
-        let cpu = this.data.status.allocatable.cpu;
+        let cpu = this.data.status.capacity.cpu;
         if(cpu.indexOf('m') > -1){
             cpu = parseInt(cpu)/1000;
         }
@@ -95,11 +95,11 @@ export class Node extends  BaseModel{
     }
 
     get memoryStatus(){
-        return this.__getStatus(this.metrics.memoryUsed, this.__getBytes(this.data.status.allocatable.memory));
+        return this.__getStatus(this.metrics.memoryUsed, this.__getBytes(this.data.status.capacity.memory));
     }
 
     get podsStatus(){
-        return this.__getStatus(this.metrics.podsCount, this.data.status.allocatable.pods);
+        return this.__getStatus(this.metrics.podsCount, this.data.status.capacity.pods);
     }
 
     get hostIp(){
@@ -125,7 +125,7 @@ export class Node extends  BaseModel{
     /*used format*/
 
     get memoryUsedFormatted(){
-        return __convertToGB(this.metrics.memoryUsed) +  ' (' +  __percentUsed(this.metrics.memoryUsed, this.__getBytes(this.data.status.allocatable.memory)) + ')';
+        return __convertToGB(this.metrics.memoryUsed) +  ' (' +  __percentUsed(this.metrics.memoryUsed, this.__getBytes(this.data.status.capacity.memory)) + ')';
     }
 
     get memoryRequestedFormatted(){
@@ -134,7 +134,7 @@ export class Node extends  BaseModel{
 
     get cpuUsedFormatted(){
 
-        let cpu = this.data.status.allocatable.cpu;
+        let cpu = this.data.status.capacity.cpu;
         if(cpu.indexOf('m') > -1){
             cpu = parseInt(cpu)/1000;
         }
@@ -147,7 +147,7 @@ export class Node extends  BaseModel{
     }
 
     get podsUsedFormatted() {
-        return this.metrics.podsCount + ' ('+ __percentUsed(this.metrics.podsCount, this.data.status.allocatable.pods) + ')';
+        return this.metrics.podsCount + ' ('+ __percentUsed(this.metrics.podsCount, this.data.status.capacity.pods) + ')';
     }
 
     get podsRequestedFormatted(){
@@ -157,25 +157,25 @@ export class Node extends  BaseModel{
     /*percent used*/
 
     get cpuPercentUsed(){
-        let cpu = this.data.status.allocatable.cpu;
+        let cpu = this.data.status.capacity.cpu;
         if(cpu.indexOf('m') > -1){
             cpu = parseInt(cpu)/1000;
         }
-        return __roundCpu(this.metrics.cpuUsed) + ' / ' + this.data.status.allocatable.cpu + ' ( '+ __percentUsed(this.metrics.cpuUsed, cpu) + ' )';
+        return __roundCpu(this.metrics.cpuUsed) + ' / ' + this.data.status.capacity.cpu + ' ( '+ __percentUsed(this.metrics.cpuUsed, cpu) + ' )';
     }
 
     get memoryPercentUsed(){
         let used = this.metrics.memoryUsed;
-        let allocatable = this.__getBytes(this.data.status.allocatable.memory);
-        let percent = __percentUsed(used, allocatable);
-        return __convertToGB(used) + ' / ' + __convertToGB(allocatable) + ' ( ' + percent + ' ) ';
+        let capacity = this.__getBytes(this.data.status.capacity.memory);
+        let percent = __percentUsed(used, capacity);
+        return __convertToGB(used) + ' / ' + __convertToGB(capacity) + ' ( ' + percent + ' ) ';
     }
 
     get podsPercentUsed(){
         let used = this.metrics.podsCount;
-        let allocatable = this.data.status.allocatable.pods;
-        let percent = __percentUsed(used, allocatable)
-        return used + ' / ' + allocatable + ' ( ' + percent + ' ) ';
+        let capacity = this.data.status.capacity.pods;
+        let percent = __percentUsed(used, capacity);
+        return used + ' / ' + capacity + ' ( ' + percent + ' ) ';
     }
 
 
@@ -200,8 +200,8 @@ export class Node extends  BaseModel{
 
         this.metrics.cpuRequested = this.__getLastMetric(cpuReq);
         this.metrics.memoryRequested = this.__getLastMetric(memoryReq);
-        this.metrics.podsCount = this.__getLastMetric(pods);
-        this.metrics.cpuUsed = this.__getLastMetric(cpuUsed);
+        this.metrics.podsCount = this.__getLastMetricByInstance(pods);
+        this.metrics.cpuUsed = this.__getLastMetricByInstance(cpuUsed);
         this.metrics.memoryUsed = this.__getLastMetricByInstance(memoryUsed);
 
         currentCpuStatus !== undefined && currentCpuStatus != this.cpuStatus && this.setCpuMetricIndicated();

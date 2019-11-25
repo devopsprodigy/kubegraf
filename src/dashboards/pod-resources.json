@@ -269,7 +269,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "sum(rate(container_cpu_usage_seconds_total{namespace=\"$namespace\", pod_name=~\"$pod\", container_name!=\"\", container_name!=\"POD\", container_name=~\"$containers\"}[1m])) by (pod_name)",
+          "expr": "sum(rate(container_cpu_usage_seconds_total{namespace=\"$namespace\", pod_name=~\"$pod\", container_name!=\"\", container_name!=\"POD\", container_name=~\"$containers\"}[2m])) by (pod_name)",
           "format": "time_series",
           "intervalFactor": 1,
           "legendFormat": "Used",
@@ -359,7 +359,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "irate(container_network_transmit_bytes_total{namespace=\"$namespace\", pod_name=\"$pod\"}[1m])",
+          "expr": "irate(container_network_transmit_bytes_total{namespace=\"$namespace\", pod_name=\"$pod\"}[2m])",
           "format": "time_series",
           "intervalFactor": 1,
           "legendFormat": "{{interface}}",
@@ -444,7 +444,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "irate(container_network_receive_bytes_total{namespace=\"$namespace\", pod_name=\"$pod\"}[1m])",
+          "expr": "irate(container_network_receive_bytes_total{namespace=\"$namespace\", pod_name=\"$pod\"}[2m])",
           "format": "time_series",
           "intervalFactor": 1,
           "legendFormat": "{{interface}}",

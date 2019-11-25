@@ -20,7 +20,7 @@ System.register(['moment'], function(exports_1) {
                 PrometheusProxy.prototype.query = function (query) {
                     var _this = this;
                     var body = {
-                        range: { from: moment_1.default().subtract(5, 'minute'), to: moment_1.default() },
+                        range: { from: moment_1.default().subtract(2, 'minute'), to: moment_1.default() },
                         targets: [{ expr: query.expr, format: 'time_series' }],
                         legendFormat: '{{' + query.legend + '}}',
                         interval: '15s'
