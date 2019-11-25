@@ -808,15 +808,22 @@
       "pointradius": 2,
       "points": false,
       "renderer": "flot",
-      "seriesOverrides": [],
+      "seriesOverrides": [
+        {
+          "alias": "Total",
+          "color": "#E0F9D7",
+          "fill": 0,
+          "stack": false
+        }
+      ],
       "stack": true,
       "steppedLine": false,
       "targets": [
         {
-          "expr": "max(node_memory_Cached_bytes{instance=~\"$node|$nodeHost.*\"})",
+          "expr": "max(node_memory_MemTotal_bytes{instance=~\"$node|$nodeHost.*\"})",
           "format": "time_series",
           "intervalFactor": 1,
-          "legendFormat": "Cached",
+          "legendFormat": "Total",
           "refId": "A"
         },
         {
@@ -827,10 +834,10 @@
           "refId": "B"
         },
         {
-          "expr": "max(node_memory_Buffers_bytes{instance=~\"$node|$nodeHost.*\"})",
+          "expr": "max(node_memory_Cached_bytes{instance=~\"$node|$nodeHost.*\"} + node_memory_Buffers_bytes{instance=~\"$node|$nodeHost.*\"})",
           "format": "time_series",
           "intervalFactor": 1,
-          "legendFormat": "Buffer",
+          "legendFormat": "Cache + Buffer",
           "refId": "C"
         },
         {
@@ -839,6 +846,13 @@
           "intervalFactor": 1,
           "legendFormat": "Used",
           "refId": "D"
+        },
+        {
+          "expr": "max((node_memory_SwapTotal_bytes{instance=~\"$node|$nodeHost.*\"} - node_memory_SwapFree_bytes{instance=~\"$node|$nodeHost.*\"}))",
+          "format": "time_series",
+          "intervalFactor": 1,
+          "legendFormat": "Swap",
+          "refId": "E"
         }
       ],
       "thresholds": [],
