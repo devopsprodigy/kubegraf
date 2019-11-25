@@ -14,7 +14,8 @@
 * Node's cpu usage correct value
 * Node's memory usage correct value
 * N/A labels in nodes-overview page
-
+* Compatibility with different prometheus' installations [#14](https://github.com/devopsprodigy/kubegraf/issues/14)
+* List of clusters on grafana 5.x.x
 
 # 1.1.1.1 (2019-10-10)
 ### Bug Fixes
