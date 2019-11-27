@@ -674,11 +674,16 @@ export  class K8sPage {
             return item.data.metadata.namespace === namespace;
         }).filter(item => {
             let labels = item.data.metadata.labels;
-            for(let prop in filter){
-                if(!labels.hasOwnProperty(prop))
-                    return false;
-                if(labels[prop] != filter[prop])
-                    return false;
+
+            if (labels == undefined){
+                return false;
+            }else{
+                for(let prop in filter){
+                    if(!labels.hasOwnProperty(prop))
+                        return false;
+                    if(labels[prop] != filter[prop])
+                        return false;
+                }
             }
             item.used = true;
             return true;
