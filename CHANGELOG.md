@@ -41,4 +41,3 @@
 
 ### Bug Fixes
 * Readonly access via cert and key [#6](https://github.com/devopsprodigy/kubegraf/pull/6)
-``
