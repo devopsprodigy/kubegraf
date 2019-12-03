@@ -22,6 +22,7 @@
     },
     "links" : [
       {"name" :  "DevOpsProdigy", "url" :  "https://devopsprodigy.com/"},
+      {"name": "Project site", "url" : "https://devopsprodigy.com/products/kubegraf"},
       {"name" : "GitHub", "url" : "https://github.com/devopsprodigy/kubegraf"},
       {"name" : "ChangeLog", "url" : "https://github.com/devopsprodigy/kubegraf/blob/master/CHANGELOG.md"},
       {"name" : "License", "url": "https://github.com/devopsprodigy/kubegraf/blob/master/LICENSE"},
