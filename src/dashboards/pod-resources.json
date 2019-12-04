@@ -557,7 +557,8 @@
       "targets": [
         {
           "expr": "sum(kube_pod_container_status_restarts_total{namespace=\"$namespace\", container=~\"$containers\", pod=\"$pod\"})",
-          "refId": "A"
+          "refId": "A",
+          "instant": true
         }
       ],
       "thresholds": "",
@@ -646,7 +647,8 @@
           "logBase": 1,
           "max": null,
           "min": null,
-          "show": true
+          "show": true,
+          "decimals": 0
         },
         {
           "format": "short",
