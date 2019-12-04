@@ -209,14 +209,16 @@
           "format": "time_series",
           "intervalFactor": 1,
           "legendFormat": "Available",
-          "refId": "A"
+          "refId": "A",
+          "instant": true
         },
         {
           "expr": "kube_daemonset_status_number_unavailable{namespace=\"$namespace\", daemonset=\"$daemonset\"}",
           "format": "time_series",
           "intervalFactor": 1,
           "legendFormat": "Unavailable",
-          "refId": "B"
+          "refId": "B",
+          "instant": true
         }
       ],
       "timeFrom": null,
@@ -301,7 +303,8 @@
           "logBase": 1,
           "max": null,
           "min": null,
-          "show": true
+          "show": true,
+          "decimals": 0
         },
         {
           "format": "short",
@@ -408,7 +411,8 @@
           "logBase": 1,
           "max": null,
           "min": "0",
-          "show": true
+          "show": true,
+          "decimals": 0
         },
         {
           "format": "short",
@@ -488,7 +492,8 @@
           "expr": "sum(kube_pod_container_status_restarts_total{namespace=\"$namespace\", pod=~\"$daemonset-.*\", container=~\"$container\"})",
           "format": "time_series",
           "intervalFactor": 1,
-          "refId": "A"
+          "refId": "A",
+          "instant": true
         }
       ],
       "thresholds": "",
@@ -576,7 +581,8 @@
           "logBase": 1,
           "max": null,
           "min": null,
-          "show": true
+          "show": true,
+          "decimals": 0
         },
         {
           "format": "short",
