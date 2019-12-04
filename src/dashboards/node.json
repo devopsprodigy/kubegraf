@@ -193,7 +193,8 @@
           "expr": "(sum(rate(container_cpu_usage_seconds_total{instance=~'$node|$nodeHost.*', id='/'}[2m])) / sum(kube_node_status_allocatable_cpu_cores{node=~'$node'})) * 100",
           "format": "time_series",
           "intervalFactor": 1,
-          "refId": "A"
+          "refId": "A",
+          "instant": true
         }
       ],
       "thresholds": "50,80",
@@ -276,7 +277,8 @@
           "expr": "sum(node_memory_MemTotal_bytes{instance=~\"$node|$nodeHost.*\"} - node_memory_MemFree_bytes{instance=~\"$node|$nodeHost.*\"} - node_memory_Buffers_bytes{instance=~\"$node|$nodeHost.*\"} - node_memory_Cached_bytes{instance=~\"$node|$nodeHost.*\"}) / sum(kube_node_status_allocatable_memory_bytes{node=~\"$node\"}) * 100",
           "format": "time_series",
           "intervalFactor": 1,
-          "refId": "A"
+          "refId": "A",
+          "instant": true
         }
       ],
       "thresholds": "50,80",
@@ -359,7 +361,8 @@
           "expr": "(sum(kubelet_running_pod_count{instance=~\"$node|$nodeHost.*\"}) / sum(kube_node_status_allocatable_pods{node=~\"$node\"})) * 100",
           "format": "time_series",
           "intervalFactor": 1,
-          "refId": "A"
+          "refId": "A",
+          "instant": true
         }
       ],
       "thresholds": "50,80",
