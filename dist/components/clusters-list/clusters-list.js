@@ -37,6 +37,7 @@ System.register(["app/core/app_events"], function(exports_1) {
                 ClustersList.prototype.getClusters = function () {
                     var list = this.datasourceSrv.getAll();
                     var type = 'devopsprodidy-kubegraf-datasource';
+                    console.log(list);
                     if (Array.isArray(list)) {
                         this.clusters = list.filter(function (item) {
                             return item.type === type;
@@ -68,7 +69,13 @@ System.register(["app/core/app_events"], function(exports_1) {
                     var _this = this;
                     this.backendSrv.delete('/api/datasources/' + id)
                         .then(function () {
-                        _this.getClusters();
+                        console.log('before', _this.clusters);
+                        _this.clusters = _this.clusters.filter(function (item) {
+                            return item.id !== id;
+                        });
+                        console.log('after', _this.clusters);
+                        // this.$scope.$apply();
+                        // this.getClusters();
                     });
                 };
                 ClustersList.templateUrl = 'components/clusters-list/clusters-list.html';
