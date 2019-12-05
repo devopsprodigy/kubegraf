@@ -19,11 +19,10 @@
         </div>
         <hr>
         <div class="row explore-pane">
-            <div class="col-md-12">
+            <div class="col-md-6">
                 <h1>Overview: <span ng-bind="ctrl.cluster.name"/>. Nodes</h1>
             </div>
-            <div class="col-md-6"></div>
-            <div class="col-md-6">
+            <div class="col-md-6" ng-if="ctrl.pageReady">
                 <div class="row">
                     <span class="col-md-3" ng-repeat="(npKey, node) in ctrl.nodesMap">
                         <input
@@ -37,14 +36,12 @@
                 </div>
                 <div class="row explore-panel" style="justify-content: flex-end; margin-top: 8px">
                     <div class="col-md-12">
-
                         <span class="btn btn-secondary" ng-click="ctrl.__hideAll()" data-toggle="tooltip"
                               title="Use Ctrl+Click to select only one Node" data-placement="bottom" bs-tooltip="">
                             HIDE ALL
                             <span class="gicon gicon-question card-item-label"></span>
                         </span>
                         <span class="btn btn-secondary" ng-click="ctrl.__showAll()">SHOW ALL</span>
-
                     </div>
                 </div>
             </div>
