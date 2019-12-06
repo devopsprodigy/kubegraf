@@ -1,3 +1,4 @@
+import appEvents from "app/core/app_events";
 import {TYPE_PROMETHEUS} from "../../common/constants";
 
 export class ClusterConfig{
@@ -10,15 +11,13 @@ export class ClusterConfig{
 
     static templateUrl = 'components/cluster-config/cluster-config.html';
 
-    constructor($scope, $injector, private backendSrv, private alertSrv, private $q, private $location, private $window){
+    constructor($scope, $injector, private backendSrv, private datasourceSrv, private alertSrv, private $q, private $location, private $window){
         this.pageReady = false;
         this.$scope = $scope;
         this.busy = false;
         this.getCluster();
         this.setGrafanaVersion($window);
-
     }
-
 
     getCluster(){
         let promises = [];
@@ -42,7 +41,6 @@ export class ClusterConfig{
             };
             document.title = 'DevOpsProdigy KubeGraf | New cluster';
         }
-
 
         this.$q.all(promises)
             .then(() => {
@@ -82,10 +80,16 @@ export class ClusterConfig{
         if(this.busy) return;
         this.busy = true;
         this.cluster.jsonData.cluster_url = this.cluster.url;
+
         return this.saveDatasource()
             .then((res) => {
-                window.location.href = 'plugins/devopsprodigy-kubegraf-app/page/clusters';
-            },err => {
+                if(res && res.datasource) {
+                    //this.cluster = res.datasource;
+                    this.cluster.version = res.datasource.version;
+                    this.testCluster()
+                }
+            })
+            .finally(() => {
                 this.busy = false;
             });
     }
@@ -97,11 +101,7 @@ export class ClusterConfig{
     }
 
     saveDatasource() {
-        if(!this.cluster.id){
-            return this.createDatasource();
-        }else{
-            return this.updateDatasource();
-        }
+        return this.cluster.id ? this.updateDatasource() : this.createDatasource();
     }
 
     createDatasource(){
@@ -133,5 +133,19 @@ export class ClusterConfig{
 
                 this.cluster = result;
             })
+    }
+
+    testCluster() {
+        this.datasourceSrv.get(this.cluster.name)
+            .then(clusterDS => {
+                clusterDS.testDatasource(true)
+                    .then(res => {
+                        if (res.status && res.status === 'success') {
+                            window.location.href = 'plugins/devopsprodigy-kubegraf-app/page/clusters';
+                        } else if (res.status && res.status === 'error') {
+                            appEvents.emit('alert-error', [res.title + ' ' + res.message]);
+                        }
+                    })
+            });
     }
 }

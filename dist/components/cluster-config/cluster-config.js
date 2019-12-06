@@ -1,15 +1,19 @@
-System.register(["../../common/constants"], function(exports_1) {
-    var constants_1;
+System.register(["app/core/app_events", "../../common/constants"], function(exports_1) {
+    var app_events_1, constants_1;
     var ClusterConfig;
     return {
         setters:[
+            function (app_events_1_1) {
+                app_events_1 = app_events_1_1;
+            },
             function (constants_1_1) {
                 constants_1 = constants_1_1;
             }],
         execute: function() {
             ClusterConfig = (function () {
-                function ClusterConfig($scope, $injector, backendSrv, alertSrv, $q, $location, $window) {
+                function ClusterConfig($scope, $injector, backendSrv, datasourceSrv, alertSrv, $q, $location, $window) {
                     this.backendSrv = backendSrv;
+                    this.datasourceSrv = datasourceSrv;
                     this.alertSrv = alertSrv;
                     this.$q = $q;
                     this.$location = $location;
@@ -82,8 +86,13 @@ System.register(["../../common/constants"], function(exports_1) {
                     this.cluster.jsonData.cluster_url = this.cluster.url;
                     return this.saveDatasource()
                         .then(function (res) {
-                        window.location.href = 'plugins/devopsprodigy-kubegraf-app/page/clusters';
-                    }, function (err) {
+                        if (res && res.datasource) {
+                            //this.cluster = res.datasource;
+                            _this.cluster.version = res.datasource.version;
+                            _this.testCluster();
+                        }
+                    })
+                        .finally(function () {
                         _this.busy = false;
                     });
                 };
@@ -93,12 +102,8 @@ System.register(["../../common/constants"], function(exports_1) {
                     return this.$scope.clusterForm.$valid;
                 };
                 ClusterConfig.prototype.saveDatasource = function () {
-                    if (!this.cluster.id) {
-                        return this.createDatasource();
-                    }
-                    else {
-                        return this.updateDatasource();
-                    }
+                    return this.cluster.id ? this.updateDatasource() : this.createDatasource();
+                    /* */
                 };
                 ClusterConfig.prototype.createDatasource = function () {
                     var _this = this;
@@ -127,6 +132,20 @@ System.register(["../../common/constants"], function(exports_1) {
                         if (!(result.jsonData.refresh_pods_rate))
                             result.jsonData.refresh_pods_rate = '60';
                         _this.cluster = result;
+                    });
+                };
+                ClusterConfig.prototype.testCluster = function () {
+                    this.datasourceSrv.get(this.cluster.name)
+                        .then(function (clusterDS) {
+                        clusterDS.testDatasource(true)
+                            .then(function (res) {
+                            if (res.status && res.status === 'success') {
+                                window.location.href = 'plugins/devopsprodigy-kubegraf-app/page/clusters';
+                            }
+                            else if (res.status && res.status === 'error') {
+                                app_events_1.default.emit('alert-error', [res.title + ' ' + res.message]);
+                            }
+                        });
                     });
                 };
                 ClusterConfig.templateUrl = 'components/cluster-config/cluster-config.html';
