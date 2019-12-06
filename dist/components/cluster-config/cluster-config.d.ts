@@ -11,6 +11,7 @@ export declare class ClusterConfig {
     $scope: any;
     pageReady: boolean;
     version: number;
+    retry: number;
     static templateUrl: string;
     constructor($scope: any, $injector: any, backendSrv: any, datasourceSrv: any, alertSrv: any, $q: any, $location: any, $window: any);
     getCluster(): void;

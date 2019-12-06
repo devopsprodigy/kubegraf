@@ -8,6 +8,7 @@ export class ClusterConfig{
     $scope: any;
     pageReady: boolean;
     version: number;
+    retry = 3;
 
     static templateUrl = 'components/cluster-config/cluster-config.html';
 
@@ -21,14 +22,14 @@ export class ClusterConfig{
 
     getCluster(){
         let promises = [];
-        if ("clusterId" in this.$location.search()){
+        if ("clusterId" in this.$location.search()) {
             promises.push(
                 this.getDatasource(this.$location.search().clusterId)
-                .then(() => {
-                    document.title = 'DevOpsProdigy KubeGraf | Edit cluster';
-                })
+                    .then(() => {
+                        document.title = 'DevOpsProdigy KubeGraf | Edit cluster';
+                    })
             );
-        }else{
+        } else {
             this.cluster = {
                 type: 'devopsprodidy-kubegraf-datasource',
                 access: 'proxy',
@@ -37,7 +38,6 @@ export class ClusterConfig{
                     access_via_token: false,
                     prom_name: ''
                 }
-
             };
             document.title = 'DevOpsProdigy KubeGraf | New cluster';
         }
@@ -84,8 +84,7 @@ export class ClusterConfig{
         return this.saveDatasource()
             .then((res) => {
                 if(res && res.datasource) {
-                    //this.cluster = res.datasource;
-                    this.cluster.version = res.datasource.version;
+                    this.cluster = res.datasource;
                     this.testCluster()
                 }
             })
@@ -136,16 +135,27 @@ export class ClusterConfig{
     }
 
     testCluster() {
-        this.datasourceSrv.get(this.cluster.name)
-            .then(clusterDS => {
-                clusterDS.testDatasource(true)
-                    .then(res => {
-                        if (res.status && res.status === 'success') {
-                            window.location.href = 'plugins/devopsprodigy-kubegraf-app/page/clusters';
-                        } else if (res.status && res.status === 'error') {
-                            appEvents.emit('alert-error', [res.title + ' ' + res.message]);
-                        }
-                    })
-            });
+        let url = '/api/v1/namespaces';
+        let _url = '/api/datasources/proxy/' + this.cluster.id;
+        if(this.cluster.jsonData.access_via_token) {
+            _url += '/__proxy';
+        }
+        _url += url;
+        this.backendSrv.datasourceRequest({
+            url: _url,
+            method: "GET",
+            headers: {"Content-Type": 'application/json'},
+        })
+            .then(response => {
+                if (response && response.status === 200) {
+                    window.location.href = 'plugins/devopsprodigy-kubegraf-app/page/clusters';
+                }
+                console.log(response);
+            }, error => {
+                if (error && error.status && error.statusText) {
+                    appEvents.emit('alert-error', [error.status + ' ' + error.statusText]);
+                }
+                console.log(error);
+            })
     }
 }
