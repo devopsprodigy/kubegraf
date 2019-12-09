@@ -361,3 +361,12 @@ label.toggle-checkbox {
     opacity: calc(1 - 99/100); }
   100% {
     opacity: calc(1 - 100/100); } }
+
+@media (max-width: 940px) {
+  .header-btn {
+    position: relative;
+    top: 2px; }
+  .page-header .btn {
+    float: initial;
+    margin-left: 0;
+    margin-right: 15px; } }
