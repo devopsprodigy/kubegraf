@@ -361,3 +361,6 @@ label.toggle-checkbox {
     opacity: calc(1 - 99/100); }
   100% {
     opacity: calc(1 - 100/100); } }
+
+.explore-toolbar-item {
+  list-style: inside; }
