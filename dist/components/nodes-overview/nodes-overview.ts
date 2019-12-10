@@ -1,11 +1,12 @@
 import {K8sPage} from "../k8s-page";
 import {Node} from "../../common/types/node";
 import store from "../../common/store";
-import {__convertToGB, __roundCpu, __convertToMicro} from "../../common/helpers";
+import { __convertToGB, __roundCpu, __convertToMicro, __getGrafanaVersion } from "../../common/helpers";
 
 export class NodesOverview extends K8sPage {
 
     static templateUrl = 'components/nodes-overview/nodes-overview.html';
+    version: number;
 
     constructor(
         $scope,
@@ -15,10 +16,12 @@ export class NodesOverview extends K8sPage {
         public datasourceSrv,
         public contextSrv,
         public $location,
-        public $timeout
+        public $timeout,
+        private $window
     ) {
         super($scope, backendSrv, datasourceSrv, contextSrv, $location, $timeout, $q);
         this.pageReady = false;
+        this.version = __getGrafanaVersion($window);
 
         this.__prepareDS().then(() => {
             this.getNodeMap().then(() => {

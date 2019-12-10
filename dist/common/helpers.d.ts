@@ -6,4 +6,5 @@ declare let __roundCpu: (cpu: any) => string;
 declare let __convertToMicro: (cpu: any) => string;
 declare let __getLastNonNullValue: (dataset: any) => any;
 declare let __percentUsed: (used: any, allocatable: any) => string;
-export { __prepare, __preparePods, __convertToGB, __roundCpu, __percentUsed, __convertToMicro, __getLastNonNullValue };
+declare const __getGrafanaVersion: (window: any) => number;
+export { __prepare, __preparePods, __convertToGB, __roundCpu, __percentUsed, __convertToMicro, __getLastNonNullValue, __getGrafanaVersion };

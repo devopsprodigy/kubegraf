@@ -1,10 +1,10 @@
-System.register(["../k8s-page", "../../common/store"], function(exports_1) {
+System.register(["../k8s-page", "../../common/store", "../../common/helpers"], function(exports_1) {
     var __extends = (this && this.__extends) || function (d, b) {
         for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
         function __() { this.constructor = d; }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
-    var k8s_page_1, store_1;
+    var k8s_page_1, store_1, helpers_1;
     var NodesOverview;
     return {
         setters:[
@@ -13,11 +13,14 @@ System.register(["../k8s-page", "../../common/store"], function(exports_1) {
             },
             function (store_1_1) {
                 store_1 = store_1_1;
+            },
+            function (helpers_1_1) {
+                helpers_1 = helpers_1_1;
             }],
         execute: function() {
             NodesOverview = (function (_super) {
                 __extends(NodesOverview, _super);
-                function NodesOverview($scope, $injector, $q, backendSrv, datasourceSrv, contextSrv, $location, $timeout) {
+                function NodesOverview($scope, $injector, $q, backendSrv, datasourceSrv, contextSrv, $location, $timeout, $window) {
                     var _this = this;
                     _super.call(this, $scope, backendSrv, datasourceSrv, contextSrv, $location, $timeout, $q);
                     this.$q = $q;
@@ -26,7 +29,9 @@ System.register(["../k8s-page", "../../common/store"], function(exports_1) {
                     this.contextSrv = contextSrv;
                     this.$location = $location;
                     this.$timeout = $timeout;
+                    this.$window = $window;
                     this.pageReady = false;
+                    this.version = helpers_1.__getGrafanaVersion($window);
                     this.__prepareDS().then(function () {
                         _this.getNodeMap().then(function () {
                             _this.pageReady = true;

@@ -1,4 +1,5 @@
 import {TYPE_PROMETHEUS} from "../../common/constants";
+import { __getGrafanaVersion } from "../../common/helpers";
 
 export class ClusterConfig{
     cluster: any;
@@ -15,8 +16,7 @@ export class ClusterConfig{
         this.$scope = $scope;
         this.busy = false;
         this.getCluster();
-        this.setGrafanaVersion($window);
-
+        this.version = __getGrafanaVersion($window);
     }
 
 
@@ -65,17 +65,6 @@ export class ClusterConfig{
                     this.cluster.jsonData.prom_name = defProm[0].name;
                 }
             })
-    }
-
-    setGrafanaVersion(window){
-        let _v;
-        try{
-            _v = window.grafanaBootData.settings.buildInfo.version.split('.')[0];
-        }catch (e) {
-            console.error(e);
-            _v = 5;
-        }
-        this.version = _v;
     }
 
     saveCluster(){

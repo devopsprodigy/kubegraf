@@ -1,10 +1,13 @@
-System.register(["../../common/constants"], function(exports_1) {
-    var constants_1;
+System.register(["../../common/constants", "../../common/helpers"], function(exports_1) {
+    var constants_1, helpers_1;
     var ClusterConfig;
     return {
         setters:[
             function (constants_1_1) {
                 constants_1 = constants_1_1;
+            },
+            function (helpers_1_1) {
+                helpers_1 = helpers_1_1;
             }],
         execute: function() {
             ClusterConfig = (function () {
@@ -18,7 +21,7 @@ System.register(["../../common/constants"], function(exports_1) {
                     this.$scope = $scope;
                     this.busy = false;
                     this.getCluster();
-                    this.setGrafanaVersion($window);
+                    this.version = helpers_1.__getGrafanaVersion($window);
                 }
                 ClusterConfig.prototype.getCluster = function () {
                     var _this = this;
@@ -62,17 +65,6 @@ System.register(["../../common/constants"], function(exports_1) {
                             _this.cluster.jsonData.prom_name = defProm[0].name;
                         }
                     });
-                };
-                ClusterConfig.prototype.setGrafanaVersion = function (window) {
-                    var _v;
-                    try {
-                        _v = window.grafanaBootData.settings.buildInfo.version.split('.')[0];
-                    }
-                    catch (e) {
-                        console.error(e);
-                        _v = 5;
-                    }
-                    this.version = _v;
                 };
                 ClusterConfig.prototype.saveCluster = function () {
                     var _this = this;

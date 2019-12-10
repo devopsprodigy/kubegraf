@@ -3,6 +3,7 @@
 import store from "../../common/store";
 
 import {K8sPage} from "../k8s-page";
+import { __getGrafanaVersion } from "../../common/helpers";
 
 export class ClusterOverview extends K8sPage{
 
@@ -10,8 +11,8 @@ export class ClusterOverview extends K8sPage{
         colName: string,
         nsKey: string
     }>;
-
     hideAllWarningPods: boolean;
+    version: number;
 
     static templateUrl = 'components/cluster-overview/cluster-overview.html';
 
@@ -23,11 +24,12 @@ export class ClusterOverview extends K8sPage{
         public datasourceSrv,
         public contextSrv,
         public $location,
-        public $timeout
+        public $timeout,
+        private $window
     ){
         super($scope, backendSrv, datasourceSrv, contextSrv, $location, $timeout, $q);
         this.pageReady = false;
-
+        this.version = __getGrafanaVersion($window);
 
         this.__prepareDS().then(() => {
             this.getClusterComponents();
@@ -59,7 +61,7 @@ export class ClusterOverview extends K8sPage{
                 colName: 'Other',
                 nsKey: 'other'
             },
-        ]
+        ];
 
         this.hideAllWarningPods = true;
     }

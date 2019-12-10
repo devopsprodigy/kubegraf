@@ -4,12 +4,14 @@ export declare class ClustersList {
     private datasourceSrv;
     private contextSrv;
     private utilSrv;
+    private $window;
     isReady: boolean;
     clusters: Array<any>;
     $scope: any;
     isAdmin: boolean;
+    version: number;
     static templateUrl: string;
-    constructor($scope: any, $injector: any, backendSrv: any, datasourceSrv: any, contextSrv: any, utilSrv: any);
+    constructor($scope: any, $injector: any, backendSrv: any, datasourceSrv: any, contextSrv: any, utilSrv: any, $window: any);
     getClusters(): void;
     deleteCluster(cluster: any): void;
     confirmDelete(id: any): void;

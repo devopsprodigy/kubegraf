@@ -14,7 +14,6 @@ export declare class ClusterConfig {
     constructor($scope: any, $injector: any, backendSrv: any, alertSrv: any, $q: any, $location: any, $window: any);
     getCluster(): void;
     getPrometheusList(): any;
-    setGrafanaVersion(window: any): void;
     saveCluster(): any;
     check(): any;
     saveDatasource(): any;

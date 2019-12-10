@@ -1,7 +1,9 @@
 import {K8sPage} from '../k8s-page';
+import { __getGrafanaVersion } from "../../common/helpers";
 
 export class ClusterAlerts extends K8sPage{
     static templateUrl = 'components/cluster-alerts/cluster-alerts.html';
+    version: number;
 
     constructor(
         $scope,
@@ -11,10 +13,12 @@ export class ClusterAlerts extends K8sPage{
         public datasourceSrv,
         public contextSrv,
         public $location,
-        public $timeout
+        public $timeout,
+        private $window
     ){
         super($scope, backendSrv, datasourceSrv, contextSrv, $location, $timeout, $q);
         this.pageReady = false;
+        this.version = __getGrafanaVersion($window);
 
         this.__prepareDS().then(() => {
             let _promises = [];
@@ -34,7 +38,6 @@ export class ClusterAlerts extends K8sPage{
                     this.pageReady = true;
                 });
         })
-
     }
 
     clusterProblem() {
