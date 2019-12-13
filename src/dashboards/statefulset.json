@@ -176,6 +176,58 @@
     },
     {
       "aliasColors": {},
+      "breakPoint": "50%",
+      "cacheTimeout": null,
+      "combine": {
+        "label": "Others",
+        "threshold": 0
+      },
+      "datasource": "$PromDs",
+      "fontSize": "80%",
+      "format": "short",
+      "gridPos": {
+        "h": 5,
+        "w": 12,
+        "x": 0,
+        "y": 0
+      },
+      "id": null,
+      "interval": null,
+      "legend": {
+        "percentage": true,
+        "show": true,
+        "values": true
+      },
+      "legendType": "Right side",
+      "links": [],
+      "maxDataPoints": 3,
+      "nullPointMode": "connected",
+      "options": {},
+      "pieType": "pie",
+      "strokeWidth": 1,
+      "targets": [
+        {
+          "expr": "sum(kube_statefulset_status_replicas_ready{namespace=\"$namespace\", statefulset=\"$statefulset\"})",
+          "hide": false,
+          "instant": true,
+          "legendFormat": "Available",
+          "refId": "A"
+        },
+        {
+          "expr": "sum(kube_statefulset_status_replicas_current{namespace=\"$namespace\", statefulset=\"$statefulset\"}) - sum(kube_statefulset_status_replicas_ready{namespace=\"$namespace\", statefulset=\"$statefulset\"}) ",
+          "instant": true,
+          "legendFormat": "Unavailable",
+          "refId": "B"
+        }
+      ],
+      "timeFrom": null,
+      "timeShift": null,
+      "title": "Statefulset status",
+      "type": "grafana-piechart-panel",
+      "valueName": "current"
+    },
+    {
+      "aliasColors": {},
       "bars": false,
       "dashLength": 10,
       "dashes": false,
@@ -183,8 +235,8 @@
       "fill": 1,
       "gridPos": {
         "h": 5,
-        "w": 24,
-        "x": 0,
+        "w": 12,
+        "x": 12,
         "y": 0
       },
       "id": null,
