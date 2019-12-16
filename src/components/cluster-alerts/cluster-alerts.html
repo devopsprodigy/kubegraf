@@ -148,7 +148,7 @@
                                 <span class="override--nodeTable_status override--pod_status_{{pod.color}}"></span>
                             </td>
                             <td class="pointer" ng-click="ctrl.goTo(pod.name)">
-                                <span ng-bind="pod.name"></span>
+                                <span ng-bind="pod.data.metadata.namespace + ' / ' +pod.name"></span>
                                 <span>
                                     <a href="{{ctrl.getPodDashboardLink(pod)}}" target="_blank" style="color: #fff">
                                         <i class="fa fa-eye"/>
