@@ -198,7 +198,7 @@
         "x": 0,
         "y": 0
       },
-      "id": null,
+      "id": 1,
       "panels": [],
       "title": "Application Info",
       "type": "row"
@@ -223,7 +223,7 @@
         "x": 0,
         "y": 0
       },
-      "id": null,
+      "id": 2,
       "interval": null,
       "legend": {
         "show": true,
@@ -275,7 +275,7 @@
         "x": 12,
         "y": 0
       },
-      "id": null,
+      "id": 3,
       "legend": {
         "avg": false,
         "current": false,
@@ -368,7 +368,7 @@
         "x": 0,
         "y": 5
       },
-      "id": null,
+      "id": 4,
       "legend": {
         "avg": false,
         "current": false,
@@ -487,7 +487,7 @@
         "x": 0,
         "y": 13
       },
-      "id": null,
+      "id": 5,
       "interval": null,
       "links": [],
       "mappingType": 1,
@@ -559,7 +559,7 @@
         "x": 6,
         "y": 13
       },
-      "id": null,
+      "id": 6,
       "legend": {
         "avg": false,
         "current": false,
@@ -642,7 +642,7 @@
         "x": 0,
         "y": 22
       },
-      "id": null,
+      "id": 7,
       "panels": [],
       "title": "Application's Resources",
       "type": "row"
@@ -661,7 +661,7 @@
         "x": 0,
         "y": 23
       },
-      "id": null,
+      "id": 8,
       "legend": {
         "alignAsTable": true,
         "avg": false,
@@ -756,7 +756,7 @@
         "x": 12,
         "y": 28
       },
-      "id": null,
+      "id": 9,
       "legend": {
         "alignAsTable": true,
         "avg": false,
@@ -850,7 +850,7 @@
         "x": 0,
         "y": 36
       },
-      "id": null,
+      "id": 10,
       "legend": {
         "alignAsTable": true,
         "avg": false,
@@ -938,7 +938,7 @@
         "x": 12,
         "y": 31
       },
-      "id": null,
+      "id": 11,
       "legend": {
         "alignAsTable": true,
         "avg": false,
