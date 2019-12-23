@@ -3,6 +3,7 @@
 import store from "../../common/store";
 
 import {K8sPage} from "../k8s-page";
+import { __getGrafanaVersion } from "../../common/helpers";
 
 export class ClusterOverview extends K8sPage{
 
@@ -10,8 +11,8 @@ export class ClusterOverview extends K8sPage{
         colName: string,
         nsKey: string
     }>;
-
     hideAllWarningPods: boolean;
+    version: number;
 
     static templateUrl = 'components/cluster-overview/cluster-overview.html';
 
@@ -23,11 +24,12 @@ export class ClusterOverview extends K8sPage{
         public datasourceSrv,
         public contextSrv,
         public $location,
-        public $timeout
+        public $timeout,
+        private $window
     ){
         super($scope, backendSrv, datasourceSrv, contextSrv, $location, $timeout, $q);
         this.pageReady = false;
-
+        this.version = __getGrafanaVersion($window);
 
         this.__prepareDS().then(() => {
             this.getClusterComponents();
@@ -59,29 +61,17 @@ export class ClusterOverview extends K8sPage{
                 colName: 'Other',
                 nsKey: 'other'
             },
-        ]
+        ];
 
         this.hideAllWarningPods = true;
     }
 
     __showAll(){
-        store.delete('namespaceStore');
-        let namespaceStore = [];
-        this.namespaceMap.map(ns => {
-           ns.open = true;
-           namespaceStore.push({name: ns.name, open: ns.open});
-        });
-        store.setObject('namespaceStore', namespaceStore);
+        this.toggleNamespace(true);
     }
 
     __hideAll(){
-        store.delete('namespaceStore');
-        let namespaceStore = [];
-        this.namespaceMap.map(ns => {
-            ns.open = false;
-            namespaceStore.push({name: ns.name, open: ns.open});
-        });
-        store.setObject('namespaceStore', namespaceStore);
+        this.toggleNamespace(false);
     }
 
     namespaceClick(event, namespace) {
@@ -89,18 +79,20 @@ export class ClusterOverview extends K8sPage{
             if(namespace.open) {
                 event.preventDefault();
             }
-
-            store.delete('namespaceStore');
-            let namespaceStore = [];
-            this.namespaceMap.map(ns => {
-                ns.open = namespace.name === ns.name;
-                namespaceStore.push({name: ns.name, open: ns.open});
-            });
-            store.setObject('namespaceStore', namespaceStore);
-
+            this.toggleNamespace(namespace);
         } else {
             namespace.toggle();
         }
+    }
+
+    toggleNamespace(namespace: boolean|any) {
+        store.delete('namespaceStore');
+        let namespaceStore = [];
+        this.namespaceMap.map(ns => {
+            ns.open = namespace === true || namespace === false ? namespace : namespace.name === ns.name;
+            namespaceStore.push({name: ns.name, open: ns.open});
+        });
+        store.setObject('namespaceStore', namespaceStore);
     }
 
     updatePods(newPods): void {

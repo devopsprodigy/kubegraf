@@ -1,7 +1,7 @@
 ///<reference path="../../node_modules/grafana-sdk-mocks/app/headers/common.d.ts" />
 System.register(['./types/pod', 'app/core/utils/kbn'], function(exports_1) {
     var pod_1, kbn_1;
-    var __prepare, __preparePods, __convertToGB, __roundCpu, __convertToMicro, __getLastNonNullValue, __percentUsed;
+    var __prepare, __preparePods, __convertToGB, __roundCpu, __convertToMicro, __getLastNonNullValue, __percentUsed, __getGrafanaVersion;
     return {
         setters:[
             function (pod_1_1) {
@@ -42,6 +42,16 @@ System.register(['./types/pod', 'app/core/utils/kbn'], function(exports_1) {
             __percentUsed = function (used, allocatable) {
                 return ((parseFloat(used) / parseFloat(allocatable)) * 100).toFixed(2) + ' %';
             };
+            __getGrafanaVersion = function (window) {
+                var version = 5;
+                try {
+                    version = window.grafanaBootData.settings.buildInfo.version.split('.')[0];
+                }
+                catch (e) {
+                    console.error(e);
+                }
+                return version;
+            };
             exports_1("__prepare", __prepare);
             exports_1("__preparePods", __preparePods);
             exports_1("__convertToGB", __convertToGB);
@@ -49,6 +59,7 @@ System.register(['./types/pod', 'app/core/utils/kbn'], function(exports_1) {
             exports_1("__percentUsed", __percentUsed);
             exports_1("__convertToMicro", __convertToMicro);
             exports_1("__getLastNonNullValue", __getLastNonNullValue);
+            exports_1("__getGrafanaVersion", __getGrafanaVersion);
         }
     }
 });
