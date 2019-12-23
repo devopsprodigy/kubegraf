@@ -43,7 +43,7 @@
   "editable": true,
   "graphTooltip": 1,
   "refresh": "1m",
-  "schemaVersion": 1,
+  "schemaVersion": 21,
   "time": {
     "from": "now-30m",
     "to": "now"

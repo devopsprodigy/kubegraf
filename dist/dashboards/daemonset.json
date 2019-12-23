@@ -43,7 +43,7 @@
   "editable": true,
   "graphTooltip": 1,
   "refresh": "1m",
-  "schemaVersion": 1,
+  "schemaVersion": 21,
   "tags": ["kubernetes", "DevOpsProdigy", "daemonset", "KubeGraf"],
   "time": {
     "from": "now-30m",
