@@ -1,11 +1,12 @@
 import {K8sPage} from "../k8s-page";
 import {Node} from "../../common/types/node";
 import store from "../../common/store";
-import {__convertToGB, __roundCpu, __convertToMicro} from "../../common/helpers";
+import { __convertToGB, __roundCpu, __convertToMicro, __getGrafanaVersion } from "../../common/helpers";
 
 export class NodesOverview extends K8sPage {
 
     static templateUrl = 'components/nodes-overview/nodes-overview.html';
+    version: number;
 
     constructor(
         $scope,
@@ -15,19 +16,20 @@ export class NodesOverview extends K8sPage {
         public datasourceSrv,
         public contextSrv,
         public $location,
-        public $timeout
+        public $timeout,
+        private $window
     ) {
         super($scope, backendSrv, datasourceSrv, contextSrv, $location, $timeout, $q);
         this.pageReady = false;
+        this.version = __getGrafanaVersion($window);
 
         this.__prepareDS().then(() => {
-            this.getNodeMap().then(() => {
-                this.pageReady = true;
-            })
+            this.getNodeMap()
                 .then(() => {
-                    this.getResourcesMetrics().then(() => {
-
-                    })
+                    this.pageReady = true;
+                })
+                .then(() => {
+                    this.getResourcesMetrics().then(() => {})
                 });
         });
 
@@ -116,34 +118,25 @@ export class NodesOverview extends K8sPage {
             if(node.open) {
                 event.preventDefault();
             }
-
-            store.delete('nodeStore');
-            let nodeStore = [];
-            this.nodesMap.map(ns => {
-                ns.open = node.name === ns.name;
-                nodeStore.push({name: ns.name, open: ns.open});
-            });
-            store.setObject('nodeStore', nodeStore);
+            this.toggleNodes(node);
         } else {
             node.toggle();
         }
     }
 
     __showAll(){
-        store.delete('nodeStore');
-        let nodeStore = [];
-        this.nodesMap.map(ns => {
-            ns.open = true;
-            nodeStore.push({name: ns.name, open: ns.open});
-        });
-        store.setObject('nodeStore', nodeStore);
+        this.toggleNodes(true)
     }
 
     __hideAll(){
+        this.toggleNodes(false)
+    }
+
+    toggleNodes(node: boolean|any) {
         store.delete('nodeStore');
         let nodeStore = [];
         this.nodesMap.map(ns => {
-            ns.open = false;
+            ns.open = node === true || node === false ? node : node.name === ns.name;
             nodeStore.push({name: ns.name, open: ns.open});
         });
         store.setObject('nodeStore', nodeStore);

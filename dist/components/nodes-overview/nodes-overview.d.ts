@@ -6,8 +6,10 @@ export declare class NodesOverview extends K8sPage {
     contextSrv: any;
     $location: any;
     $timeout: any;
+    private $window;
     static templateUrl: string;
-    constructor($scope: any, $injector: any, $q: any, backendSrv: any, datasourceSrv: any, contextSrv: any, $location: any, $timeout: any);
+    version: number;
+    constructor($scope: any, $injector: any, $q: any, backendSrv: any, datasourceSrv: any, contextSrv: any, $location: any, $timeout: any, $window: any);
     showAllPodsNS(ns: any): void;
     toggleNsList(node: any): void;
     updatePods(newPods: any): void;
@@ -15,4 +17,5 @@ export declare class NodesOverview extends K8sPage {
     nodeClick(event: any, node: any): void;
     __showAll(): void;
     __hideAll(): void;
+    toggleNodes(node: boolean | any): void;
 }

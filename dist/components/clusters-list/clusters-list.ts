@@ -1,29 +1,34 @@
 ///<reference path="../../../node_modules/grafana-sdk-mocks/app/headers/common.d.ts" />
 
 import appEvents from "app/core/app_events";
+import { __getGrafanaVersion } from "../../common/helpers";
 
 export class ClustersList {
     isReady: boolean;
     clusters: Array<any>;
     $scope: any;
     isAdmin: boolean;
+    version: number;
 
     static templateUrl = 'components/clusters-list/clusters-list.html';
 
-    constructor($scope, $injector, private backendSrv, private datasourceSrv, private contextSrv, private utilSrv){
+    constructor($scope, $injector, private backendSrv, private datasourceSrv, private contextSrv, private utilSrv, private $window){
         this.isReady = false;
         this.$scope = $scope;
+        this.version = __getGrafanaVersion($window);
         document.title = 'DevOpsProdigy KubeGraf';
-        try{
+
+        try {
             this.getClusters();
-        }catch (e) {
+        } catch (e) {
             console.error(e);
-        }finally {
+        } finally {
             this.isReady = true;
         }
-        try{
+
+        try {
             this.isAdmin = this.contextSrv.isGrafanaAdmin;
-        }catch (e) {
+        } catch (e) {
             console.error(e);
             this.isAdmin = false;
         }
@@ -32,7 +37,7 @@ export class ClustersList {
     getClusters() {
         const list = this.datasourceSrv.getAll();
         const type = 'devopsprodidy-kubegraf-datasource';
-
+        console.log(list);
         if (Array.isArray(list)) {
             this.clusters = list.filter(item => {
                 return item.type === type
@@ -64,7 +69,10 @@ export class ClustersList {
     confirmDelete(id){
         this.backendSrv.delete('/api/datasources/' + id)
             .then(() => {
-                this.getClusters();
-            })
+                this.clusters = this.clusters.filter(item => {
+                    return item.id !== id
+                });
+                // this.getClusters();
+            });
     }
 }

@@ -1,11 +1,11 @@
 ///<reference path="../../../node_modules/grafana-sdk-mocks/app/headers/common.d.ts" />
-System.register(["../../common/store", "../k8s-page"], function(exports_1) {
+System.register(["../../common/store", "../k8s-page", "../../common/helpers"], function(exports_1) {
     var __extends = (this && this.__extends) || function (d, b) {
         for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
         function __() { this.constructor = d; }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
-    var store_1, k8s_page_1;
+    var store_1, k8s_page_1, helpers_1;
     var ClusterOverview;
     return {
         setters:[
@@ -14,11 +14,14 @@ System.register(["../../common/store", "../k8s-page"], function(exports_1) {
             },
             function (k8s_page_1_1) {
                 k8s_page_1 = k8s_page_1_1;
+            },
+            function (helpers_1_1) {
+                helpers_1 = helpers_1_1;
             }],
         execute: function() {
             ClusterOverview = (function (_super) {
                 __extends(ClusterOverview, _super);
-                function ClusterOverview($scope, $injector, $q, backendSrv, datasourceSrv, contextSrv, $location, $timeout) {
+                function ClusterOverview($scope, $injector, $q, backendSrv, datasourceSrv, contextSrv, $location, $timeout, $window) {
                     var _this = this;
                     _super.call(this, $scope, backendSrv, datasourceSrv, contextSrv, $location, $timeout, $q);
                     this.$q = $q;
@@ -27,7 +30,9 @@ System.register(["../../common/store", "../k8s-page"], function(exports_1) {
                     this.contextSrv = contextSrv;
                     this.$location = $location;
                     this.$timeout = $timeout;
+                    this.$window = $window;
                     this.pageReady = false;
+                    this.version = helpers_1.__getGrafanaVersion($window);
                     this.__prepareDS().then(function () {
                         _this.getClusterComponents();
                         _this.getNamespaceMap();
@@ -61,39 +66,30 @@ System.register(["../../common/store", "../k8s-page"], function(exports_1) {
                     this.hideAllWarningPods = true;
                 }
                 ClusterOverview.prototype.__showAll = function () {
-                    store_1.default.delete('namespaceStore');
-                    var namespaceStore = [];
-                    this.namespaceMap.map(function (ns) {
-                        ns.open = true;
-                        namespaceStore.push({ name: ns.name, open: ns.open });
-                    });
-                    store_1.default.setObject('namespaceStore', namespaceStore);
+                    this.toggleNamespace(true);
                 };
                 ClusterOverview.prototype.__hideAll = function () {
-                    store_1.default.delete('namespaceStore');
-                    var namespaceStore = [];
-                    this.namespaceMap.map(function (ns) {
-                        ns.open = false;
-                        namespaceStore.push({ name: ns.name, open: ns.open });
-                    });
-                    store_1.default.setObject('namespaceStore', namespaceStore);
+                    this.toggleNamespace(false);
                 };
                 ClusterOverview.prototype.namespaceClick = function (event, namespace) {
                     if (event.ctrlKey) {
                         if (namespace.open) {
                             event.preventDefault();
                         }
-                        store_1.default.delete('namespaceStore');
-                        var namespaceStore = [];
-                        this.namespaceMap.map(function (ns) {
-                            ns.open = namespace.name === ns.name;
-                            namespaceStore.push({ name: ns.name, open: ns.open });
-                        });
-                        store_1.default.setObject('namespaceStore', namespaceStore);
+                        this.toggleNamespace(namespace);
                     }
                     else {
                         namespace.toggle();
                     }
+                };
+                ClusterOverview.prototype.toggleNamespace = function (namespace) {
+                    store_1.default.delete('namespaceStore');
+                    var namespaceStore = [];
+                    this.namespaceMap.map(function (ns) {
+                        ns.open = namespace === true || namespace === false ? namespace : namespace.name === ns.name;
+                        namespaceStore.push({ name: ns.name, open: ns.open });
+                    });
+                    store_1.default.setObject('namespaceStore', namespaceStore);
                 };
                 ClusterOverview.prototype.updatePods = function (newPods) {
                     var _this = this;

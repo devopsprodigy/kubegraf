@@ -42,4 +42,16 @@ let __percentUsed = (used, allocatable) => {
   return ((parseFloat(used) / parseFloat(allocatable))*100).toFixed(2) + ' %';
 };
 
-export { __prepare, __preparePods, __convertToGB, __roundCpu, __percentUsed, __convertToMicro, __getLastNonNullValue }
+const __getGrafanaVersion = (window) => {
+    let version = 5;
+
+    try {
+        version = window.grafanaBootData.settings.buildInfo.version.split('.')[0];
+    } catch (e) {
+        console.error(e);
+    }
+
+    return version;
+}
+
+export { __prepare, __preparePods, __convertToGB, __roundCpu, __percentUsed, __convertToMicro, __getLastNonNullValue, __getGrafanaVersion }
