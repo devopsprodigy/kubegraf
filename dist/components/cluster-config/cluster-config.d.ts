@@ -1,5 +1,6 @@
 export declare class ClusterConfig {
     private backendSrv;
+    private datasourceSrv;
     private alertSrv;
     private $q;
     private $location;
@@ -10,8 +11,9 @@ export declare class ClusterConfig {
     $scope: any;
     pageReady: boolean;
     version: number;
+    retry: number;
     static templateUrl: string;
-    constructor($scope: any, $injector: any, backendSrv: any, alertSrv: any, $q: any, $location: any, $window: any);
+    constructor($scope: any, $injector: any, backendSrv: any, datasourceSrv: any, alertSrv: any, $q: any, $location: any, $window: any);
     getCluster(): void;
     getPrometheusList(): any;
     setGrafanaVersion(window: any): void;
@@ -21,4 +23,5 @@ export declare class ClusterConfig {
     createDatasource(): any;
     updateDatasource(): any;
     getDatasource(id: any): any;
+    testCluster(): void;
 }
