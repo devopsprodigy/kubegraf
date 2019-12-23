@@ -43,7 +43,7 @@
   "editable": true,
   "graphTooltip": 1,
   "refresh": "1m",
-  "schemaVersion": 1,
+  "schemaVersion": 21,
   "time": {
     "from": "now-30m",
     "to": "now"
@@ -151,6 +151,31 @@
         "regex": "",
         "skipUrlSync": false,
         "sort": 1,
+        "tagValuesQuery": "",
+        "tags": [],
+        "tagsQuery": "",
+        "type": "query",
+        "useTags": false
+      },
+      {
+        "allValue": null,
+        "current": {
+          "text": "elastic-gke-logging-1-elasticsearch-0",
+          "value": "elastic-gke-logging-1-elasticsearch-0"
+        },
+        "datasource": "$PromDs",
+        "definition": "label_values(container_memory_usage_bytes{namespace=\"$namespace\", pod_name=~\"$statefulset-.*\", container_name!=\"\", container_name!=\"POD\"}, pod)",
+        "hide": 0,
+        "includeAll": true,
+        "label": null,
+        "multi": true,
+        "name": "pod",
+        "options": [],
+        "query": "label_values(container_memory_usage_bytes{namespace=\"$namespace\", pod_name=~\"$statefulset-.*\", container_name!=\"\", container_name!=\"POD\"}, pod)",
+        "refresh": 1,
+        "regex": "",
+        "skipUrlSync": false,
+        "sort": 0,
         "tagValuesQuery": "",
         "tags": [],
         "tagsQuery": "",
@@ -319,28 +344,28 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "kube_pod_container_status_ready{namespace=\"$namespace\", pod=~\"$statefulset-.*\", container=~\"$container\"}",
+          "expr": "kube_pod_container_status_ready{namespace=\"$namespace\", pod=~\"$pod\", container=~\"$container\"}",
           "format": "time_series",
           "intervalFactor": 1,
           "legendFormat": "Ready [$statefulset / {{pod}} / {{container}}]",
           "refId": "A"
         },
         {
-          "expr": "kube_pod_container_status_running{namespace=\"$namespace\", pod=~\"$statefulset-.*\", container=~\"$container\"}",
+          "expr": "kube_pod_container_status_running{namespace=\"$namespace\", pod=~\"$pod\", container=~\"$container\"}",
           "format": "time_series",
           "intervalFactor": 1,
           "legendFormat": "Running [$statefulset / {{pod}} / {{container}}]",
           "refId": "B"
         },
         {
-          "expr": "kube_pod_container_status_waiting{namespace=\"$namespace\", pod=~\"$statefulset-.*\", container=~\"$container\"}",
+          "expr": "kube_pod_container_status_waiting{namespace=\"$namespace\", pod=~\"$pod\", container=~\"$container\"}",
           "format": "time_series",
           "intervalFactor": 1,
           "legendFormat": "Waiting [$statefulset / {{pod}} / {{container}}]",
           "refId": "C"
         },
         {
-          "expr": "kube_pod_container_status_terminated{namespace=\"$namespace\", pod=~\"$statefulset-.*\", container=~\"$container\"}",
+          "expr": "kube_pod_container_status_terminated{namespace=\"$namespace\", pod=~\"$pod\", container=~\"$container\"}",
           "format": "time_series",
           "intervalFactor": 1,
           "legendFormat": "Terminated [$statefulset / {{pod}} / {{container}}]",
@@ -450,7 +475,7 @@
       "tableColumn": "",
       "targets": [
         {
-          "expr": "sum(kube_pod_container_status_restarts_total{namespace=\"$namespace\", pod=~\"$statefulset-.*\", container=~\"$container\"})",
+          "expr": "sum(kube_pod_container_status_restarts_total{namespace=\"$namespace\", pod=~\"$pod\", container=~\"$container\"})",
           "format": "time_series",
           "intervalFactor": 1,
           "refId": "A",
@@ -510,7 +535,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "kube_pod_container_status_restarts_total{namespace=\"$namespace\", pod=~\"$statefulset-.*\", container=~\"$container\"}",
+          "expr": "kube_pod_container_status_restarts_total{namespace=\"$namespace\", pod=~\"$pod\", container=~\"$container\"}",
           "format": "time_series",
           "intervalFactor": 1,
           "legendFormat": "Restarts [$statefulset / {{pod}} / {{ container}} ]",
@@ -616,12 +641,12 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "sum (container_memory_usage_bytes{namespace=\"$namespace\", pod_name=~\"$statefulset-.*\", container_name!=\"\", container_name!=\"POD\", container_name=~\"$container\"}) by (pod_name)",
+          "expr": "sum (container_memory_usage_bytes{namespace=\"$namespace\", pod_name=~\"$pod\", container_name!=\"\", container_name!=\"POD\", container_name=~\"$container\"}) by (pod_name)",
           "legendFormat": "Used: {{pod_name}} / {{$container}}",
           "refId": "A"
         },
         {
-          "expr": "sum (kube_pod_container_resource_requests_memory_bytes{ namespace=\"$namespace\", pod=~\"$statefulset-.*\", container=~\"$container\"}) by (pod)",
+          "expr": "sum (kube_pod_container_resource_requests_memory_bytes{ namespace=\"$namespace\", pod=~\"$pod\", container=~\"$container\"}) by (pod)",
           "hide": false,
           "legendFormat": "Requested: {{pod}} / {{$container}}",
           "refId": "B"
@@ -711,12 +736,12 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "sum(rate(container_cpu_usage_seconds_total{namespace=\"$namespace\", pod_name=~\"$statefulset-.*\", container_name=~\"$container\"}[2m])) by (pod_name)",
+          "expr": "sum(rate(container_cpu_usage_seconds_total{namespace=\"$namespace\", pod_name=~\"$pod\", container_name=~\"$container\"}[2m])) by (pod_name)",
           "legendFormat": "Used: {{pod_name}} / {{$container}}",
           "refId": "A"
         },
         {
-          "expr": "sum(kube_pod_container_resource_requests_cpu_cores{namespace=\"$namespace\", pod=~\"$statefulset-.*\", container_name=~\"$container\"}) by (pod)",
+          "expr": "sum(kube_pod_container_resource_requests_cpu_cores{namespace=\"$namespace\", pod=~\"$pod\", container_name=~\"$container\"}) by (pod)",
           "legendFormat": "Requested: {{pod}} / {{$container}}",
           "refId": "B"
         }
@@ -804,7 +829,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "irate(container_network_transmit_bytes_total{namespace=\"$namespace\", pod_name=~\"$statefulset-.*\"}[2m])",
+          "expr": "irate(container_network_transmit_bytes_total{namespace=\"$namespace\", pod_name=~\"$pod\"}[2m])",
           "legendFormat": "{{interface}} : [{{pod_name}}]",
           "refId": "A"
         }
@@ -892,7 +917,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "irate(container_network_receive_bytes_total{namespace=\"$namespace\", pod_name=~\"$statefulset-.*\"}[2m])",
+          "expr": "irate(container_network_receive_bytes_total{namespace=\"$namespace\", pod_name=~\"$pod\"}[2m])",
           "legendFormat": "{{interface}} : [{{pod_name}}]",
           "refId": "A"
         }
