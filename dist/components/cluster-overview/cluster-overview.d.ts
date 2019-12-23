@@ -17,6 +17,7 @@ export declare class ClusterOverview extends K8sPage {
     __showAll(): void;
     __hideAll(): void;
     namespaceClick(event: any, namespace: any): void;
+    toggleNamespace(namespace: boolean | any): void;
     updatePods(newPods: any): void;
     toggleAllWarningPods(): void;
 }
