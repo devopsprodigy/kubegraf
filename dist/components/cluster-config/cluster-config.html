@@ -80,8 +80,10 @@
         </div>
 
         <div class="row">
-            <div class="col-md-12">
-                <button type="submit" class="btn btn-success" ng-click="ctrl.saveCluster()" ng-disabled="!ctrl.check()">Save</button>
+            <div class="col-md-12 gf-form-button-row">
+                <button type="submit" class="btn btn-success" ng-click="ctrl.saveCluster()" ng-disabled="!ctrl.check()">Save & Test</button>
+                <!--<button type="submit" class="btn btn-danger" ng-disabled="!ctrl.cluster.id">Delete</button>-->
+                <button class="btn btn-inverse" onclick="window.history.back()">Back</button>
             </div>
         </div>
     </form>
