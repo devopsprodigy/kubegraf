@@ -15,7 +15,7 @@
             </a>
         </div>
         <div ng-class="ctrl.isAdmin ? 'col-xs-6' : 'col-xs-12'">
-            <a class="btn btn-secondary timepicker-rangestring pull-right" href="plugins/devopsprodigy-kubegraf-app/">
+            <a class="btn btn-secondary timepicker-rangestring pull-right" ng-href="{{ctrl.version < 6 ? 'plugins/devopsprodigy-kubegraf-app/edit' : 'plugins/devopsprodigy-kubegraf-app/'}}">
                 <i class="fa fa-fw fa-cog"/>&nbsp;
                 Plugin Config
             </a>

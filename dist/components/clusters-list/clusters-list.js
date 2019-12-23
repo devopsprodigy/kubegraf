@@ -74,12 +74,9 @@ System.register(["app/core/app_events", "../../common/helpers"], function(export
                     var _this = this;
                     this.backendSrv.delete('/api/datasources/' + id)
                         .then(function () {
-                        console.log('before', _this.clusters);
                         _this.clusters = _this.clusters.filter(function (item) {
                             return item.id !== id;
                         });
-                        console.log('after', _this.clusters);
-                        // this.$scope.$apply();
                         // this.getClusters();
                     });
                 };
