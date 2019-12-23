@@ -175,7 +175,10 @@
       "type": "row"
     },
     {
-      "aliasColors": {},
+      "aliasColors": {
+        "Available": "#56A64B",
+        "Unavailable": "#E02F44"
+      },
       "breakPoint": "50%",
       "cacheTimeout": null,
       "combine": {
@@ -228,7 +231,10 @@
       "valueName": "current"
     },
     {
-      "aliasColors": {},
+      "aliasColors": {
+        "Available": "#56A64B",
+        "Unavailable": "#E02F44"
+      },
       "bars": false,
       "dashLength": 10,
       "dashes": false,

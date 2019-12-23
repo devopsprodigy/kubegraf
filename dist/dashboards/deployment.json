@@ -175,7 +175,10 @@
       "type": "row"
     },
     {
-      "aliasColors": {},
+      "aliasColors": {
+        "Available": "#56A64B",
+        "Unavailable": "#E02F44"
+      },
       "datasource": "$PromDs",
       "breakPoint": "50%",
       "cacheTimeout": null,
@@ -229,7 +232,10 @@
       "valueName": "current"
     },
     {
-      "aliasColors": {},
+      "aliasColors": {
+        "Available": "#56A64B",
+        "Unavailable": "#E02F44"
+      },
       "datasource": "$PromDs",
       "bars": false,
       "cacheTimeout": null,
