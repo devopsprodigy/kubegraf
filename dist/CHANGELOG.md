@@ -1,4 +1,4 @@
-# 1.2.0 (2019-11-18)
+# 1.2.0 (2019-12-20)
 
 ### New features
 * Navigation improvement: 
