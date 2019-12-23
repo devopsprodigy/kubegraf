@@ -370,3 +370,6 @@ label.toggle-checkbox {
     float: initial;
     margin-left: 0;
     margin-right: 15px; } }
+
+.explore-toolbar-item {
+  list-style: inside; }

@@ -150,12 +150,12 @@ export class ClusterConfig{
                 if (response && response.status === 200) {
                     window.location.href = 'plugins/devopsprodigy-kubegraf-app/page/clusters';
                 }
-                console.log(response);
+                appEvents.emit('alert-error', ['Unhandled error']);
             }, error => {
                 if (error && error.status && error.statusText) {
                     appEvents.emit('alert-error', [error.status + ' ' + error.statusText]);
                 }
-                console.log(error);
+                appEvents.emit('alert-error', ['Unhandled error']);
             })
     }
 }

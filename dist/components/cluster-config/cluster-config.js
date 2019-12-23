@@ -149,12 +149,12 @@ System.register(["app/core/app_events", "../../common/constants"], function(expo
                         if (response && response.status === 200) {
                             window.location.href = 'plugins/devopsprodigy-kubegraf-app/page/clusters';
                         }
-                        console.log(response);
+                        app_events_1.default.emit('alert-error', ['Unhandled error']);
                     }, function (error) {
                         if (error && error.status && error.statusText) {
                             app_events_1.default.emit('alert-error', [error.status + ' ' + error.statusText]);
                         }
-                        console.log(error);
+                        app_events_1.default.emit('alert-error', ['Unhandled error']);
                     });
                 };
                 ClusterConfig.templateUrl = 'components/cluster-config/cluster-config.html';
