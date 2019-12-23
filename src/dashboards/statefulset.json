@@ -43,7 +43,7 @@
   "editable": true,
   "graphTooltip": 1,
   "refresh": "1m",
-  "schemaVersion": 1,
+  "schemaVersion": 21,
   "time": {
     "from": "now-30m",
     "to": "now"
@@ -156,6 +156,31 @@
         "tagsQuery": "",
         "type": "query",
         "useTags": false
+      },
+      {
+        "allValue": null,
+        "current": {
+          "text": "elastic-gke-logging-1-elasticsearch-0",
+          "value": "elastic-gke-logging-1-elasticsearch-0"
+        },
+        "datasource": "$PromDs",
+        "definition": "label_values(container_memory_usage_bytes{namespace=\"$namespace\", pod_name=~\"$statefulset-.*\", container_name!=\"\", container_name!=\"POD\"}, pod)",
+        "hide": 0,
+        "includeAll": true,
+        "label": null,
+        "multi": true,
+        "name": "pod",
+        "options": [],
+        "query": "label_values(container_memory_usage_bytes{namespace=\"$namespace\", pod_name=~\"$statefulset-.*\", container_name!=\"\", container_name!=\"POD\"}, pod)",
+        "refresh": 1,
+        "regex": "",
+        "skipUrlSync": false,
+        "sort": 0,
+        "tagValuesQuery": "",
+        "tags": [],
+        "tagsQuery": "",
+        "type": "query",
+        "useTags": false
       }
     ]
   },
@@ -169,10 +194,65 @@
         "x": 0,
         "y": 0
       },
-      "id": null,
+      "id": 1,
       "panels": [],
       "title": "Application Info",
       "type": "row"
+    },
+    {
+      "aliasColors": {
+        "Available": "#56A64B",
+        "Unavailable": "#E02F44"
+      },
+      "breakPoint": "50%",
+      "cacheTimeout": null,
+      "combine": {
+        "label": "Others",
+        "threshold": 0
+      },
+      "datasource": "$PromDs",
+      "fontSize": "80%",
+      "format": "short",
+      "gridPos": {
+        "h": 5,
+        "w": 12,
+        "x": 0,
+        "y": 0
+      },
+      "id": 2,
+      "interval": null,
+      "legend": {
+        "percentage": true,
+        "show": true,
+        "values": true
+      },
+      "legendType": "Right side",
+      "links": [],
+      "maxDataPoints": 3,
+      "nullPointMode": "connected",
+      "options": {},
+      "pieType": "pie",
+      "strokeWidth": 1,
+      "targets": [
+        {
+          "expr": "sum(kube_statefulset_status_replicas_ready{namespace=\"$namespace\", statefulset=\"$statefulset\"})",
+          "hide": false,
+          "instant": true,
+          "legendFormat": "Available",
+          "refId": "A"
+        },
+        {
+          "expr": "sum(kube_statefulset_status_replicas_current{namespace=\"$namespace\", statefulset=\"$statefulset\"}) - sum(kube_statefulset_status_replicas_ready{namespace=\"$namespace\", statefulset=\"$statefulset\"}) ",
+          "instant": true,
+          "legendFormat": "Unavailable",
+          "refId": "B"
+        }
+      ],
+      "timeFrom": null,
+      "timeShift": null,
+      "title": "Statefulset status",
+      "type": "grafana-piechart-panel",
+      "valueName": "current"
     },
     {
       "aliasColors": {},
@@ -183,11 +263,11 @@
       "fill": 1,
       "gridPos": {
         "h": 5,
-        "w": 24,
-        "x": 0,
+        "w": 12,
+        "x": 12,
         "y": 0
       },
-      "id": null,
+      "id": 3,
       "legend": {
         "avg": false,
         "current": false,
@@ -294,7 +374,7 @@
         "x": 0,
         "y": 5
       },
-      "id": null,
+      "id": 4,
       "legend": {
         "avg": false,
         "current": false,
@@ -319,28 +399,28 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "kube_pod_container_status_ready{namespace=\"$namespace\", pod=~\"$statefulset-.*\", container=~\"$container\"}",
+          "expr": "kube_pod_container_status_ready{namespace=\"$namespace\", pod=~\"$pod\", container=~\"$container\"}",
           "format": "time_series",
           "intervalFactor": 1,
           "legendFormat": "Ready [$statefulset / {{pod}} / {{container}}]",
           "refId": "A"
         },
         {
-          "expr": "kube_pod_container_status_running{namespace=\"$namespace\", pod=~\"$statefulset-.*\", container=~\"$container\"}",
+          "expr": "kube_pod_container_status_running{namespace=\"$namespace\", pod=~\"$pod\", container=~\"$container\"}",
           "format": "time_series",
           "intervalFactor": 1,
           "legendFormat": "Running [$statefulset / {{pod}} / {{container}}]",
           "refId": "B"
         },
         {
-          "expr": "kube_pod_container_status_waiting{namespace=\"$namespace\", pod=~\"$statefulset-.*\", container=~\"$container\"}",
+          "expr": "kube_pod_container_status_waiting{namespace=\"$namespace\", pod=~\"$pod\", container=~\"$container\"}",
           "format": "time_series",
           "intervalFactor": 1,
           "legendFormat": "Waiting [$statefulset / {{pod}} / {{container}}]",
           "refId": "C"
         },
         {
-          "expr": "kube_pod_container_status_terminated{namespace=\"$namespace\", pod=~\"$statefulset-.*\", container=~\"$container\"}",
+          "expr": "kube_pod_container_status_terminated{namespace=\"$namespace\", pod=~\"$pod\", container=~\"$container\"}",
           "format": "time_series",
           "intervalFactor": 1,
           "legendFormat": "Terminated [$statefulset / {{pod}} / {{container}}]",
@@ -413,7 +493,7 @@
         "x": 0,
         "y": 13
       },
-      "id": null,
+      "id": 5,
       "interval": null,
       "links": [],
       "mappingType": 1,
@@ -450,7 +530,7 @@
       "tableColumn": "",
       "targets": [
         {
-          "expr": "sum(kube_pod_container_status_restarts_total{namespace=\"$namespace\", pod=~\"$statefulset-.*\", container=~\"$container\"})",
+          "expr": "sum(kube_pod_container_status_restarts_total{namespace=\"$namespace\", pod=~\"$pod\", container=~\"$container\"})",
           "format": "time_series",
           "intervalFactor": 1,
           "refId": "A",
@@ -485,7 +565,7 @@
         "x": 6,
         "y": 13
       },
-      "id": null,
+      "id": 6,
       "legend": {
         "avg": false,
         "current": false,
@@ -510,7 +590,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "kube_pod_container_status_restarts_total{namespace=\"$namespace\", pod=~\"$statefulset-.*\", container=~\"$container\"}",
+          "expr": "kube_pod_container_status_restarts_total{namespace=\"$namespace\", pod=~\"$pod\", container=~\"$container\"}",
           "format": "time_series",
           "intervalFactor": 1,
           "legendFormat": "Restarts [$statefulset / {{pod}} / {{ container}} ]",
@@ -568,7 +648,7 @@
         "x": 0,
         "y": 22
       },
-      "id": null,
+      "id": 7,
       "panels": [],
       "title": "Application's Resources",
       "type": "row"
@@ -587,7 +667,7 @@
         "x": 0,
         "y": 23
       },
-      "id": null,
+      "id": 8,
       "legend": {
         "alignAsTable": true,
         "avg": false,
@@ -616,12 +696,12 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "sum (container_memory_usage_bytes{namespace=\"$namespace\", pod_name=~\"$statefulset-.*\", container_name!=\"\", container_name!=\"POD\", container_name=~\"$container\"}) by (pod_name)",
+          "expr": "sum (container_memory_usage_bytes{namespace=\"$namespace\", pod_name=~\"$pod\", container_name!=\"\", container_name!=\"POD\", container_name=~\"$container\"}) by (pod_name)",
           "legendFormat": "Used: {{pod_name}} / {{$container}}",
           "refId": "A"
         },
         {
-          "expr": "sum (kube_pod_container_resource_requests_memory_bytes{ namespace=\"$namespace\", pod=~\"$statefulset-.*\", container=~\"$container\"}) by (pod)",
+          "expr": "sum (kube_pod_container_resource_requests_memory_bytes{ namespace=\"$namespace\", pod=~\"$pod\", container=~\"$container\"}) by (pod)",
           "hide": false,
           "legendFormat": "Requested: {{pod}} / {{$container}}",
           "refId": "B"
@@ -682,7 +762,7 @@
         "x": 12,
         "y": 28
       },
-      "id": null,
+      "id": 9,
       "legend": {
         "alignAsTable": true,
         "avg": false,
@@ -711,12 +791,12 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "sum(rate(container_cpu_usage_seconds_total{namespace=\"$namespace\", pod_name=~\"$statefulset-.*\", container_name=~\"$container\"}[2m])) by (pod_name)",
+          "expr": "sum(rate(container_cpu_usage_seconds_total{namespace=\"$namespace\", pod_name=~\"$pod\", container_name=~\"$container\"}[2m])) by (pod_name)",
           "legendFormat": "Used: {{pod_name}} / {{$container}}",
           "refId": "A"
         },
         {
-          "expr": "sum(kube_pod_container_resource_requests_cpu_cores{namespace=\"$namespace\", pod=~\"$statefulset-.*\", container_name=~\"$container\"}) by (pod)",
+          "expr": "sum(kube_pod_container_resource_requests_cpu_cores{namespace=\"$namespace\", pod=~\"$pod\", container_name=~\"$container\"}) by (pod)",
           "legendFormat": "Requested: {{pod}} / {{$container}}",
           "refId": "B"
         }
@@ -776,7 +856,7 @@
         "x": 0,
         "y": 36
       },
-      "id": null,
+      "id": 10,
       "legend": {
         "alignAsTable": true,
         "avg": false,
@@ -804,7 +884,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "irate(container_network_transmit_bytes_total{namespace=\"$namespace\", pod_name=~\"$statefulset-.*\"}[2m])",
+          "expr": "irate(container_network_transmit_bytes_total{namespace=\"$namespace\", pod_name=~\"$pod\"}[2m])",
           "legendFormat": "{{interface}} : [{{pod_name}}]",
           "refId": "A"
         }
@@ -864,7 +944,7 @@
         "x": 12,
         "y": 31
       },
-      "id": null,
+      "id": 11,
       "legend": {
         "alignAsTable": true,
         "avg": false,
@@ -892,7 +972,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "irate(container_network_receive_bytes_total{namespace=\"$namespace\", pod_name=~\"$statefulset-.*\"}[2m])",
+          "expr": "irate(container_network_receive_bytes_total{namespace=\"$namespace\", pod_name=~\"$pod\"}[2m])",
           "legendFormat": "{{interface}} : [{{pod_name}}]",
           "refId": "A"
         }

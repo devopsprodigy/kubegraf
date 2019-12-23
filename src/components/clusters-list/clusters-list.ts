@@ -37,7 +37,7 @@ export class ClustersList {
     getClusters() {
         const list = this.datasourceSrv.getAll();
         const type = 'devopsprodidy-kubegraf-datasource';
-
+        console.log(list);
         if (Array.isArray(list)) {
             this.clusters = list.filter(item => {
                 return item.type === type
@@ -69,7 +69,10 @@ export class ClustersList {
     confirmDelete(id){
         this.backendSrv.delete('/api/datasources/' + id)
             .then(() => {
-                this.getClusters();
-            })
+                this.clusters = this.clusters.filter(item => {
+                    return item.id !== id
+                });
+                // this.getClusters();
+            });
     }
 }

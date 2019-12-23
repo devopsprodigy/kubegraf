@@ -17,4 +17,5 @@ export declare class NodesOverview extends K8sPage {
     nodeClick(event: any, node: any): void;
     __showAll(): void;
     __hideAll(): void;
+    toggleNodes(node: boolean | any): void;
 }

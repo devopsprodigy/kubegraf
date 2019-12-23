@@ -1,27 +1,29 @@
-System.register(["../../common/constants", "../../common/helpers"], function(exports_1) {
-    var constants_1, helpers_1;
+System.register(["app/core/app_events", "../../common/constants"], function(exports_1) {
+    var app_events_1, constants_1;
     var ClusterConfig;
     return {
         setters:[
+            function (app_events_1_1) {
+                app_events_1 = app_events_1_1;
+            },
             function (constants_1_1) {
                 constants_1 = constants_1_1;
-            },
-            function (helpers_1_1) {
-                helpers_1 = helpers_1_1;
             }],
         execute: function() {
             ClusterConfig = (function () {
-                function ClusterConfig($scope, $injector, backendSrv, alertSrv, $q, $location, $window) {
+                function ClusterConfig($scope, $injector, backendSrv, datasourceSrv, alertSrv, $q, $location, $window) {
                     this.backendSrv = backendSrv;
+                    this.datasourceSrv = datasourceSrv;
                     this.alertSrv = alertSrv;
                     this.$q = $q;
                     this.$location = $location;
                     this.$window = $window;
+                    this.retry = 3;
                     this.pageReady = false;
                     this.$scope = $scope;
                     this.busy = false;
                     this.getCluster();
-                    this.version = helpers_1.__getGrafanaVersion($window);
+                    this.setGrafanaVersion($window);
                 }
                 ClusterConfig.prototype.getCluster = function () {
                     var _this = this;
@@ -66,6 +68,17 @@ System.register(["../../common/constants", "../../common/helpers"], function(exp
                         }
                     });
                 };
+                ClusterConfig.prototype.setGrafanaVersion = function (window) {
+                    var _v;
+                    try {
+                        _v = window.grafanaBootData.settings.buildInfo.version.split('.')[0];
+                    }
+                    catch (e) {
+                        console.error(e);
+                        _v = 5;
+                    }
+                    this.version = _v;
+                };
                 ClusterConfig.prototype.saveCluster = function () {
                     var _this = this;
                     if (this.busy)
@@ -74,8 +87,12 @@ System.register(["../../common/constants", "../../common/helpers"], function(exp
                     this.cluster.jsonData.cluster_url = this.cluster.url;
                     return this.saveDatasource()
                         .then(function (res) {
-                        window.location.href = 'plugins/devopsprodigy-kubegraf-app/page/clusters';
-                    }, function (err) {
+                        if (res && res.datasource) {
+                            _this.cluster = res.datasource;
+                            _this.testCluster();
+                        }
+                    })
+                        .finally(function () {
                         _this.busy = false;
                     });
                 };
@@ -85,12 +102,7 @@ System.register(["../../common/constants", "../../common/helpers"], function(exp
                     return this.$scope.clusterForm.$valid;
                 };
                 ClusterConfig.prototype.saveDatasource = function () {
-                    if (!this.cluster.id) {
-                        return this.createDatasource();
-                    }
-                    else {
-                        return this.updateDatasource();
-                    }
+                    return this.cluster.id ? this.updateDatasource() : this.createDatasource();
                 };
                 ClusterConfig.prototype.createDatasource = function () {
                     var _this = this;
@@ -119,6 +131,30 @@ System.register(["../../common/constants", "../../common/helpers"], function(exp
                         if (!(result.jsonData.refresh_pods_rate))
                             result.jsonData.refresh_pods_rate = '60';
                         _this.cluster = result;
+                    });
+                };
+                ClusterConfig.prototype.testCluster = function () {
+                    var url = '/api/v1/namespaces';
+                    var _url = '/api/datasources/proxy/' + this.cluster.id;
+                    if (this.cluster.jsonData.access_via_token) {
+                        _url += '/__proxy';
+                    }
+                    _url += url;
+                    this.backendSrv.datasourceRequest({
+                        url: _url,
+                        method: "GET",
+                        headers: { "Content-Type": 'application/json' },
+                    })
+                        .then(function (response) {
+                        if (response && response.status === 200) {
+                            window.location.href = 'plugins/devopsprodigy-kubegraf-app/page/clusters';
+                        }
+                        app_events_1.default.emit('alert-error', ['Unhandled error']);
+                    }, function (error) {
+                        if (error && error.status && error.statusText) {
+                            app_events_1.default.emit('alert-error', [error.status + ' ' + error.statusText]);
+                        }
+                        app_events_1.default.emit('alert-error', ['Unhandled error']);
                     });
                 };
                 ClusterConfig.templateUrl = 'components/cluster-config/cluster-config.html';

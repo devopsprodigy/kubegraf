@@ -1,3 +1,4 @@
+import appEvents from "app/core/app_events";
 import {TYPE_PROMETHEUS} from "../../common/constants";
 import { __getGrafanaVersion } from "../../common/helpers";
 
@@ -8,10 +9,11 @@ export class ClusterConfig{
     $scope: any;
     pageReady: boolean;
     version: number;
+    retry = 3;
 
     static templateUrl = 'components/cluster-config/cluster-config.html';
 
-    constructor($scope, $injector, private backendSrv, private alertSrv, private $q, private $location, private $window){
+    constructor($scope, $injector, private backendSrv, private datasourceSrv, private alertSrv, private $q, private $location, private $window){
         this.pageReady = false;
         this.$scope = $scope;
         this.busy = false;
@@ -19,17 +21,16 @@ export class ClusterConfig{
         this.version = __getGrafanaVersion($window);
     }
 
-
     getCluster(){
         let promises = [];
-        if ("clusterId" in this.$location.search()){
+        if ("clusterId" in this.$location.search()) {
             promises.push(
                 this.getDatasource(this.$location.search().clusterId)
-                .then(() => {
-                    document.title = 'DevOpsProdigy KubeGraf | Edit cluster';
-                })
+                    .then(() => {
+                        document.title = 'DevOpsProdigy KubeGraf | Edit cluster';
+                    })
             );
-        }else{
+        } else {
             this.cluster = {
                 type: 'devopsprodidy-kubegraf-datasource',
                 access: 'proxy',
@@ -38,11 +39,9 @@ export class ClusterConfig{
                     access_via_token: false,
                     prom_name: ''
                 }
-
             };
             document.title = 'DevOpsProdigy KubeGraf | New cluster';
         }
-
 
         this.$q.all(promises)
             .then(() => {
@@ -71,10 +70,15 @@ export class ClusterConfig{
         if(this.busy) return;
         this.busy = true;
         this.cluster.jsonData.cluster_url = this.cluster.url;
+
         return this.saveDatasource()
             .then((res) => {
-                window.location.href = 'plugins/devopsprodigy-kubegraf-app/page/clusters';
-            },err => {
+                if(res && res.datasource) {
+                    this.cluster = res.datasource;
+                    this.testCluster()
+                }
+            })
+            .finally(() => {
                 this.busy = false;
             });
     }
@@ -86,11 +90,7 @@ export class ClusterConfig{
     }
 
     saveDatasource() {
-        if(!this.cluster.id){
-            return this.createDatasource();
-        }else{
-            return this.updateDatasource();
-        }
+        return this.cluster.id ? this.updateDatasource() : this.createDatasource();
     }
 
     createDatasource(){
@@ -121,6 +121,31 @@ export class ClusterConfig{
                     result.jsonData.refresh_pods_rate = '60';
 
                 this.cluster = result;
+            })
+    }
+
+    testCluster() {
+        let url = '/api/v1/namespaces';
+        let _url = '/api/datasources/proxy/' + this.cluster.id;
+        if(this.cluster.jsonData.access_via_token) {
+            _url += '/__proxy';
+        }
+        _url += url;
+        this.backendSrv.datasourceRequest({
+            url: _url,
+            method: "GET",
+            headers: {"Content-Type": 'application/json'},
+        })
+            .then(response => {
+                if (response && response.status === 200) {
+                    window.location.href = 'plugins/devopsprodigy-kubegraf-app/page/clusters';
+                }
+                appEvents.emit('alert-error', ['Unhandled error']);
+            }, error => {
+                if (error && error.status && error.statusText) {
+                    appEvents.emit('alert-error', [error.status + ' ' + error.statusText]);
+                }
+                appEvents.emit('alert-error', ['Unhandled error']);
             })
     }
 }

@@ -67,23 +67,11 @@ export class ClusterOverview extends K8sPage{
     }
 
     __showAll(){
-        store.delete('namespaceStore');
-        let namespaceStore = [];
-        this.namespaceMap.map(ns => {
-           ns.open = true;
-           namespaceStore.push({name: ns.name, open: ns.open});
-        });
-        store.setObject('namespaceStore', namespaceStore);
+        this.toggleNamespace(true);
     }
 
     __hideAll(){
-        store.delete('namespaceStore');
-        let namespaceStore = [];
-        this.namespaceMap.map(ns => {
-            ns.open = false;
-            namespaceStore.push({name: ns.name, open: ns.open});
-        });
-        store.setObject('namespaceStore', namespaceStore);
+        this.toggleNamespace(false);
     }
 
     namespaceClick(event, namespace) {
@@ -91,18 +79,20 @@ export class ClusterOverview extends K8sPage{
             if(namespace.open) {
                 event.preventDefault();
             }
-
-            store.delete('namespaceStore');
-            let namespaceStore = [];
-            this.namespaceMap.map(ns => {
-                ns.open = namespace.name === ns.name;
-                namespaceStore.push({name: ns.name, open: ns.open});
-            });
-            store.setObject('namespaceStore', namespaceStore);
-
+            this.toggleNamespace(namespace);
         } else {
             namespace.toggle();
         }
+    }
+
+    toggleNamespace(namespace: boolean|any) {
+        store.delete('namespaceStore');
+        let namespaceStore = [];
+        this.namespaceMap.map(ns => {
+            ns.open = namespace === true || namespace === false ? namespace : namespace.name === ns.name;
+            namespaceStore.push({name: ns.name, open: ns.open});
+        });
+        store.setObject('namespaceStore', namespaceStore);
     }
 
     updatePods(newPods): void {

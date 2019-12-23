@@ -66,39 +66,30 @@ System.register(["../../common/store", "../k8s-page", "../../common/helpers"], f
                     this.hideAllWarningPods = true;
                 }
                 ClusterOverview.prototype.__showAll = function () {
-                    store_1.default.delete('namespaceStore');
-                    var namespaceStore = [];
-                    this.namespaceMap.map(function (ns) {
-                        ns.open = true;
-                        namespaceStore.push({ name: ns.name, open: ns.open });
-                    });
-                    store_1.default.setObject('namespaceStore', namespaceStore);
+                    this.toggleNamespace(true);
                 };
                 ClusterOverview.prototype.__hideAll = function () {
-                    store_1.default.delete('namespaceStore');
-                    var namespaceStore = [];
-                    this.namespaceMap.map(function (ns) {
-                        ns.open = false;
-                        namespaceStore.push({ name: ns.name, open: ns.open });
-                    });
-                    store_1.default.setObject('namespaceStore', namespaceStore);
+                    this.toggleNamespace(false);
                 };
                 ClusterOverview.prototype.namespaceClick = function (event, namespace) {
                     if (event.ctrlKey) {
                         if (namespace.open) {
                             event.preventDefault();
                         }
-                        store_1.default.delete('namespaceStore');
-                        var namespaceStore = [];
-                        this.namespaceMap.map(function (ns) {
-                            ns.open = namespace.name === ns.name;
-                            namespaceStore.push({ name: ns.name, open: ns.open });
-                        });
-                        store_1.default.setObject('namespaceStore', namespaceStore);
+                        this.toggleNamespace(namespace);
                     }
                     else {
                         namespace.toggle();
                     }
+                };
+                ClusterOverview.prototype.toggleNamespace = function (namespace) {
+                    store_1.default.delete('namespaceStore');
+                    var namespaceStore = [];
+                    this.namespaceMap.map(function (ns) {
+                        ns.open = namespace === true || namespace === false ? namespace : namespace.name === ns.name;
+                        namespaceStore.push({ name: ns.name, open: ns.open });
+                    });
+                    store_1.default.setObject('namespaceStore', namespaceStore);
                 };
                 ClusterOverview.prototype.updatePods = function (newPods) {
                     var _this = this;

@@ -7,17 +7,21 @@
 </div>
 
 <div ng-if="ctrl.isReady">
-    <div class="row" ng-if="ctrl.isAdmin">
-        <div class="col-xs-6">
+    <div class="row">
+        <div class="col-xs-6" ng-if="ctrl.isAdmin">
             <a class="btn btn-success" href="plugins/devopsprodigy-kubegraf-app/page/cluster-config">
                 <i class="fa fa-fw fa-plus"></i>&nbsp;
                 Add New Cluster
             </a>
         </div>
-        <div class="col-xs-6">
+        <div ng-class="ctrl.isAdmin ? 'col-xs-6' : 'col-xs-12'">
             <a class="btn btn-secondary timepicker-rangestring pull-right" ng-href="{{ctrl.version < 6 ? 'plugins/devopsprodigy-kubegraf-app/edit' : 'plugins/devopsprodigy-kubegraf-app/'}}">
                 <i class="fa fa-fw fa-cog"/>&nbsp;
                 Plugin Config
+            </a>
+            <a class="btn btn-secondary timepicker-rangestring pull-right" style="margin-right: 15px" href="plugins/devopsprodigy-kubegraf-app/?page=dashboards">
+                <i class="fa fa-fw fa-tachometer"/>&nbsp;
+                Dashboards
             </a>
         </div>
     </div>

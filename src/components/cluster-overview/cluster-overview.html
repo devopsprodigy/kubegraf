@@ -1,12 +1,12 @@
 <section ng-if="ctrl.pageReady" class="page-container--override">
     <div class="page-header">
         <div class="row">
-            <nav class="gf-tabs col-md-9">
+            <nav class="gf-tabs col-lg-6 col-md-12">
                 <div class="gf-tabs-item"><a class="gf-tabs-link" target="_self" href="plugins/devopsprodigy-kubegraf-app/page/cluster-status?clusterName={{ctrl.cluster.name}}">Cluster Status</a></div>
                 <div class="gf-tabs-item"><a class="gf-tabs-link active" target="_self" href="plugins/devopsprodigy-kubegraf-app/page/cluster-overview?clusterName={{ctrl.cluster.name}}">Applications Overview</a></div>
                 <div class="gf-tabs-item"><a class="gf-tabs-link" target="_self" href="plugins/devopsprodigy-kubegraf-app/page/nodes-overview?clusterName={{ctrl.cluster.name}}">Nodes Overview</a></div>
             </nav>
-            <div class="col-md-3"  ng-if="ctrl.isAdmin">
+            <div class="header-btn col-lg-6 col-md-12" ng-if="ctrl.isAdmin">
                 <a class="btn btn-secondary timepicker-rangestring" target="_self" ng-href="{{ctrl.version < 6 ? 'plugins/devopsprodigy-kubegraf-app/edit' : 'plugins/devopsprodigy-kubegraf-app/'}}"">
                     <i class="fa fa-fw fa-cog override--fa"/>&nbsp;
                     Plugin Config
@@ -14,6 +14,10 @@
                 <a class="btn btn-secondary" href="plugins/devopsprodigy-kubegraf-app/page/cluster-config?clusterId={{ctrl.cluster.id}}" target="_self">
                     <i class="fa fa-fw fa-cog override--fa"></i>&nbsp;
                     Edit
+                </a>
+                <a class="btn btn-secondary timepicker-rangestring" href="plugins/devopsprodigy-kubegraf-app/?page=dashboards">
+                    <i class="fa fa-fw fa-tachometer"></i>&nbsp;
+                    Dashboards
                 </a>
             </div>
         </div>
