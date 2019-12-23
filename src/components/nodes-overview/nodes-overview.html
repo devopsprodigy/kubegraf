@@ -112,15 +112,15 @@
                                     </tr>
                                     <tr>
                                         <td>Allocatable</td>
-                                        <td ng-bind="node.data.status.allocatable.pods" ng-style="{'background-color': node.rowPodsColor}" ng-class="{'pulse' : node.podsIndicate}"/>
-                                        <td ng-bind="node.cpuAllocatableFormatted" ng-style="{'background-color': node.rowCpuColor}" ng-class="{'pulse' : node.cpuIndicate}"></td>
-                                        <td ng-bind="node.memoryAllocatableFormatted" ng-style="{'background-color': node.rowMemoryColor}" ng-class="{'pulse' : node.memoryIndicate}"></td>
+                                        <td ng-bind="node.data.status.allocatable.pods"></td>
+                                        <td ng-bind="node.cpuAllocatableFormatted"></td>
+                                        <td ng-bind="node.memoryAllocatableFormatted"></td>
                                     </tr>
                                     <tr>
                                         <td>Capacity</td>
-                                        <td ng-bind="node.data.status.capacity.pods" ng-style="{'background-color': node.rowPodsColor}" ng-class="{'pulse' : node.podsIndicate}"/>
-                                        <td ng-bind="node.data.status.capacity.cpu" ng-style="{'background-color': node.rowCpuColor}" ng-class="{'pulse' : node.cpuIndicate}"></td>
-                                        <td ng-bind="node.memoryCapacityFormatted" ng-style="{'background-color': node.rowMemoryColor}" ng-class="{'pulse' : node.memoryIndicate}"></td>
+                                        <td ng-bind="node.data.status.capacity.pods"></td>
+                                        <td ng-bind="node.data.status.capacity.cpu"></td>
+                                        <td ng-bind="node.memoryCapacityFormatted"></td>
                                     </tr>
 
                                 </table>
