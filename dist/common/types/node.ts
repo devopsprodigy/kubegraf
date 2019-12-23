@@ -94,12 +94,28 @@ export class Node extends  BaseModel{
         return this.__getStatus(this.metrics.cpuUsed, cpu);
     }
 
+    get cpuStatusRequested(){
+        let cpu = this.data.status.allocatable.cpu;
+        if(cpu.indexOf('m') > -1){
+            cpu = parseInt(cpu)/1000;
+        }
+        return this.__getStatusRequested(this.metrics.cpuRequested, cpu);
+    }
+
     get memoryStatus(){
         return this.__getStatus(this.metrics.memoryUsed, this.__getBytes(this.data.status.allocatable.memory));
     }
 
+    get memoryStatusRequested(){
+        return this.__getStatusRequested(this.metrics.memoryRequested, this.__getBytes(this.data.status.allocatable.memory));
+    }
+
     get podsStatus(){
         return this.__getStatus(this.metrics.podsCount, this.data.status.allocatable.pods);
+    }
+
+    get podsStatusRequested(){
+        return this.__getStatusRequested(this.metrics.podsCount, this.data.status.allocatable.pods);
     }
 
     get hostIp(){
@@ -129,11 +145,10 @@ export class Node extends  BaseModel{
     }
 
     get memoryRequestedFormatted(){
-        return __convertToGB(this.metrics.memoryRequested);
+        return __convertToGB(this.metrics.memoryRequested) +  ' (' +  __percentUsed(this.metrics.memoryRequested, this.__getBytes(this.data.status.allocatable.memory)) + ')';
     }
 
     get cpuUsedFormatted(){
-
         let cpu = this.data.status.allocatable.cpu;
         if(cpu.indexOf('m') > -1){
             cpu = parseInt(cpu)/1000;
@@ -143,7 +158,12 @@ export class Node extends  BaseModel{
     }
 
     get cpuRequestedFormatted(){
-        return __roundCpu(this.metrics.cpuRequested);
+        let cpu = this.data.status.allocatable.cpu;
+        if(cpu.indexOf('m') > -1){
+            cpu = parseInt(cpu)/1000;
+        }
+
+        return __roundCpu(this.metrics.cpuRequested) + ' (' + __percentUsed(this.metrics.cpuRequested, cpu) + ')';
     }
 
     get podsUsedFormatted() {
@@ -151,7 +171,7 @@ export class Node extends  BaseModel{
     }
 
     get podsRequestedFormatted(){
-        return this.metrics.podsCount;
+        return this.metrics.podsCount + ' ('+ __percentUsed(this.metrics.podsCount, this.data.status.allocatable.pods) + ')';
     }
 
     /*percent used*/
@@ -185,12 +205,24 @@ export class Node extends  BaseModel{
         return this.__getColor(this.cpuStatus);
     }
 
+    get rowCpuRequestedColor(){
+        return this.__getColor(this.cpuStatusRequested);
+    }
+
     get rowMemoryColor(){
         return this.__getColor(this.memoryStatus);
     }
 
+    get rowMemoryRequestedColor(){
+        return this.__getColor(this.memoryStatusRequested);
+    }
+
     get rowPodsColor(){
         return this.__getColor(this.podsStatus);
+    }
+
+    get rowPodsRequestedColor(){
+        return this.__getColor(this.podsStatusRequested);
     }
 
     parseMetrics(cpuReq, memoryReq, pods, cpuUsed, memoryUsed){
@@ -270,6 +302,24 @@ export class Node extends  BaseModel{
             return WARNING;
         }
         else if(diff > 0.8){
+            return ERROR;
+        }
+        else {
+            return;
+        }
+    }
+
+    __getStatusRequested(requested, allocatable){
+
+        let diff = requested/allocatable;
+
+        if(diff <= 0.9){
+            return SUCCESS;
+        }
+        else if(diff > 0.9 && diff <= 1){
+            return WARNING;
+        }
+        else if(diff > 1){
             return ERROR;
         }
         else {

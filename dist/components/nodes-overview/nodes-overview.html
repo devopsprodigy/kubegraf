@@ -98,14 +98,15 @@
                                     </tr>
                                     <tr>
                                         <td>Used</td>
-                                        <td ng-bind="node.podsUsedFormatted" ng-style="{'background-color': node.rowPodsColor}" ng-class="{'pulse' : node.podsIndicate}"/>
-                                        <td ng-bind="node.cpuUsedFormatted" ng-style="{'background-color': node.rowCpuColor}" ng-class="{'pulse' : node.cpuIndicate}"/>
-                                        <td ng-bind="node.memoryUsedFormatted" ng-style="{'background-color': node.rowMemoryColor}" ng-class="{'pulse' : node.memoryIndicate}"/>
+                                        <td ng-bind="node.podsUsedFormatted" ng-style="{'background-color': node.rowPodsColor}" ng-class="{'pulse': node.podsIndicate}"></td>
+                                        <td ng-bind="node.cpuUsedFormatted" ng-style="{'background-color': node.rowCpuColor}" ng-class="{'pulse': node.cpuIndicate}"></td>
+                                        <td ng-bind="node.memoryUsedFormatted" ng-style="{'background-color': node.rowMemoryColor}" ng-class="{'pulse': node.memoryIndicate}"></td>
                                     </tr>
+                                    <tr>
                                         <td>Requested</td>
-                                        <td ng-bind="node.podsRequestedFormatted" ng-style="{'background-color': node.rowPodsColor}" ng-class="{'pulse' : node.podsIndicate}"/>
-                                        <td ng-bind="node.cpuRequestedFormatted" ng-style="{'background-color': node.rowCpuColor}" ng-class="{'pulse' : node.cpuIndicate}"/>
-                                        <td ng-bind="node.memoryRequestedFormatted" ng-style="{'background-color': node.rowMemoryColor}" ng-class="{'pulse' : node.memoryIndicate}"/>
+                                        <td ng-bind="node.podsRequestedFormatted" ng-style="{'background-color': node.rowPodsRequestedColor}" ng-class="{'pulse': node.podsIndicate}"></td>
+                                        <td ng-bind="node.cpuRequestedFormatted" ng-style="{'background-color': node.rowCpuRequestedColor}" ng-class="{'pulse': node.cpuIndicate}"></td>
+                                        <td ng-bind="node.memoryRequestedFormatted" ng-style="{'background-color': node.rowMemoryRequestedColor}" ng-class="{'pulse': node.memoryIndicate}"></td>
                                     </tr>
                                     <tr>
                                         <td>Allocatable</td>

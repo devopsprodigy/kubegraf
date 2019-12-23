@@ -106,6 +106,17 @@ System.register(["../helpers", '../../common/store', '../../common/types/traits/
                     enumerable: true,
                     configurable: true
                 });
+                Object.defineProperty(Node.prototype, "cpuStatusRequested", {
+                    get: function () {
+                        var cpu = this.data.status.allocatable.cpu;
+                        if (cpu.indexOf('m') > -1) {
+                            cpu = parseInt(cpu) / 1000;
+                        }
+                        return this.__getStatusRequested(this.metrics.cpuRequested, cpu);
+                    },
+                    enumerable: true,
+                    configurable: true
+                });
                 Object.defineProperty(Node.prototype, "memoryStatus", {
                     get: function () {
                         return this.__getStatus(this.metrics.memoryUsed, this.__getBytes(this.data.status.allocatable.memory));
@@ -113,9 +124,23 @@ System.register(["../helpers", '../../common/store', '../../common/types/traits/
                     enumerable: true,
                     configurable: true
                 });
+                Object.defineProperty(Node.prototype, "memoryStatusRequested", {
+                    get: function () {
+                        return this.__getStatusRequested(this.metrics.memoryRequested, this.__getBytes(this.data.status.allocatable.memory));
+                    },
+                    enumerable: true,
+                    configurable: true
+                });
                 Object.defineProperty(Node.prototype, "podsStatus", {
                     get: function () {
                         return this.__getStatus(this.metrics.podsCount, this.data.status.allocatable.pods);
+                    },
+                    enumerable: true,
+                    configurable: true
+                });
+                Object.defineProperty(Node.prototype, "podsStatusRequested", {
+                    get: function () {
+                        return this.__getStatusRequested(this.metrics.podsCount, this.data.status.allocatable.pods);
                     },
                     enumerable: true,
                     configurable: true
@@ -162,7 +187,7 @@ System.register(["../helpers", '../../common/store', '../../common/types/traits/
                 });
                 Object.defineProperty(Node.prototype, "memoryRequestedFormatted", {
                     get: function () {
-                        return helpers_1.__convertToGB(this.metrics.memoryRequested);
+                        return helpers_1.__convertToGB(this.metrics.memoryRequested) + ' (' + helpers_1.__percentUsed(this.metrics.memoryRequested, this.__getBytes(this.data.status.allocatable.memory)) + ')';
                     },
                     enumerable: true,
                     configurable: true
@@ -180,7 +205,11 @@ System.register(["../helpers", '../../common/store', '../../common/types/traits/
                 });
                 Object.defineProperty(Node.prototype, "cpuRequestedFormatted", {
                     get: function () {
-                        return helpers_1.__roundCpu(this.metrics.cpuRequested);
+                        var cpu = this.data.status.allocatable.cpu;
+                        if (cpu.indexOf('m') > -1) {
+                            cpu = parseInt(cpu) / 1000;
+                        }
+                        return helpers_1.__roundCpu(this.metrics.cpuRequested) + ' (' + helpers_1.__percentUsed(this.metrics.cpuRequested, cpu) + ')';
                     },
                     enumerable: true,
                     configurable: true
@@ -194,7 +223,7 @@ System.register(["../helpers", '../../common/store', '../../common/types/traits/
                 });
                 Object.defineProperty(Node.prototype, "podsRequestedFormatted", {
                     get: function () {
-                        return this.metrics.podsCount;
+                        return this.metrics.podsCount + ' (' + helpers_1.__percentUsed(this.metrics.podsCount, this.data.status.allocatable.pods) + ')';
                     },
                     enumerable: true,
                     configurable: true
@@ -239,6 +268,13 @@ System.register(["../helpers", '../../common/store', '../../common/types/traits/
                     enumerable: true,
                     configurable: true
                 });
+                Object.defineProperty(Node.prototype, "rowCpuRequestedColor", {
+                    get: function () {
+                        return this.__getColor(this.cpuStatusRequested);
+                    },
+                    enumerable: true,
+                    configurable: true
+                });
                 Object.defineProperty(Node.prototype, "rowMemoryColor", {
                     get: function () {
                         return this.__getColor(this.memoryStatus);
@@ -246,9 +282,23 @@ System.register(["../helpers", '../../common/store', '../../common/types/traits/
                     enumerable: true,
                     configurable: true
                 });
+                Object.defineProperty(Node.prototype, "rowMemoryRequestedColor", {
+                    get: function () {
+                        return this.__getColor(this.memoryStatusRequested);
+                    },
+                    enumerable: true,
+                    configurable: true
+                });
                 Object.defineProperty(Node.prototype, "rowPodsColor", {
                     get: function () {
                         return this.__getColor(this.podsStatus);
+                    },
+                    enumerable: true,
+                    configurable: true
+                });
+                Object.defineProperty(Node.prototype, "rowPodsRequestedColor", {
+                    get: function () {
+                        return this.__getColor(this.podsStatusRequested);
                     },
                     enumerable: true,
                     configurable: true
@@ -324,6 +374,21 @@ System.register(["../helpers", '../../common/store', '../../common/types/traits/
                         return constants_1.WARNING;
                     }
                     else if (diff > 0.8) {
+                        return constants_1.ERROR;
+                    }
+                    else {
+                        return;
+                    }
+                };
+                Node.prototype.__getStatusRequested = function (requested, allocatable) {
+                    var diff = requested / allocatable;
+                    if (diff <= 0.9) {
+                        return constants_1.SUCCESS;
+                    }
+                    else if (diff > 0.9 && diff <= 1) {
+                        return constants_1.WARNING;
+                    }
+                    else if (diff > 1) {
                         return constants_1.ERROR;
                     }
                     else {
