@@ -105,7 +105,7 @@
                                 <span class="override--nodeTable_status" ng-style="{'background' : node.rowCpuColor}"></span>
                             </td>
                             <td>Node:
-                                <span ng-bind="ctrl.getAlertsNodesByCPU()[0].name" />
+                                <span ng-bind="node.name" />
                                 <span>
                                     <a href="{{ctrl.getNodeDashboardLink(node)}}" target="_blank" style="color: #fff">
                                         <i class="fa fa-eye"/>
@@ -120,7 +120,7 @@
                                 <span class="override--nodeTable_status" ng-style="{'background' : node.rowMemoryColor}"></span>
                             </td>
                             <td>Node:
-                                <span ng-bind="ctrl.getAlertsNodesByMemory()[0].name" />
+                                <span ng-bind="node.name" />
                                 <span>
                                     <a href="{{ctrl.getNodeDashboardLink(node)}}" target="_blank" style="color: #fff">
                                         <i class="fa fa-eye"/>
@@ -135,7 +135,7 @@
                                 <span class="override--nodeTable_status" ng-style="{'background' : node.rowPodsColor}"></span>
                             </td>
                             <td>Node:
-                                <span ng-bind="ctrl.getAlertsNodesByPods()[0].name" />
+                                <span ng-bind="node.name" />
                                 <span>
                                     <a href="{{ctrl.getNodeDashboardLink(node)}}" target="_blank" style="color: #fff">
                                         <i class="fa fa-eye"/>
