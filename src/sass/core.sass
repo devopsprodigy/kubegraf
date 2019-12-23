@@ -151,10 +151,20 @@ label.toggle-checkbox
     height: 18px
     background: url(/public/img/checkbox.png) 0 0 no-repeat
 
-
-
 @keyframes pulse
   @for $i from 0 through 100
     #{$i}%
       opacity: calc(1 - #{$i}/100)
 
+@media (max-width: 940px)
+  .header-btn
+    position: relative
+    top: 2px
+
+  .page-header .btn
+    float: initial
+    margin-left: 0
+    margin-right: 15px
+
+.explore-toolbar-item
+  list-style: inside
