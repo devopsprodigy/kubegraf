@@ -22,7 +22,8 @@ System.register(["app/core/app_events"], function(exports_1) {
                     this.statefulsetsPromise = null;
                     this.accessViaToken = instanceSettings.jsonData.access_via_token;
                 }
-                DOPK8SDatasource.prototype.testDatasource = function () {
+                DOPK8SDatasource.prototype.testDatasource = function (silent) {
+                    if (silent === void 0) { silent = false; }
                     var url = '/api/v1/namespaces';
                     var _url = this.url;
                     if (this.accessViaToken)
@@ -31,16 +32,18 @@ System.register(["app/core/app_events"], function(exports_1) {
                     return this.backendSrv.datasourceRequest({
                         url: _url,
                         method: "GET",
-                        headers: { "Content-Type": 'application/json' }
+                        headers: { "Content-Type": 'application/json' },
+                        silent: silent
                     })
                         .then(function (response) {
-                        if (response.status === 200) {
+                        if (response && response.status === 200) {
                             return { status: "success", message: "Data source is OK", title: "Success" };
                         }
-                        else {
-                            return { status: "error", message: "Data source is not OK", title: "Error" };
-                        }
+                        return { status: "error", message: "Data source is not OK", title: "Error" };
                     }, function (error) {
+                        if (error && error.status && error.statusText) {
+                            return { status: "error", message: error.statusText, title: error.status };
+                        }
                         return { status: "error", message: "Data source is not OK", title: "Error" };
                     });
                 };

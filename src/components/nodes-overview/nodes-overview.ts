@@ -21,13 +21,12 @@ export class NodesOverview extends K8sPage {
         this.pageReady = false;
 
         this.__prepareDS().then(() => {
-            this.getNodeMap().then(() => {
-                this.pageReady = true;
-            })
+            this.getNodeMap()
                 .then(() => {
-                    this.getResourcesMetrics().then(() => {
-
-                    })
+                    this.pageReady = true;
+                })
+                .then(() => {
+                    this.getResourcesMetrics().then(() => {})
                 });
         });
 
@@ -116,34 +115,25 @@ export class NodesOverview extends K8sPage {
             if(node.open) {
                 event.preventDefault();
             }
-
-            store.delete('nodeStore');
-            let nodeStore = [];
-            this.nodesMap.map(ns => {
-                ns.open = node.name === ns.name;
-                nodeStore.push({name: ns.name, open: ns.open});
-            });
-            store.setObject('nodeStore', nodeStore);
+            this.toggleNodes(node);
         } else {
             node.toggle();
         }
     }
 
     __showAll(){
-        store.delete('nodeStore');
-        let nodeStore = [];
-        this.nodesMap.map(ns => {
-            ns.open = true;
-            nodeStore.push({name: ns.name, open: ns.open});
-        });
-        store.setObject('nodeStore', nodeStore);
+        this.toggleNodes(true)
     }
 
     __hideAll(){
+        this.toggleNodes(false)
+    }
+
+    toggleNodes(node: boolean|any) {
         store.delete('nodeStore');
         let nodeStore = [];
         this.nodesMap.map(ns => {
-            ns.open = false;
+            ns.open = node === true || node === false ? node : node.name === ns.name;
             nodeStore.push({name: ns.name, open: ns.open});
         });
         store.setObject('nodeStore', nodeStore);

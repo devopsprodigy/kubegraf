@@ -28,12 +28,12 @@ System.register(["../k8s-page", "../../common/store"], function(exports_1) {
                     this.$timeout = $timeout;
                     this.pageReady = false;
                     this.__prepareDS().then(function () {
-                        _this.getNodeMap().then(function () {
+                        _this.getNodeMap()
+                            .then(function () {
                             _this.pageReady = true;
                         })
                             .then(function () {
-                            _this.getResourcesMetrics().then(function () {
-                            });
+                            _this.getResourcesMetrics().then(function () { });
                         });
                     });
                 }
@@ -113,32 +113,23 @@ System.register(["../k8s-page", "../../common/store"], function(exports_1) {
                         if (node.open) {
                             event.preventDefault();
                         }
-                        store_1.default.delete('nodeStore');
-                        var nodeStore = [];
-                        this.nodesMap.map(function (ns) {
-                            ns.open = node.name === ns.name;
-                            nodeStore.push({ name: ns.name, open: ns.open });
-                        });
-                        store_1.default.setObject('nodeStore', nodeStore);
+                        this.toggleNodes(node);
                     }
                     else {
                         node.toggle();
                     }
                 };
                 NodesOverview.prototype.__showAll = function () {
-                    store_1.default.delete('nodeStore');
-                    var nodeStore = [];
-                    this.nodesMap.map(function (ns) {
-                        ns.open = true;
-                        nodeStore.push({ name: ns.name, open: ns.open });
-                    });
-                    store_1.default.setObject('nodeStore', nodeStore);
+                    this.toggleNodes(true);
                 };
                 NodesOverview.prototype.__hideAll = function () {
+                    this.toggleNodes(false);
+                };
+                NodesOverview.prototype.toggleNodes = function (node) {
                     store_1.default.delete('nodeStore');
                     var nodeStore = [];
                     this.nodesMap.map(function (ns) {
-                        ns.open = false;
+                        ns.open = node === true || node === false ? node : node.name === ns.name;
                         nodeStore.push({ name: ns.name, open: ns.open });
                     });
                     store_1.default.setObject('nodeStore', nodeStore);

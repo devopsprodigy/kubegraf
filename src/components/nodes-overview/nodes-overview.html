@@ -1,12 +1,12 @@
 <section ng-if="ctrl.pageReady" class="page-container--override">
     <div class="page-header">
         <div class="row">
-            <nav class="gf-tabs col-md-9">
+            <nav class="gf-tabs col-lg-6 col-md-12">
                 <div class="gf-tabs-item"><a class="gf-tabs-link" target="_self" href="plugins/devopsprodigy-kubegraf-app/page/cluster-status?clusterName={{ctrl.cluster.name}}">Cluster Status</a></div>
                 <div class="gf-tabs-item"><a class="gf-tabs-link" target="_self" href="plugins/devopsprodigy-kubegraf-app/page/cluster-overview?clusterName={{ctrl.cluster.name}}">Applications Overview</a></div>
                 <div class="gf-tabs-item"><a class="gf-tabs-link active" target="_self" href="plugins/devopsprodigy-kubegraf-app/page/nodes-overview?clusterName={{ctrl.cluster.name}}">Nodes Overview</a></div>
             </nav>
-            <div class="col-md-3"  ng-if="ctrl.isAdmin">
+            <div class="header-btn col-lg-6 col-md-12" ng-if="ctrl.isAdmin">
                 <a class="btn btn-secondary timepicker-rangestring" target="_self" href="plugins/devopsprodigy-kubegraf-app/">
                     <i class="override--fa fa fa-fw fa-cog"/>&nbsp;
                     Plugin Config
@@ -15,15 +15,18 @@
                     <i class="override--fa fa fa-fw fa-cog"></i>&nbsp;
                     Edit
                 </a>
+                <a class="btn btn-secondary timepicker-rangestring" href="plugins/devopsprodigy-kubegraf-app/?page=dashboards">
+                    <i class="fa fa-fw fa-tachometer"></i>&nbsp;
+                    Dashboards
+                </a>
             </div>
         </div>
         <hr>
         <div class="row explore-pane">
-            <div class="col-md-12">
+            <div class="col-md-6">
                 <h1>Overview: <span ng-bind="ctrl.cluster.name"/>. Nodes</h1>
             </div>
-            <div class="col-md-6"></div>
-            <div class="col-md-6">
+            <div class="col-md-6" ng-if="ctrl.pageReady">
                 <div class="row">
                     <span class="col-md-3" ng-repeat="(npKey, node) in ctrl.nodesMap">
                         <input
@@ -37,14 +40,12 @@
                 </div>
                 <div class="row explore-panel" style="justify-content: flex-end; margin-top: 8px">
                     <div class="col-md-12">
-
                         <span class="btn btn-secondary" ng-click="ctrl.__hideAll()" data-toggle="tooltip"
                               title="Use Ctrl+Click to select only one Node" data-placement="bottom" bs-tooltip="">
                             HIDE ALL
                             <span class="gicon gicon-question card-item-label"></span>
                         </span>
                         <span class="btn btn-secondary" ng-click="ctrl.__showAll()">SHOW ALL</span>
-
                     </div>
                 </div>
             </div>
@@ -128,10 +129,10 @@
                         <i class="fa fa-fw fa-eye"/>&nbsp;
                         Open Dashboard
                     </a>
-                    <div class="btn btn-secondary" ng-if="!node.hideNs" ng-click="ctrl.toggleNsList(node)">
+                    <div class="btn btn-danger" ng-if="!node.hideNs" ng-click="ctrl.toggleNsList(node)">
                         Hide Applications
                     </div>
-                    <div class="btn btn-danger" ng-if="node.hideNs" ng-click="ctrl.toggleNsList(node)">
+                    <div class="btn btn-secondary" ng-if="node.hideNs" ng-click="ctrl.toggleNsList(node)">
                         Show Applications
                     </div>
                     <hr>

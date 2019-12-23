@@ -26,7 +26,7 @@ export class DOPK8SDatasource {
         this.accessViaToken = instanceSettings.jsonData.access_via_token;
     }
 
-    testDatasource(){
+    testDatasource(silent: boolean = false){
         let url = '/api/v1/namespaces';
         let _url = this.url;
         if(this.accessViaToken)
@@ -35,15 +35,18 @@ export class DOPK8SDatasource {
         return this.backendSrv.datasourceRequest({
             url: _url,
             method: "GET",
-            headers: {"Content-Type": 'application/json'}
+            headers: {"Content-Type": 'application/json'},
+            silent: silent
         })
             .then(response => {
-                if (response.status === 200) {
+                if (response && response.status === 200) {
                     return {status: "success", message: "Data source is OK", title: "Success"};
-                }else{
-                    return {status: "error", message: "Data source is not OK", title: "Error"};
                 }
+                return {status: "error", message: "Data source is not OK", title: "Error"};
             }, error => {
+                if (error && error.status && error.statusText) {
+                    return {status: "error", message: error.statusText, title: error.status};
+                }
                 return {status: "error", message: "Data source is not OK", title: "Error"};
             })
     }

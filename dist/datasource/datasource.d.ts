@@ -13,7 +13,7 @@ export declare class DOPK8SDatasource {
     podsPromise: any;
     accessViaToken: boolean;
     constructor(instanceSettings: any, backendSrv: any, templateSrv: any);
-    testDatasource(): any;
+    testDatasource(silent?: boolean): any;
     metricFindQuery(query: any): any;
     __get(url: any): any;
     __parseContainers(items: any, queryData: any): any[];
