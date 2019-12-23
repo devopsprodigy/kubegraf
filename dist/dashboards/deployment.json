@@ -106,7 +106,7 @@
         "options": [],
         "query": "prometheus",
         "refresh": 1,
-        "regex": "/$prom_ds/",
+        "regex": "/^$prom_ds$/",
         "type": "datasource"
       },
       {
