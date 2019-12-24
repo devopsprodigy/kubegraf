@@ -36,6 +36,9 @@ System.register(["../helpers", '../../common/store', '../../common/types/traits/
                     this.cpuIndicate = false;
                     this.memoryIndicate = false;
                     this.podsIndicate = false;
+                    this.cpuRequestedIndicate = false;
+                    this.memoryRequestedIndicate = false;
+                    this.podsRequestedIndicate = false;
                     this.nsListState();
                     this.hideNs = store_1.default.getBool(this.name + 'NsList', false);
                 }
@@ -307,29 +310,68 @@ System.register(["../helpers", '../../common/store', '../../common/types/traits/
                     var currentCpuStatus = this.cpuStatus;
                     var currentMemoryStatus = this.memoryStatus;
                     var currentPodsStatus = this.podsStatus;
+                    var currentCpuStatusRequested = this.cpuStatusRequested;
+                    var currentMemoryStatusRequested = this.memoryStatusRequested;
+                    var currentPodsStatusRequested = this.podsStatusRequested;
                     this.metrics.cpuRequested = this.__getLastMetric(cpuReq);
                     this.metrics.memoryRequested = this.__getLastMetric(memoryReq);
                     this.metrics.podsCount = this.__getLastMetricByInstance(pods);
                     this.metrics.cpuUsed = this.__getLastMetricByInstance(cpuUsed);
                     this.metrics.memoryUsed = this.__getLastMetricByInstance(memoryUsed);
                     currentCpuStatus !== undefined && currentCpuStatus != this.cpuStatus && this.setCpuMetricIndicated();
-                    currentCpuStatus !== undefined && currentMemoryStatus != this.memoryStatus && this.setMemoryMetricIndicated();
-                    currentCpuStatus !== undefined && currentPodsStatus != this.podsStatus && this.setPodsMetricIndicated();
+                    currentMemoryStatus !== undefined && currentMemoryStatus != this.memoryStatus && this.setMemoryMetricIndicated();
+                    currentPodsStatus !== undefined && currentPodsStatus != this.podsStatus && this.setPodsMetricIndicated();
+                    currentCpuStatusRequested !== undefined && currentCpuStatusRequested != this.cpuStatusRequested && this.setCpuMetricIndicated(true);
+                    currentMemoryStatusRequested !== undefined && currentMemoryStatusRequested != this.memoryStatusRequested && this.setMemoryMetricIndicated(true);
+                    currentPodsStatusRequested !== undefined && currentPodsStatusRequested != this.podsStatusRequested && this.setPodsMetricIndicated(true);
                 };
-                Node.prototype.setCpuMetricIndicated = function () {
+                Node.prototype.setCpuMetricIndicated = function (requested) {
                     var _this = this;
-                    this.cpuIndicate = true;
-                    setTimeout(function () { _this.cpuIndicate = false; }, 10000);
+                    if (requested === void 0) { requested = false; }
+                    if (requested) {
+                        this.cpuRequestedIndicate = true;
+                        setTimeout(function () {
+                            _this.cpuRequestedIndicate = false;
+                        }, 10000);
+                    }
+                    else {
+                        this.cpuIndicate = true;
+                        setTimeout(function () {
+                            _this.cpuIndicate = false;
+                        }, 10000);
+                    }
                 };
-                Node.prototype.setMemoryMetricIndicated = function () {
+                Node.prototype.setMemoryMetricIndicated = function (requested) {
                     var _this = this;
-                    this.memoryIndicate = true;
-                    setTimeout(function () { _this.memoryIndicate = false; }, 10000);
+                    if (requested === void 0) { requested = false; }
+                    if (requested) {
+                        this.memoryRequestedIndicate = true;
+                        setTimeout(function () {
+                            _this.memoryRequestedIndicate = false;
+                        }, 10000);
+                    }
+                    else {
+                        this.memoryIndicate = true;
+                        setTimeout(function () {
+                            _this.memoryIndicate = false;
+                        }, 10000);
+                    }
                 };
-                Node.prototype.setPodsMetricIndicated = function () {
+                Node.prototype.setPodsMetricIndicated = function (requested) {
                     var _this = this;
-                    this.podsIndicate = true;
-                    setTimeout(function () { _this.podsIndicate = false; }, 10000);
+                    if (requested === void 0) { requested = false; }
+                    if (requested) {
+                        this.podsRequestedIndicate = true;
+                        setTimeout(function () {
+                            _this.podsRequestedIndicate = false;
+                        }, 10000);
+                    }
+                    else {
+                        this.podsIndicate = true;
+                        setTimeout(function () {
+                            _this.podsIndicate = false;
+                        }, 10000);
+                    }
                 };
                 Node.prototype.__getLastMetricByInstance = function (metrics) {
                     var _this = this;

@@ -22,6 +22,9 @@ export class Node extends  BaseModel{
     cpuIndicate: boolean;
     memoryIndicate: boolean;
     podsIndicate: boolean;
+    cpuRequestedIndicate: boolean;
+    memoryRequestedIndicate: boolean;
+    podsRequestedIndicate: boolean;
 
     constructor(data){
         super(data);
@@ -36,6 +39,9 @@ export class Node extends  BaseModel{
         this.cpuIndicate = false;
         this.memoryIndicate = false;
         this.podsIndicate = false;
+        this.cpuRequestedIndicate = false;
+        this.memoryRequestedIndicate = false;
+        this.podsRequestedIndicate = false;
         this.nsListState();
         this.hideNs = store.getBool(this.name + 'NsList', false);
     }
@@ -229,6 +235,9 @@ export class Node extends  BaseModel{
         let currentCpuStatus = this.cpuStatus;
         let currentMemoryStatus = this.memoryStatus;
         let currentPodsStatus = this.podsStatus;
+        let currentCpuStatusRequested = this.cpuStatusRequested;
+        let currentMemoryStatusRequested = this.memoryStatusRequested;
+        let currentPodsStatusRequested = this.podsStatusRequested;
 
         this.metrics.cpuRequested = this.__getLastMetric(cpuReq);
         this.metrics.memoryRequested = this.__getLastMetric(memoryReq);
@@ -237,23 +246,53 @@ export class Node extends  BaseModel{
         this.metrics.memoryUsed = this.__getLastMetricByInstance(memoryUsed);
 
         currentCpuStatus !== undefined && currentCpuStatus != this.cpuStatus && this.setCpuMetricIndicated();
-        currentCpuStatus !== undefined && currentMemoryStatus != this.memoryStatus && this.setMemoryMetricIndicated();
-        currentCpuStatus !== undefined && currentPodsStatus != this.podsStatus && this.setPodsMetricIndicated();
+        currentMemoryStatus !== undefined && currentMemoryStatus != this.memoryStatus && this.setMemoryMetricIndicated();
+        currentPodsStatus !== undefined && currentPodsStatus != this.podsStatus && this.setPodsMetricIndicated();
+        currentCpuStatusRequested !== undefined && currentCpuStatusRequested != this.cpuStatusRequested && this.setCpuMetricIndicated(true);
+        currentMemoryStatusRequested !== undefined && currentMemoryStatusRequested != this.memoryStatusRequested && this.setMemoryMetricIndicated(true);
+        currentPodsStatusRequested !== undefined && currentPodsStatusRequested != this.podsStatusRequested && this.setPodsMetricIndicated(true);
     }
 
-    setCpuMetricIndicated(){
-        this.cpuIndicate = true;
-        setTimeout(() =>{this.cpuIndicate = false}, 10000);
+    setCpuMetricIndicated(requested = false){
+        if (requested) {
+            this.cpuRequestedIndicate = true;
+            setTimeout(() => {
+                this.cpuRequestedIndicate = false
+            }, 10000);
+        } else {
+            this.cpuIndicate = true;
+            setTimeout(() => {
+                this.cpuIndicate = false
+            }, 10000);
+        }
     }
 
-    setMemoryMetricIndicated(){
-        this.memoryIndicate = true;
-        setTimeout(() =>{this.memoryIndicate = false}, 10000);
+    setMemoryMetricIndicated(requested = false){
+        if (requested){
+            this.memoryRequestedIndicate = true;
+            setTimeout(() => {
+                this.memoryRequestedIndicate = false
+            }, 10000);
+        } else {
+            this.memoryIndicate = true;
+            setTimeout(() => {
+                this.memoryIndicate = false
+            }, 10000);
+        }
     }
 
-    setPodsMetricIndicated(){
-        this.podsIndicate = true;
-        setTimeout(() =>{this.podsIndicate = false}, 10000);
+    setPodsMetricIndicated(requested = false){
+        if (requested) {
+            this.podsRequestedIndicate = true;
+            setTimeout(() => {
+                this.podsRequestedIndicate = false
+            }, 10000);
+        } else {
+            this.podsIndicate = true;
+            setTimeout(() => {
+                this.podsIndicate = false
+            }, 10000);
+        }
     }
 
     __getLastMetricByInstance(metrics){

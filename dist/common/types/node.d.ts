@@ -17,6 +17,9 @@ export declare class Node extends BaseModel {
     cpuIndicate: boolean;
     memoryIndicate: boolean;
     podsIndicate: boolean;
+    cpuRequestedIndicate: boolean;
+    memoryRequestedIndicate: boolean;
+    podsRequestedIndicate: boolean;
     constructor(data: any);
     toggle(): void;
     nsListState(): any;
@@ -49,9 +52,9 @@ export declare class Node extends BaseModel {
     rowPodsColor: string;
     rowPodsRequestedColor: string;
     parseMetrics(cpuReq: any, memoryReq: any, pods: any, cpuUsed: any, memoryUsed: any): void;
-    setCpuMetricIndicated(): void;
-    setMemoryMetricIndicated(): void;
-    setPodsMetricIndicated(): void;
+    setCpuMetricIndicated(requested?: boolean): void;
+    setMemoryMetricIndicated(requested?: boolean): void;
+    setPodsMetricIndicated(requested?: boolean): void;
     __getLastMetricByInstance(metrics: any): any;
     __getLastMetric(metrics: any): any;
     __getBytes(str: string): number;
