@@ -22,6 +22,9 @@ export class Node extends BaseModel {
     cpuIndicate: boolean;
     memoryIndicate: boolean;
     podsIndicate: boolean;
+    cpuRequestedIndicate: boolean;
+    memoryRequestedIndicate: boolean;
+    podsRequestedIndicate: boolean;
 
     constructor(data){
         super(data);
@@ -36,6 +39,9 @@ export class Node extends BaseModel {
         this.cpuIndicate = false;
         this.memoryIndicate = false;
         this.podsIndicate = false;
+        this.cpuRequestedIndicate = false;
+        this.memoryRequestedIndicate = false;
+        this.podsRequestedIndicate = false;
         this.nsListState();
         this.hideNs = store.getBool(this.name + 'NsList', false);
     }
@@ -94,12 +100,28 @@ export class Node extends BaseModel {
         return this.__getStatus(this.metrics.cpuUsed, cpu);
     }
 
+    get cpuStatusRequested(){
+        let cpu = this.data.status.allocatable.cpu;
+        if(cpu.indexOf('m') > -1){
+            cpu = parseInt(cpu)/1000;
+        }
+        return this.__getStatusRequested(this.metrics.cpuRequested, cpu);
+    }
+
     get memoryStatus(){
         return this.__getStatus(this.metrics.memoryUsed, this.__getBytes(this.data.status.allocatable.memory));
     }
 
+    get memoryStatusRequested(){
+        return this.__getStatusRequested(this.metrics.memoryRequested, this.__getBytes(this.data.status.allocatable.memory));
+    }
+
     get podsStatus(){
         return this.__getStatus(this.metrics.podsCount, this.data.status.allocatable.pods);
+    }
+
+    get podsStatusRequested(){
+        return this.__getStatusRequested(this.metrics.podsCount, this.data.status.allocatable.pods);
     }
 
     get hostIp(){
@@ -129,11 +151,10 @@ export class Node extends BaseModel {
     }
 
     get memoryRequestedFormatted(){
-        return __convertToGB(this.metrics.memoryRequested);
+        return __convertToGB(this.metrics.memoryRequested) +  ' (' +  __percentUsed(this.metrics.memoryRequested, this.__getBytes(this.data.status.allocatable.memory)) + ')';
     }
 
     get cpuUsedFormatted(){
-
         let cpu = this.data.status.allocatable.cpu;
         if(cpu.indexOf('m') > -1){
             cpu = parseInt(cpu)/1000;
@@ -143,7 +164,12 @@ export class Node extends BaseModel {
     }
 
     get cpuRequestedFormatted(){
-        return __roundCpu(this.metrics.cpuRequested);
+        let cpu = this.data.status.allocatable.cpu;
+        if(cpu.indexOf('m') > -1){
+            cpu = parseInt(cpu)/1000;
+        }
+
+        return __roundCpu(this.metrics.cpuRequested) + ' (' + __percentUsed(this.metrics.cpuRequested, cpu) + ')';
     }
 
     get podsUsedFormatted() {
@@ -151,7 +177,7 @@ export class Node extends BaseModel {
     }
 
     get podsRequestedFormatted(){
-        return this.metrics.podsCount;
+        return this.metrics.podsCount + ' ('+ __percentUsed(this.metrics.podsCount, this.data.status.allocatable.pods) + ')';
     }
 
     /*percent used*/
@@ -185,18 +211,33 @@ export class Node extends BaseModel {
         return this.__getColor(this.cpuStatus);
     }
 
+    get rowCpuRequestedColor(){
+        return this.__getColor(this.cpuStatusRequested);
+    }
+
     get rowMemoryColor(){
         return this.__getColor(this.memoryStatus);
+    }
+
+    get rowMemoryRequestedColor(){
+        return this.__getColor(this.memoryStatusRequested);
     }
 
     get rowPodsColor(){
         return this.__getColor(this.podsStatus);
     }
 
+    get rowPodsRequestedColor(){
+        return this.__getColor(this.podsStatusRequested);
+    }
+
     parseMetrics(cpuReq, memoryReq, pods, cpuUsed, memoryUsed){
         let currentCpuStatus = this.cpuStatus;
         let currentMemoryStatus = this.memoryStatus;
         let currentPodsStatus = this.podsStatus;
+        let currentCpuStatusRequested = this.cpuStatusRequested;
+        let currentMemoryStatusRequested = this.memoryStatusRequested;
+        let currentPodsStatusRequested = this.podsStatusRequested;
 
         this.metrics.cpuRequested = this.__getLastMetric(cpuReq);
         this.metrics.memoryRequested = this.__getLastMetric(memoryReq);
@@ -205,23 +246,53 @@ export class Node extends BaseModel {
         this.metrics.memoryUsed = this.__getLastMetricByInstance(memoryUsed);
 
         currentCpuStatus !== undefined && currentCpuStatus != this.cpuStatus && this.setCpuMetricIndicated();
-        currentCpuStatus !== undefined && currentMemoryStatus != this.memoryStatus && this.setMemoryMetricIndicated();
-        currentCpuStatus !== undefined && currentPodsStatus != this.podsStatus && this.setPodsMetricIndicated();
+        currentMemoryStatus !== undefined && currentMemoryStatus != this.memoryStatus && this.setMemoryMetricIndicated();
+        currentPodsStatus !== undefined && currentPodsStatus != this.podsStatus && this.setPodsMetricIndicated();
+        currentCpuStatusRequested !== undefined && currentCpuStatusRequested != this.cpuStatusRequested && this.setCpuMetricIndicated(true);
+        currentMemoryStatusRequested !== undefined && currentMemoryStatusRequested != this.memoryStatusRequested && this.setMemoryMetricIndicated(true);
+        currentPodsStatusRequested !== undefined && currentPodsStatusRequested != this.podsStatusRequested && this.setPodsMetricIndicated(true);
     }
 
-    setCpuMetricIndicated(){
-        this.cpuIndicate = true;
-        setTimeout(() =>{this.cpuIndicate = false}, 10000);
+    setCpuMetricIndicated(requested = false){
+        if (requested) {
+            this.cpuRequestedIndicate = true;
+            setTimeout(() => {
+                this.cpuRequestedIndicate = false
+            }, 10000);
+        } else {
+            this.cpuIndicate = true;
+            setTimeout(() => {
+                this.cpuIndicate = false
+            }, 10000);
+        }
     }
 
-    setMemoryMetricIndicated(){
-        this.memoryIndicate = true;
-        setTimeout(() =>{this.memoryIndicate = false}, 10000);
+    setMemoryMetricIndicated(requested = false){
+        if (requested){
+            this.memoryRequestedIndicate = true;
+            setTimeout(() => {
+                this.memoryRequestedIndicate = false
+            }, 10000);
+        } else {
+            this.memoryIndicate = true;
+            setTimeout(() => {
+                this.memoryIndicate = false
+            }, 10000);
+        }
     }
 
-    setPodsMetricIndicated(){
-        this.podsIndicate = true;
-        setTimeout(() =>{this.podsIndicate = false}, 10000);
+    setPodsMetricIndicated(requested = false){
+        if (requested) {
+            this.podsRequestedIndicate = true;
+            setTimeout(() => {
+                this.podsRequestedIndicate = false
+            }, 10000);
+        } else {
+            this.podsIndicate = true;
+            setTimeout(() => {
+                this.podsIndicate = false
+            }, 10000);
+        }
     }
 
     __getLastMetricByInstance(metrics){
@@ -270,6 +341,24 @@ export class Node extends BaseModel {
             return WARNING;
         }
         else if(diff > 0.8){
+            return ERROR;
+        }
+        else {
+            return;
+        }
+    }
+
+    __getStatusRequested(requested, allocatable){
+
+        let diff = requested/allocatable;
+
+        if(diff <= 0.9){
+            return SUCCESS;
+        }
+        else if(diff > 0.9 && diff <= 1){
+            return WARNING;
+        }
+        else if(diff > 1){
             return ERROR;
         }
         else {
