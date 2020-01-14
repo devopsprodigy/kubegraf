@@ -36,6 +36,9 @@ System.register(["../helpers", '../../common/store', '../../common/types/traits/
                     this.cpuIndicate = false;
                     this.memoryIndicate = false;
                     this.podsIndicate = false;
+                    this.cpuRequestedIndicate = false;
+                    this.memoryRequestedIndicate = false;
+                    this.podsRequestedIndicate = false;
                     this.nsListState();
                     this.hideNs = store_1.default.getBool(this.name + 'NsList', false);
                 }
@@ -106,6 +109,17 @@ System.register(["../helpers", '../../common/store', '../../common/types/traits/
                     enumerable: true,
                     configurable: true
                 });
+                Object.defineProperty(Node.prototype, "cpuStatusRequested", {
+                    get: function () {
+                        var cpu = this.data.status.allocatable.cpu;
+                        if (cpu.indexOf('m') > -1) {
+                            cpu = parseInt(cpu) / 1000;
+                        }
+                        return this.__getStatusRequested(this.metrics.cpuRequested, cpu);
+                    },
+                    enumerable: true,
+                    configurable: true
+                });
                 Object.defineProperty(Node.prototype, "memoryStatus", {
                     get: function () {
                         return this.__getStatus(this.metrics.memoryUsed, this.__getBytes(this.data.status.allocatable.memory));
@@ -113,9 +127,23 @@ System.register(["../helpers", '../../common/store', '../../common/types/traits/
                     enumerable: true,
                     configurable: true
                 });
+                Object.defineProperty(Node.prototype, "memoryStatusRequested", {
+                    get: function () {
+                        return this.__getStatusRequested(this.metrics.memoryRequested, this.__getBytes(this.data.status.allocatable.memory));
+                    },
+                    enumerable: true,
+                    configurable: true
+                });
                 Object.defineProperty(Node.prototype, "podsStatus", {
                     get: function () {
                         return this.__getStatus(this.metrics.podsCount, this.data.status.allocatable.pods);
+                    },
+                    enumerable: true,
+                    configurable: true
+                });
+                Object.defineProperty(Node.prototype, "podsStatusRequested", {
+                    get: function () {
+                        return this.__getStatusRequested(this.metrics.podsCount, this.data.status.allocatable.pods);
                     },
                     enumerable: true,
                     configurable: true
@@ -162,7 +190,7 @@ System.register(["../helpers", '../../common/store', '../../common/types/traits/
                 });
                 Object.defineProperty(Node.prototype, "memoryRequestedFormatted", {
                     get: function () {
-                        return helpers_1.__convertToGB(this.metrics.memoryRequested);
+                        return helpers_1.__convertToGB(this.metrics.memoryRequested) + ' (' + helpers_1.__percentUsed(this.metrics.memoryRequested, this.__getBytes(this.data.status.allocatable.memory)) + ')';
                     },
                     enumerable: true,
                     configurable: true
@@ -180,7 +208,11 @@ System.register(["../helpers", '../../common/store', '../../common/types/traits/
                 });
                 Object.defineProperty(Node.prototype, "cpuRequestedFormatted", {
                     get: function () {
-                        return helpers_1.__roundCpu(this.metrics.cpuRequested);
+                        var cpu = this.data.status.allocatable.cpu;
+                        if (cpu.indexOf('m') > -1) {
+                            cpu = parseInt(cpu) / 1000;
+                        }
+                        return helpers_1.__roundCpu(this.metrics.cpuRequested) + ' (' + helpers_1.__percentUsed(this.metrics.cpuRequested, cpu) + ')';
                     },
                     enumerable: true,
                     configurable: true
@@ -194,7 +226,7 @@ System.register(["../helpers", '../../common/store', '../../common/types/traits/
                 });
                 Object.defineProperty(Node.prototype, "podsRequestedFormatted", {
                     get: function () {
-                        return this.metrics.podsCount;
+                        return this.metrics.podsCount + ' (' + helpers_1.__percentUsed(this.metrics.podsCount, this.data.status.allocatable.pods) + ')';
                     },
                     enumerable: true,
                     configurable: true
@@ -239,9 +271,23 @@ System.register(["../helpers", '../../common/store', '../../common/types/traits/
                     enumerable: true,
                     configurable: true
                 });
+                Object.defineProperty(Node.prototype, "rowCpuRequestedColor", {
+                    get: function () {
+                        return this.__getColor(this.cpuStatusRequested);
+                    },
+                    enumerable: true,
+                    configurable: true
+                });
                 Object.defineProperty(Node.prototype, "rowMemoryColor", {
                     get: function () {
                         return this.__getColor(this.memoryStatus);
+                    },
+                    enumerable: true,
+                    configurable: true
+                });
+                Object.defineProperty(Node.prototype, "rowMemoryRequestedColor", {
+                    get: function () {
+                        return this.__getColor(this.memoryStatusRequested);
                     },
                     enumerable: true,
                     configurable: true
@@ -253,33 +299,79 @@ System.register(["../helpers", '../../common/store', '../../common/types/traits/
                     enumerable: true,
                     configurable: true
                 });
+                Object.defineProperty(Node.prototype, "rowPodsRequestedColor", {
+                    get: function () {
+                        return this.__getColor(this.podsStatusRequested);
+                    },
+                    enumerable: true,
+                    configurable: true
+                });
                 Node.prototype.parseMetrics = function (cpuReq, memoryReq, pods, cpuUsed, memoryUsed) {
                     var currentCpuStatus = this.cpuStatus;
                     var currentMemoryStatus = this.memoryStatus;
                     var currentPodsStatus = this.podsStatus;
+                    var currentCpuStatusRequested = this.cpuStatusRequested;
+                    var currentMemoryStatusRequested = this.memoryStatusRequested;
+                    var currentPodsStatusRequested = this.podsStatusRequested;
                     this.metrics.cpuRequested = this.__getLastMetric(cpuReq);
                     this.metrics.memoryRequested = this.__getLastMetric(memoryReq);
                     this.metrics.podsCount = this.__getLastMetricByInstance(pods);
                     this.metrics.cpuUsed = this.__getLastMetricByInstance(cpuUsed);
                     this.metrics.memoryUsed = this.__getLastMetricByInstance(memoryUsed);
                     currentCpuStatus !== undefined && currentCpuStatus != this.cpuStatus && this.setCpuMetricIndicated();
-                    currentCpuStatus !== undefined && currentMemoryStatus != this.memoryStatus && this.setMemoryMetricIndicated();
-                    currentCpuStatus !== undefined && currentPodsStatus != this.podsStatus && this.setPodsMetricIndicated();
+                    currentMemoryStatus !== undefined && currentMemoryStatus != this.memoryStatus && this.setMemoryMetricIndicated();
+                    currentPodsStatus !== undefined && currentPodsStatus != this.podsStatus && this.setPodsMetricIndicated();
+                    currentCpuStatusRequested !== undefined && currentCpuStatusRequested != this.cpuStatusRequested && this.setCpuMetricIndicated(true);
+                    currentMemoryStatusRequested !== undefined && currentMemoryStatusRequested != this.memoryStatusRequested && this.setMemoryMetricIndicated(true);
+                    currentPodsStatusRequested !== undefined && currentPodsStatusRequested != this.podsStatusRequested && this.setPodsMetricIndicated(true);
                 };
-                Node.prototype.setCpuMetricIndicated = function () {
+                Node.prototype.setCpuMetricIndicated = function (requested) {
                     var _this = this;
-                    this.cpuIndicate = true;
-                    setTimeout(function () { _this.cpuIndicate = false; }, 10000);
+                    if (requested === void 0) { requested = false; }
+                    if (requested) {
+                        this.cpuRequestedIndicate = true;
+                        setTimeout(function () {
+                            _this.cpuRequestedIndicate = false;
+                        }, 10000);
+                    }
+                    else {
+                        this.cpuIndicate = true;
+                        setTimeout(function () {
+                            _this.cpuIndicate = false;
+                        }, 10000);
+                    }
                 };
-                Node.prototype.setMemoryMetricIndicated = function () {
+                Node.prototype.setMemoryMetricIndicated = function (requested) {
                     var _this = this;
-                    this.memoryIndicate = true;
-                    setTimeout(function () { _this.memoryIndicate = false; }, 10000);
+                    if (requested === void 0) { requested = false; }
+                    if (requested) {
+                        this.memoryRequestedIndicate = true;
+                        setTimeout(function () {
+                            _this.memoryRequestedIndicate = false;
+                        }, 10000);
+                    }
+                    else {
+                        this.memoryIndicate = true;
+                        setTimeout(function () {
+                            _this.memoryIndicate = false;
+                        }, 10000);
+                    }
                 };
-                Node.prototype.setPodsMetricIndicated = function () {
+                Node.prototype.setPodsMetricIndicated = function (requested) {
                     var _this = this;
-                    this.podsIndicate = true;
-                    setTimeout(function () { _this.podsIndicate = false; }, 10000);
+                    if (requested === void 0) { requested = false; }
+                    if (requested) {
+                        this.podsRequestedIndicate = true;
+                        setTimeout(function () {
+                            _this.podsRequestedIndicate = false;
+                        }, 10000);
+                    }
+                    else {
+                        this.podsIndicate = true;
+                        setTimeout(function () {
+                            _this.podsIndicate = false;
+                        }, 10000);
+                    }
                 };
                 Node.prototype.__getLastMetricByInstance = function (metrics) {
                     var _this = this;
@@ -324,6 +416,21 @@ System.register(["../helpers", '../../common/store', '../../common/types/traits/
                         return constants_1.WARNING;
                     }
                     else if (diff > 0.8) {
+                        return constants_1.ERROR;
+                    }
+                    else {
+                        return;
+                    }
+                };
+                Node.prototype.__getStatusRequested = function (requested, allocatable) {
+                    var diff = requested / allocatable;
+                    if (diff <= 0.9) {
+                        return constants_1.SUCCESS;
+                    }
+                    else if (diff > 0.9 && diff <= 1) {
+                        return constants_1.WARNING;
+                    }
+                    else if (diff > 1) {
                         return constants_1.ERROR;
                     }
                     else {

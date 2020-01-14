@@ -42,7 +42,6 @@ System.register(["app/core/app_events", "../../common/helpers"], function(export
                 ClustersList.prototype.getClusters = function () {
                     var list = this.datasourceSrv.getAll();
                     var type = 'devopsprodidy-kubegraf-datasource';
-                    console.log(list);
                     if (Array.isArray(list)) {
                         this.clusters = list.filter(function (item) {
                             return item.type === type;

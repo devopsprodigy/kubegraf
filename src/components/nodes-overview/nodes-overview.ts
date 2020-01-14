@@ -2,6 +2,7 @@ import {K8sPage} from "../k8s-page";
 import {Node} from "../../common/types/node";
 import store from "../../common/store";
 import { __convertToGB, __roundCpu, __convertToMicro, __getGrafanaVersion } from "../../common/helpers";
+import { Pod } from "../../common/types/pod";
 
 export class NodesOverview extends K8sPage {
 
@@ -55,7 +56,7 @@ export class NodesOverview extends K8sPage {
         store.set(key, !state);
     };
 
-    updatePods(newPods): void {
+    updatePods(newPods:Array<Pod>): void {
         this.insertPodsToNodesMap(newPods);
     }
 
@@ -140,5 +141,9 @@ export class NodesOverview extends K8sPage {
             nodeStore.push({name: ns.name, open: ns.open});
         });
         store.setObject('nodeStore', nodeStore);
+    }
+
+    podsFilterIsDeleted(pods: Array<Pod>) {
+        return pods.filter(pod => pod.is_deleted === false)
     }
 }

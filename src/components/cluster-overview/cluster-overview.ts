@@ -96,43 +96,15 @@ export class ClusterOverview extends K8sPage{
     }
 
     updatePods(newPods): void {
-        this.updateJobs();
-        this.namespaceMap.forEach(ns => {
-            ns.deployments.forEach(deployment => {
-                let pods = this.__findPodsBySelector(deployment.data.spec.selector.matchLabels, ns.name, newPods);
-                deployment.pods = deployment.pods.concat(pods);
-            });
-            ns.statefulsets.forEach(statefulset => {
-                let pods = this.__findPodsBySelector(statefulset.data.spec.selector.matchLabels, ns.name, newPods);
-                statefulset.pods = statefulset.pods.concat(pods);
-            });
-            ns.daemonsets.forEach(daemonset => {
-                let pods = this.__findPodsBySelector(daemonset.data.spec.selector.matchLabels, ns.name, newPods);
-                daemonset.pods = daemonset.pods.concat(pods);
-            });
-
-            ns.jobs.forEach(job =>{
-                job.pods = this.__findPodsBySelector(
-                    job.data.metadata.labels,
-                    ns.name
-                );
-            });
-
-            ns.cronJobs.forEach(cron =>{
-                cron.jobs.map(job => {
-                    job.pods = this.__findPodsBySelector(
-                        job.data.metadata.labels,
-                        ns.name
-                    );
-                });
-            });
-
-            ns.other[0].pods = ns.other[0].pods.concat(newPods.filter(item => !item.used && item.data.metadata.namespace === ns.name));
-        });
+        this.refreshNamespaceMap()
     }
 
     toggleAllWarningPods(){
         this.hideAllWarningPods = !this.hideAllWarningPods;
+    }
+
+    namespaceFilterIsDeleted(namespaces) {
+        return namespaces.filter(item => item.is_deleted === false)
     }
 
 }

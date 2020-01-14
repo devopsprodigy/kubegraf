@@ -37,7 +37,7 @@ export declare class K8sPage {
     nodesError: Boolean | Error;
     podsError: Boolean | Error;
     componentsError: Boolean | Error;
-    updatePods(pods: any): void;
+    updatePods(pods: Array<Pod>): void;
     constructor($scope: any, backendSrv: any, datasourceSrv: any, contextSrv: any, $location: any, timeout: any, $q: any);
     getNodeDashboardLink(node: any): string;
     getPodDashboardLink(pod: any): string;
@@ -58,6 +58,7 @@ export declare class K8sPage {
     insertPodsToNodesMap(pods: any): void;
     refreshNodes(): void;
     getNamespaceMap(): void;
+    refreshNamespaceMap(): void;
     attachDeployments(): any;
     refreshDeployments(): void;
     attachStatefulsets(): any;

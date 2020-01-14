@@ -98,26 +98,27 @@
                                     </tr>
                                     <tr>
                                         <td>Used</td>
-                                        <td ng-bind="node.podsUsedFormatted" ng-style="{'background-color': node.rowPodsColor}" ng-class="{'pulse' : node.podsIndicate}"/>
-                                        <td ng-bind="node.cpuUsedFormatted" ng-style="{'background-color': node.rowCpuColor}" ng-class="{'pulse' : node.cpuIndicate}"/>
-                                        <td ng-bind="node.memoryUsedFormatted" ng-style="{'background-color': node.rowMemoryColor}" ng-class="{'pulse' : node.memoryIndicate}"/>
+                                        <td ng-bind="node.podsUsedFormatted" ng-style="{'background-color': node.rowPodsColor}" ng-class="{'pulse': node.podsIndicate}"></td>
+                                        <td ng-bind="node.cpuUsedFormatted" ng-style="{'background-color': node.rowCpuColor}" ng-class="{'pulse': node.cpuIndicate}"></td>
+                                        <td ng-bind="node.memoryUsedFormatted" ng-style="{'background-color': node.rowMemoryColor}" ng-class="{'pulse': node.memoryIndicate}"></td>
                                     </tr>
+                                    <tr>
                                         <td>Requested</td>
-                                        <td ng-bind="node.podsRequestedFormatted" ng-style="{'background-color': node.rowPodsColor}" ng-class="{'pulse' : node.podsIndicate}"/>
-                                        <td ng-bind="node.cpuRequestedFormatted" ng-style="{'background-color': node.rowCpuColor}" ng-class="{'pulse' : node.cpuIndicate}"/>
-                                        <td ng-bind="node.memoryRequestedFormatted" ng-style="{'background-color': node.rowMemoryColor}" ng-class="{'pulse' : node.memoryIndicate}"/>
+                                        <td ng-bind="node.podsRequestedFormatted" ng-style="{'background-color': node.rowPodsRequestedColor}" ng-class="{'pulse': node.podsRequestedIndicate}"></td>
+                                        <td ng-bind="node.cpuRequestedFormatted" ng-style="{'background-color': node.rowCpuRequestedColor}" ng-class="{'pulse': node.cpuRequestedIndicate}"></td>
+                                        <td ng-bind="node.memoryRequestedFormatted" ng-style="{'background-color': node.rowMemoryRequestedColor}" ng-class="{'pulse': node.memoryRequestedIndicate}"></td>
                                     </tr>
                                     <tr>
                                         <td>Allocatable</td>
-                                        <td ng-bind="node.data.status.allocatable.pods" ng-style="{'background-color': node.rowPodsColor}" ng-class="{'pulse' : node.podsIndicate}"/>
-                                        <td ng-bind="node.cpuAllocatableFormatted" ng-style="{'background-color': node.rowCpuColor}" ng-class="{'pulse' : node.cpuIndicate}"></td>
-                                        <td ng-bind="node.memoryAllocatableFormatted" ng-style="{'background-color': node.rowMemoryColor}" ng-class="{'pulse' : node.memoryIndicate}"></td>
+                                        <td ng-bind="node.data.status.allocatable.pods"></td>
+                                        <td ng-bind="node.cpuAllocatableFormatted"></td>
+                                        <td ng-bind="node.memoryAllocatableFormatted"></td>
                                     </tr>
                                     <tr>
                                         <td>Capacity</td>
-                                        <td ng-bind="node.data.status.capacity.pods" ng-style="{'background-color': node.rowPodsColor}" ng-class="{'pulse' : node.podsIndicate}"/>
-                                        <td ng-bind="node.data.status.capacity.cpu" ng-style="{'background-color': node.rowCpuColor}" ng-class="{'pulse' : node.cpuIndicate}"></td>
-                                        <td ng-bind="node.memoryCapacityFormatted" ng-style="{'background-color': node.rowMemoryColor}" ng-class="{'pulse' : node.memoryIndicate}"></td>
+                                        <td ng-bind="node.data.status.capacity.pods"></td>
+                                        <td ng-bind="node.data.status.capacity.cpu"></td>
+                                        <td ng-bind="node.memoryCapacityFormatted"></td>
                                     </tr>
 
                                 </table>
@@ -136,7 +137,7 @@
                         Show Applications
                     </div>
                     <hr>
-                    <div ng-repeat="ns in node.namespaces" ng-show="ns.pods.length > 0" ng-if="!node.hideNs">
+                    <div ng-repeat="ns in node.namespaces" ng-show="ctrl.podsFilterIsDeleted(ns.pods).length > 0" ng-if="!node.hideNs">
                         <div class="row">
                             <div class="col-md-12 markdown-html explore-panel">
                                 <table class="override--table_ns_6 explore-toolbar-item explore-panel">

@@ -92,34 +92,13 @@ System.register(["../../common/store", "../k8s-page", "../../common/helpers"], f
                     store_1.default.setObject('namespaceStore', namespaceStore);
                 };
                 ClusterOverview.prototype.updatePods = function (newPods) {
-                    var _this = this;
-                    this.updateJobs();
-                    this.namespaceMap.forEach(function (ns) {
-                        ns.deployments.forEach(function (deployment) {
-                            var pods = _this.__findPodsBySelector(deployment.data.spec.selector.matchLabels, ns.name, newPods);
-                            deployment.pods = deployment.pods.concat(pods);
-                        });
-                        ns.statefulsets.forEach(function (statefulset) {
-                            var pods = _this.__findPodsBySelector(statefulset.data.spec.selector.matchLabels, ns.name, newPods);
-                            statefulset.pods = statefulset.pods.concat(pods);
-                        });
-                        ns.daemonsets.forEach(function (daemonset) {
-                            var pods = _this.__findPodsBySelector(daemonset.data.spec.selector.matchLabels, ns.name, newPods);
-                            daemonset.pods = daemonset.pods.concat(pods);
-                        });
-                        ns.jobs.forEach(function (job) {
-                            job.pods = _this.__findPodsBySelector(job.data.metadata.labels, ns.name);
-                        });
-                        ns.cronJobs.forEach(function (cron) {
-                            cron.jobs.map(function (job) {
-                                job.pods = _this.__findPodsBySelector(job.data.metadata.labels, ns.name);
-                            });
-                        });
-                        ns.other[0].pods = ns.other[0].pods.concat(newPods.filter(function (item) { return !item.used && item.data.metadata.namespace === ns.name; }));
-                    });
+                    this.refreshNamespaceMap();
                 };
                 ClusterOverview.prototype.toggleAllWarningPods = function () {
                     this.hideAllWarningPods = !this.hideAllWarningPods;
+                };
+                ClusterOverview.prototype.namespaceFilterIsDeleted = function (namespaces) {
+                    return namespaces.filter(function (item) { return item.is_deleted === false; });
                 };
                 ClusterOverview.templateUrl = 'components/cluster-overview/cluster-overview.html';
                 return ClusterOverview;

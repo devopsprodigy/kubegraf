@@ -37,7 +37,6 @@ export class ClustersList {
     getClusters() {
         const list = this.datasourceSrv.getAll();
         const type = 'devopsprodidy-kubegraf-datasource';
-        console.log(list);
         if (Array.isArray(list)) {
             this.clusters = list.filter(item => {
                 return item.type === type

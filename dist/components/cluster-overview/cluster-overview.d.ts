@@ -22,4 +22,5 @@ export declare class ClusterOverview extends K8sPage {
     toggleNamespace(namespace: boolean | any): void;
     updatePods(newPods: any): void;
     toggleAllWarningPods(): void;
+    namespaceFilterIsDeleted(namespaces: any): any;
 }

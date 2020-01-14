@@ -89,8 +89,7 @@ System.register(["app/core/app_events", "../common/types/pod", "../common/proxie
                     }
                     document.title = 'DevOpsProdigy KubeGraf';
                 }
-                K8sPage.prototype.updatePods = function (pods) {
-                };
+                K8sPage.prototype.updatePods = function (pods) { };
                 ;
                 K8sPage.prototype.getNodeDashboardLink = function (node) {
                     var dbUrl = 'dashboard/db/devopsprodigy-kubegraf-nodes-dashboard?orgId=1';
@@ -370,6 +369,52 @@ System.register(["app/core/app_events", "../common/types/pod", "../common/proxie
                         });
                     });
                 };
+                K8sPage.prototype.refreshNamespaceMap = function () {
+                    var _this = this;
+                    this.cluster.getNamespaces()
+                        .then(function (namespaces) {
+                        var namespaceStore = [];
+                        namespaces.forEach(function (namespace) {
+                            var ns = new namespace_1.Namespace(namespace);
+                            if (_this.namespaceMap.every(function (item) { return item.name != ns.name; })) {
+                                _this.namespaceMap.push(ns);
+                                var storeIndex = namespaceStore.findIndex(function (item) { return item.name === ns.name; });
+                                if (storeIndex > -1) {
+                                    ns.open = namespaceStore[storeIndex].open;
+                                }
+                                else {
+                                    namespaceStore.push({ name: ns.name, open: ns.open });
+                                }
+                            }
+                        });
+                        _this.namespaceMap.forEach(function (ns, index) {
+                            if (namespaces.every(function (item) { return item.metadata.name != ns.name; })) {
+                                _this.namespaceMap.splice(index, 1);
+                                var storeIndex = namespaceStore.findIndex(function (item) { return item.name === ns.name; });
+                                if (storeIndex > -1) {
+                                    namespaceStore.splice(storeIndex, 1);
+                                }
+                            }
+                        });
+                        store_1.default.setObject('namespaceStore', namespaceStore);
+                        var _promises = [];
+                        _promises.push(_this.refreshDeployments());
+                        _promises.push(_this.refreshStatefulsets());
+                        _promises.push(_this.refreshDaemonsets());
+                        _promises.push(_this.getClusterCronJobs());
+                        _promises.push(_this.refreshJobs());
+                        _this.$q.all(_promises)
+                            .then(function () {
+                            var _psPromises = [];
+                            _psPromises.push(_this.getAllServices());
+                            _this.$q.all(_psPromises)
+                                .then(function () {
+                                _this.attachPodsToMap();
+                                _this.namespaceMapReady = true;
+                            });
+                        });
+                    });
+                };
                 K8sPage.prototype.attachDeployments = function () {
                     var _this = this;
                     return this.cluster.getDeployments()
@@ -380,9 +425,7 @@ System.register(["app/core/app_events", "../common/types/pod", "../common/proxie
                             _this.storeDeployments.push(deploy);
                             _ns.deployments.push(deploy);
                         });
-                    }).then(this.timeout(function () {
-                        _this.refreshDeployments();
-                    }, this.refreshRate));
+                    });
                 };
                 K8sPage.prototype.refreshDeployments = function () {
                     var _this = this;
@@ -414,9 +457,7 @@ System.register(["app/core/app_events", "../common/types/pod", "../common/proxie
                             var _ns = _this.__getNamespace(newDeployment.data.metadata.namespace);
                             _ns.deployments.push(newDeployment);
                         });
-                    }).then(this.timeout(function () {
-                        _this.refreshDeployments();
-                    }, this.refreshRate));
+                    });
                 };
                 ;
                 K8sPage.prototype.attachStatefulsets = function () {
@@ -429,9 +470,7 @@ System.register(["app/core/app_events", "../common/types/pod", "../common/proxie
                             _ns.statefulsets.push(ss);
                             _this.storeStatefulSets.push(ss);
                         });
-                    }).then(this.timeout(function () {
-                        _this.refreshStatefulsets();
-                    }, this.refreshRate));
+                    });
                 };
                 K8sPage.prototype.refreshStatefulsets = function () {
                     var _this = this;
@@ -463,9 +502,7 @@ System.register(["app/core/app_events", "../common/types/pod", "../common/proxie
                             var _ns = _this.__getNamespace(newStatefulset.data.metadata.namespace);
                             _ns.statefulsets.push(newStatefulset);
                         });
-                    }).then(this.timeout(function () {
-                        _this.refreshStatefulsets(); //expr: 'sum(kube_pod_container_resource_requests_memory_bytes) by (pod)',
-                    }, this.refreshRate));
+                    });
                 };
                 ;
                 K8sPage.prototype.attachDaemonsets = function () {
@@ -478,9 +515,7 @@ System.register(["app/core/app_events", "../common/types/pod", "../common/proxie
                             _ns.daemonsets.push(ds);
                             _this.storeDaemonSets.push(ds);
                         });
-                    }).then(this.timeout(function () {
-                        _this.refreshDaemonsets();
-                    }, this.refreshRate));
+                    });
                 };
                 K8sPage.prototype.refreshDaemonsets = function () {
                     var _this = this;
@@ -512,9 +547,7 @@ System.register(["app/core/app_events", "../common/types/pod", "../common/proxie
                             var _ns = _this.__getNamespace(newDaemonset.data.metadata.namespace);
                             _ns.daemonsets.push(newDaemonset);
                         });
-                    }).then(this.timeout(function () {
-                        _this.refreshDaemonsets();
-                    }, this.refreshRate));
+                    });
                 };
                 ;
                 K8sPage.prototype.attachJobs = function () {
@@ -669,9 +702,8 @@ System.register(["app/core/app_events", "../common/types/pod", "../common/proxie
                             _this.podsError = false;
                             if (skipEmptyHost)
                                 pods = pods.filter(function (pod) { return pod.status.hostIP != undefined; });
-                            _this.storePods.filter(function (pod) {
-                                return !pod.is_deleted;
-                            }).forEach(function (issetPod) {
+                            _this.storePods.filter(function (pod) { return !pod.is_deleted; })
+                                .forEach(function (issetPod) {
                                 var equalPod = pods.filter(function (item) {
                                     return item.metadata.uid === issetPod.data.metadata.uid;
                                 });

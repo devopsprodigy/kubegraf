@@ -117,8 +117,8 @@
                                 <div class="card-item-header">
                                     <h4><span ng-bind="col.colName"/>:</h4>
                                 </div>
-                                <div ng-if="namespace[col.nsKey].length === 0">No data</div>
-                                <div ng-repeat="key in namespace[col.nsKey]" class="override--borderBottom">
+                                <div ng-if="ctrl.namespaceFilterIsDeleted(namespace[col.nsKey]).length === 0">No data</div>
+                                <div ng-repeat="key in ctrl.namespaceFilterIsDeleted(namespace[col.nsKey])" class="override--borderBottom">
                                     <h5 class="explore-panel pointer card-item-label" ng-click="key.toggle()">
                                         <span ng-bind="key.name"/>
                                         <span ng-if="col.nsKey === 'deployments' || col.nsKey === 'daemonsets' || col.nsKey === 'statefulsets'">
