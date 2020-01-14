@@ -4,7 +4,7 @@ import store from '../../common/store';
 import {BaseModel} from '../../common/types/traits/baseModel';
 import {ERROR, SUCCESS, WARNING, COLOR_YELLOW, COLOR_RED, COLOR_GREEN} from "../constants";
 
-export class Node extends  BaseModel{
+export class Node extends BaseModel {
     hideNs: boolean;
     namespaces: Array<{
         name: string,

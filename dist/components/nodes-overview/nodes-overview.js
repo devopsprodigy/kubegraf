@@ -139,6 +139,9 @@ System.register(["../k8s-page", "../../common/store", "../../common/helpers"], f
                     });
                     store_1.default.setObject('nodeStore', nodeStore);
                 };
+                NodesOverview.prototype.podsFilterIsDeleted = function (pods) {
+                    return pods.filter(function (pod) { return pod.is_deleted === false; });
+                };
                 NodesOverview.templateUrl = 'components/nodes-overview/nodes-overview.html';
                 return NodesOverview;
             })(k8s_page_1.K8sPage);

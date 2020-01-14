@@ -53,9 +53,7 @@ export  class K8sPage {
     componentsError: Boolean|Error = false;
 
 
-    updatePods(pods){
-
-    };
+    updatePods(pods: Array<Pod>) {};
 
     constructor(
         $scope,
@@ -206,7 +204,6 @@ export  class K8sPage {
     getNodes(){
         return this.cluster.getNodes()
             .then(nodes => {
-
                 let nodeStore = [];
                 let getStore = store.getObject('nodeStore');
 
@@ -217,18 +214,15 @@ export  class K8sPage {
                 if(nodes instanceof Array) {
                     this.nodesError = false;
                     nodes.forEach(node => {
-
                         let nd = new Node(node);
                         this.nodesMap.push(nd);
 
                         let index = nodeStore.findIndex(item => item.name === nd.name);
-
                         if (index > -1) {
                             nd.open = nodeStore[index].open;
                         } else {
                             nodeStore.push({name: nd.name, open: nd.open});
                         }
-
                     });
                     store.setObject('nodeStore', nodeStore);
                 } else if (nodes instanceof Error){
@@ -322,8 +316,6 @@ export  class K8sPage {
 
     insertPodsToNodesMap(pods){
         this.nodesMap.forEach(node => {
-
-
             let filterPods = pods.filter(pod => pod.data.status.hostIP === node.hostIp);
 
             filterPods.forEach(pod => {
@@ -347,8 +339,6 @@ export  class K8sPage {
             });
         });
     }
-
-
 
     refreshNodes(){
         this.cluster.getNodes()
@@ -415,7 +405,54 @@ export  class K8sPage {
             });
     }
 
-    attachDeployments(){
+    refreshNamespaceMap() {
+        this.cluster.getNamespaces()
+            .then(namespaces => {
+                let namespaceStore = [];
+                namespaces.forEach(namespace => {
+                    let ns = new Namespace(namespace);
+                    if (this.namespaceMap.every(item => item.name != ns.name)) {
+                        this.namespaceMap.push(ns);
+                        const storeIndex = namespaceStore.findIndex(item => item.name === ns.name);
+                        if (storeIndex > -1) {
+                            ns.open = namespaceStore[storeIndex].open;
+                        } else {
+                            namespaceStore.push({name: ns.name, open: ns.open});
+                        }
+                    }
+                });
+                this.namespaceMap.forEach((ns, index) => {
+                    if (namespaces.every(item => item.metadata.name != ns.name)) {
+                        this.namespaceMap.splice(index, 1);
+                        const storeIndex = namespaceStore.findIndex(item => item.name === ns.name);
+                        if (storeIndex > -1) {
+                            namespaceStore.splice(storeIndex, 1);
+                        }
+                    }
+                });
+                store.setObject('namespaceStore', namespaceStore);
+
+                let _promises = [];
+                _promises.push(this.refreshDeployments());
+                _promises.push(this.refreshStatefulsets());
+                _promises.push(this.refreshDaemonsets());
+                _promises.push(this.getClusterCronJobs());
+                _promises.push(this.refreshJobs());
+
+                this.$q.all(_promises)
+                    .then(() => {
+                        let _psPromises = [];
+                        _psPromises.push(this.getAllServices());
+                        this.$q.all(_psPromises)
+                            .then(() => {
+                                this.attachPodsToMap();
+                                this.namespaceMapReady = true;
+                            });
+                    })
+            });
+    }
+
+    attachDeployments() {
         return this.cluster.getDeployments()
             .then(deployments => {
                 deployments.forEach(item => {
@@ -424,32 +461,28 @@ export  class K8sPage {
                     this.storeDeployments.push(deploy);
                     _ns.deployments.push(deploy);
                 });
-            }).then(
-                this.timeout(()=> {
-                    this.refreshDeployments();
-                }, this.refreshRate)
-            );
+            })
     }
 
-    refreshDeployments(){
+    refreshDeployments() {
         this.cluster.getDeployments()
-            .then( newDeployments => {
+            .then(newDeployments => {
                 this.storeDeployments.filter(deployment => {
                     return !deployment.is_deleted;
                 }).forEach(issetDeployment => {
                     let equalDeployment = newDeployments.filter(item => {
                         return item.metadata.uid === issetDeployment.data.metadata.uid
                     });
-                    if(equalDeployment.length > 0){
+                    if (equalDeployment.length > 0) {
                         equalDeployment = equalDeployment[0];
-                    }else{
+                    } else {
                         equalDeployment = false;
                     }
 
-                    if(equalDeployment !== false){
+                    if (equalDeployment !== false) {
                         issetDeployment.update(equalDeployment);
                         newDeployments.splice(newDeployments.indexOf(equalDeployment), 1);
-                    }else{
+                    } else {
                         issetDeployment.destroy();
                     }
                 });
@@ -460,14 +493,10 @@ export  class K8sPage {
                     let _ns = this.__getNamespace(newDeployment.data.metadata.namespace);
                     _ns.deployments.push(newDeployment);
                 });
-            }).then(
-            this.timeout(()=> {
-                this.refreshDeployments();
-            }, this.refreshRate)
-        );
+            });
     };
 
-    attachStatefulsets(){
+    attachStatefulsets() {
         return this.cluster.getStatefulsets()
             .then(statefulsets => {
                 statefulsets.forEach(item => {
@@ -476,32 +505,28 @@ export  class K8sPage {
                     _ns.statefulsets.push(ss);
                     this.storeStatefulSets.push(ss);
                 });
-            }).then(
-                this.timeout(()=> {
-                    this.refreshStatefulsets();
-                }, this.refreshRate)
-            );
+            });
     }
 
-    refreshStatefulsets(){
+    refreshStatefulsets() {
         this.cluster.getStatefulsets()
-            .then( Statefulsets => {
+            .then(Statefulsets => {
                 this.storeStatefulSets.filter(statefulset => {
                     return !statefulset.is_deleted;
                 }).forEach(issetStatefulset => {
                     let equalStatefulset = Statefulsets.filter(item => {
                         return item.metadata.uid === issetStatefulset.data.metadata.uid
                     });
-                    if(equalStatefulset.length > 0){
+                    if (equalStatefulset.length > 0) {
                         equalStatefulset = equalStatefulset[0];
-                    }else{
+                    } else {
                         equalStatefulset = false;
                     }
 
-                    if(equalStatefulset !== false){
+                    if (equalStatefulset !== false) {
                         issetStatefulset.update(equalStatefulset);
                         Statefulsets.splice(Statefulsets.indexOf(equalStatefulset), 1);
-                    }else{
+                    } else {
                         issetStatefulset.destroy();
                     }
                 });
@@ -512,14 +537,10 @@ export  class K8sPage {
                     let _ns = this.__getNamespace(newStatefulset.data.metadata.namespace);
                     _ns.statefulsets.push(newStatefulset);
                 });
-            }).then(
-            this.timeout(()=> {
-                this.refreshStatefulsets();            //expr: 'sum(kube_pod_container_resource_requests_memory_bytes) by (pod)',
-            }, this.refreshRate)
-        );
+            });
     };
 
-    attachDaemonsets(){
+    attachDaemonsets() {
         return this.cluster.getDaemonsets()
             .then(daemonsets => {
                 daemonsets.forEach(item => {
@@ -528,32 +549,28 @@ export  class K8sPage {
                     _ns.daemonsets.push(ds);
                     this.storeDaemonSets.push(ds);
                 });
-            }).then(
-                this.timeout(()=> {
-                    this.refreshDaemonsets();
-                }, this.refreshRate)
-            );
+            });
     }
 
-    refreshDaemonsets(){
+    refreshDaemonsets() {
         this.cluster.getDaemonsets()
-            .then( Daemonsets => {
+            .then(Daemonsets => {
                 this.storeDaemonSets.filter(daemonset => {
                     return !daemonset.is_deleted;
                 }).forEach(issetDaemonSet => {
                     let equalDaemonSet = Daemonsets.filter(item => {
                         return item.metadata.uid === issetDaemonSet.data.metadata.uid
                     });
-                    if(equalDaemonSet.length > 0){
+                    if (equalDaemonSet.length > 0) {
                         equalDaemonSet = equalDaemonSet[0];
-                    }else{
+                    } else {
                         equalDaemonSet = false;
                     }
 
-                    if(equalDaemonSet !== false){
+                    if (equalDaemonSet !== false) {
                         issetDaemonSet.update(equalDaemonSet);
                         Daemonsets.splice(Daemonsets.indexOf(equalDaemonSet), 1);
-                    }else{
+                    } else {
                         issetDaemonSet.destroy();
                     }
                 });
@@ -564,11 +581,7 @@ export  class K8sPage {
                     let _ns = this.__getNamespace(newDaemonset.data.metadata.namespace);
                     _ns.daemonsets.push(newDaemonset);
                 });
-            }).then(
-            this.timeout(()=> {
-                this.refreshDaemonsets();
-            }, this.refreshRate)
-        );
+            });
     };
 
     attachJobs(){
@@ -722,7 +735,6 @@ export  class K8sPage {
             })
     }
 
-
     getPods(skipEmptyHost = false){
         return this.cluster.getPods()
             .then(pods => {
@@ -754,26 +766,24 @@ export  class K8sPage {
                     if (skipEmptyHost)
                         pods = pods.filter(pod => pod.status.hostIP != undefined);
 
-                    this.storePods.filter(pod => {
-                        return !pod.is_deleted;
-                    }).forEach(issetPod => {
-                        let equalPod = pods.filter(item => {
-                            return item.metadata.uid === issetPod.data.metadata.uid
+                    this.storePods.filter(pod => !pod.is_deleted)
+                        .forEach(issetPod => {
+                            let equalPod = pods.filter(item => {
+                                return item.metadata.uid === issetPod.data.metadata.uid
+                            });
+                            if (equalPod.length > 0) {
+                                equalPod = equalPod[0];
+                            } else {
+                                equalPod = false;
+                            }
+
+                            if (equalPod !== false) {
+                                issetPod.update(equalPod);
+                                pods.splice(pods.indexOf(equalPod), 1);
+                            } else {
+                                issetPod.destroy();
+                            }
                         });
-                        if (equalPod.length > 0) {
-                            equalPod = equalPod[0];
-                        } else {
-                            equalPod = false;
-                        }
-
-                        if (equalPod !== false) {
-                            issetPod.update(equalPod);
-                            pods.splice(pods.indexOf(equalPod), 1);
-                        } else {
-                            issetPod.destroy();
-                        }
-
-                    });
                     pods = pods.map(pod => new Pod(pod));
                     this.storePods = this.storePods.concat(pods);
                     this.updatePods(pods);

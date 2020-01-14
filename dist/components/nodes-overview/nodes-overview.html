@@ -136,7 +136,7 @@
                         Show Applications
                     </div>
                     <hr>
-                    <div ng-repeat="ns in node.namespaces" ng-show="ns.pods.length > 0" ng-if="!node.hideNs">
+                    <div ng-repeat="ns in node.namespaces" ng-show="ctrl.podsFilterIsDeleted(ns.pods).length > 0" ng-if="!node.hideNs">
                         <div class="row">
                             <div class="col-md-12 markdown-html explore-panel">
                                 <table class="override--table_ns_6 explore-toolbar-item explore-panel">
