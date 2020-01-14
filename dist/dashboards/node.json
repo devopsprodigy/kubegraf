@@ -150,10 +150,94 @@
       "gridPos": {
         "h": 5,
         "w": 8,
-        "x": 8,
+        "x": 0,
         "y": 0
       },
       "id": 1,
+      "interval": null,
+      "links": [],
+      "mappingType": 1,
+      "mappingTypes": [
+        {
+          "name": "value to text",
+          "value": 1
+        },
+        {
+          "name": "range to text",
+          "value": 2
+        }
+      ],
+      "maxDataPoints": 100,
+      "nullPointMode": "connected",
+      "nullText": null,
+      "postfix": "",
+      "postfixFontSize": "50%",
+      "prefix": "",
+      "prefixFontSize": "50%",
+      "rangeMaps": [
+        {
+          "from": "null",
+          "text": "N/A",
+          "to": "null"
+        }
+      ],
+      "sparkline": {
+        "fillColor": "rgba(31, 118, 189, 0.18)",
+        "full": false,
+        "lineColor": "rgb(31, 120, 193)",
+        "show": false
+      },
+      "tableColumn": "",
+      "targets": [
+        {
+          "expr": "(sum(kubelet_running_pod_count{instance=~\"$node|$nodeHost.*\"}) / sum(kube_node_status_allocatable_pods{node=~\"$node\"})) * 100",
+          "format": "time_series",
+          "intervalFactor": 1,
+          "refId": "A",
+          "instant": true
+        }
+      ],
+      "thresholds": "50,80",
+      "timeFrom": null,
+      "timeShift": null,
+      "title": "Node \"$node\" Pods Usage",
+      "type": "singlestat",
+      "valueFontSize": "50%",
+      "valueMaps": [
+        {
+          "op": "=",
+          "text": "N/A",
+          "value": "null"
+        }
+      ],
+      "valueName": "current"
+    },
+    {
+      "cacheTimeout": null,
+      "colorBackground": false,
+      "colorValue": true,
+      "colors": [
+        "#299c46",
+        "rgba(237, 129, 40, 0.89)",
+        "#d44a3a"
+      ],
+      "decimals": 2,
+      "datasource": "$PromDs",
+      "format": "percent",
+      "gauge": {
+        "maxValue": 100,
+        "minValue": 0,
+        "show": true,
+        "thresholdLabels": false,
+        "thresholdMarkers": true
+      },
+      "gridPos": {
+        "h": 5,
+        "w": 8,
+        "x": 8,
+        "y": 0
+      },
+      "id": 2,
       "interval": null,
       "links": [],
       "mappingType": 1,
@@ -237,7 +321,7 @@
         "x": 16,
         "y": 0
       },
-      "id": 2,
+      "id": 3,
       "interval": null,
       "links": [],
       "mappingType": 1,
@@ -317,11 +401,11 @@
       },
       "gridPos": {
         "h": 5,
-        "w": 8,
+        "w": 12,
         "x": 0,
-        "y": 0
+        "y": 5
       },
-      "id": 3,
+      "id": 5,
       "interval": null,
       "links": [],
       "mappingType": 1,
@@ -358,7 +442,7 @@
       "tableColumn": "",
       "targets": [
         {
-          "expr": "(sum(kubelet_running_pod_count{instance=~\"$node|$nodeHost.*\"}) / sum(kube_node_status_allocatable_pods{node=~\"$node\"})) * 100",
+          "expr": "sum(kube_pod_container_resource_requests_cpu_cores{node=~\"$node\"}) / sum(kube_node_status_allocatable_cpu_cores{node=~\"$node\"}) * 100",
           "format": "time_series",
           "intervalFactor": 1,
           "refId": "A",
@@ -368,7 +452,91 @@
       "thresholds": "50,80",
       "timeFrom": null,
       "timeShift": null,
-      "title": "Node \"$node\" Pods Usage",
+      "title": "Node \"$node\" CPU Requested",
+      "type": "singlestat",
+      "valueFontSize": "50%",
+      "valueMaps": [
+        {
+          "op": "=",
+          "text": "N/A",
+          "value": "null"
+        }
+      ],
+      "valueName": "current"
+    },
+    {
+      "cacheTimeout": null,
+      "colorBackground": false,
+      "colorValue": true,
+      "colors": [
+        "#299c46",
+        "rgba(237, 129, 40, 0.89)",
+        "#d44a3a"
+      ],
+      "decimals": 2,
+      "datasource": "$PromDs",
+      "format": "percent",
+      "gauge": {
+        "maxValue": 100,
+        "minValue": 0,
+        "show": true,
+        "thresholdLabels": false,
+        "thresholdMarkers": true
+      },
+      "gridPos": {
+        "h": 5,
+        "w": 12,
+        "x": 12,
+        "y": 5
+      },
+      "id": 6,
+      "interval": null,
+      "links": [],
+      "mappingType": 1,
+      "mappingTypes": [
+        {
+          "name": "value to text",
+          "value": 1
+        },
+        {
+          "name": "range to text",
+          "value": 2
+        }
+      ],
+      "maxDataPoints": 100,
+      "nullPointMode": "connected",
+      "nullText": null,
+      "postfix": "",
+      "postfixFontSize": "50%",
+      "prefix": "",
+      "prefixFontSize": "50%",
+      "rangeMaps": [
+        {
+          "from": "null",
+          "text": "N/A",
+          "to": "null"
+        }
+      ],
+      "sparkline": {
+        "fillColor": "rgba(31, 118, 189, 0.18)",
+        "full": false,
+        "lineColor": "rgb(31, 120, 193)",
+        "show": false
+      },
+      "tableColumn": "",
+      "targets": [
+        {
+          "expr": "sum(kube_pod_container_resource_requests_memory_bytes{node=~\"$node\"}) / sum(kube_node_status_allocatable_memory_bytes{node=~\"$node\"}) * 100",
+          "format": "time_series",
+          "intervalFactor": 1,
+          "refId": "A",
+          "instant": true
+        }
+      ],
+      "thresholds": "50,80",
+      "timeFrom": null,
+      "timeShift": null,
+      "title": "Node \"$node\" Memory Requested",
       "type": "singlestat",
       "valueFontSize": "50%",
       "valueMaps": [
@@ -392,9 +560,9 @@
         "h": 7,
         "w": 8,
         "x": 8,
-        "y": 5
+        "y": 10
       },
-      "id": 4,
+      "id": 7,
       "legend": {
         "avg": false,
         "current": false,
@@ -500,9 +668,9 @@
         "h": 7,
         "w": 8,
         "x": 16,
-        "y": 5
+        "y": 10
       },
-      "id": 5,
+      "id": 8,
       "legend": {
         "avg": false,
         "current": false,
@@ -606,9 +774,9 @@
         "h": 7,
         "w": 8,
         "x": 0,
-        "y": 5
+        "y": 10
       },
-      "id": 6,
+      "id": 9,
       "legend": {
         "avg": false,
         "current": false,
@@ -707,7 +875,7 @@
         "x": 0,
         "y": 12
       },
-      "id": 7,
+      "id": 10,
       "legend": {
         "avg": false,
         "current": false,
@@ -792,7 +960,7 @@
         "x": 13,
         "y": 12
       },
-      "id": 8,
+      "id": 11,
       "legend": {
         "avg": false,
         "current": false,
@@ -912,7 +1080,7 @@
         "x": 0,
         "y": 20
       },
-      "id": 9,
+      "id": 12,
       "legend": {
         "avg": false,
         "current": false,
@@ -1004,7 +1172,7 @@
         "x": 8,
         "y": 20
       },
-      "id": 10,
+      "id": 13,
       "legend": {
         "avg": false,
         "current": false,
@@ -1096,7 +1264,7 @@
         "x": 16,
         "y": 20
       },
-      "id": 11,
+      "id": 14,
       "legend": {
         "avg": false,
         "current": false,
@@ -1188,7 +1356,7 @@
         "x": 0,
         "y": 28
       },
-      "id": 12,
+      "id": 15,
       "legend": {
         "avg": false,
         "current": false,
@@ -1280,7 +1448,7 @@
         "x": 8,
         "y": 28
       },
-      "id": 13,
+      "id": 16,
       "legend": {
         "avg": false,
         "current": false,
@@ -1372,7 +1540,7 @@
         "x": 16,
         "y": 28
       },
-      "id": 14,
+      "id": 17,
       "legend": {
         "avg": false,
         "current": false,
