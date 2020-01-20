@@ -1,7 +1,10 @@
-System.register(["./components/clusters-list/clusters-list", "./components/cluster-config/cluster-config", "./components/cluster-overview/cluster-overview", "./components/nodes-overview/nodes-overview", "./components/cluster-alerts/cluster-alerts", "./config/config", 'app/plugins/sdk'], function(exports_1) {
-    var clusters_list_1, cluster_config_1, cluster_overview_1, nodes_overview_1, cluster_alerts_1, config_1, sdk_1;
+System.register(["./components/applications-overview/applications-overview", "./components/clusters-list/clusters-list", "./components/cluster-config/cluster-config", "./components/cluster-overview/cluster-overview", "./components/nodes-overview/nodes-overview", "./components/cluster-alerts/cluster-alerts", "./config/config", 'app/plugins/sdk'], function(exports_1) {
+    var applications_overview_1, clusters_list_1, cluster_config_1, cluster_overview_1, nodes_overview_1, cluster_alerts_1, config_1, sdk_1;
     return {
         setters:[
+            function (applications_overview_1_1) {
+                applications_overview_1 = applications_overview_1_1;
+            },
             function (clusters_list_1_1) {
                 clusters_list_1 = clusters_list_1_1;
             },
@@ -28,11 +31,12 @@ System.register(["./components/clusters-list/clusters-list", "./components/clust
                 dark: 'plugins/devopsprodigy-kubegraf-app/css/dark.css',
                 light: 'plugins/devopsprodigy-kubegraf-app/css/light.css'
             });
-            exports_1("ClustersList", clusters_list_1.ClustersList);
+            exports_1("ApplicationsOverview", applications_overview_1.ApplicationsOverview);
+            exports_1("ClusterAlerts", cluster_alerts_1.ClusterAlerts);
             exports_1("ClusterConfig", cluster_config_1.ClusterConfig);
             exports_1("ClusterOverview", cluster_overview_1.ClusterOverview);
+            exports_1("ClustersList", clusters_list_1.ClustersList);
             exports_1("NodesOverview", nodes_overview_1.NodesOverview);
-            exports_1("ClusterAlerts", cluster_alerts_1.ClusterAlerts);
             exports_1("ConfigCtrl", config_1.DOPKubeGrafAppConfig);
         }
     }

@@ -1,108 +1,17 @@
-///<reference path="../../../node_modules/grafana-sdk-mocks/app/headers/common.d.ts" />
-System.register(["../../common/store", "../k8s-page", "../../common/helpers"], function(exports_1) {
-    var __extends = (this && this.__extends) || function (d, b) {
-        for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-    var store_1, k8s_page_1, helpers_1;
+System.register([], function(exports_1) {
     var ClusterOverview;
     return {
-        setters:[
-            function (store_1_1) {
-                store_1 = store_1_1;
-            },
-            function (k8s_page_1_1) {
-                k8s_page_1 = k8s_page_1_1;
-            },
-            function (helpers_1_1) {
-                helpers_1 = helpers_1_1;
-            }],
+        setters:[],
         execute: function() {
-            ClusterOverview = (function (_super) {
-                __extends(ClusterOverview, _super);
-                function ClusterOverview($scope, $injector, $q, backendSrv, datasourceSrv, contextSrv, $location, $timeout, $window) {
-                    var _this = this;
-                    _super.call(this, $scope, backendSrv, datasourceSrv, contextSrv, $location, $timeout, $q);
-                    this.$q = $q;
-                    this.backendSrv = backendSrv;
-                    this.datasourceSrv = datasourceSrv;
-                    this.contextSrv = contextSrv;
-                    this.$location = $location;
-                    this.$timeout = $timeout;
-                    this.$window = $window;
-                    this.pageReady = false;
-                    this.version = helpers_1.__getGrafanaVersion($window);
-                    this.__prepareDS().then(function () {
-                        _this.getClusterComponents();
-                        _this.getNamespaceMap();
-                    });
-                    this.columnNames = [
-                        {
-                            colName: 'Deployments',
-                            nsKey: 'deployments'
-                        },
-                        {
-                            colName: 'Statefulsets',
-                            nsKey: 'statefulsets'
-                        },
-                        {
-                            colName: 'Daemonsets',
-                            nsKey: 'daemonsets'
-                        },
-                        {
-                            colName: 'Cron Jobs',
-                            nsKey: 'cronJobs'
-                        },
-                        {
-                            colName: 'Jobs',
-                            nsKey: 'jobs'
-                        },
-                        {
-                            colName: 'Other',
-                            nsKey: 'other'
-                        },
-                    ];
-                    this.hideAllWarningPods = true;
+            ClusterOverview = (function () {
+                function ClusterOverview($location) {
+                    var cluster = $location.search().clusterName;
+                    if (cluster) {
+                        window.location.href = 'plugins/devopsprodigy-kubegraf-app/page/applications-overview?clusterName=' + cluster;
+                    }
                 }
-                ClusterOverview.prototype.__showAll = function () {
-                    this.toggleNamespace(true);
-                };
-                ClusterOverview.prototype.__hideAll = function () {
-                    this.toggleNamespace(false);
-                };
-                ClusterOverview.prototype.namespaceClick = function (event, namespace) {
-                    if (event.ctrlKey) {
-                        if (namespace.open) {
-                            event.preventDefault();
-                        }
-                        this.toggleNamespace(namespace);
-                    }
-                    else {
-                        namespace.toggle();
-                    }
-                };
-                ClusterOverview.prototype.toggleNamespace = function (namespace) {
-                    store_1.default.delete('namespaceStore');
-                    var namespaceStore = [];
-                    this.namespaceMap.map(function (ns) {
-                        ns.open = namespace === true || namespace === false ? namespace : namespace.name === ns.name;
-                        namespaceStore.push({ name: ns.name, open: ns.open });
-                    });
-                    store_1.default.setObject('namespaceStore', namespaceStore);
-                };
-                ClusterOverview.prototype.updatePods = function (newPods) {
-                    this.refreshNamespaceMap();
-                };
-                ClusterOverview.prototype.toggleAllWarningPods = function () {
-                    this.hideAllWarningPods = !this.hideAllWarningPods;
-                };
-                ClusterOverview.prototype.namespaceFilterIsDeleted = function (namespaces) {
-                    return namespaces.filter(function (item) { return item.is_deleted === false; });
-                };
-                ClusterOverview.templateUrl = 'components/cluster-overview/cluster-overview.html';
                 return ClusterOverview;
-            })(k8s_page_1.K8sPage);
+            })();
             exports_1("ClusterOverview", ClusterOverview);
         }
     }

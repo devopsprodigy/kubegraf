@@ -1,3 +1,4 @@
+import {ApplicationsOverview} from "./components/applications-overview/applications-overview";
 import {ClustersList} from "./components/clusters-list/clusters-list";
 import {ClusterConfig} from "./components/cluster-config/cluster-config";
 import {ClusterOverview} from "./components/cluster-overview/cluster-overview";
@@ -13,10 +14,11 @@ loadPluginCss({
 });
 
 export {
-    ClustersList,
+    ApplicationsOverview,
+    ClusterAlerts,
     ClusterConfig,
     ClusterOverview,
+    ClustersList,
     NodesOverview,
-    ClusterAlerts,
     DOPKubeGrafAppConfig as ConfigCtrl
 }
