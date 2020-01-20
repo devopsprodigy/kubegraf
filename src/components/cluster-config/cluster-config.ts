@@ -138,14 +138,17 @@ export class ClusterConfig{
         })
             .then(response => {
                 if (response && response.status === 200) {
-                    window.location.href = 'plugins/devopsprodigy-kubegraf-app/page/clusters';
+                    //window.location.href = 'plugins/devopsprodigy-kubegraf-app/page/clusters';
+                    setTimeout(()=>{window.history.back()},800);
+                } else {
+                    appEvents.emit('alert-error', ['Unhandled error']);
                 }
-                appEvents.emit('alert-error', ['Unhandled error']);
             }, error => {
                 if (error && error.status && error.statusText) {
                     appEvents.emit('alert-error', [error.status + ' ' + error.statusText]);
+                } else {
+                    appEvents.emit('alert-error', ['Unhandled error']);
                 }
-                appEvents.emit('alert-error', ['Unhandled error']);
             })
     }
 }

@@ -139,14 +139,19 @@ System.register(["app/core/app_events", "../../common/constants", "../../common/
                     })
                         .then(function (response) {
                         if (response && response.status === 200) {
-                            window.location.href = 'plugins/devopsprodigy-kubegraf-app/page/clusters';
+                            //window.location.href = 'plugins/devopsprodigy-kubegraf-app/page/clusters';
+                            setTimeout(function () { window.history.back(); }, 800);
                         }
-                        app_events_1.default.emit('alert-error', ['Unhandled error']);
+                        else {
+                            app_events_1.default.emit('alert-error', ['Unhandled error']);
+                        }
                     }, function (error) {
                         if (error && error.status && error.statusText) {
                             app_events_1.default.emit('alert-error', [error.status + ' ' + error.statusText]);
                         }
-                        app_events_1.default.emit('alert-error', ['Unhandled error']);
+                        else {
+                            app_events_1.default.emit('alert-error', ['Unhandled error']);
+                        }
                     });
                 };
                 ClusterConfig.templateUrl = 'components/cluster-config/cluster-config.html';
