@@ -903,7 +903,7 @@ export  class K8sPage {
         let warningPods = this.storePods.filter(item => this.podIsWarning(item));
         if (warningPods.length > 0 && warningPods.filter(pod => pod.message === "Undefined error").length > 0) {
             this.storePods.forEach((pod,index) => {
-                if (this.podIsWarning(pod) && pod.message === "Undefined error") {
+                if (this.podIsWarning(pod) && pod.message === "Undefined error" && this.storeEvents) {
                     const event = this.storeEvents.find(event => event.involvedObject.name === pod.name);
                     if (event !== undefined) {
                         this.storePods[index].message = event.message;

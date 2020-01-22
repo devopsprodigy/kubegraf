@@ -838,7 +838,7 @@ System.register(["app/core/app_events", "../common/types/pod", "../common/proxie
                     var warningPods = this.storePods.filter(function (item) { return _this.podIsWarning(item); });
                     if (warningPods.length > 0 && warningPods.filter(function (pod) { return pod.message === "Undefined error"; }).length > 0) {
                         this.storePods.forEach(function (pod, index) {
-                            if (_this.podIsWarning(pod) && pod.message === "Undefined error") {
+                            if (_this.podIsWarning(pod) && pod.message === "Undefined error" && _this.storeEvents) {
                                 var event_1 = _this.storeEvents.find(function (event) { return event.involvedObject.name === pod.name; });
                                 if (event_1 !== undefined) {
                                     _this.storePods[index].message = event_1.message;

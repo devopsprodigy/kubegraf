@@ -34,6 +34,7 @@ System.register(["../../common/store", "../k8s-page", "../../common/helpers"], f
                     this.pageReady = false;
                     this.version = helpers_1.__getGrafanaVersion($window);
                     this.__prepareDS().then(function () {
+                        _this.getEvents();
                         _this.getClusterComponents();
                         _this.getNamespaceMap();
                     });

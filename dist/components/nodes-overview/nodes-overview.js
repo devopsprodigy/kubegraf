@@ -33,6 +33,7 @@ System.register(["../k8s-page", "../../common/store", "../../common/helpers"], f
                     this.pageReady = false;
                     this.version = helpers_1.__getGrafanaVersion($window);
                     this.__prepareDS().then(function () {
+                        _this.getEvents();
                         _this.getNodeMap()
                             .then(function () {
                             _this.pageReady = true;

@@ -32,6 +32,7 @@ export class ApplicationsOverview extends K8sPage{
         this.version = __getGrafanaVersion($window);
 
         this.__prepareDS().then(() => {
+            this.getEvents();
             this.getClusterComponents();
             this.getNamespaceMap();
         });
