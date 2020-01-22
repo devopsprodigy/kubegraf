@@ -411,4 +411,15 @@ export class DOPK8SDatasource {
                 return result.items;
             })
     }
+
+    getEvents() {
+        return this.__get('/api/v1/events')
+            .then(result => {
+                if(!result.items){
+                    appEvents.emit('alert-error', [`Events not received`]);
+                    return [];
+                }
+                return result.items;
+            })
+    }
 }

@@ -371,6 +371,16 @@ System.register(["app/core/app_events"], function(exports_1) {
                         return result.items;
                     });
                 };
+                DOPK8SDatasource.prototype.getEvents = function () {
+                    return this.__get('/api/v1/events')
+                        .then(function (result) {
+                        if (!result.items) {
+                            app_events_1.default.emit('alert-error', ["Events not received"]);
+                            return [];
+                        }
+                        return result.items;
+                    });
+                };
                 return DOPK8SDatasource;
             })();
             exports_1("DOPK8SDatasource", DOPK8SDatasource);

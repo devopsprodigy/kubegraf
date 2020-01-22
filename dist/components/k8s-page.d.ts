@@ -25,6 +25,7 @@ export declare class K8sPage {
     refreshRate: number;
     $q: any;
     storePods: Array<Pod>;
+    storeEvents: Array<any>;
     storeComponents: Array<Component>;
     storeServices: Array<Service>;
     storeJobs: Array<Job>;
@@ -91,4 +92,6 @@ export declare class K8sPage {
     getAlertsNodesByMemory(): Node[];
     getAlertsNodesByPods(): Node[];
     getAlertsComponents(): Component[];
+    getEvents(): void;
+    podIsWarning(pod: Pod): boolean;
 }

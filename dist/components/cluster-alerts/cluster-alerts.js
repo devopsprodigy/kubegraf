@@ -31,6 +31,7 @@ System.register(['../k8s-page', "../../common/helpers"], function(exports_1) {
                     this.version = helpers_1.__getGrafanaVersion($window);
                     this.__prepareDS().then(function () {
                         var _promises = [];
+                        _promises.push(_this.getEvents());
                         _promises.push(_this.getPods());
                         _promises.push(_this.getClusterComponents());
                         _promises.push(_this.getNodeMap(true).then(function () {

@@ -7,6 +7,7 @@ export declare class Pod extends BaseModel {
         memoryRequested: number | string;
     };
     used: boolean;
+    private eventMessage;
     constructor(data: any);
     status: number;
     color: string;

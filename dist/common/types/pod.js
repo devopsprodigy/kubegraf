@@ -19,6 +19,7 @@ System.register(['../constants', '../../common/types/traits/baseModel'], functio
                 __extends(Pod, _super);
                 function Pod(data) {
                     _super.call(this, data);
+                    this.eventMessage = null;
                     this.metrics = {
                         cpuUsed: 'N-A',
                         memoryUsed: 'N-A',
@@ -92,6 +93,9 @@ System.register(['../constants', '../../common/types/traits/baseModel'], functio
                 });
                 Object.defineProperty(Pod.prototype, "message", {
                     get: function () {
+                        if (this.eventMessage) {
+                            return this.eventMessage;
+                        }
                         var status = this.status;
                         var data = this.data;
                         var phase = this.data.status.phase;
@@ -108,8 +112,9 @@ System.register(['../constants', '../../common/types/traits/baseModel'], functio
                             }
                             else if (data.status.conditions) {
                                 var d = data.status.conditions.filter(function (item) { return item.ready === false || (item.type === 'PodScheduled' && item.status === 'False'); })[0];
-                                if (d != undefined)
+                                if (d != undefined) {
                                     return d.message;
+                                }
                             }
                             else if (data.status.message) {
                                 return data.status.message;
@@ -141,6 +146,9 @@ System.register(['../constants', '../../common/types/traits/baseModel'], functio
                                 return message;
                             }
                         }
+                    },
+                    set: function (msg) {
+                        this.eventMessage = msg;
                     },
                     enumerable: true,
                     configurable: true

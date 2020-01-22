@@ -9,6 +9,7 @@ export class Pod extends BaseModel{
         memoryRequested: number|string
     };
     used: boolean;
+    private eventMessage: string = null;
 
     constructor(data){
         super(data);
@@ -80,53 +81,57 @@ export class Pod extends BaseModel{
 
 
     get message(){
+        if (this.eventMessage) {
+            return this.eventMessage
+        }
 
         let status = this.status;
         let data = this.data;
         let phase = this.data.status.phase;
         let message = 'Pod is ' + phase;
-
-        if(status === ERROR){
-            if(data.status.containerStatuses){
+        if (status === ERROR) {
+            if (data.status.containerStatuses) {
                 let d = data.status.containerStatuses.filter(item => item.ready === false)[0];
-                if(d && d.state && d.state.waiting){
-                    if(d.state.waiting.message && d.state.waiting.reason){
+                if (d && d.state && d.state.waiting) {
+                    if (d.state.waiting.message && d.state.waiting.reason) {
                         message = d.state.waiting.reason + '. ' + d.state.waiting.message;
                         return message;
                     }
                 }
-            }else  if(data.status.conditions){
+            } else if (data.status.conditions) {
                 let d = data.status.conditions.filter(item => item.ready === false || (item.type === 'PodScheduled' && item.status === 'False'))[0];
-                if(d != undefined)
-                    return  d.message;
-            }
-            else if(data.status.message){
-                return  data.status.message;
+                if (d != undefined) {
+                    return d.message;
+                }
+            } else if (data.status.message) {
+                return data.status.message;
             }
             return 'Undefined error';
-        }else{
-            if(this.data.metadata.deletionTimestamp){
+        } else {
+            if (this.data.metadata.deletionTimestamp) {
                 return 'Pod is Terminating';
-            } else if(phase === 'Running' || phase === 'Succeeded'){
+            } else if (phase === 'Running' || phase === 'Succeeded') {
                 return 'Pod is ' + phase;
-            }else{
-                if(data.status.containerStatuses){
+            } else {
+                if (data.status.containerStatuses) {
                     let d = data.status.containerStatuses.filter(item => item.ready === false)[0];
-                    if(d.state.waiting.message && d.state.waiting.message.length > 0){
+                    if (d.state.waiting.message && d.state.waiting.message.length > 0) {
                         message = d.state.waiting.message;
                     }
-                }
-                else  if(data.status.conditions){
+                } else if (data.status.conditions) {
                     let d = data.status.conditions.filter(item => item.ready === false || (item.type === 'PodScheduled' && item.status === 'False'))[0];
-                    if(d != undefined)
+                    if (d != undefined)
                         message = d.message;
-                }
-                else if(data.status.message){
+                } else if (data.status.message) {
                     message = data.status.message;
                 }
                 return message;
             }
         }
+    }
+
+    set message(msg) {
+        this.eventMessage = msg;
     }
 
     get NaMessage(){

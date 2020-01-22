@@ -33,4 +33,5 @@ export declare class DOPK8SDatasource {
     getNodes(): any;
     getJobs(): any;
     getCronJobs(): any;
+    getEvents(): any;
 }

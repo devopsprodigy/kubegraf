@@ -39,6 +39,7 @@ export  class K8sPage {
 
     //common store
     storePods: Array<Pod> = [];
+    storeEvents: Array<any> = null;
     storeComponents: Array<Component> = [];
     storeServices: Array<Service> = [];
     storeJobs: Array<Job> = [];
@@ -109,7 +110,6 @@ export  class K8sPage {
         dbUrl += '&' + 'var-'+ entityName +'=' + entity.name;
         return dbUrl;
     }
-
 
     getNodeMap(withoutPods = false){
         let _promises = [];
@@ -740,9 +740,9 @@ export  class K8sPage {
             .then(pods => {
                 if(pods instanceof Array) {
                     this.podsError = false;
-                    if(skipEmptyHost)
+                    if (skipEmptyHost) {
                         pods = pods.filter(pod => pod.status.hostIP != undefined);
-
+                    }
                     this.storePods = pods.map(pod => new Pod(pod));
                 } else if (pods instanceof Error){
                     this.podsError = pods;
@@ -753,8 +753,6 @@ export  class K8sPage {
                 },this.refreshRate)
             })
     }
-
-
 
     refreshPods(skipEmptyHost = false){
 
@@ -901,12 +899,19 @@ export  class K8sPage {
         return pods.filter(item => !item.is_deleted).length;
     }
 
-    getWarningPods(){
-        return this.storePods.filter(item =>
-            (item.status === WARNING || item.status === ERROR || item.status === TERMINATING)
-            &&
-            !item.is_deleted
-        );
+    getWarningPods() {
+        let warningPods = this.storePods.filter(item => this.podIsWarning(item));
+        if (warningPods.length > 0 && warningPods.filter(pod => pod.message === "Undefined error").length > 0) {
+            this.storePods.forEach((pod,index) => {
+                if (this.podIsWarning(pod) && pod.message === "Undefined error") {
+                    const event = this.storeEvents.find(event => event.involvedObject.name === pod.name);
+                    if (event !== undefined) {
+                        this.storePods[index].message = event.message;
+                    }
+                }
+            })
+        }
+        return warningPods
     }
 
     getWarningNodes(){
@@ -938,4 +943,17 @@ export  class K8sPage {
         return this.storeComponents.filter(item => item.status === ERROR);
     }
 
+    getEvents() {
+        this.cluster.getEvents().then(events => {
+            this.storeEvents = events
+
+            this.timeout(() => {
+                this.getEvents();
+            }, this.refreshRate)
+        });
+    }
+
+    podIsWarning(pod: Pod) {
+        return !pod.is_deleted && (pod.status === WARNING || pod.status === ERROR || pod.status === TERMINATING)
+    }
 }

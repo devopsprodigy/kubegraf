@@ -56,6 +56,7 @@ System.register(["app/core/app_events", "../common/types/pod", "../common/proxie
                     this.nodesMapReady = false;
                     //common store
                     this.storePods = [];
+                    this.storeEvents = null;
                     this.storeComponents = [];
                     this.storeServices = [];
                     this.storeJobs = [];
@@ -681,8 +682,9 @@ System.register(["app/core/app_events", "../common/types/pod", "../common/proxie
                         .then(function (pods) {
                         if (pods instanceof Array) {
                             _this.podsError = false;
-                            if (skipEmptyHost)
+                            if (skipEmptyHost) {
                                 pods = pods.filter(function (pod) { return pod.status.hostIP != undefined; });
+                            }
                             _this.storePods = pods.map(function (pod) { return new pod_1.Pod(pod); });
                         }
                         else if (pods instanceof Error) {
@@ -832,11 +834,19 @@ System.register(["app/core/app_events", "../common/types/pod", "../common/proxie
                     return pods.filter(function (item) { return !item.is_deleted; }).length;
                 };
                 K8sPage.prototype.getWarningPods = function () {
-                    return this.storePods.filter(function (item) {
-                        return (item.status === constants_1.WARNING || item.status === constants_1.ERROR || item.status === constants_1.TERMINATING)
-                            &&
-                                !item.is_deleted;
-                    });
+                    var _this = this;
+                    var warningPods = this.storePods.filter(function (item) { return _this.podIsWarning(item); });
+                    if (warningPods.length > 0 && warningPods.filter(function (pod) { return pod.message === "Undefined error"; }).length > 0) {
+                        this.storePods.forEach(function (pod, index) {
+                            if (_this.podIsWarning(pod) && pod.message === "Undefined error") {
+                                var event_1 = _this.storeEvents.find(function (event) { return event.involvedObject.name === pod.name; });
+                                if (event_1 !== undefined) {
+                                    _this.storePods[index].message = event_1.message;
+                                }
+                            }
+                        });
+                    }
+                    return warningPods;
                 };
                 K8sPage.prototype.getWarningNodes = function () {
                     return this.nodesMap.filter(function (item) { return item.status === constants_1.ERROR; });
@@ -861,6 +871,18 @@ System.register(["app/core/app_events", "../common/types/pod", "../common/proxie
                 };
                 K8sPage.prototype.getAlertsComponents = function () {
                     return this.storeComponents.filter(function (item) { return item.status === constants_1.ERROR; });
+                };
+                K8sPage.prototype.getEvents = function () {
+                    var _this = this;
+                    this.cluster.getEvents().then(function (events) {
+                        _this.storeEvents = events;
+                        _this.timeout(function () {
+                            _this.getEvents();
+                        }, _this.refreshRate);
+                    });
+                };
+                K8sPage.prototype.podIsWarning = function (pod) {
+                    return !pod.is_deleted && (pod.status === constants_1.WARNING || pod.status === constants_1.ERROR || pod.status === constants_1.TERMINATING);
                 };
                 return K8sPage;
             })();

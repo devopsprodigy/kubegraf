@@ -23,6 +23,7 @@ export class ClusterAlerts extends K8sPage{
         this.__prepareDS().then(() => {
             let _promises = [];
 
+            _promises.push(this.getEvents());
             _promises.push(this.getPods());
             _promises.push(this.getClusterComponents());
             _promises.push(
