@@ -945,7 +945,7 @@ export  class K8sPage {
 
     getEvents() {
         this.cluster.getEvents().then(events => {
-            this.storeEvents = events
+            this.storeEvents = events;
 
             this.timeout(() => {
                 this.getEvents();

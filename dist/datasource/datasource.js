@@ -374,6 +374,10 @@ System.register(["app/core/app_events"], function(exports_1) {
                 DOPK8SDatasource.prototype.getEvents = function () {
                     return this.__get('/api/v1/events')
                         .then(function (result) {
+                        if (result.status === 403) {
+                            app_events_1.default.emit('alert-error', [result.status + ' ' + result.statusText, "Please, update ClusterRole to get new permissions"]);
+                            return [];
+                        }
                         if (!result.items) {
                             app_events_1.default.emit('alert-error', ["Events not received"]);
                             return [];

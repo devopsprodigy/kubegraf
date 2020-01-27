@@ -415,7 +415,11 @@ export class DOPK8SDatasource {
     getEvents() {
         return this.__get('/api/v1/events')
             .then(result => {
-                if(!result.items){
+                if (result.status === 403) {
+                    appEvents.emit('alert-error', [result.status+' '+result.statusText, `Please, update ClusterRole to get new permissions`]);
+                    return [];
+                }
+                if (!result.items) {
                     appEvents.emit('alert-error', [`Events not received`]);
                     return [];
                 }
