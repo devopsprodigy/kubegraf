@@ -72,7 +72,7 @@
                             <th>Pod Name</th>
                             <th>Error message </th>
                             <th ng-show="ctrl.hideAllWarningPods">
-                                <div class="btn btn-danger override--full-width" ng-click="ctrl.toggleAllWarningPods()"> <span class="btn gicon gicon-alert-alt"></span>show all warnings(<span ng-bind="ctrl.getWarningPods().length"></span>)</div>
+                                <div class="btn btn-danger override--full-width" ng-click="ctrl.toggleAllWarningPods()"> <span class="btn gicon gicon-alert-alt"></span><span ng-bind="'show all warnings('+ctrl.getWarningPods().length+')'"></span></div>
                             </th>
                         </tr>
                         <tr ng-repeat="pod in ctrl.getWarningPods()" ng-hide="ctrl.hideAllWarningPods">

@@ -1,4 +1,5 @@
-import appEvents from "app/core/app_events";
+///<reference path="../../../node_modules/grafana-sdk-mocks/app/headers/common.d.ts" />
+import appEvents from "grafana/app/core/app_events";
 import {TYPE_PROMETHEUS} from "../../common/constants";
 import { __getGrafanaVersion } from "../../common/helpers";
 

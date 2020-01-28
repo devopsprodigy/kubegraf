@@ -1,16 +1,44 @@
 {
   "compileOnSave": false,
   "compilerOptions": {
-      "target": "ES5",
-      "module": "system",
-      "sourceMap": true,
-      "declaration": true,
-      "emitDecoratorMetadata": true,
-      "experimentalDecorators": true,
-      "noImplicitAny": false,
-      "moduleResolution": "node"
+    "moduleResolution": "node",
+    "outDir": "./dist",
+    "target": "es5",
+    "lib": ["es5", "es6", "dom"],
+    "module": "es6",
+    "declaration": false,
+    "allowSyntheticDefaultImports": true,
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
+    "importHelpers": true,
+    "noEmitHelpers": true,
+    "removeComments": false,
+    "inlineSourceMap": false,
+    "sourceMap": true,
+    "noEmitOnError": false,
+    "emitDecoratorMetadata": false,
+    "experimentalDecorators": true,
+    "strictNullChecks": false,
+    "noImplicitReturns": false,
+    "noImplicitThis": true,
+    "noImplicitUseStrict": false,
+    "noImplicitAny": false,
+    "downlevelIteration": true,
+    "noUnusedLocals": false,
+    "baseUrl": "public",
+    "pretty": true,
+    "typeRoots": ["node_modules/@types", "public/app/types"],
+    "paths": {
+      "app": ["app"],
+      "sass": ["sass"],
+      "@grafana/slate-react": ["../node_modules/@types/slate-react"]
+    },
+    "skipLibCheck": true
   },
+  "include": [
+    "./src/**/*.ts"
+  ],
   "exclude": [
-      "./node_modules/**"
+    "node_modules"
   ]
 }

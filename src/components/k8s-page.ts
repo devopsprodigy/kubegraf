@@ -1,6 +1,5 @@
 ///<reference path="../../node_modules/grafana-sdk-mocks/app/headers/common.d.ts" />
-
-import appEvents from "app/core/app_events";
+import appEvents from "grafana/app/core/app_events";
 
 import {Pod} from "../common/types/pod";
 import angular from "angular";
