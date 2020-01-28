@@ -143,6 +143,28 @@ System.register(["../k8s-page", "../../common/store", "../../common/helpers"], f
                 NodesOverview.prototype.podsFilterIsDeleted = function (pods) {
                     return pods.filter(function (pod) { return pod.is_deleted === false; });
                 };
+                NodesOverview.prototype.sort = function (key, nsIndex, nodeIndex) {
+                    if (this.nodesMap[nodeIndex] && this.nodesMap[nodeIndex].namespaces[nsIndex]) {
+                        if (this.nodesMap[nodeIndex].namespaces[nsIndex].sort.indexOf(key) === 0) {
+                            this.nodesMap[nodeIndex].namespaces[nsIndex].sort = '-' + key;
+                        }
+                        else {
+                            this.nodesMap[nodeIndex].namespaces[nsIndex].sort = key;
+                        }
+                    }
+                };
+                NodesOverview.prototype.icon = function (key, nsIndex, nodeIndex) {
+                    console.log(key, nsIndex, nodeIndex);
+                    if (this.nodesMap[nodeIndex] && this.nodesMap[nodeIndex].namespaces[nsIndex]) {
+                        if (this.nodesMap[nodeIndex].namespaces[nsIndex].sort.indexOf(key) === 0) {
+                            return '<i class="fa fa-long-arrow-down"></i>';
+                        }
+                        else if (this.nodesMap[nodeIndex].namespaces[nsIndex].sort.indexOf('-' + key) === 0) {
+                            return '<i class="fa fa-long-arrow-up"></i>';
+                        }
+                    }
+                    return '<i class="fa fa-long-arrow-up gray"></i>';
+                };
                 NodesOverview.templateUrl = 'components/nodes-overview/nodes-overview.html';
                 return NodesOverview;
             })(k8s_page_1.K8sPage);

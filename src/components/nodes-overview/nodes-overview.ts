@@ -147,4 +147,26 @@ export class NodesOverview extends K8sPage {
     podsFilterIsDeleted(pods: Array<Pod>) {
         return pods.filter(pod => pod.is_deleted === false)
     }
+
+    sort(key, nsIndex, nodeIndex){
+        if (this.nodesMap[nodeIndex] && this.nodesMap[nodeIndex].namespaces[nsIndex]) {
+            if (this.nodesMap[nodeIndex].namespaces[nsIndex].sort.indexOf(key) === 0) {
+                this.nodesMap[nodeIndex].namespaces[nsIndex].sort = '-' + key
+            } else {
+                this.nodesMap[nodeIndex].namespaces[nsIndex].sort = key
+            }
+        }
+    }
+
+    icon(key, nsIndex, nodeIndex){
+        console.log(key, nsIndex, nodeIndex);
+        if (this.nodesMap[nodeIndex] && this.nodesMap[nodeIndex].namespaces[nsIndex]) {
+            if (this.nodesMap[nodeIndex].namespaces[nsIndex].sort.indexOf(key) === 0) {
+                return '<i class="fa fa-long-arrow-down"></i>'
+            } else if (this.nodesMap[nodeIndex].namespaces[nsIndex].sort.indexOf('-' + key) === 0){
+                return '<i class="fa fa-long-arrow-up"></i>'
+            }
+        }
+        return '<i class="fa fa-long-arrow-up gray"></i>'
+    }
 }

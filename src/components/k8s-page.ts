@@ -327,7 +327,8 @@ export  class K8sPage {
                     let _ns = {
                         name: pod.data.metadata.namespace,
                         pods: [],
-                        limit: PODS_LIMIT
+                        limit: PODS_LIMIT,
+                        sort: 'name'
                     };
                     node.namespaces.push(_ns);
                 }

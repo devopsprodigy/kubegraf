@@ -14,6 +14,7 @@ export declare class Namespace extends BaseModel {
     }>;
     jobs: Array<Job>;
     cronJobs: Array<Cronjob>;
+    sort: string;
     constructor(data: any);
     toggle(): void;
 }

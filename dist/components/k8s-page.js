@@ -297,7 +297,8 @@ System.register(["app/core/app_events", "../common/types/pod", "../common/proxie
                                 var _ns_1 = {
                                     name: pod.data.metadata.namespace,
                                     pods: [],
-                                    limit: constants_1.PODS_LIMIT
+                                    limit: constants_1.PODS_LIMIT,
+                                    sort: 'name'
                                 };
                                 node.namespaces.push(_ns_1);
                             }

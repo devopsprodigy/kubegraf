@@ -23,6 +23,7 @@ System.register(["../../common/store", '../../common/types/traits/baseModel'], f
                     this.statefulsets = [];
                     this.daemonsets = [];
                     this.other = [{ pods: [] }];
+                    this.sort = 'name';
                 }
                 Namespace.prototype.toggle = function () {
                     var _this = this;
