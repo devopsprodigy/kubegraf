@@ -8,6 +8,12 @@ export class Pod extends BaseModel{
         cpuRequested: number|string,
         memoryRequested: number|string
     };
+    sourceMetrics: {
+        cpuUsed: number,
+        memoryUsed: number,
+        cpuRequested: number,
+        memoryRequested: number
+    };
     used: boolean;
     private eventMessage: string = null;
 
@@ -18,6 +24,12 @@ export class Pod extends BaseModel{
             memoryUsed: 'N-A',
             cpuRequested: 'N-A',
             memoryRequested: 'N-A'
+        };
+        this.sourceMetrics = {
+            cpuUsed: null,
+            memoryUsed: null,
+            cpuRequested: null,
+            memoryRequested: null
         };
         this.used = false;
     }

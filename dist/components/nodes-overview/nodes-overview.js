@@ -64,55 +64,26 @@ System.register(["../k8s-page", "../../common/store", "../../common/helpers"], f
                 };
                 NodesOverview.prototype.summary = function (ns, metric) {
                     var res = 0;
-                    var postfix = null;
                     if (ns.pods) {
                         res = ns.pods.reduce(function (prevValue, pod) {
-                            if (pod.metrics[metric] && pod.metrics[metric] !== 'N-A') {
-                                var match = pod.metrics[metric].match(/([a-zA-Z]+)$/);
-                                var value = 0;
-                                if (match[1]) {
-                                    switch (match[1]) {
-                                        case ('m'):
-                                            value = parseInt(pod.metrics[metric], 10);
-                                            postfix = 'm';
-                                            break;
-                                        case ('MiB'):
-                                            value = parseFloat(pod.metrics[metric]);
-                                            if (postfix === 'GiB') {
-                                                value = value / 1024;
-                                            }
-                                            else {
-                                                postfix = 'MiB';
-                                            }
-                                            break;
-                                        case ('GiB'):
-                                            value = parseFloat(pod.metrics[metric]);
-                                            if (postfix === 'MiB') {
-                                                prevValue = prevValue / 1024;
-                                            }
-                                            postfix = 'GiB';
-                                            break;
-                                    }
-                                }
-                                return prevValue + value;
+                            if (pod.sourceMetrics[metric]) {
+                                return prevValue + pod.sourceMetrics[metric];
                             }
                             return prevValue;
                         }, 0);
                     }
-                    if (res !== 0) {
-                        switch (postfix) {
-                            case "m":
-                                return res + postfix;
-                            case "GiB":
-                                return Math.round(res * 1000) / 1000 + ' ' + postfix;
-                            case "MiB":
-                                if (res / 1024 > 1) {
-                                    return Math.round((res / 1024) * 1000) / 1000 + ' GiB';
-                                }
-                                return Math.round(res * 1000) / 1000 + ' ' + postfix;
-                        }
+                    switch (metric) {
+                        case "cpuUsed":
+                            return helpers_1.__convertToMicro(res.toFixed(3));
+                        case "cpuRequested":
+                            return helpers_1.__convertToMicro(helpers_1.__roundCpu(res));
+                        case "memoryUsed":
+                            return helpers_1.__convertToGB(res);
+                        case "memoryRequested":
+                            return helpers_1.__convertToGB(res);
+                        default:
+                            return 'N-A';
                     }
-                    return 'N-A';
                 };
                 NodesOverview.prototype.nodeClick = function (event, node) {
                     if (event.ctrlKey) {
@@ -154,7 +125,6 @@ System.register(["../k8s-page", "../../common/store", "../../common/helpers"], f
                     }
                 };
                 NodesOverview.prototype.icon = function (key, nsIndex, nodeIndex) {
-                    console.log(key, nsIndex, nodeIndex);
                     if (this.nodesMap[nodeIndex] && this.nodesMap[nodeIndex].namespaces[nsIndex]) {
                         if (this.nodesMap[nodeIndex].namespaces[nsIndex].sort.indexOf(key) === 0) {
                             return '<i class="fa fa-long-arrow-down"></i>';

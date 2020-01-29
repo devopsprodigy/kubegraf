@@ -6,6 +6,12 @@ export declare class Pod extends BaseModel {
         cpuRequested: number | string;
         memoryRequested: number | string;
     };
+    sourceMetrics: {
+        cpuUsed: number;
+        memoryUsed: number;
+        cpuRequested: number;
+        memoryRequested: number;
+    };
     used: boolean;
     private eventMessage;
     constructor(data: any);
