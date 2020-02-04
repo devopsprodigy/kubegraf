@@ -139,16 +139,16 @@
           "value": "$__all"
         },
         "datasource": "$PromDs",
-        "definition": "label_values(container_memory_usage_bytes{namespace=\"$namespace\", pod_name=~\"$daemonset-.*\", container_name!=\"\", container_name!=\"POD\"}, container_name)",
+        "definition": "query_result(container_memory_usage_bytes{namespace=\"$namespace\", pod_name=~\"$daemonset-.*\", container_name!=\"\", container_name!=\"POD\"} or container_memory_usage_bytes{namespace=\"$namespace\", pod=~\"$daemonset-.*\", container!=\"POD\", container!=\"\"})",
         "hide": 0,
         "includeAll": true,
         "label": null,
         "multi": false,
         "name": "container",
         "options": [],
-        "query": "label_values(container_memory_usage_bytes{namespace=\"$namespace\", pod_name=~\"$daemonset-.*\", container_name!=\"\", container_name!=\"POD\"}, container_name)",
+        "query": "query_result(container_memory_usage_bytes{namespace=\"$namespace\", pod_name=~\"$daemonset-.*\", container_name!=\"\", container_name!=\"POD\"} or container_memory_usage_bytes{namespace=\"$namespace\", pod=~\"$daemonset-.*\", container!=\"POD\", container!=\"\"})",
         "refresh": 2,
-        "regex": "",
+        "regex": "/container=\"(.+?)\"|container_name=\"(.+?)\"/",
         "skipUrlSync": false,
         "sort": 1,
         "tagValuesQuery": "",
@@ -168,16 +168,16 @@
           ]
         },
         "datasource": "$PromDs",
-        "definition": "label_values(container_memory_usage_bytes{namespace=\"$namespace\", pod_name=~\"$daemonset-.*\", container_name!=\"\", container_name!=\"POD\"}, pod)",
+        "definition": "query_result(container_memory_usage_bytes{namespace=\"$namespace\", pod_name=~\"$daemonset-.*\", container_name!=\"\", container_name!=\"POD\"} or container_memory_usage_bytes{namespace=\"$namespace\", pod=~\"$daemonset-.*\", container!=\"POD\", container!=\"\"})",
         "hide": 0,
         "includeAll": true,
         "label": null,
         "multi": true,
         "name": "pod",
         "options": [],
-        "query": "label_values(container_memory_usage_bytes{namespace=\"$namespace\", pod_name=~\"$daemonset-.*\", container_name!=\"\", container_name!=\"POD\"}, pod)",
+        "query": "query_result(container_memory_usage_bytes{namespace=\"$namespace\", pod_name=~\"$daemonset-.*\", container_name!=\"\", container_name!=\"POD\"} or container_memory_usage_bytes{namespace=\"$namespace\", pod=~\"$daemonset-.*\", container!=\"POD\", container!=\"\"})",
         "refresh": 1,
-        "regex": "",
+        "regex": "/pod=\"(.+?)\"|pod_name=\"(.+?)\"/",
         "skipUrlSync": false,
         "sort": 0,
         "tagValuesQuery": "",
@@ -690,12 +690,12 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "sum (container_memory_usage_bytes{namespace=\"$namespace\", pod_name=~\"$pod\", container_name!=\"\", container_name!=\"POD\", container_name=~\"$container\"}) by (pod_name)",
-          "legendFormat": "Used: {{pod_name}} / {{$container}}",
+          "expr": "sum(container_memory_usage_bytes{namespace=\"$namespace\", pod=~\"$pod\", container!=\"\", container!=\"POD\", container=~\"$container\"}) by (pod) or\nsum(label_replace(container_memory_usage_bytes{namespace=\"$namespace\", pod_name=~\"$pod\", container_name!=\"\", container_name!=\"POD\", container_name=~\"$container\"}, \"pod\", \"$1\", \"pod_name\", \"(.*)\")) by (pod)",
+          "legendFormat": "Used: {{pod}} / {{$container}}",
           "refId": "A"
         },
         {
-          "expr": "sum (kube_pod_container_resource_requests_memory_bytes{ namespace=\"$namespace\", pod=~\"$pod\", container=~\"$container\"}) by (pod)",
+          "expr": "sum(kube_pod_container_resource_requests_memory_bytes{namespace=\"$namespace\", pod=~\"$pod\", container=~\"$container\"}) by (pod)",
           "hide": false,
           "legendFormat": "Requested: {{pod}} / {{$container}}",
           "refId": "B"
@@ -785,12 +785,12 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "sum(rate(container_cpu_usage_seconds_total{namespace=\"$namespace\", pod_name=~\"$pod\", container_name=~\"$container\"}[2m])) by (pod_name)",
-          "legendFormat": "Used: {{pod_name}} / {{$container}}",
+          "expr": "sum(rate(container_cpu_usage_seconds_total{namespace=\"$namespace\", pod=~\"$pod\", container=~\"$container\"}[2m])) by (pod) or\nsum(label_replace(rate(container_cpu_usage_seconds_total{namespace=\"$namespace\", pod_name=~\"$pod\", container_name=~\"$container\"}[2m]), \"pod\", \"$1\", \"pod_name\", \"(.*)\")) by (pod)",
+          "legendFormat": "Used: {{pod}} / {{$container}}",
           "refId": "A"
         },
         {
-          "expr": "kube_pod_container_resource_requests_cpu_cores{namespace=\"$namespace\", pod=~\"$pod\", container_name=~\"$container\"}",
+          "expr": "kube_pod_container_resource_requests_cpu_cores{namespace=\"$namespace\", pod=~\"$pod\", container=~\"$container\"}",
           "legendFormat": "Requested: {{pod}} / {{$container}}",
           "refId": "B"
         }
@@ -878,8 +878,8 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "irate(container_network_transmit_bytes_total{namespace=\"$namespace\", pod_name=~\"$pod\"}[2m])",
-          "legendFormat": "{{interface}} : [{{pod_name}}]",
+          "expr": "irate(container_network_transmit_bytes_total{namespace=\"$namespace\", pod=~\"$pod\"}[2m]) or label_replace(irate(container_network_transmit_bytes_total{namespace=\"$namespace\", pod_name=~\"$pod\"}[2m]), \"pod\", \"$1\", \"pod_name\", \"(.*)\")",
+          "legendFormat": "{{interface}} : [{{pod}}]",
           "refId": "A"
         }
       ],
@@ -966,8 +966,8 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "irate(container_network_receive_bytes_total{namespace=\"$namespace\", pod_name=~\"$pod\"}[2m])",
-          "legendFormat": "{{interface}} : [{{pod_name}}]",
+          "expr": "irate(container_network_receive_bytes_total{namespace=\"$namespace\", pod=~\"$pod\"}[2m]) or label_replace(irate(container_network_receive_bytes_total{namespace=\"$namespace\", pod_name=~\"$pod\"}[2m]), \"pod\", \"$1\", \"pod_name\", \"(.*)\")",
+          "legendFormat": "{{interface}} : [{{pod}}]",
           "refId": "A"
         }
       ],
