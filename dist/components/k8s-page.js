@@ -256,16 +256,20 @@ System.register(["app/core/app_events", "../common/types/pod", "../common/proxie
                 };
                 K8sPage.prototype.__getPodsUsedCpu = function () {
                     var podsUsedCpu = {
-                        expr: 'sum(rate(container_cpu_usage_seconds_total{pod_name!="", container_name!="", container_name!="POD"}[2m])) by (pod_name)',
-                        legend: 'pod_name'
+                        //expr: 'sum(rate(container_cpu_usage_seconds_total{pod_name!="", container_name!="", container_name!="POD"}[2m])) by (pod_name)',
+                        expr: 'sum(rate(container_cpu_usage_seconds_total{pod!="", container!="", container!="POD"}[2m])) by (pod) or ' +
+                            'sum(label_replace(rate(container_cpu_usage_seconds_total{pod_name!="", container_name!="", container_name!="POD"}[2m]), "pod", "$1", "pod_name", "(.*)")) by (pod)',
+                        legend: 'pod'
                     };
                     return this.prometheusDS.query(podsUsedCpu)
                         .then(function (res) { return res; });
                 };
                 K8sPage.prototype.__getPodsUsedMemory = function () {
                     var podsUsedMemory = {
-                        expr: 'sum (container_memory_usage_bytes{container_name!="", container_name!="POD"}) by (pod_name)',
-                        legend: 'pod_name'
+                        //expr: 'sum(container_memory_usage_bytes{container_name!="", container_name!="POD"}) by (pod_name)'
+                        expr: 'sum(container_memory_usage_bytes{container!="", container!="POD"}) by (pod) or ' +
+                            'sum(label_replace(container_memory_usage_bytes{container_name!="", container_name!="POD"}, "pod", "$1", "pod_name", "(.*)")) by (pod)',
+                        legend: 'pod'
                     };
                     return this.prometheusDS.query(podsUsedMemory)
                         .then(function (res) { return res; });

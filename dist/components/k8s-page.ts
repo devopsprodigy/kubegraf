@@ -276,8 +276,10 @@ export  class K8sPage {
 
     __getPodsUsedCpu(){
         const podsUsedCpu = {
-            expr: 'sum(rate(container_cpu_usage_seconds_total{pod_name!="", container_name!="", container_name!="POD"}[2m])) by (pod_name)',
-            legend: 'pod_name'
+            //expr: 'sum(rate(container_cpu_usage_seconds_total{pod_name!="", container_name!="", container_name!="POD"}[2m])) by (pod_name)',
+            expr: 'sum(rate(container_cpu_usage_seconds_total{pod!="", container!="", container!="POD"}[2m])) by (pod) or ' +
+                'sum(label_replace(rate(container_cpu_usage_seconds_total{pod_name!="", container_name!="", container_name!="POD"}[2m]), "pod", "$1", "pod_name", "(.*)")) by (pod)',
+            legend: 'pod'
         };
 
         return this.prometheusDS.query(podsUsedCpu)
@@ -286,8 +288,10 @@ export  class K8sPage {
 
     __getPodsUsedMemory(){
         const podsUsedMemory = {
-            expr: 'sum (container_memory_usage_bytes{container_name!="", container_name!="POD"}) by (pod_name)',
-            legend: 'pod_name'
+            //expr: 'sum(container_memory_usage_bytes{container_name!="", container_name!="POD"}) by (pod_name)'
+            expr: 'sum(container_memory_usage_bytes{container!="", container!="POD"}) by (pod) or ' +
+                'sum(label_replace(container_memory_usage_bytes{container_name!="", container_name!="POD"}, "pod", "$1", "pod_name", "(.*)")) by (pod)',
+            legend: 'pod'
         };
 
         return this.prometheusDS.query(podsUsedMemory)
