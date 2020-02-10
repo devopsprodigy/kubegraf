@@ -1,7 +1,7 @@
 ///<reference path="../../node_modules/grafana-sdk-mocks/app/headers/common.d.ts" />
 
 import {Pod} from './types/pod';
-import kbn from 'app/core/utils/kbn';
+import kbn from 'grafana/app/core/utils/kbn';
 
 
 let __prepare = items => {
