@@ -46,9 +46,11 @@ export class ClusterAlerts extends K8sPage{
         let usedCpu = this.getAlertsNodesByCPU().length === 0;
         let usedMemory = this.getAlertsNodesByMemory().length === 0;
         let usedPods = this.getAlertsNodesByPods().length === 0;
+        let requestedCpu = this.getAlertsNodesByCPU('cpuStatusRequested').length === 0;
+        let requestedMemory = this.getAlertsNodesByMemory('memoryStatusRequested').length === 0;
         let failPods = this.getWarningPods().length === 0;
         let components = this.getAlertsComponents.length === 0;
 
-        return this.nodesError || this.componentsError || this.podsError || !(node && usedCpu && usedMemory && usedPods && failPods && components);
+        return this.nodesError || this.componentsError || this.podsError || !(node && usedCpu && usedMemory && usedPods && failPods && components && requestedCpu && requestedMemory);
     };
 }

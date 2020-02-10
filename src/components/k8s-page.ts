@@ -934,15 +934,16 @@ export  class K8sPage {
         }
     }
 
-    getAlertsNodesByCPU(){
-        return this.nodesMap.filter(item => item.cpuStatus === WARNING || item.cpuStatus === ERROR);
-    }
-    getAlertsNodesByMemory(){
-        return this.nodesMap.filter(item => item.memoryStatus === WARNING || item.memoryStatus === ERROR);
+    getAlertsNodesByCPU(status: 'cpuStatus'|'cpuStatusRequested' = 'cpuStatus'){
+        return this.nodesMap.filter(item => item[status] === WARNING || item[status] === ERROR);
     }
 
-    getAlertsNodesByPods(){
-        return this.nodesMap.filter(item => item.podsStatus === WARNING || item.podsStatus === ERROR);
+    getAlertsNodesByMemory(status: 'memoryStatus'|'memoryStatusRequested' = 'memoryStatus'){
+        return this.nodesMap.filter(item => item[status] === WARNING || item[status] === ERROR);
+    }
+
+    getAlertsNodesByPods(status: 'podsStatus' = 'podsStatus'){
+        return this.nodesMap.filter(item => item[status] === WARNING || item[status] === ERROR);
     }
 
     getAlertsComponents(){

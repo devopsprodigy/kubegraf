@@ -114,6 +114,20 @@
                             </td>
                             <td>CPU used: <span ng-bind="node.cpuPercentUsed" /></td>
                         </tr>
+                        <tr ng-repeat="node in ctrl.getAlertsNodesByCPU('cpuStatusRequested')">
+                            <td>
+                                <span class="override--nodeTable_status" ng-style="{'background' : node.rowCpuRequestedColor}"></span>
+                            </td>
+                            <td>Node:
+                                <span ng-bind="node.name" />
+                                <span>
+                                    <a href="{{ctrl.getNodeDashboardLink(node)}}" target="_blank" style="color: #fff">
+                                        <i class="fa fa-eye"/>
+                                    </a>
+                                </span>
+                            </td>
+                            <td>CPU requested: <span ng-bind="node.cpuPercentRequested" /></td>
+                        </tr>
                         <!--memory used-->
                         <tr ng-repeat="node in ctrl.getAlertsNodesByMemory()">
                             <td>
@@ -128,6 +142,20 @@
                                 </span>
                             </td>
                             <td>Memory used: <span ng-bind="node.memoryPercentUsed" /></td>
+                        </tr>
+                        <tr ng-repeat="node in ctrl.getAlertsNodesByMemory('memoryStatusRequested')">
+                            <td>
+                                <span class="override--nodeTable_status" ng-style="{'background' : node.rowMemoryRequestedColor}"></span>
+                            </td>
+                            <td>Node:
+                                <span ng-bind="node.name" />
+                                <span>
+                                    <a href="{{ctrl.getNodeDashboardLink(node)}}" target="_blank" style="color: #fff">
+                                        <i class="fa fa-eye"/>
+                                    </a>
+                                </span>
+                            </td>
+                            <td>Memory used: <span ng-bind="node.memoryPercentRequested" /></td>
                         </tr>
                         <!--pods used-->
                         <tr ng-repeat="node in ctrl.getAlertsNodesByPods()">

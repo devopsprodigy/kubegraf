@@ -191,11 +191,25 @@ export class Node extends BaseModel {
         return __roundCpu(this.metrics.cpuUsed) + ' / ' + this.data.status.allocatable.cpu + ' ( '+ __percentUsed(this.metrics.cpuUsed, cpu) + ' )';
     }
 
+    get cpuPercentRequested(){
+        let cpu = this.data.status.allocatable.cpu;
+        if(cpu.indexOf('m') > -1){
+            cpu = parseInt(cpu)/1000;
+        }
+        return __roundCpu(this.metrics.cpuRequested) + ' / ' + this.data.status.allocatable.cpu + ' ( '+ __percentUsed(this.metrics.cpuRequested, cpu) + ' )';
+    }
+
     get memoryPercentUsed(){
         let used = this.metrics.memoryUsed;
         let allocatable = this.__getBytes(this.data.status.allocatable.memory);
         let percent = __percentUsed(used, allocatable);
         return __convertToGB(used) + ' / ' + __convertToGB(allocatable) + ' ( ' + percent + ' ) ';
+    }
+
+    get memoryPercentRequested(){
+        let allocatable = this.__getBytes(this.data.status.allocatable.memory);
+        let percent = __percentUsed(this.metrics.memoryRequested, allocatable);
+        return __convertToGB(this.metrics.memoryRequested) + ' / ' + __convertToGB(allocatable) + ' ( ' + percent + ' ) ';
     }
 
     get podsPercentUsed(){
@@ -204,7 +218,6 @@ export class Node extends BaseModel {
         let percent = __percentUsed(used, allocatable);
         return used + ' / ' + allocatable + ' ( ' + percent + ' ) ';
     }
-
 
     /*color*/
 
@@ -353,13 +366,13 @@ export class Node extends BaseModel {
 
         let diff = requested/allocatable;
 
-        if(diff <= 0.9){
+        if(diff <= 0.5){
             return SUCCESS;
         }
-        else if(diff > 0.9 && diff <= 1){
+        else if(diff > 0.5 && diff <= 0.8){
             return WARNING;
         }
-        else if(diff > 1){
+        else if(diff > 0.8){
             return ERROR;
         }
         else {

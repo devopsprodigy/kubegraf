@@ -18830,6 +18830,19 @@ function (_super) {
     enumerable: true,
     configurable: true
   });
+  Object.defineProperty(Node.prototype, "cpuPercentRequested", {
+    get: function get() {
+      var cpu = this.data.status.allocatable.cpu;
+
+      if (cpu.indexOf('m') > -1) {
+        cpu = parseInt(cpu) / 1000;
+      }
+
+      return (0, _helpers.__roundCpu)(this.metrics.cpuRequested) + ' / ' + this.data.status.allocatable.cpu + ' ( ' + (0, _helpers.__percentUsed)(this.metrics.cpuRequested, cpu) + ' )';
+    },
+    enumerable: true,
+    configurable: true
+  });
   Object.defineProperty(Node.prototype, "memoryPercentUsed", {
     get: function get() {
       var used = this.metrics.memoryUsed;
@@ -18838,6 +18851,16 @@ function (_super) {
 
       var percent = (0, _helpers.__percentUsed)(used, allocatable);
       return (0, _helpers.__convertToGB)(used) + ' / ' + (0, _helpers.__convertToGB)(allocatable) + ' ( ' + percent + ' ) ';
+    },
+    enumerable: true,
+    configurable: true
+  });
+  Object.defineProperty(Node.prototype, "memoryPercentRequested", {
+    get: function get() {
+      var allocatable = this.__getBytes(this.data.status.allocatable.memory);
+
+      var percent = (0, _helpers.__percentUsed)(this.metrics.memoryRequested, allocatable);
+      return (0, _helpers.__convertToGB)(this.metrics.memoryRequested) + ' / ' + (0, _helpers.__convertToGB)(allocatable) + ' ( ' + percent + ' ) ';
     },
     enumerable: true,
     configurable: true
@@ -19035,11 +19058,11 @@ function (_super) {
   Node.prototype.__getStatusRequested = function (requested, allocatable) {
     var diff = requested / allocatable;
 
-    if (diff <= 0.9) {
+    if (diff <= 0.5) {
       return _constants.SUCCESS;
-    } else if (diff > 0.9 && diff <= 1) {
+    } else if (diff > 0.5 && diff <= 0.8) {
       return _constants.WARNING;
-    } else if (diff > 1) {
+    } else if (diff > 0.8) {
       return _constants.ERROR;
     } else {
       return;
@@ -19601,9 +19624,11 @@ function (_super) {
     var usedCpu = this.getAlertsNodesByCPU().length === 0;
     var usedMemory = this.getAlertsNodesByMemory().length === 0;
     var usedPods = this.getAlertsNodesByPods().length === 0;
+    var requestedCpu = this.getAlertsNodesByCPU('cpuStatusRequested').length === 0;
+    var requestedMemory = this.getAlertsNodesByMemory('memoryStatusRequested').length === 0;
     var failPods = this.getWarningPods().length === 0;
     var components = this.getAlertsComponents.length === 0;
-    return this.nodesError || this.componentsError || this.podsError || !(node && usedCpu && usedMemory && usedPods && failPods && components);
+    return this.nodesError || this.componentsError || this.podsError || !(node && usedCpu && usedMemory && usedPods && failPods && components && requestedCpu && requestedMemory);
   };
 
   ;
@@ -21072,21 +21097,33 @@ function () {
     }
   };
 
-  K8sPage.prototype.getAlertsNodesByCPU = function () {
+  K8sPage.prototype.getAlertsNodesByCPU = function (status) {
+    if (status === void 0) {
+      status = 'cpuStatus';
+    }
+
     return this.nodesMap.filter(function (item) {
-      return item.cpuStatus === _constants.WARNING || item.cpuStatus === _constants.ERROR;
+      return item[status] === _constants.WARNING || item[status] === _constants.ERROR;
     });
   };
 
-  K8sPage.prototype.getAlertsNodesByMemory = function () {
+  K8sPage.prototype.getAlertsNodesByMemory = function (status) {
+    if (status === void 0) {
+      status = 'memoryStatus';
+    }
+
     return this.nodesMap.filter(function (item) {
-      return item.memoryStatus === _constants.WARNING || item.memoryStatus === _constants.ERROR;
+      return item[status] === _constants.WARNING || item[status] === _constants.ERROR;
     });
   };
 
-  K8sPage.prototype.getAlertsNodesByPods = function () {
+  K8sPage.prototype.getAlertsNodesByPods = function (status) {
+    if (status === void 0) {
+      status = 'podsStatus';
+    }
+
     return this.nodesMap.filter(function (item) {
-      return item.podsStatus === _constants.WARNING || item.podsStatus === _constants.ERROR;
+      return item[status] === _constants.WARNING || item[status] === _constants.ERROR;
     });
   };
 
