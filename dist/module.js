@@ -18523,6 +18523,7 @@ function (_super) {
     _this.other = [{
       pods: []
     }];
+    _this.sort = 'name';
     return _this;
   }
 
@@ -19103,6 +19104,12 @@ function (_super) {
       memoryUsed: 'N-A',
       cpuRequested: 'N-A',
       memoryRequested: 'N-A'
+    };
+    _this.sourceMetrics = {
+      cpuUsed: null,
+      memoryUsed: null,
+      cpuRequested: null,
+      memoryRequested: null
     };
     _this.used = false;
     return _this;
@@ -20219,32 +20226,36 @@ function () {
       _this.nodesMap.forEach(function (node) {
         node.namespaces.map(function (namespace) {
           namespace.pods.map(function (pod) {
-            var cpu = results[0].filter(function (item) {
+            var cpu = results[0].find(function (item) {
               return item.target === pod.name;
-            })[0];
-            var mem = results[1].filter(function (item) {
+            });
+            var mem = results[1].find(function (item) {
               return item.target === pod.name;
-            })[0];
-            var cpuReq = results[2].filter(function (item) {
+            });
+            var cpuReq = results[2].find(function (item) {
               return item.target === pod.name;
-            })[0];
-            var memReq = results[3].filter(function (item) {
+            });
+            var memReq = results[3].find(function (item) {
               return item.target === pod.name;
-            })[0];
+            });
 
             if (cpu !== undefined) {
+              pod.sourceMetrics.cpuUsed = cpu.datapoint;
               pod.metrics.cpuUsed = (0, _helpers.__convertToMicro)(cpu.datapoint.toFixed(3));
             }
 
             if (mem !== undefined) {
+              pod.sourceMetrics.memoryUsed = mem.datapoint;
               pod.metrics.memoryUsed = (0, _helpers.__convertToGB)(mem.datapoint);
             }
 
             if (cpuReq !== undefined) {
+              pod.sourceMetrics.cpuRequested = cpuReq.datapoint;
               pod.metrics.cpuRequested = (0, _helpers.__convertToMicro)((0, _helpers.__roundCpu)(cpuReq.datapoint));
             }
 
             if (memReq !== undefined) {
+              pod.sourceMetrics.memoryRequested = memReq.datapoint;
               pod.metrics.memoryRequested = (0, _helpers.__convertToGB)(memReq.datapoint);
             }
           });
@@ -20259,8 +20270,9 @@ function () {
 
   K8sPage.prototype.__getPodsUsedCpu = function () {
     var podsUsedCpu = {
-      expr: 'sum(rate(container_cpu_usage_seconds_total{pod_name!="", container_name!="", container_name!="POD"}[2m])) by (pod_name)',
-      legend: 'pod_name'
+      //expr: 'sum(rate(container_cpu_usage_seconds_total{pod_name!="", container_name!="", container_name!="POD"}[2m])) by (pod_name)',
+      expr: 'sum(rate(container_cpu_usage_seconds_total{pod!="", container!="", container!="POD"}[2m])) by (pod) or ' + 'sum(label_replace(rate(container_cpu_usage_seconds_total{pod_name!="", container_name!="", container_name!="POD"}[2m]), "pod", "$1", "pod_name", "(.*)")) by (pod)',
+      legend: 'pod'
     };
     return this.prometheusDS.query(podsUsedCpu).then(function (res) {
       return res;
@@ -20269,8 +20281,9 @@ function () {
 
   K8sPage.prototype.__getPodsUsedMemory = function () {
     var podsUsedMemory = {
-      expr: 'sum (container_memory_usage_bytes{container_name!="", container_name!="POD"}) by (pod_name)',
-      legend: 'pod_name'
+      //expr: 'sum(container_memory_usage_bytes{container_name!="", container_name!="POD"}) by (pod_name)'
+      expr: 'sum(container_memory_usage_bytes{container!="", container!="POD"}) by (pod) or ' + 'sum(label_replace(container_memory_usage_bytes{container_name!="", container_name!="POD"}, "pod", "$1", "pod_name", "(.*)")) by (pod)',
+      legend: 'pod'
     };
     return this.prometheusDS.query(podsUsedMemory).then(function (res) {
       return res;
@@ -20311,7 +20324,8 @@ function () {
           var _ns_1 = {
             name: pod.data.metadata.namespace,
             pods: [],
-            limit: _constants.PODS_LIMIT
+            limit: _constants.PODS_LIMIT,
+            sort: 'name'
           };
           node.namespaces.push(_ns_1);
         }
@@ -21190,69 +21204,33 @@ function (_super) {
 
   NodesOverview.prototype.summary = function (ns, metric) {
     var res = 0;
-    var postfix = null;
 
     if (ns.pods) {
       res = ns.pods.reduce(function (prevValue, pod) {
-        if (pod.metrics[metric] && pod.metrics[metric] !== 'N-A') {
-          var match = pod.metrics[metric].match(/([a-zA-Z]+)$/);
-          var value = 0;
-
-          if (match[1]) {
-            switch (match[1]) {
-              case 'm':
-                value = parseInt(pod.metrics[metric], 10);
-                postfix = 'm';
-                break;
-
-              case 'MiB':
-                value = parseFloat(pod.metrics[metric]);
-
-                if (postfix === 'GiB') {
-                  value = value / 1024;
-                } else {
-                  postfix = 'MiB';
-                }
-
-                break;
-
-              case 'GiB':
-                value = parseFloat(pod.metrics[metric]);
-
-                if (postfix === 'MiB') {
-                  prevValue = prevValue / 1024;
-                }
-
-                postfix = 'GiB';
-                break;
-            }
-          }
-
-          return prevValue + value;
+        if (pod.sourceMetrics[metric]) {
+          return prevValue + pod.sourceMetrics[metric];
         }
 
         return prevValue;
       }, 0);
     }
 
-    if (res !== 0) {
-      switch (postfix) {
-        case "m":
-          return res + postfix;
+    switch (metric) {
+      case "cpuUsed":
+        return (0, _helpers.__convertToMicro)(res.toFixed(3));
 
-        case "GiB":
-          return Math.round(res * 1000) / 1000 + ' ' + postfix;
+      case "cpuRequested":
+        return (0, _helpers.__convertToMicro)((0, _helpers.__roundCpu)(res));
 
-        case "MiB":
-          if (res / 1024 > 1) {
-            return Math.round(res / 1024 * 1000) / 1000 + ' GiB';
-          }
+      case "memoryUsed":
+        return (0, _helpers.__convertToGB)(res);
 
-          return Math.round(res * 1000) / 1000 + ' ' + postfix;
-      }
+      case "memoryRequested":
+        return (0, _helpers.__convertToGB)(res);
+
+      default:
+        return 'N-A';
     }
-
-    return 'N-A';
   };
 
   NodesOverview.prototype.nodeClick = function (event, node) {
@@ -21294,6 +21272,28 @@ function (_super) {
     return pods.filter(function (pod) {
       return pod.is_deleted === false;
     });
+  };
+
+  NodesOverview.prototype.sort = function (key, nsIndex, nodeIndex) {
+    if (this.nodesMap[nodeIndex] && this.nodesMap[nodeIndex].namespaces[nsIndex]) {
+      if (this.nodesMap[nodeIndex].namespaces[nsIndex].sort.indexOf(key) === 0) {
+        this.nodesMap[nodeIndex].namespaces[nsIndex].sort = '-' + key;
+      } else {
+        this.nodesMap[nodeIndex].namespaces[nsIndex].sort = key;
+      }
+    }
+  };
+
+  NodesOverview.prototype.icon = function (key, nsIndex, nodeIndex) {
+    if (this.nodesMap[nodeIndex] && this.nodesMap[nodeIndex].namespaces[nsIndex]) {
+      if (this.nodesMap[nodeIndex].namespaces[nsIndex].sort.indexOf(key) === 0) {
+        return '<i class="fa fa-long-arrow-down"></i>';
+      } else if (this.nodesMap[nodeIndex].namespaces[nsIndex].sort.indexOf('-' + key) === 0) {
+        return '<i class="fa fa-long-arrow-up"></i>';
+      }
+    }
+
+    return '<i class="fa fa-long-arrow-up gray"></i>';
   };
 
   NodesOverview.templateUrl = 'components/nodes-overview/nodes-overview.html';
