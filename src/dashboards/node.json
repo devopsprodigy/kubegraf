@@ -381,6 +381,25 @@
       "valueName": "current"
     },
     {
+      "content": "<br><br><br>\n<h1 style=\"text-align:center\">Requested<br> resources</h1>",
+      "datasource": null,
+      "gridPos": {
+        "h": 5,
+        "w": 8,
+        "x": 0,
+        "y": 5
+      },
+      "id": 4,
+      "mode": "html",
+      "options": {},
+      "repeat": null,
+      "repeatDirection": "h",
+      "timeFrom": null,
+      "timeShift": null,
+      "title": "",
+      "type": "text"
+    },
+    {
       "cacheTimeout": null,
       "colorBackground": false,
       "colorValue": true,
@@ -401,8 +420,8 @@
       },
       "gridPos": {
         "h": 5,
-        "w": 12,
-        "x": 0,
+        "w": 8,
+        "x": 8,
         "y": 5
       },
       "id": 5,
@@ -485,8 +504,8 @@
       },
       "gridPos": {
         "h": 5,
-        "w": 12,
-        "x": 12,
+        "w": 8,
+        "x": 16,
         "y": 5
       },
       "id": 6,
