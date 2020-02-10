@@ -244,23 +244,25 @@ export  class K8sPage {
                 this.nodesMap.forEach(node => {
                     node.namespaces.map(namespace => {
                         namespace.pods.map(pod => {
-                            let cpu = results[0].filter(item => item.target === pod.name)[0];
-                            let mem = results[1].filter(item => item.target === pod.name)[0];
-                            let cpuReq = results[2].filter(item => item.target === pod.name)[0];
-                            let memReq = results[3].filter(item => item.target === pod.name)[0];
+                            let cpu = results[0].find(item => item.target === pod.name);
+                            let mem = results[1].find(item => item.target === pod.name);
+                            let cpuReq = results[2].find(item => item.target === pod.name);
+                            let memReq = results[3].find(item => item.target === pod.name);
 
                             if (cpu !== undefined) {
+                                pod.sourceMetrics.cpuUsed = cpu.datapoint;
                                 pod.metrics.cpuUsed = __convertToMicro(cpu.datapoint.toFixed(3));
                             }
                             if (mem !== undefined) {
+                                pod.sourceMetrics.memoryUsed = mem.datapoint;
                                 pod.metrics.memoryUsed = __convertToGB(mem.datapoint);
                             }
-
                             if(cpuReq !== undefined){
+                                pod.sourceMetrics.cpuRequested = cpuReq.datapoint;
                                 pod.metrics.cpuRequested = __convertToMicro(__roundCpu(cpuReq.datapoint));
                             }
-
                             if(memReq !== undefined){
+                                pod.sourceMetrics.memoryRequested = memReq.datapoint;
                                 pod.metrics.memoryRequested = __convertToGB(memReq.datapoint);
                             }
                         });
@@ -331,7 +333,8 @@ export  class K8sPage {
                     let _ns = {
                         name: pod.data.metadata.namespace,
                         pods: [],
-                        limit: PODS_LIMIT
+                        limit: PODS_LIMIT,
+                        sort: 'name'
                     };
                     node.namespaces.push(_ns);
                 }

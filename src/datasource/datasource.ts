@@ -1,4 +1,5 @@
-import appEvents from "app/core/app_events";
+///<reference path="../../node_modules/grafana-sdk-mocks/app/headers/common.d.ts" />
+import appEvents from "grafana/app/core/app_events";
 
 export class DOPK8SDatasource {
     name: string;
@@ -229,7 +230,7 @@ export class DOPK8SDatasource {
         return this.__get('/api/v1/namespaces')
             .then(result => {
                 if(!result.items){
-                    appEvents.emit('alert-error', [`Namespaces not received`], 100);
+                    appEvents.emit('alert-error', [`Namespaces not received`]);
                     return [];
                 }
                 return result.items;

@@ -63,56 +63,29 @@ export class NodesOverview extends K8sPage {
 
     summary(ns, metric) {
         let res = 0;
-        let postfix = null;
+
         if (ns.pods) {
             res = ns.pods.reduce((prevValue, pod) => {
-                if (pod.metrics[metric] && pod.metrics[metric] !== 'N-A') {
-                    const match = pod.metrics[metric].match(/([a-zA-Z]+)$/)
-                    let value = 0
-                    if (match[1]) {
-                        switch (match[1]) {
-                            case('m'):
-                                value = parseInt(pod.metrics[metric], 10);
-                                postfix = 'm';
-                                break;
-                            case('MiB'):
-                                value = parseFloat(pod.metrics[metric]);
-                                if (postfix === 'GiB') {
-                                    value = value / 1024;
-                                } else {
-                                    postfix = 'MiB';
-                                }
-                                break;
-                            case('GiB'):
-                                value = parseFloat(pod.metrics[metric]);
-                                if (postfix === 'MiB') {
-                                    prevValue = prevValue / 1024
-                                }
-                                postfix = 'GiB';
-                                break;
-                        }
-                    }
-                    return prevValue + value
+                if (pod.sourceMetrics[metric]) {
+                    return prevValue + pod.sourceMetrics[metric];
                 }
                 return prevValue
             }, 0)
         }
 
-        if (res !== 0) {
-            switch (postfix) {
-                case "m":
-                    return res + postfix;
-                case "GiB":
-                    return Math.round(res * 1000) / 1000 + ' ' + postfix;
-                case "MiB":
-                    if(res / 1024 > 1){
-                        return Math.round((res / 1024) * 1000) / 1000 + ' GiB';
-                    }
-                    return Math.round(res * 1000) / 1000 + ' ' + postfix;
-            }
-        }
 
-        return 'N-A'
+        switch (metric) {
+            case "cpuUsed":
+                return __convertToMicro(res.toFixed(3));
+            case "cpuRequested":
+                return __convertToMicro(__roundCpu(res));
+            case "memoryUsed":
+                return __convertToGB(res);
+            case "memoryRequested":
+                return __convertToGB(res);
+            default:
+                return 'N-A'
+        }
     }
 
     nodeClick(event, node) {
@@ -146,5 +119,26 @@ export class NodesOverview extends K8sPage {
 
     podsFilterIsDeleted(pods: Array<Pod>) {
         return pods.filter(pod => pod.is_deleted === false)
+    }
+
+    sort(key, nsIndex, nodeIndex){
+        if (this.nodesMap[nodeIndex] && this.nodesMap[nodeIndex].namespaces[nsIndex]) {
+            if (this.nodesMap[nodeIndex].namespaces[nsIndex].sort.indexOf(key) === 0) {
+                this.nodesMap[nodeIndex].namespaces[nsIndex].sort = '-' + key
+            } else {
+                this.nodesMap[nodeIndex].namespaces[nsIndex].sort = key
+            }
+        }
+    }
+
+    icon(key, nsIndex, nodeIndex){
+        if (this.nodesMap[nodeIndex] && this.nodesMap[nodeIndex].namespaces[nsIndex]) {
+            if (this.nodesMap[nodeIndex].namespaces[nsIndex].sort.indexOf(key) === 0) {
+                return '<i class="fa fa-long-arrow-down"></i>'
+            } else if (this.nodesMap[nodeIndex].namespaces[nsIndex].sort.indexOf('-' + key) === 0){
+                return '<i class="fa fa-long-arrow-up"></i>'
+            }
+        }
+        return '<i class="fa fa-long-arrow-up gray"></i>'
     }
 }

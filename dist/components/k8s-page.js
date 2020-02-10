@@ -230,20 +230,24 @@ System.register(["app/core/app_events", "../common/types/pod", "../common/proxie
                         _this.nodesMap.forEach(function (node) {
                             node.namespaces.map(function (namespace) {
                                 namespace.pods.map(function (pod) {
-                                    var cpu = results[0].filter(function (item) { return item.target === pod.name; })[0];
-                                    var mem = results[1].filter(function (item) { return item.target === pod.name; })[0];
-                                    var cpuReq = results[2].filter(function (item) { return item.target === pod.name; })[0];
-                                    var memReq = results[3].filter(function (item) { return item.target === pod.name; })[0];
+                                    var cpu = results[0].find(function (item) { return item.target === pod.name; });
+                                    var mem = results[1].find(function (item) { return item.target === pod.name; });
+                                    var cpuReq = results[2].find(function (item) { return item.target === pod.name; });
+                                    var memReq = results[3].find(function (item) { return item.target === pod.name; });
                                     if (cpu !== undefined) {
+                                        pod.sourceMetrics.cpuUsed = cpu.datapoint;
                                         pod.metrics.cpuUsed = helpers_1.__convertToMicro(cpu.datapoint.toFixed(3));
                                     }
                                     if (mem !== undefined) {
+                                        pod.sourceMetrics.memoryUsed = mem.datapoint;
                                         pod.metrics.memoryUsed = helpers_1.__convertToGB(mem.datapoint);
                                     }
                                     if (cpuReq !== undefined) {
+                                        pod.sourceMetrics.cpuRequested = cpuReq.datapoint;
                                         pod.metrics.cpuRequested = helpers_1.__convertToMicro(helpers_1.__roundCpu(cpuReq.datapoint));
                                     }
                                     if (memReq !== undefined) {
+                                        pod.sourceMetrics.memoryRequested = memReq.datapoint;
                                         pod.metrics.memoryRequested = helpers_1.__convertToGB(memReq.datapoint);
                                     }
                                 });
@@ -301,7 +305,8 @@ System.register(["app/core/app_events", "../common/types/pod", "../common/proxie
                                 var _ns_1 = {
                                     name: pod.data.metadata.namespace,
                                     pods: [],
-                                    limit: constants_1.PODS_LIMIT
+                                    limit: constants_1.PODS_LIMIT,
+                                    sort: 'name'
                                 };
                                 node.namespaces.push(_ns_1);
                             }

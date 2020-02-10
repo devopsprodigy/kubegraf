@@ -26,6 +26,12 @@ System.register(['../constants', '../../common/types/traits/baseModel'], functio
                         cpuRequested: 'N-A',
                         memoryRequested: 'N-A'
                     };
+                    this.sourceMetrics = {
+                        cpuUsed: null,
+                        memoryUsed: null,
+                        cpuRequested: null,
+                        memoryRequested: null
+                    };
                     this.used = false;
                 }
                 Object.defineProperty(Pod.prototype, "status", {

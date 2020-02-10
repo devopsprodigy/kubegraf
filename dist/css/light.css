@@ -11,6 +11,12 @@
 .btn .fa.override--fa {
   top: 0; }
 
+i.grey {
+  opacity: 0.5; }
+
+i.active {
+  opacity: 1; }
+
 .override--pod_status {
   display: block;
   width: 10px;
@@ -373,3 +379,6 @@ label.toggle-checkbox {
 
 .explore-toolbar-item {
   list-style: inside; }
+
+
+/*# sourceMappingURL=light.css.map*/

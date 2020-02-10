@@ -20,4 +20,6 @@ export declare class NodesOverview extends K8sPage {
     __hideAll(): void;
     toggleNodes(node: boolean | any): void;
     podsFilterIsDeleted(pods: Array<Pod>): Pod[];
+    sort(key: any, nsIndex: any, nodeIndex: any): void;
+    icon(key: any, nsIndex: any, nodeIndex: any): string;
 }

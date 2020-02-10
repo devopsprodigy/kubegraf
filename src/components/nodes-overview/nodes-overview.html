@@ -78,7 +78,7 @@
     </section>
     <br/><br/>
     <div class="row" >
-        <div class="col-md-12" ng-repeat="node in ctrl.nodesMap">
+        <div class="col-md-12" ng-repeat="(nodeIndex, node) in ctrl.nodesMap">
             <div class="card-section" ng-show="node.open">
                 <div class="card-item">
                     <div class="card-item-header">
@@ -137,14 +137,17 @@
                         Show Applications
                     </div>
                     <hr>
-                    <div ng-repeat="ns in node.namespaces" ng-show="ctrl.podsFilterIsDeleted(ns.pods).length > 0" ng-if="!node.hideNs">
+                    <div ng-repeat="(nsIndex, ns) in node.namespaces" ng-show="ctrl.podsFilterIsDeleted(ns.pods).length > 0" ng-if="!node.hideNs">
                         <div class="row">
                             <div class="col-md-12 markdown-html explore-panel">
                                 <table class="override--table_ns_6 explore-toolbar-item explore-panel">
                                     <tr>
                                         <td></td>
                                         <td>
-                                            <h4>Namespace: <span ng-bind="ns.name" /> (<span ng-bind="ctrl.__getPodsLength(ns.pods)" />)</h4>
+                                            <h4 class="pointer" ng-click="ctrl.sort('name', nsIndex, nodeIndex)">
+                                                Namespace: <span ng-bind="ns.name" /> (<span ng-bind="ctrl.__getPodsLength(ns.pods)" />)
+                                                <span ng-bind-html="ctrl.icon('name', nsIndex, nodeIndex)"></span>
+                                            </h4>
                                             <div
                                                     class="btn btn-secondary explore-panel"
                                                     ng-if="ns.pods.length > ns.limit"
@@ -154,10 +157,34 @@
                                                 show more pods
                                             </div>
                                         </td>
-                                        <th>CPU usage</th>
-                                        <th>CPU requested</th>
-                                        <th>Memory usage</th>
-                                        <th>Memory requested</th>
+                                        <th>
+                                            <span
+                                                class="pointer"
+                                                ng-click="ctrl.sort('sourceMetrics.cpuUsed', nsIndex, nodeIndex)"
+                                                ng-bind-html="'CPU usage ' + ctrl.icon('sourceMetrics.cpuUsed', nsIndex, nodeIndex)"
+                                            ></span>
+                                        </th>
+                                        <th>
+                                            <span
+                                                class="pointer"
+                                                ng-click="ctrl.sort('sourceMetrics.cpuRequested', nsIndex, nodeIndex)"
+                                                ng-bind-html="'CPU requested ' + ctrl.icon('sourceMetrics.cpuRequested', nsIndex, nodeIndex)"
+                                            ></span>
+                                        </th>
+                                        <th>
+                                            <span
+                                                class="pointer"
+                                                ng-click="ctrl.sort('sourceMetrics.memoryUsed', nsIndex, nodeIndex)"
+                                                ng-bind-html="'Memory usage ' + ctrl.icon('sourceMetrics.memoryUsed', nsIndex, nodeIndex)"
+                                            ></span>
+                                        </th>
+                                        <th>
+                                            <span
+                                                class="pointer"
+                                                ng-click="ctrl.sort('sourceMetrics.memoryRequested', nsIndex, nodeIndex)"
+                                                ng-bind-html="'Memory requested ' + ctrl.icon('sourceMetrics.memoryRequested', nsIndex, nodeIndex)"
+                                            ></span>
+                                        </th>
                                     </tr>
                                 </table>
                             </div>
@@ -165,7 +192,7 @@
                         <div class="row">
                             <div class="col-md-12 markdown-html">
                                 <table class="override--table_ns_6 explore-toolbar-item">
-                                    <tr ng-repeat="pod in ns.pods | limitTo: ns.limit" ng-if="!pod.is_deleted" >
+                                    <tr ng-repeat="pod in ns.pods | limitTo: ns.limit | orderBy: ns.sort" ng-if="!pod.is_deleted">
                                         <td>
                                             <span class="override--nodeTable_status override--pod_status_{{pod.color}}"></span>
                                         </td>

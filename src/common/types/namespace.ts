@@ -15,6 +15,7 @@ export class Namespace extends BaseModel{
     other: Array<{pods: Array<Pod>}>;
     jobs: Array<Job>;
     cronJobs: Array<Cronjob>;
+    sort: string
 
     constructor(data) {
         super(data);
@@ -22,6 +23,7 @@ export class Namespace extends BaseModel{
         this.statefulsets = [];
         this.daemonsets = [];
         this.other = [{pods: []}];
+        this.sort = 'name';
     }
 
     toggle() {

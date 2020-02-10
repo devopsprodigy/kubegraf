@@ -6,6 +6,7 @@ export declare class Node extends BaseModel {
         name: string;
         limit: number | boolean;
         pods: Array<Pod>;
+        sort: string;
     }>;
     metrics: {
         cpuRequested: number | string;

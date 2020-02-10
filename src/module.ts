@@ -6,7 +6,7 @@ import {NodesOverview} from "./components/nodes-overview/nodes-overview";
 import {ClusterAlerts} from "./components/cluster-alerts/cluster-alerts";
 import {DOPKubeGrafAppConfig} from "./config/config";
 
-import {loadPluginCss} from 'app/plugins/sdk';
+import {loadPluginCss} from 'grafana/app/plugins/sdk';
 
 loadPluginCss({
     dark: 'plugins/devopsprodigy-kubegraf-app/css/dark.css',
