@@ -139,6 +139,6 @@ export class NodesOverview extends K8sPage {
                 return '<i class="fa fa-long-arrow-up"></i>'
             }
         }
-        return '<i class="fa fa-long-arrow-up gray"></i>'
+        return '<i class="fa fa-long-arrow-up grey"></i>'
     }
 }

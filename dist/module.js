@@ -21330,7 +21330,7 @@ function (_super) {
       }
     }
 
-    return '<i class="fa fa-long-arrow-up gray"></i>';
+    return '<i class="fa fa-long-arrow-up grey"></i>';
   };
 
   NodesOverview.templateUrl = 'components/nodes-overview/nodes-overview.html';
