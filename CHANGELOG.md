@@ -1,3 +1,19 @@
+# 1.3.0 (2020-02-12)
+
+### New features
+* Add requested resource metrics (CPU, memory) to node's dashboard
+* Add order for pods (by cpu, memory) at Nodes overview page
+* Add disk metrics to dashboards
+* Migrate to Webpack
+* Parse error messages from Events (you need to update [ClusterRole](https://github.com/devopsprodigy/kubegraf/blob/master/kubernetes/clusterrole.yaml))
+* Add namespaces update on static pages
+* Compatibility with different metric's labels (pod/pod_name, container/container_name)
+
+
+### Bug Fixes
+* Fix Save&Test button
+* Cluster delete
+
 # 1.2.0 (2019-12-20)
 
 ### New features
