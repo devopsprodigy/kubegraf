@@ -41,8 +41,8 @@
       {"name": "Cluster status", "path": "img/cluster_status_1.png"},
       {"name": "Cluster status", "path": "img/cluster_status_2.png"}
     ],
-    "version": "1.2.0",
-    "updated" : "2019-11-18"
+    "version": "1.3.0",
+    "updated" : "2020-02-12"
   },
 
   "includes"  : [
