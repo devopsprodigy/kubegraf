@@ -16,7 +16,7 @@ export class ClusterAlerts extends K8sPage{
         public $timeout,
         private $window
     ){
-        super($scope, backendSrv, datasourceSrv, contextSrv, $location, $timeout, $q);
+        super($scope, backendSrv, datasourceSrv, contextSrv, $location, $timeout, $q, $window);
         this.pageReady = false;
         this.version = __getGrafanaVersion($window);
 

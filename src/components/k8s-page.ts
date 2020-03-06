@@ -51,7 +51,7 @@ export  class K8sPage {
     nodesError: Boolean|Error = false;
     podsError: Boolean|Error = false;
     componentsError: Boolean|Error = false;
-
+    orgId: number = 1;
 
     updatePods(pods: Array<Pod>) {};
 
@@ -62,7 +62,8 @@ export  class K8sPage {
         contextSrv,
         $location,
         timeout,
-        $q
+        $q,
+        $window
     ) {
         this.$q = $q;
         this.$scope = $scope;
@@ -72,6 +73,7 @@ export  class K8sPage {
         this.contextSrv = contextSrv;
         this.datasourceSrv = datasourceSrv;
         this.timeout = timeout;
+        this.orgId = ($window.grafanaBootData && $window.grafanaBootData.user) ? $window.grafanaBootData.user.orgId : 1;
         try{
             this.isAdmin = this.contextSrv.isGrafanaAdmin;
         }catch (e) {
@@ -87,14 +89,14 @@ export  class K8sPage {
     }
 
     getNodeDashboardLink(node){
-        let dbUrl = 'dashboard/db/devopsprodigy-kubegraf-nodes-dashboard?orgId=1';
+        let dbUrl = 'dashboard/db/devopsprodigy-kubegraf-nodes-dashboard?orgId=' + this.orgId;
         dbUrl += '&' + 'var-cluster=' + this.cluster.name;
         dbUrl += '&' + 'var-node=' + node.name;
         return dbUrl;
     }
 
     getPodDashboardLink(pod){
-        let dbUrl = 'dashboard/db/devopsprodigy-kubegraf-pods-dashboard?orgId=1';
+        let dbUrl = 'dashboard/db/devopsprodigy-kubegraf-pods-dashboard?orgId=' + this.orgId;
         dbUrl += '&' + 'var-cluster=' + this.cluster.name;
         dbUrl += '&' + 'var-namespace=' + pod.data.metadata.namespace;
         dbUrl += '&' + 'var-pod=' + pod.name;
@@ -103,7 +105,7 @@ export  class K8sPage {
 
     getEntityDashboardLink(entity, name){
         let entityName = name.substring(0, name.length-1);
-        let dbUrl = 'dashboard/db/devopsprodigy-kubegraf-' + name + '-dashboard?orgId=1';
+        let dbUrl = 'dashboard/db/devopsprodigy-kubegraf-' + name + '-dashboard?orgId=' + this.orgId;
         dbUrl += '&' + 'var-cluster=' + this.cluster.name;
         dbUrl += '&' + 'var-namespace=' + entity.data.metadata.namespace;
         dbUrl += '&' + 'var-'+ entityName +'=' + entity.name;
