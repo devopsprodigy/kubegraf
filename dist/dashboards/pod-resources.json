@@ -805,7 +805,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "rate(container_fs_reads_total{namespace=\"$namespace\", pod=\"$pod\", container!=\"\", container!=\"POD\"}[5m]) or rate(container_fs_reads_total{namespace=\"$namespace\", pod_name=\"$pod\", container_name!=\"\", container_name!=\"POD\"}[5m])",
+          "expr": "rate(container_fs_reads_total{namespace=\"$namespace\", pod=~\"$pod\", container!=\"\", container!=\"POD\"}[5m]) or label_replace(label_replace(rate(container_fs_reads_total{namespace=\"$namespace\", pod_name=~\"$pod\", container_name!=\"\", container_name!=\"POD\"}[5m]), \"pod\", \"$1\", \"pod_name\", \"(.*)\"), \"container\", \"$1\", \"container_name\", \"(.*)\")",
           "format": "time_series",
           "intervalFactor": 1,
           "legendFormat": "Reads {{ device }} [{{ pod }} / {{ container }}]",
@@ -892,7 +892,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "rate(container_fs_writes_total{namespace=\"$namespace\", pod=\"$pod\", container!=\"\", container!=\"POD\"}[5m]) or rate(container_fs_writes_total{namespace=\"$namespace\", pod_name=\"$pod\", container_name!=\"\", container_name!=\"POD\"}[5m])",
+          "expr": "rate(container_fs_writes_total{namespace=\"$namespace\", pod=~\"$pod\", container!=\"\", container!=\"POD\"}[5m]) or label_replace(label_replace(rate(container_fs_writes_total{namespace=\"$namespace\", pod_name=~\"$pod\", container_name!=\"\", container_name!=\"POD\"}[5m]), \"pod\", \"$1\", \"pod_name\", \"(.*)\"), \"container\", \"$1\", \"container_name\", \"(.*)\")",
           "format": "time_series",
           "intervalFactor": 1,
           "legendFormat": "Writes {{ device }} [{{ pod }} / {{ container }}]",
