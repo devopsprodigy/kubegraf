@@ -87,6 +87,12 @@
                             <span class="override--node_status" ng-style="{'background-color': node.color}" />
                         </h2>
                         <span class="card-item.sub-name">IP: <span ng-bind="node.hostIp"/></span><br/>
+                        <span class="card-item.sub-name">CPU Cores: <span ng-bind="ctrl.serverInfo[node.name].cpuCores"/></span><br/>
+                        <span class="card-item.sub-name">RAM Total: <span ng-bind="ctrl.serverInfo[node.name].ramTotal"/></span><br/>
+                        <span class="card-item.sub-name">SWAP Total: <span ng-bind="ctrl.serverInfo[node.name].swapTotal"/></span><br/>
+                        <span class="card-item.sub-name">RootFS Total: <span ng-bind="ctrl.serverInfo[node.name].rootFSTotal"/></span><br/>
+                        <span class="card-item.sub-name">Sys Load (1m avg): <span ng-bind="ctrl.serverInfo[node.name].sysLoad"/></span><br/>
+                        <span class="card-item.sub-name">Uptime: <span ng-bind="ctrl.serverInfo[node.name].uptime"/></span><br/><br/>
                         <div class="row">
                             <div class="col-md-12 markdown-html explore-panel">
                                 <table class="override--table">

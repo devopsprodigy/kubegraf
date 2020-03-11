@@ -23,6 +23,10 @@ let __convertToGB = bytes => {
     return kbn.valueFormats['bytes'](bytes, 3, null);
 };
 
+let __convertToHours = seconds => {
+    return kbn.valueFormats['ms'](seconds, 1, null);
+};
+
 let __roundCpu = cpu => {
     return parseFloat(cpu).toFixed(3);
 };
@@ -54,4 +58,4 @@ const __getGrafanaVersion = (window) => {
     return version;
 }
 
-export { __prepare, __preparePods, __convertToGB, __roundCpu, __percentUsed, __convertToMicro, __getLastNonNullValue, __getGrafanaVersion }
+export { __prepare, __preparePods, __convertToGB, __roundCpu, __percentUsed, __convertToMicro, __getLastNonNullValue, __getGrafanaVersion, __convertToHours}

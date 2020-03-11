@@ -8,6 +8,7 @@ export class NodesOverview extends K8sPage {
 
     static templateUrl = 'components/nodes-overview/nodes-overview.html';
     version: number;
+    serverInfo: any = null;
 
     constructor(
         $scope,
@@ -28,6 +29,15 @@ export class NodesOverview extends K8sPage {
             this.getEvents();
             this.getNodeMap()
                 .then(() => {
+                    if (this.nodesMap.length > 0 && this.serverInfo === null) {
+                        const metrics = {};
+                        this.nodesMap.forEach(node => {
+                            this.__getServerInfo(node.hostIp).then(res => {
+                                metrics[node.name] = res;
+                            });
+                        });
+                        this.serverInfo = metrics;
+                    }
                     this.pageReady = true;
                 })
                 .then(() => {

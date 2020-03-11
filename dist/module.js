@@ -18019,7 +18019,7 @@ exports.TYPE_PROMETHEUS = TYPE_PROMETHEUS;
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.__getGrafanaVersion = exports.__getLastNonNullValue = exports.__convertToMicro = exports.__percentUsed = exports.__roundCpu = exports.__convertToGB = exports.__preparePods = exports.__prepare = undefined;
+exports.__convertToHours = exports.__getGrafanaVersion = exports.__getLastNonNullValue = exports.__convertToMicro = exports.__percentUsed = exports.__roundCpu = exports.__convertToGB = exports.__preparePods = exports.__prepare = undefined;
 
 var _pod = __webpack_require__(/*! ./types/pod */ "./common/types/pod.ts");
 
@@ -18047,6 +18047,10 @@ var __preparePods = function __preparePods(pods) {
 
 var __convertToGB = function __convertToGB(bytes) {
   return _kbn2.default.valueFormats['bytes'](bytes, 3, null);
+};
+
+var __convertToHours = function __convertToHours(seconds) {
+  return _kbn2.default.valueFormats['ms'](seconds, 1, null);
 };
 
 var __roundCpu = function __roundCpu(cpu) {
@@ -18090,6 +18094,7 @@ exports.__percentUsed = __percentUsed;
 exports.__convertToMicro = __convertToMicro;
 exports.__getLastNonNullValue = __getLastNonNullValue;
 exports.__getGrafanaVersion = __getGrafanaVersion;
+exports.__convertToHours = __convertToHours;
 
 /***/ }),
 
@@ -20000,6 +20005,8 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.K8sPage = undefined;
 
+var _tslib = __webpack_require__(/*! tslib */ "../node_modules/tslib/tslib.es6.js");
+
 var _app_events = __webpack_require__(/*! grafana/app/core/app_events */ "grafana/app/core/app_events");
 
 var _app_events2 = _interopRequireDefault(_app_events);
@@ -20089,6 +20096,107 @@ function () {
   K8sPage.prototype.updatePods = function (pods) {};
 
   ;
+
+  K8sPage.prototype.__getServerInfo = function (nodeIp) {
+    return (0, _tslib.__awaiter)(this, void 0, void 0, function () {
+      var job, instance, nodeInfo, jobMatch, instanceMatch, cpuCores, ramTotal, swapTotal, rootFSTotal, sysLoad, uptime;
+      return (0, _tslib.__generator)(this, function (_a) {
+        switch (_a.label) {
+          case 0:
+            job = "kubernetes-service-endpoints";
+            instance = nodeIp + ":.+";
+            return [4
+            /*yield*/
+            , this.prometheusDS.query({
+              expr: "node_uname_info{instance=~\"" + nodeIp + ":.+\"}",
+              legend: 'job'
+            })];
+
+          case 1:
+            nodeInfo = _a.sent();
+
+            if (nodeInfo[0] && nodeInfo[0].target) {
+              jobMatch = nodeInfo[0].target.match(/job="(.+?)"/);
+
+              if (jobMatch[1]) {
+                job = jobMatch[1];
+              }
+
+              instanceMatch = nodeInfo[0].target.match(/instance="(.+?)"/);
+
+              if (instanceMatch[1]) {
+                instance = instanceMatch[1];
+              }
+            }
+
+            return [4
+            /*yield*/
+            , this.prometheusDS.query({
+              expr: "count(count(node_cpu_seconds_total{instance=~\"" + instance + "\",job=~\"" + job + "\"}) by (cpu))",
+              legend: 'instance'
+            })];
+
+          case 2:
+            cpuCores = _a.sent();
+            return [4
+            /*yield*/
+            , this.prometheusDS.query({
+              expr: "node_memory_MemTotal_bytes{instance=~\"" + instance + "\",job=~\"" + job + "\"}",
+              legend: 'instance'
+            })];
+
+          case 3:
+            ramTotal = _a.sent();
+            return [4
+            /*yield*/
+            , this.prometheusDS.query({
+              expr: "node_memory_SwapTotal_bytes{instance=~\"" + instance + "\",job=~\"" + job + "\"}",
+              legend: 'instance'
+            })];
+
+          case 4:
+            swapTotal = _a.sent();
+            return [4
+            /*yield*/
+            , this.prometheusDS.query({
+              expr: "node_filesystem_size_bytes{instance=~\"" + instance + "\",job=~\"" + job + "\",mountpoint=\"/\",fstype!=\"rootfs\"}",
+              legend: 'instance'
+            })];
+
+          case 5:
+            rootFSTotal = _a.sent();
+            return [4
+            /*yield*/
+            , this.prometheusDS.query({
+              expr: "node_load1{instance=~\"" + instance + "\",job=~\"" + job + "\"}",
+              legend: 'instance'
+            })];
+
+          case 6:
+            sysLoad = _a.sent();
+            return [4
+            /*yield*/
+            , this.prometheusDS.query({
+              expr: "node_time_seconds{instance=~\"" + instance + "\",job=~\"" + job + "\"} - node_boot_time_seconds{instance=~\"" + instance + "\",job=~\"" + job + "\"}",
+              legend: 'instance'
+            })];
+
+          case 7:
+            uptime = _a.sent();
+            return [2
+            /*return*/
+            , {
+              cpuCores: cpuCores[0] && cpuCores[0].datapoint,
+              ramTotal: ramTotal[0] && (0, _helpers.__convertToGB)(ramTotal[0].datapoint),
+              swapTotal: swapTotal[0] && (0, _helpers.__convertToGB)(swapTotal[0].datapoint),
+              rootFSTotal: rootFSTotal[0] && (0, _helpers.__convertToGB)(rootFSTotal[0].datapoint),
+              sysLoad: sysLoad[0] && sysLoad[0].datapoint,
+              uptime: uptime[0] && (0, _helpers.__convertToHours)(uptime[0].datapoint)
+            }];
+        }
+      });
+    });
+  };
 
   K8sPage.prototype.getNodeDashboardLink = function (node) {
     var dbUrl = 'dashboard/db/devopsprodigy-kubegraf-nodes-dashboard?orgId=' + this.orgId;
@@ -21219,6 +21327,7 @@ function (_super) {
     _this.$location = $location;
     _this.$timeout = $timeout;
     _this.$window = $window;
+    _this.serverInfo = null;
     _this.pageReady = false;
     _this.version = (0, _helpers.__getGrafanaVersion)($window);
 
@@ -21226,6 +21335,18 @@ function (_super) {
       _this.getEvents();
 
       _this.getNodeMap().then(function () {
+        if (_this.nodesMap.length > 0 && _this.serverInfo === null) {
+          var metrics_1 = {};
+
+          _this.nodesMap.forEach(function (node) {
+            _this.__getServerInfo(node.hostIp).then(function (res) {
+              metrics_1[node.name] = res;
+            });
+          });
+
+          _this.serverInfo = metrics_1;
+        }
+
         _this.pageReady = true;
       }).then(function () {
         _this.getResourcesMetrics().then(function () {});
