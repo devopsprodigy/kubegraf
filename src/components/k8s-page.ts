@@ -139,7 +139,7 @@ export  class K8sPage {
             swapTotal: swapTotal[0] && __convertToGB(swapTotal[0].datapoint),
             rootFSTotal: rootFSTotal[0] && __convertToGB(rootFSTotal[0].datapoint),
             sysLoad: sysLoad[0] && sysLoad[0].datapoint,
-            uptime: uptime[0] && __convertToHours(uptime[0].datapoint)
+            uptime: uptime[0] && __convertToHours(uptime[0].datapoint * 1000)
         }
     }
 

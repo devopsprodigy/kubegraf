@@ -20172,7 +20172,7 @@ function () {
               swapTotal: swapTotal[0] && (0, _helpers.__convertToGB)(swapTotal[0].datapoint),
               rootFSTotal: rootFSTotal[0] && (0, _helpers.__convertToGB)(rootFSTotal[0].datapoint),
               sysLoad: sysLoad[0] && sysLoad[0].datapoint,
-              uptime: uptime[0] && (0, _helpers.__convertToHours)(uptime[0].datapoint)
+              uptime: uptime[0] && (0, _helpers.__convertToHours)(uptime[0].datapoint * 1000)
             }];
         }
       });
@@ -21316,19 +21316,80 @@ function (_super) {
       _this.getEvents();
 
       _this.getNodeMap().then(function () {
-        if (_this.nodesMap.length > 0 && _this.serverInfo === null) {
-          var metrics_1 = {};
+        return (0, _tslib.__awaiter)(_this, void 0, void 0, function () {
+          var _a, _b, node, _c, _d, e_1_1;
 
-          _this.nodesMap.forEach(function (node) {
-            _this.__getServerInfo(node.hostIp).then(function (res) {
-              metrics_1[node.name] = res;
-            });
+          var e_1, _e;
+
+          return (0, _tslib.__generator)(this, function (_f) {
+            switch (_f.label) {
+              case 0:
+                if (!(this.nodesMap.length > 0 && this.serverInfo === null)) return [3
+                /*break*/
+                , 8];
+                this.serverInfo = {};
+                _f.label = 1;
+
+              case 1:
+                _f.trys.push([1, 6, 7, 8]);
+
+                _a = (0, _tslib.__values)(this.nodesMap), _b = _a.next();
+                _f.label = 2;
+
+              case 2:
+                if (!!_b.done) return [3
+                /*break*/
+                , 5];
+                node = _b.value;
+                _c = this.serverInfo;
+                _d = node.name;
+                return [4
+                /*yield*/
+                , this.__getServerInfo(node.hostIp)];
+
+              case 3:
+                _c[_d] = _f.sent();
+                _f.label = 4;
+
+              case 4:
+                _b = _a.next();
+                return [3
+                /*break*/
+                , 2];
+
+              case 5:
+                return [3
+                /*break*/
+                , 8];
+
+              case 6:
+                e_1_1 = _f.sent();
+                e_1 = {
+                  error: e_1_1
+                };
+                return [3
+                /*break*/
+                , 8];
+
+              case 7:
+                try {
+                  if (_b && !_b.done && (_e = _a.return)) _e.call(_a);
+                } finally {
+                  if (e_1) throw e_1.error;
+                }
+
+                return [7
+                /*endfinally*/
+                ];
+
+              case 8:
+                this.pageReady = true;
+                return [2
+                /*return*/
+                ];
+            }
           });
-
-          _this.serverInfo = metrics_1;
-        }
-
-        _this.pageReady = true;
+        });
       }).then(function () {
         _this.getResourcesMetrics().then(function () {});
       });

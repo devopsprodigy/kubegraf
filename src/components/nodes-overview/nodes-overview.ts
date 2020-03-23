@@ -28,15 +28,12 @@ export class NodesOverview extends K8sPage {
         this.__prepareDS().then(() => {
             this.getEvents();
             this.getNodeMap()
-                .then(() => {
+                .then(async () => {
                     if (this.nodesMap.length > 0 && this.serverInfo === null) {
-                        const metrics = {};
-                        this.nodesMap.forEach(node => {
-                            this.__getServerInfo(node.hostIp).then(res => {
-                                metrics[node.name] = res;
-                            });
-                        });
-                        this.serverInfo = metrics;
+                        this.serverInfo = {};
+                        for (const node of this.nodesMap) {
+                            this.serverInfo[node.name] = await this.__getServerInfo(node.hostIp);
+                        }
                     }
                     this.pageReady = true;
                 })

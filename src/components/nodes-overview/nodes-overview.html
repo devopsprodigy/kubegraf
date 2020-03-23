@@ -78,7 +78,7 @@
     </section>
     <br/><br/>
     <div class="row" >
-        <div class="col-md-12" ng-repeat="(nodeIndex, node) in ctrl.nodesMap">
+        <div class="col-md-12" ng-repeat="(nodeIndex, node) in ctrl.nodesMap" ng-if="ctrl.pageReady">
             <div class="card-section" ng-show="node.open">
                 <div class="card-item">
                     <div class="card-item-header">
