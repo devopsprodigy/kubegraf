@@ -76,7 +76,7 @@ export class ApplicationsOverview extends K8sPage{
     }
 
     namespaceClick(event, namespace) {
-        if (event.ctrlKey) {
+        if (event.ctrlKey || event.metaKey) {
             if(namespace.open) {
                 event.preventDefault();
             }
