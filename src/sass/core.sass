@@ -1,8 +1,44 @@
 .page-container
   &--override
-    width: 90vw
+    width: calc(100vw - 56px)
     position: relative
-    left: calc(50% - 45vw)
+    left: calc((100% - 100vw)/2 + 28px)
+    .page-header
+      background-color: #222326
+      padding: 32px 60px 0 60px
+      .btn
+        font-size: 12px
+        padding: 10px 20px
+        margin-left: 20px
+      .hr
+        height: 1px
+        background-color: #343436
+        width: 100vw
+        margin-left: -60px
+    .page-body--override
+      padding: 28px 60px 0
+      .overview-panel
+        background-color: #2d2d30
+        border-radius: 2px
+        padding: 16px 10px
+        &_header
+          cursor: pointer
+          display: flex
+        h1
+          font-size: 24px
+          color: #eaeaea
+          line-height: 1
+          font-weight: normal
+          margin-bottom: initial
+
+.chevron
+  display: block
+  width: 24px
+  height: 24px
+  background: url(/public/plugins/devopsprodigy-kubegraf-app/img/chevron.svg) center no-repeat
+  margin-right: 6px
+  transform: rotate(180deg)
+
 .card-item-label
   margin: -1px 0 0 8px
   position: relative

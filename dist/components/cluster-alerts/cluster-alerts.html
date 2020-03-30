@@ -21,184 +21,186 @@
                 </a>
             </div>
         </div>
-        <hr/>
+        <div class="hr"></div>
+    </div>
+    <div class="page-body--override">
         <div class="rpw explore-pane">
             <div class="col-md-6">
                 <h1>Overview: <span ng-bind="ctrl.cluster.name"/>. Alerts</h1>
             </div>
         </div>
-    </div>
-    <br />
-    <section ng-if="ctrl.nodesMapReady && ctrl.clusterProblem()">
-        <div class="row">
-            <div class="col-md-6">
-                <div class="markdown-html explore-panel">
-                    <table style="width: 100%">
-                        <tr>
-                            <th>Status</th>
-                            <th>Entity</th>
-                            <th>Error message</th>
-                        </tr>
-                        <tr ng-if="ctrl.nodesError"><td colspan="3"><b>Node</b></td></tr>
-                        <tr ng-if="ctrl.nodesError">
-                            <td>
-                                <span class="override--nodeTable_status override--pod_status_error"></span>
-                            </td>
-                            <td class="pointer">
-                                <span>K8S API Request</span>
-                            </td>
-                            <td ng-bind="ctrl.nodesError.message"></td>
-                        </tr>
-                        <tr ng-if="ctrl.podsError"><td colspan="3"><b>Pods</b></td></tr>
-                        <tr ng-if="ctrl.podsError">
-                            <td>
-                                <span class="override--nodeTable_status override--pod_status_error"></span>
-                            </td>
-                            <td class="pointer">
-                                <span>K8S API Request</span>
-                            </td>
-                            <td ng-bind="ctrl.podsError.message"></td>
-                        </tr>
-                        <tr ng-if="ctrl.componentsError"><td colspan="3"><b>Services</b></td></tr>
-                        <tr ng-if="ctrl.componentsError">
-                            <td>
-                                <span class="override--nodeTable_status override--pod_status_error"></span>
-                            </td>
-                            <td class="pointer">
-                                <span>K8S API Request</span>
-                            </td>
-                            <td ng-bind="ctrl.componentsError.message"></td>
-                        </tr>
-                        <!--services problem-->
-                        <tr ng-if="ctrl.getAlertsComponents.length > 0"><td>Services</td></tr>
-                        <tr ng-repeat="component in ctrl.getAlertsComponents">
-                            <td>
-                                <span class="override--nodeTable_status" ng-style="{'background': component.color}"></span>
-                            </td>
-                            <td ng-bind="component.name"></td>
-                            <td ng-bind="component.message"></td>
-                        </tr>
-                        <!--Node-->
-                        <tr ng-if="ctrl.getWarningNodes().length > 0"><td colspan="3"><b>Node</b></td></tr>
-                        <tr ng-repeat="node in ctrl.getWarningNodes()">
-                            <td>
-                                <span class="override--nodeTable_status override--pod_status_{{node.color}}"></span>
-                            </td>
-                            <td class="pointer">
-                                <span ng-bind="node.name" />
-                                <span>
-                                    <a href="{{ctrl.getNodeDashboardLink(node)}}" target="_blank" style="color: #fff">
-                                        <i class="fa fa-eye"/>
-                                    </a>
-                                </span>
-                            </td>
-                            <td ng-bind="node.message"></td>
-                        </tr>
-                        <!--Resources-->
-                        <tr ng-if="ctrl.getAlertsNodesByCPU().length > 0 || ctrl.getAlertsNodesByMemory().length > 0 || ctrl.getAlertsNodesByPods().length > 0"
-                        >
-                            <td colspan="3"><b>Resources</b></td>
-                        </tr>
-                        <!--cpu used-->
-                        <tr ng-repeat="node in ctrl.getAlertsNodesByCPU()">
-                            <td>
-                                <span class="override--nodeTable_status" ng-style="{'background' : node.rowCpuColor}"></span>
-                            </td>
-                            <td>Node:
-                                <span ng-bind="node.name" />
-                                <span>
-                                    <a href="{{ctrl.getNodeDashboardLink(node)}}" target="_blank" style="color: #fff">
-                                        <i class="fa fa-eye"/>
-                                    </a>
-                                </span>
-                            </td>
-                            <td>CPU used: <span ng-bind="node.cpuPercentUsed" /></td>
-                        </tr>
-                        <tr ng-repeat="node in ctrl.getAlertsNodesByCPU('cpuStatusRequested')">
-                            <td>
-                                <span class="override--nodeTable_status" ng-style="{'background' : node.rowCpuRequestedColor}"></span>
-                            </td>
-                            <td>Node:
-                                <span ng-bind="node.name" />
-                                <span>
-                                    <a href="{{ctrl.getNodeDashboardLink(node)}}" target="_blank" style="color: #fff">
-                                        <i class="fa fa-eye"/>
-                                    </a>
-                                </span>
-                            </td>
-                            <td>CPU requested: <span ng-bind="node.cpuPercentRequested" /></td>
-                        </tr>
-                        <!--memory used-->
-                        <tr ng-repeat="node in ctrl.getAlertsNodesByMemory()">
-                            <td>
-                                <span class="override--nodeTable_status" ng-style="{'background' : node.rowMemoryColor}"></span>
-                            </td>
-                            <td>Node:
-                                <span ng-bind="node.name" />
-                                <span>
-                                    <a href="{{ctrl.getNodeDashboardLink(node)}}" target="_blank" style="color: #fff">
-                                        <i class="fa fa-eye"/>
-                                    </a>
-                                </span>
-                            </td>
-                            <td>Memory used: <span ng-bind="node.memoryPercentUsed" /></td>
-                        </tr>
-                        <tr ng-repeat="node in ctrl.getAlertsNodesByMemory('memoryStatusRequested')">
-                            <td>
-                                <span class="override--nodeTable_status" ng-style="{'background' : node.rowMemoryRequestedColor}"></span>
-                            </td>
-                            <td>Node:
-                                <span ng-bind="node.name" />
-                                <span>
-                                    <a href="{{ctrl.getNodeDashboardLink(node)}}" target="_blank" style="color: #fff">
-                                        <i class="fa fa-eye"/>
-                                    </a>
-                                </span>
-                            </td>
-                            <td>Memory used: <span ng-bind="node.memoryPercentRequested" /></td>
-                        </tr>
-                        <!--pods used-->
-                        <tr ng-repeat="node in ctrl.getAlertsNodesByPods()">
-                            <td>
-                                <span class="override--nodeTable_status" ng-style="{'background' : node.rowPodsColor}"></span>
-                            </td>
-                            <td>Node:
-                                <span ng-bind="node.name" />
-                                <span>
-                                    <a href="{{ctrl.getNodeDashboardLink(node)}}" target="_blank" style="color: #fff">
-                                        <i class="fa fa-eye"/>
-                                    </a>
-                                </span>
-                            </td>
-                            <td>Pods count used: <span ng-bind="node.podsPercentUsed" /></td>
-                        </tr>
+        <br>
+        <section ng-if="ctrl.nodesMapReady && ctrl.clusterProblem()">
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="markdown-html explore-panel">
+                        <table style="width: 100%">
+                            <tr>
+                                <th>Status</th>
+                                <th>Entity</th>
+                                <th>Error message</th>
+                            </tr>
+                            <tr ng-if="ctrl.nodesError"><td colspan="3"><b>Node</b></td></tr>
+                            <tr ng-if="ctrl.nodesError">
+                                <td>
+                                    <span class="override--nodeTable_status override--pod_status_error"></span>
+                                </td>
+                                <td class="pointer">
+                                    <span>K8S API Request</span>
+                                </td>
+                                <td ng-bind="ctrl.nodesError.message"></td>
+                            </tr>
+                            <tr ng-if="ctrl.podsError"><td colspan="3"><b>Pods</b></td></tr>
+                            <tr ng-if="ctrl.podsError">
+                                <td>
+                                    <span class="override--nodeTable_status override--pod_status_error"></span>
+                                </td>
+                                <td class="pointer">
+                                    <span>K8S API Request</span>
+                                </td>
+                                <td ng-bind="ctrl.podsError.message"></td>
+                            </tr>
+                            <tr ng-if="ctrl.componentsError"><td colspan="3"><b>Services</b></td></tr>
+                            <tr ng-if="ctrl.componentsError">
+                                <td>
+                                    <span class="override--nodeTable_status override--pod_status_error"></span>
+                                </td>
+                                <td class="pointer">
+                                    <span>K8S API Request</span>
+                                </td>
+                                <td ng-bind="ctrl.componentsError.message"></td>
+                            </tr>
+                            <!--services problem-->
+                            <tr ng-if="ctrl.getAlertsComponents.length > 0"><td>Services</td></tr>
+                            <tr ng-repeat="component in ctrl.getAlertsComponents">
+                                <td>
+                                    <span class="override--nodeTable_status" ng-style="{'background': component.color}"></span>
+                                </td>
+                                <td ng-bind="component.name"></td>
+                                <td ng-bind="component.message"></td>
+                            </tr>
+                            <!--Node-->
+                            <tr ng-if="ctrl.getWarningNodes().length > 0"><td colspan="3"><b>Node</b></td></tr>
+                            <tr ng-repeat="node in ctrl.getWarningNodes()">
+                                <td>
+                                    <span class="override--nodeTable_status override--pod_status_{{node.color}}"></span>
+                                </td>
+                                <td class="pointer">
+                                    <span ng-bind="node.name" />
+                                    <span>
+                                        <a href="{{ctrl.getNodeDashboardLink(node)}}" target="_blank" style="color: #fff">
+                                            <i class="fa fa-eye"/>
+                                        </a>
+                                    </span>
+                                </td>
+                                <td ng-bind="node.message"></td>
+                            </tr>
+                            <!--Resources-->
+                            <tr ng-if="ctrl.getAlertsNodesByCPU().length > 0 || ctrl.getAlertsNodesByMemory().length > 0 || ctrl.getAlertsNodesByPods().length > 0"
+                            >
+                                <td colspan="3"><b>Resources</b></td>
+                            </tr>
+                            <!--cpu used-->
+                            <tr ng-repeat="node in ctrl.getAlertsNodesByCPU()">
+                                <td>
+                                    <span class="override--nodeTable_status" ng-style="{'background' : node.rowCpuColor}"></span>
+                                </td>
+                                <td>Node:
+                                    <span ng-bind="node.name" />
+                                    <span>
+                                        <a href="{{ctrl.getNodeDashboardLink(node)}}" target="_blank" style="color: #fff">
+                                            <i class="fa fa-eye"/>
+                                        </a>
+                                    </span>
+                                </td>
+                                <td>CPU used: <span ng-bind="node.cpuPercentUsed" /></td>
+                            </tr>
+                            <tr ng-repeat="node in ctrl.getAlertsNodesByCPU('cpuStatusRequested')">
+                                <td>
+                                    <span class="override--nodeTable_status" ng-style="{'background' : node.rowCpuRequestedColor}"></span>
+                                </td>
+                                <td>Node:
+                                    <span ng-bind="node.name" />
+                                    <span>
+                                        <a href="{{ctrl.getNodeDashboardLink(node)}}" target="_blank" style="color: #fff">
+                                            <i class="fa fa-eye"/>
+                                        </a>
+                                    </span>
+                                </td>
+                                <td>CPU requested: <span ng-bind="node.cpuPercentRequested" /></td>
+                            </tr>
+                            <!--memory used-->
+                            <tr ng-repeat="node in ctrl.getAlertsNodesByMemory()">
+                                <td>
+                                    <span class="override--nodeTable_status" ng-style="{'background' : node.rowMemoryColor}"></span>
+                                </td>
+                                <td>Node:
+                                    <span ng-bind="node.name" />
+                                    <span>
+                                        <a href="{{ctrl.getNodeDashboardLink(node)}}" target="_blank" style="color: #fff">
+                                            <i class="fa fa-eye"/>
+                                        </a>
+                                    </span>
+                                </td>
+                                <td>Memory used: <span ng-bind="node.memoryPercentUsed" /></td>
+                            </tr>
+                            <tr ng-repeat="node in ctrl.getAlertsNodesByMemory('memoryStatusRequested')">
+                                <td>
+                                    <span class="override--nodeTable_status" ng-style="{'background' : node.rowMemoryRequestedColor}"></span>
+                                </td>
+                                <td>Node:
+                                    <span ng-bind="node.name" />
+                                    <span>
+                                        <a href="{{ctrl.getNodeDashboardLink(node)}}" target="_blank" style="color: #fff">
+                                            <i class="fa fa-eye"/>
+                                        </a>
+                                    </span>
+                                </td>
+                                <td>Memory used: <span ng-bind="node.memoryPercentRequested" /></td>
+                            </tr>
+                            <!--pods used-->
+                            <tr ng-repeat="node in ctrl.getAlertsNodesByPods()">
+                                <td>
+                                    <span class="override--nodeTable_status" ng-style="{'background' : node.rowPodsColor}"></span>
+                                </td>
+                                <td>Node:
+                                    <span ng-bind="node.name" />
+                                    <span>
+                                        <a href="{{ctrl.getNodeDashboardLink(node)}}" target="_blank" style="color: #fff">
+                                            <i class="fa fa-eye"/>
+                                        </a>
+                                    </span>
+                                </td>
+                                <td>Pods count used: <span ng-bind="node.podsPercentUsed" /></td>
+                            </tr>
 
-                        <!--fail pods-->
-                        <tr ng-if="ctrl.getWarningPods().length > 0"><td colspan="3"><b>Pods</b></td></tr>
-                        <tr ng-repeat="pod in ctrl.getWarningPods()" ng-if="!pod.is_deleted">
-                            <td>
-                                <span class="override--nodeTable_status override--pod_status_{{pod.color}}"></span>
-                            </td>
-                            <td class="pointer" ng-click="ctrl.goTo(pod.name)">
-                                <span ng-bind="pod.data.metadata.namespace + ' / ' +pod.name"></span>
-                                <span>
-                                    <a href="{{ctrl.getPodDashboardLink(pod)}}" target="_blank" style="color: #fff">
-                                        <i class="fa fa-eye"/>
-                                    </a>
-                                </span>
-                            </td>
-                            <td ng-bind="pod.message"></td>
-                        </tr>
+                            <!--fail pods-->
+                            <tr ng-if="ctrl.getWarningPods().length > 0"><td colspan="3"><b>Pods</b></td></tr>
+                            <tr ng-repeat="pod in ctrl.getWarningPods()" ng-if="!pod.is_deleted">
+                                <td>
+                                    <span class="override--nodeTable_status override--pod_status_{{pod.color}}"></span>
+                                </td>
+                                <td class="pointer" ng-click="ctrl.goTo(pod.name)">
+                                    <span ng-bind="pod.data.metadata.namespace + ' / ' +pod.name"></span>
+                                    <span>
+                                        <a href="{{ctrl.getPodDashboardLink(pod)}}" target="_blank" style="color: #fff">
+                                            <i class="fa fa-eye"/>
+                                        </a>
+                                    </span>
+                                </td>
+                                <td ng-bind="pod.message"></td>
+                            </tr>
 
-                    </table>
+                        </table>
+                    </div>
                 </div>
             </div>
-        </div>
-    </section>
-    <section ng-if="ctrl.nodesMapReady && !ctrl.clusterProblem()">
-        <div class="pointer card-item-label col-md-12">
-            <span class="override--pod_status override--pod_status_success"></span>
-            <h3>YOUR CLUSTER WORKS FINE</h3>
-        </div>
-    </section>
+        </section>
+        <section ng-if="ctrl.nodesMapReady && !ctrl.clusterProblem()">
+            <div class="pointer card-item-label col-md-12">
+                <span class="override--pod_status override--pod_status_success"></span>
+                <h3>YOUR CLUSTER WORKS FINE</h3>
+            </div>
+        </section>
+    </div>
 </section>

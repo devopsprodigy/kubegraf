@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 13 7" width="13" height="7">
+	<defs>
+		<clipPath clipPathUnits="userSpaceOnUse" id="cp1">
+			<path d="M-135 -130L1145 -130L1145 1722L-135 1722Z" />
+		</clipPath>
+	</defs>
+	<style>
+		tspan { white-space:pre }
+		.shp0 { fill: #d8d9da } 
+	</style>
+	<g id="1" clip-path="url(#cp1)">
+		<path id="Polygon 1" class="shp0" d="M6.5 0L13 7L0 7L6.5 0Z" />
+	</g>
+</svg>

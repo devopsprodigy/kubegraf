@@ -21,7 +21,9 @@
                 </a>
             </div>
         </div>
-        <hr>
+        <div class="hr"></div>
+    </div>
+    <div class="page-body--override">
         <div class="row explore-pane">
             <div class="col-md-6">
                 <h1>Overview: <span ng-bind="ctrl.cluster.name"/>. Nodes</h1>
@@ -50,226 +52,225 @@
                 </div>
             </div>
         </div>
-    </div>
-</section>
-<br/><br/>
-<section class="page-container--override">
-    <section ng-if="ctrl.getWarningPods().length > 0">
-        <div class="row">
-            <div class="col-md-12">
-                <div class="markdown-html explore-panel">
-                    <table style="width: 100%">
-                        <tr>
-                            <th>Status</th>
-                            <th>Pod Name</th>
-                            <th>Error message</th>
-                        </tr>
-                        <tr ng-repeat="pod in ctrl.getWarningPods()" ng-if="!pod.is_deleted">
-                            <td>
-                                <span class="override--nodeTable_status override--pod_status_{{pod.color}}"></span>
-                            </td>
-                            <td class="pointer" ng-bind="pod.name" ng-click="ctrl.goTo(pod.name)"></td>
-                            <td ng-bind="pod.message"></td>
-                        </tr>
-                    </table>
+        <section>
+            <section ng-if="ctrl.getWarningPods().length > 0">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="markdown-html explore-panel">
+                            <table style="width: 100%">
+                                <tr>
+                                    <th>Status</th>
+                                    <th>Pod Name</th>
+                                    <th>Error message</th>
+                                </tr>
+                                <tr ng-repeat="pod in ctrl.getWarningPods()" ng-if="!pod.is_deleted">
+                                    <td>
+                                        <span class="override--nodeTable_status override--pod_status_{{pod.color}}"></span>
+                                    </td>
+                                    <td class="pointer" ng-bind="pod.name" ng-click="ctrl.goTo(pod.name)"></td>
+                                    <td ng-bind="pod.message"></td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
                 </div>
-            </div>
-        </div>
-    </section>
-    <br/><br/>
-    <div class="row" >
-        <div class="col-md-12" ng-repeat="(nodeIndex, node) in ctrl.nodesMap" ng-if="ctrl.pageReady">
-            <div class="card-section" ng-show="node.open">
-                <div class="card-item">
-                    <div class="card-item-header">
-                        <h2 class="explore-toolbar-item">
-                            Node: <span ng-bind="node.name" />
-                            <span class="override--node_status" ng-style="{'background-color': node.color}" />
-                        </h2>
-                        <span class="card-item.sub-name">IP: <span ng-bind="node.hostIp"/></span><br/>
-                        <span class="card-item.sub-name">CPU Cores: <span ng-bind="ctrl.serverInfo[node.name].cpuCores"/></span><br/>
-                        <span class="card-item.sub-name">RAM Total: <span ng-bind="ctrl.serverInfo[node.name].ramTotal"/></span><br/>
-                        <span class="card-item.sub-name">SWAP Total: <span ng-bind="ctrl.serverInfo[node.name].swapTotal"/></span><br/>
-                        <span class="card-item.sub-name">RootFS Total: <span ng-bind="ctrl.serverInfo[node.name].rootFSTotal"/></span><br/>
-                        <span class="card-item.sub-name">Sys Load (1m avg): <span ng-bind="ctrl.serverInfo[node.name].sysLoad"/></span><br/>
-                        <span class="card-item.sub-name">Uptime: <span ng-bind="ctrl.serverInfo[node.name].uptime"/></span><br/><br/>
-                        <div class="row">
-                            <div class="col-md-12 markdown-html explore-panel">
-                                <table class="override--table">
-                                    <tr>
-                                        <th></th>
-                                        <th>Pods limits</th>
-                                        <th>CPU (cores)</th>
-                                        <th>Memory</th>
-                                    </tr>
-                                    <tr>
-                                        <td>Used</td>
-                                        <td ng-bind="node.podsUsedFormatted" ng-style="{'background-color': node.rowPodsColor}" ng-class="{'pulse': node.podsIndicate}"></td>
-                                        <td ng-bind="node.cpuUsedFormatted" ng-style="{'background-color': node.rowCpuColor}" ng-class="{'pulse': node.cpuIndicate}"></td>
-                                        <td ng-bind="node.memoryUsedFormatted" ng-style="{'background-color': node.rowMemoryColor}" ng-class="{'pulse': node.memoryIndicate}"></td>
-                                    </tr>
-                                    <tr>
-                                        <td>Requested</td>
-                                        <td ng-bind="node.podsRequestedFormatted" ng-style="{'background-color': node.rowPodsRequestedColor}" ng-class="{'pulse': node.podsRequestedIndicate}"></td>
-                                        <td ng-bind="node.cpuRequestedFormatted" ng-style="{'background-color': node.rowCpuRequestedColor}" ng-class="{'pulse': node.cpuRequestedIndicate}"></td>
-                                        <td ng-bind="node.memoryRequestedFormatted" ng-style="{'background-color': node.rowMemoryRequestedColor}" ng-class="{'pulse': node.memoryRequestedIndicate}"></td>
-                                    </tr>
-                                    <tr>
-                                        <td>Allocatable</td>
-                                        <td ng-bind="node.data.status.allocatable.pods"></td>
-                                        <td ng-bind="node.cpuAllocatableFormatted"></td>
-                                        <td ng-bind="node.memoryAllocatableFormatted"></td>
-                                    </tr>
-                                    <tr>
-                                        <td>Capacity</td>
-                                        <td ng-bind="node.data.status.capacity.pods"></td>
-                                        <td ng-bind="node.data.status.capacity.cpu"></td>
-                                        <td ng-bind="node.memoryCapacityFormatted"></td>
-                                    </tr>
+            </section>
+            <br/>
+            <div class="row" >
+                <div class="col-md-12" ng-repeat="(nodeIndex, node) in ctrl.nodesMap" ng-if="ctrl.pageReady">
+                    <div class="card-section" ng-show="node.open">
+                        <div class="card-item">
+                            <div class="card-item-header">
+                                <h2 class="explore-toolbar-item">
+                                    Node: <span ng-bind="node.name" />
+                                    <span class="override--node_status" ng-style="{'background-color': node.color}" />
+                                </h2>
+                                <span class="card-item.sub-name">IP: <span ng-bind="node.hostIp"/></span><br/>
+                                <span class="card-item.sub-name">CPU Cores: <span ng-bind="ctrl.serverInfo[node.name].cpuCores"/></span><br/>
+                                <span class="card-item.sub-name">RAM Total: <span ng-bind="ctrl.serverInfo[node.name].ramTotal"/></span><br/>
+                                <span class="card-item.sub-name">SWAP Total: <span ng-bind="ctrl.serverInfo[node.name].swapTotal"/></span><br/>
+                                <span class="card-item.sub-name">RootFS Total: <span ng-bind="ctrl.serverInfo[node.name].rootFSTotal"/></span><br/>
+                                <span class="card-item.sub-name">Sys Load (1m avg): <span ng-bind="ctrl.serverInfo[node.name].sysLoad"/></span><br/>
+                                <span class="card-item.sub-name">Uptime: <span ng-bind="ctrl.serverInfo[node.name].uptime"/></span><br/><br/>
+                                <div class="row">
+                                    <div class="col-md-12 markdown-html explore-panel">
+                                        <table class="override--table">
+                                            <tr>
+                                                <th></th>
+                                                <th>Pods limits</th>
+                                                <th>CPU (cores)</th>
+                                                <th>Memory</th>
+                                            </tr>
+                                            <tr>
+                                                <td>Used</td>
+                                                <td ng-bind="node.podsUsedFormatted" ng-style="{'background-color': node.rowPodsColor}" ng-class="{'pulse': node.podsIndicate}"></td>
+                                                <td ng-bind="node.cpuUsedFormatted" ng-style="{'background-color': node.rowCpuColor}" ng-class="{'pulse': node.cpuIndicate}"></td>
+                                                <td ng-bind="node.memoryUsedFormatted" ng-style="{'background-color': node.rowMemoryColor}" ng-class="{'pulse': node.memoryIndicate}"></td>
+                                            </tr>
+                                            <tr>
+                                                <td>Requested</td>
+                                                <td ng-bind="node.podsRequestedFormatted" ng-style="{'background-color': node.rowPodsRequestedColor}" ng-class="{'pulse': node.podsRequestedIndicate}"></td>
+                                                <td ng-bind="node.cpuRequestedFormatted" ng-style="{'background-color': node.rowCpuRequestedColor}" ng-class="{'pulse': node.cpuRequestedIndicate}"></td>
+                                                <td ng-bind="node.memoryRequestedFormatted" ng-style="{'background-color': node.rowMemoryRequestedColor}" ng-class="{'pulse': node.memoryRequestedIndicate}"></td>
+                                            </tr>
+                                            <tr>
+                                                <td>Allocatable</td>
+                                                <td ng-bind="node.data.status.allocatable.pods"></td>
+                                                <td ng-bind="node.cpuAllocatableFormatted"></td>
+                                                <td ng-bind="node.memoryAllocatableFormatted"></td>
+                                            </tr>
+                                            <tr>
+                                                <td>Capacity</td>
+                                                <td ng-bind="node.data.status.capacity.pods"></td>
+                                                <td ng-bind="node.data.status.capacity.cpu"></td>
+                                                <td ng-bind="node.memoryCapacityFormatted"></td>
+                                            </tr>
 
-                                </table>
+                                        </table>
+                                    </div>
+                                </div>
                             </div>
-                        </div>
-                    </div>
 
-                    <a class="btn btn-success" href="{{ctrl.getNodeDashboardLink(node)}}" target="_blank">
-                        <i class="fa fa-fw fa-eye"/>&nbsp;
-                        Open Dashboard
-                    </a>
-                    <div class="btn btn-danger" ng-if="!node.hideNs" ng-click="ctrl.toggleNsList(node)">
-                        Hide Applications
-                    </div>
-                    <div class="btn btn-secondary" ng-if="node.hideNs" ng-click="ctrl.toggleNsList(node)">
-                        Show Applications
-                    </div>
-                    <hr>
-                    <div ng-repeat="(nsIndex, ns) in node.namespaces" ng-show="ctrl.podsFilterIsDeleted(ns.pods).length > 0" ng-if="!node.hideNs">
-                        <div class="row">
-                            <div class="col-md-12 markdown-html explore-panel">
-                                <table class="override--table_ns_6 explore-toolbar-item explore-panel">
-                                    <tr>
-                                        <td></td>
-                                        <td>
-                                            <h4 class="pointer" ng-click="ctrl.sort('name', nsIndex, nodeIndex)">
-                                                Namespace: <span ng-bind="ns.name" /> (<span ng-bind="ctrl.__getPodsLength(ns.pods)" />)
-                                                <span ng-bind-html="ctrl.icon('name', nsIndex, nodeIndex)"></span>
-                                            </h4>
-                                            <div
-                                                    class="btn btn-secondary explore-panel"
-                                                    ng-if="ns.pods.length > ns.limit"
-                                                    ng-hide="ns.limit === false"
-                                                    ng-click="ctrl.showAllPodsNS(ns)"
-                                            >
-                                                show more pods
-                                            </div>
-                                        </td>
-                                        <th>
-                                            <span
-                                                class="pointer"
-                                                ng-click="ctrl.sort('sourceMetrics.cpuUsed', nsIndex, nodeIndex)"
-                                                ng-bind-html="'CPU usage ' + ctrl.icon('sourceMetrics.cpuUsed', nsIndex, nodeIndex)"
-                                            ></span>
-                                        </th>
-                                        <th>
-                                            <span
-                                                class="pointer"
-                                                ng-click="ctrl.sort('sourceMetrics.cpuRequested', nsIndex, nodeIndex)"
-                                                ng-bind-html="'CPU requested ' + ctrl.icon('sourceMetrics.cpuRequested', nsIndex, nodeIndex)"
-                                            ></span>
-                                        </th>
-                                        <th>
-                                            <span
-                                                class="pointer"
-                                                ng-click="ctrl.sort('sourceMetrics.memoryUsed', nsIndex, nodeIndex)"
-                                                ng-bind-html="'Memory usage ' + ctrl.icon('sourceMetrics.memoryUsed', nsIndex, nodeIndex)"
-                                            ></span>
-                                        </th>
-                                        <th>
-                                            <span
-                                                class="pointer"
-                                                ng-click="ctrl.sort('sourceMetrics.memoryRequested', nsIndex, nodeIndex)"
-                                                ng-bind-html="'Memory requested ' + ctrl.icon('sourceMetrics.memoryRequested', nsIndex, nodeIndex)"
-                                            ></span>
-                                        </th>
-                                    </tr>
-                                </table>
+                            <a class="btn btn-success" href="{{ctrl.getNodeDashboardLink(node)}}" target="_blank">
+                                <i class="fa fa-fw fa-eye"/>&nbsp;
+                                Open Dashboard
+                            </a>
+                            <div class="btn btn-danger" ng-if="!node.hideNs" ng-click="ctrl.toggleNsList(node)">
+                                Hide Applications
                             </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-12 markdown-html">
-                                <table class="override--table_ns_6 explore-toolbar-item">
-                                    <tr ng-repeat="pod in ns.pods | limitTo: ns.limit | orderBy: ns.sort" ng-if="!pod.is_deleted">
-                                        <td>
-                                            <span class="override--nodeTable_status override--pod_status_{{pod.color}}"></span>
-                                        </td>
-                                        <td>
-                                            <span ng-bind="pod.name" bs-tooltip="pod.message" data-placement="right" class="pointer {{pod.name}}" />
-                                            <span>
+                            <div class="btn btn-secondary" ng-if="node.hideNs" ng-click="ctrl.toggleNsList(node)">
+                                Show Applications
+                            </div>
+                            <hr>
+                            <div ng-repeat="(nsIndex, ns) in node.namespaces" ng-show="ctrl.podsFilterIsDeleted(ns.pods).length > 0" ng-if="!node.hideNs">
+                                <div class="row">
+                                    <div class="col-md-12 markdown-html explore-panel">
+                                        <table class="override--table_ns_6 explore-toolbar-item explore-panel">
+                                            <tr>
+                                                <td></td>
+                                                <td>
+                                                    <h4 class="pointer" ng-click="ctrl.sort('name', nsIndex, nodeIndex)">
+                                                        Namespace: <span ng-bind="ns.name" /> (<span ng-bind="ctrl.__getPodsLength(ns.pods)" />)
+                                                        <span ng-bind-html="ctrl.icon('name', nsIndex, nodeIndex)"></span>
+                                                    </h4>
+                                                    <div
+                                                            class="btn btn-secondary explore-panel"
+                                                            ng-if="ns.pods.length > ns.limit"
+                                                            ng-hide="ns.limit === false"
+                                                            ng-click="ctrl.showAllPodsNS(ns)"
+                                                    >
+                                                        show more pods
+                                                    </div>
+                                                </td>
+                                                <th>
+                                            <span
+                                                    class="pointer"
+                                                    ng-click="ctrl.sort('sourceMetrics.cpuUsed', nsIndex, nodeIndex)"
+                                                    ng-bind-html="'CPU usage ' + ctrl.icon('sourceMetrics.cpuUsed', nsIndex, nodeIndex)"
+                                            ></span>
+                                                </th>
+                                                <th>
+                                            <span
+                                                    class="pointer"
+                                                    ng-click="ctrl.sort('sourceMetrics.cpuRequested', nsIndex, nodeIndex)"
+                                                    ng-bind-html="'CPU requested ' + ctrl.icon('sourceMetrics.cpuRequested', nsIndex, nodeIndex)"
+                                            ></span>
+                                                </th>
+                                                <th>
+                                            <span
+                                                    class="pointer"
+                                                    ng-click="ctrl.sort('sourceMetrics.memoryUsed', nsIndex, nodeIndex)"
+                                                    ng-bind-html="'Memory usage ' + ctrl.icon('sourceMetrics.memoryUsed', nsIndex, nodeIndex)"
+                                            ></span>
+                                                </th>
+                                                <th>
+                                            <span
+                                                    class="pointer"
+                                                    ng-click="ctrl.sort('sourceMetrics.memoryRequested', nsIndex, nodeIndex)"
+                                                    ng-bind-html="'Memory requested ' + ctrl.icon('sourceMetrics.memoryRequested', nsIndex, nodeIndex)"
+                                            ></span>
+                                                </th>
+                                            </tr>
+                                        </table>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-12 markdown-html">
+                                        <table class="override--table_ns_6 explore-toolbar-item">
+                                            <tr ng-repeat="pod in ns.pods | limitTo: ns.limit | orderBy: ns.sort" ng-if="!pod.is_deleted">
+                                                <td>
+                                                    <span class="override--nodeTable_status override--pod_status_{{pod.color}}"></span>
+                                                </td>
+                                                <td>
+                                                    <span ng-bind="pod.name" bs-tooltip="pod.message" data-placement="right" class="pointer {{pod.name}}" />
+                                                    <span>
                                                 <a href="{{ctrl.getPodDashboardLink(pod)}}" target="_blank" style="color: #fff">
                                                     <i class="fa fa-eye"/>
                                                 </a>
                                             </span>
-                                        </td>
-                                        <td>
-                                            <span ng-bind="pod.metrics.cpuUsed"/>
-                                            <span class="gicon gicon-question card-item-label"
-                                                  bs-tooltip="pod.NaMessage"
-                                                  data-placement="right"
-                                                  ng-if="pod.metrics.cpuUsed === 'N-A'"
-                                            ></span>
-                                        </td>
-                                        <td>
-                                            <span ng-bind="pod.metrics.cpuRequested"/>
-                                            <span class="gicon gicon-question card-item-label"
-                                                  bs-tooltip="pod.NaMessage"
-                                                  data-placement="right"
-                                                  ng-if="pod.metrics.cpuRequested === 'N-A'"
-                                            ></span>
-                                        </td>
-                                        <td>
-                                            <span ng-bind="pod.metrics.memoryUsed" />
-                                            <span class="gicon gicon-question card-item-label"
-                                                  bs-tooltip="pod.NaMessage"
-                                                  data-placement="right"
-                                                  ng-if="pod.metrics.memoryUsed === 'N-A'"
-                                            ></span>
-                                        </td>
-                                        <td>
-                                            <span ng-bind="pod.metrics.memoryRequested"/>
-                                            <span class="gicon gicon-question card-item-label"
-                                                  bs-tooltip="pod.NaMessage"
-                                                  data-placement="right"
-                                                  ng-if="pod.metrics.memoryRequested === 'N-A'"
-                                            ></span>
-                                        </td>
-                                    </tr>
-                                    <tr ng-if="ns.pods">
-                                        <th>
-                                            <span class="override--nodeTable_status"></span>
-                                        </th>
-                                        <th>
-                                            <span class="pull-right">Summary</span>
-                                        </th>
-                                        <th>
-                                            <span ng-bind="ctrl.summary(ns, 'cpuUsed')"/>
-                                        </th>
-                                        <th>
-                                            <span ng-bind="ctrl.summary(ns, 'cpuRequested')"/>
-                                        </th>
-                                        <th>
-                                            <span ng-bind="ctrl.summary(ns, 'memoryUsed')" />
-                                        </th>
-                                        <th>
-                                            <span ng-bind="ctrl.summary(ns, 'memoryRequested')"/>
-                                        </th>
-                                    </tr>
-                                </table>
+                                                </td>
+                                                <td>
+                                                    <span ng-bind="pod.metrics.cpuUsed"/>
+                                                    <span class="gicon gicon-question card-item-label"
+                                                          bs-tooltip="pod.NaMessage"
+                                                          data-placement="right"
+                                                          ng-if="pod.metrics.cpuUsed === 'N-A'"
+                                                    ></span>
+                                                </td>
+                                                <td>
+                                                    <span ng-bind="pod.metrics.cpuRequested"/>
+                                                    <span class="gicon gicon-question card-item-label"
+                                                          bs-tooltip="pod.NaMessage"
+                                                          data-placement="right"
+                                                          ng-if="pod.metrics.cpuRequested === 'N-A'"
+                                                    ></span>
+                                                </td>
+                                                <td>
+                                                    <span ng-bind="pod.metrics.memoryUsed" />
+                                                    <span class="gicon gicon-question card-item-label"
+                                                          bs-tooltip="pod.NaMessage"
+                                                          data-placement="right"
+                                                          ng-if="pod.metrics.memoryUsed === 'N-A'"
+                                                    ></span>
+                                                </td>
+                                                <td>
+                                                    <span ng-bind="pod.metrics.memoryRequested"/>
+                                                    <span class="gicon gicon-question card-item-label"
+                                                          bs-tooltip="pod.NaMessage"
+                                                          data-placement="right"
+                                                          ng-if="pod.metrics.memoryRequested === 'N-A'"
+                                                    ></span>
+                                                </td>
+                                            </tr>
+                                            <tr ng-if="ns.pods">
+                                                <th>
+                                                    <span class="override--nodeTable_status"></span>
+                                                </th>
+                                                <th>
+                                                    <span class="pull-right">Summary</span>
+                                                </th>
+                                                <th>
+                                                    <span ng-bind="ctrl.summary(ns, 'cpuUsed')"/>
+                                                </th>
+                                                <th>
+                                                    <span ng-bind="ctrl.summary(ns, 'cpuRequested')"/>
+                                                </th>
+                                                <th>
+                                                    <span ng-bind="ctrl.summary(ns, 'memoryUsed')" />
+                                                </th>
+                                                <th>
+                                                    <span ng-bind="ctrl.summary(ns, 'memoryRequested')"/>
+                                                </th>
+                                            </tr>
+                                        </table>
+                                    </div>
+                                </div>
+                                <hr>
                             </div>
                         </div>
-                        <hr>
                     </div>
                 </div>
             </div>
-        </div>
+        </section>
     </div>
 </section>
