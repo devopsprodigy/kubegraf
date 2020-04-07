@@ -19554,6 +19554,16 @@ function (_super) {
     });
   };
 
+  ApplicationsOverview.prototype.namespaceCount = function () {
+    return this.namespaceMap ? this.namespaceMap.length : 0;
+  };
+
+  ApplicationsOverview.prototype.namespaceActiveCount = function () {
+    return this.namespaceMap ? this.namespaceMap.filter(function (namespace) {
+      return namespace.open;
+    }).length : 0;
+  };
+
   ApplicationsOverview.templateUrl = 'components/applications-overview/applications-overview.html';
   return ApplicationsOverview;
 }(_k8sPage.K8sPage);

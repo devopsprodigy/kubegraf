@@ -22,47 +22,42 @@
     </div>
     <div class="page-body--override">
         <div class="overview-panel">
-            <div class="row">
-                <div class="col-md-8">
-                    <div class="overview-panel_header">
-                        <span class="chevron"></span>
-                        <h1>Overview: <span ng-bind="ctrl.cluster.name"/>. Applications</h1>
-                    </div>
+            <div class="header">
+                <div class="title">
+                    <span class="chevron"></span>
+                    <h1>Overview: <span ng-bind="ctrl.cluster.name"/>. Applications</h1>
                 </div>
-                <div class="col-md-4" ng-if="ctrl.namespaceMapReady">
-
-                    <div class="row explore-panel" style="justify-content: flex-end; margin-top: 8px">
-                        <div class="col-md-12">
-                                <span class="btn btn-secondary" ng-click="ctrl.__hideAll()" data-toggle="tooltip"
-                                      title="Use Ctrl+Click or ⌘+Click to select only one Namespace" data-placement="bottom" bs-tooltip="">
-                                    HIDE ALL <span class="gicon gicon-question card-item-label"></span>
-                                </span>
-                            <span class="btn btn-secondary" ng-click="ctrl.__showAll()">SHOW ALL</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-md-4">
-                    <h3>Components: </h3>
-                    <div ng-repeat="component in ctrl.storeComponents | orderBy: 'name'" class="pointer card-item-label col-md-12 explore-toolbar-item">
-                        <span class="override--pod_status" ng-style="{'background': component.color}"></span>
-                        <h5 ng-bind="component.name" bs-tooltip="component.message" data-placement="right" style="display: inline-block"></h5>
-                    </div>
-                </div>
-                <div class="col-md-8">
-                    <span class="col-md-3" ng-repeat="(npKey, namespace) in ctrl.namespaceMap">
-                        <input
-                                type="checkbox" class="toggle-checkbox"
-                                id="{{npKey}}"
-                                ng-click="ctrl.namespaceClick($event, namespace)"
-                                ng-checked="namespace.open"
-                        >
-                        <label class="toggle-checkbox" for="{{npKey}}" ng-bind="namespace.name" />
+                <div class="overview-panel_btn">
+                    <span class="namespace-counter" ng-if="ctrl.namespaceMapReady">
+                        <span class="active">{{ ctrl.namespaceActiveCount() }}</span> / {{ ctrl.namespaceCount() }}
                     </span>
+                    <span class="vertical-line"></span>
+                    <span class="btn btn-secondary" ng-click="ctrl.__showAll()">Show all</span>
+                    <span class="btn btn-secondary" ng-click="ctrl.__hideAll()" data-toggle="tooltip"
+                          title="Use Ctrl+Click or ⌘+Click to select only one Namespace"
+                          data-placement="bottom" bs-tooltip=""
+                    >Hide all&nbsp;&nbsp;<span class="gicon gicon-question card-item-label"></span></span>
                 </div>
             </div>
-
+            <div class="overview-panel_body">
+                <div class="overview-panel_body_components">
+                    <h2>Components</h2>
+                    <div class="component" ng-repeat="component in ctrl.storeComponents | orderBy: 'name'">
+                        <span class="status-indicator" ng-class="{red:component.status, green:!component.status}"></span>
+                        <span ng-bind="component.name" bs-tooltip="component.message" data-placement="right"></span>
+                    </div>
+                </div>
+                <div class="overview-panel_body_namespaces" ng-if="ctrl.namespaceMapReady">
+                    <div class="checkbox" ng-repeat="(npKey, namespace) in ctrl.namespaceMap">
+                        <input type="checkbox"
+                               id="checkbox-{{npKey}}"
+                               ng-click="ctrl.namespaceClick($event, namespace)"
+                               ng-checked="namespace.open">
+                        <span class="gf-form-switch__checkbox"></span>
+                        <label for="checkbox-{{npKey}}" ng-bind="namespace.name"></label>
+                    </div>
+                </div>
+            </div>
         </div>
         <div ng-if="ctrl.namespaceMapReady">
             <section ng-if="ctrl.getWarningPods().length > 0">
@@ -104,85 +99,71 @@
                     </div>
                 </div>
             </section>
-            <br/><br/>
-            <div class="row" >
-                <div class="col-md-12" ng-repeat="(npKey, namespace) in ctrl.namespaceMap">
-                    <div class="card-section" ng-show="namespace.open">
-                        <div class="card-item">
-                            <div class="card-item-header">
-                                <h2>Namespace: <span ng-bind="namespace.name"/></h2>
-                                <span class="card-item.sub-name">Status: <span ng-bind="namespace.data.status.phase"/></span>
+            <div class="namespace-panel" ng-repeat="(npKey, namespace) in ctrl.namespaceMap" ng-show="namespace.open">
+                <div class="header">
+                    <div class="title">
+                        <span class="chevron"></span>
+                        <h1>Namespace: <span ng-bind="namespace.name"/></h1>
+                    </div>
+                    <div class="status">Status: <span ng-bind="namespace.data.status.phase"/></div>
+                </div>
+                <div class="namespace-panel_body">
+                    <div class="column" ng-repeat="col in ctrl.columnNames">
+                        <div class="column_header">
+                            <h3 ng-bind="col.colName"></h3>
+                        </div>
+                        <div ng-if="ctrl.namespaceFilterIsDeleted(namespace[col.nsKey]).length === 0" class="column_cell">
+                            <h4 class="column_cell_header">
+                                No data
+                            </h4>
+                        </div>
+                        <div ng-repeat="key in ctrl.namespaceFilterIsDeleted(namespace[col.nsKey])" class="column_cell">
+                            <h4 class="column_cell_header" ng-click="key.toggle()">
+                                <span ng-bind="key.name"/>
+                                <span ng-if="col.nsKey === 'deployments' || col.nsKey === 'daemonsets' || col.nsKey === 'statefulsets'">
+                                    <a href="{{ctrl.getEntityDashboardLink(key, col.nsKey)}}" target="_blank">
+                                        <i class="fa fa-eye"/>
+                                    </a>
+                                </span>
+                            </h4>
+                            <div ng-repeat="pod in key.pods | limitTo: key.limit" class="pod"
+                                 ng-if="!pod.is_deleted" bs-tooltip="pod.message" data-placement="bottom">
+                                    <span class="status-indicator {{pod.color}}"></span>
+                                    <span class="pod_title">
+                                        {{pod.name}}&nbsp;<a href="{{ctrl.getPodDashboardLink(pod)}}" target="_blank"><i class="fa fa-eye"></i></a>
+                                    </span>
+                                </div>
+                            <div ng-if="col.nsKey === 'cronJobs'" ng-repeat="job in key.jobs | limitTo: key.limit">
+                                <div class="card-item-label"
+                                     ng-repeat="pod in job.pods"
+                                     ng-if="!pod.is_deleted"
+                                     bs-tooltip="pod.message" data-placement="bottom"
+                                >
+                                    <li class="explore-toolbar-item">
+                                        <span class="override--pod_status override--pod_status_{{pod.color}}"/>
+                                        <span ng-bind="pod.name" class="{{pod.name}} pointer"/>
+                                        <span>
+                                        <a href="{{ctrl.getPodDashboardLink(pod)}}" target="_blank">
+                                            <i class="fa fa-eye"/>
+                                        </a>
+                                    </span>
+                                    </li>
+                                </div>
                             </div>
-                            <hr>
-                            <div class="row">
-                                <div class="graph-panel col-md-2 override--borderRight" ng-repeat="col in ctrl.columnNames">
-                                    <div class="card-section">
-                                        <div class="card-item-header">
-                                            <h4><span ng-bind="col.colName"/>:</h4>
-                                        </div>
-                                        <div ng-if="ctrl.namespaceFilterIsDeleted(namespace[col.nsKey]).length === 0">No data</div>
-                                        <div ng-repeat="key in ctrl.namespaceFilterIsDeleted(namespace[col.nsKey])" class="override--borderBottom">
-                                            <h5 class="explore-panel pointer card-item-label" ng-click="key.toggle()">
-                                                <span ng-bind="key.name"/>
-                                                <span ng-if="col.nsKey === 'deployments' || col.nsKey === 'daemonsets' || col.nsKey === 'statefulsets'">
-                                                <a href="{{ctrl.getEntityDashboardLink(key, col.nsKey)}}" target="_blank">
-                                                    <i class="fa fa-eye"/>
-                                                </a>
-                                            </span>
-                                            </h5>
-                                            <div>
-                                                <div class="card-item-label"
-                                                     ng-repeat="pod in key.pods | limitTo: key.limit"
-                                                     ng-if="!pod.is_deleted"
-                                                     bs-tooltip="pod.message" data-placement="bottom"
-                                                >
-                                                    <li class="explore-toolbar-item">
-                                                        <span class="override--pod_status override--pod_status_{{pod.color}}"/>
-                                                        <span ng-bind="pod.name" class="{{pod.name}} pointer"/>
-                                                        <span>
-                                                        <a href="{{ctrl.getPodDashboardLink(pod)}}" target="_blank">
-                                                            <i class="fa fa-eye"/>
-                                                        </a>
-                                                    </span>
-                                                    </li>
-                                                </div>
-                                                <div  ng-if="col.nsKey === 'cronJobs'" ng-repeat="job in key.jobs | limitTo: key.limit">
-                                                    <div class="card-item-label"
-                                                         ng-repeat="pod in job.pods"
-                                                         ng-if="!pod.is_deleted"
-                                                         bs-tooltip="pod.message" data-placement="bottom"
-                                                    >
-                                                        <li class="explore-toolbar-item">
-                                                            <span class="override--pod_status override--pod_status_{{pod.color}}"/>
-                                                            <span ng-bind="pod.name" class="{{pod.name}} pointer"/>
-                                                            <span>
-                                                            <a href="{{ctrl.getPodDashboardLink(pod)}}" target="_blank">
-                                                                <i class="fa fa-eye"/>
-                                                            </a>
-                                                        </span>
-                                                        </li>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div
-                                                    class="btn btn-secondary explore-panel"
-                                                    ng-if="key.pods.length > key.limit"
-                                                    ng-hide="key.limit === false"
-                                                    ng-click="key.showAllPods()"
-                                            >
-                                                show more pods
-                                            </div>
-                                            <div ng-if="key.services.length > 0">
-                                                <h5 class="card-item-label explore-panel">Services: </h5>
-                                                <div class="card-item-label" ng-repeat="service in key.services">
-                                                    <h6 class="explore-panel" ng-bind="service.name"></h6>
-                                                    <span ng-repeat="port in service.data.spec.ports" class="card-item override--card-item">
-                                                    <span ng-bind="port.port"></span>/<span ng-bind="port.protocol" />
-                                                </span>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
+                            <span class="btn btn-secondary explore-panel" ng-if="key.pods.length > key.limit"
+                                ng-hide="key.limit === false" ng-click="key.showAllPods()">
+                                show more pods
+                            </span>
+                            <div ng-if="key.services.length > 0" class="services">
+                                <h5>Services</h5>
+                                <div class="service" ng-repeat="service in key.services">
+                                    <span class="dot-grey"></span>
+                                    <span class="service_title">
+                                        {{ service.name }}:
+                                        <span ng-repeat="port in service.data.spec.ports">
+                                            {{ port.port }}/{{ port.protocol }}
+                                        </span>
+                                    </span>
                                 </div>
                             </div>
                         </div>

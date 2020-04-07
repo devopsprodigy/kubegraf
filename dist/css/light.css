@@ -6,8 +6,6 @@
     background-color: #222326;
     padding: 32px 60px 0 60px; }
     .page-container--override .page-header .btn {
-      font-size: 12px;
-      padding: 10px 20px;
       margin-left: 20px; }
     .page-container--override .page-header .hr {
       height: 1px;
@@ -16,27 +14,215 @@
       margin-left: -60px; }
   .page-container--override .page-body--override {
     padding: 28px 60px 0; }
-    .page-container--override .page-body--override .overview-panel {
-      background-color: #2d2d30;
-      border-radius: 2px;
-      padding: 16px 10px; }
-      .page-container--override .page-body--override .overview-panel_header {
-        cursor: pointer;
-        display: flex; }
-      .page-container--override .page-body--override .overview-panel h1 {
+    .page-container--override .page-body--override .header {
+      display: flex;
+      justify-content: space-between; }
+    .page-container--override .page-body--override .title {
+      cursor: pointer;
+      display: flex; }
+      .page-container--override .page-body--override .title h1 {
         font-size: 24px;
         color: #eaeaea;
-        line-height: 1;
+        line-height: 24px;
         font-weight: normal;
         margin-bottom: initial; }
+    .page-container--override .page-body--override .status {
+      font-size: 14px;
+      color: #8e8e8e; }
+      .page-container--override .page-body--override .status span {
+        color: #c04c21; }
+    .page-container--override .page-body--override .overview-panel {
+      background-color: #2d2d30;
+      border-radius: 3px;
+      padding: 16px 16px;
+      display: flex;
+      flex-direction: column;
+      margin-bottom: 10px; }
+      .page-container--override .page-body--override .overview-panel_header {
+        display: flex;
+        justify-content: space-between;
+        padding-bottom: 24px; }
+      .page-container--override .page-body--override .overview-panel_body {
+        display: flex;
+        justify-content: space-between;
+        color: #b8b8b8;
+        margin-top: 24px; }
+        .page-container--override .page-body--override .overview-panel_body h2 {
+          font-size: 18px;
+          font-weight: normal;
+          color: #b8b8b8;
+          margin-bottom: 20px;
+          line-height: 18px; }
+        .page-container--override .page-body--override .overview-panel_body_components {
+          display: flex;
+          flex-direction: column;
+          font-size: 14px;
+          margin-right: 20px; }
+          .page-container--override .page-body--override .overview-panel_body_components .component {
+            margin-bottom: 8px;
+            display: flex; }
+        .page-container--override .page-body--override .overview-panel_body_namespaces {
+          display: flex;
+          align-content: flex-start;
+          flex-flow: wrap;
+          max-width: 700px; }
+      .page-container--override .page-body--override .overview-panel_btn {
+        display: flex;
+        min-width: 313px; }
+        .page-container--override .page-body--override .overview-panel_btn span {
+          margin: 0 10px; }
+        .page-container--override .page-body--override .overview-panel_btn span:last-child {
+          margin-right: 0; }
+    .page-container--override .page-body--override .namespace-panel {
+      background-color: #212124;
+      margin-bottom: 10px;
+      padding: 16px 0; }
+      .page-container--override .page-body--override .namespace-panel .header {
+        padding: 0 16px; }
+      .page-container--override .page-body--override .namespace-panel_body {
+        display: flex;
+        margin-top: 24px; }
+        .page-container--override .page-body--override .namespace-panel_body .column {
+          width: 100%;
+          display: flex;
+          flex-direction: column;
+          border-right: 1px solid #161719; }
+          .page-container--override .page-body--override .namespace-panel_body .column:last-child {
+            border: none; }
+          .page-container--override .page-body--override .namespace-panel_body .column_header h3 {
+            color: #b8b8b8;
+            font-size: 18px;
+            margin-bottom: 24px;
+            margin-left: 10px; }
+          .page-container--override .page-body--override .namespace-panel_body .column_cell {
+            display: flex;
+            flex-direction: column;
+            border-bottom: 1px solid #161719;
+            margin-bottom: 6px;
+            padding: 0 10px 12px; }
+            .page-container--override .page-body--override .namespace-panel_body .column_cell i {
+              color: #b8b8b8;
+              font-size: 12px; }
+              .page-container--override .page-body--override .namespace-panel_body .column_cell i:hover {
+                color: #eaeaea; }
+            .page-container--override .page-body--override .namespace-panel_body .column_cell h4 {
+              margin-bottom: 6px; }
+            .page-container--override .page-body--override .namespace-panel_body .column_cell:last-child {
+              border: none; }
+            .page-container--override .page-body--override .namespace-panel_body .column_cell_header {
+              font-size: 14px;
+              color: #8e8e8e; }
+              .page-container--override .page-body--override .namespace-panel_body .column_cell_header span {
+                color: #eaeaea; }
+            .page-container--override .page-body--override .namespace-panel_body .column_cell .pod {
+              display: flex;
+              line-height: initial;
+              font-size: 12px;
+              color: #b8b8b8; }
+              .page-container--override .page-body--override .namespace-panel_body .column_cell .pod_title {
+                top: 3px;
+                position: relative; }
+            .page-container--override .page-body--override .namespace-panel_body .column_cell .services {
+              margin-top: 12px;
+              color: #8e8e8e; }
+              .page-container--override .page-body--override .namespace-panel_body .column_cell .services h5 {
+                font-size: 14px;
+                line-height: initial;
+                margin-left: 14px;
+                color: #b8b8b8;
+                margin-bottom: 6px; }
+              .page-container--override .page-body--override .namespace-panel_body .column_cell .services .service {
+                display: flex;
+                margin-left: 6px; }
+                .page-container--override .page-body--override .namespace-panel_body .column_cell .services .service_title {
+                  color: #b8b8b8;
+                  line-height: initial;
+                  font-size: 12px; }
+                  .page-container--override .page-body--override .namespace-panel_body .column_cell .services .service_title span {
+                    color: #8e8e8e;
+                    line-height: 14px;
+                    font-size: 12px;
+                    border-right: 1px solid #2f2f32;
+                    margin-right: 5px;
+                    padding-right: 5px; }
+                    .page-container--override .page-body--override .namespace-panel_body .column_cell .services .service_title span:last-child {
+                      border: none;
+                      margin: 0;
+                      padding: 0; }
+
+.checkbox {
+  width: 165px;
+  display: flex;
+  margin-bottom: 6px;
+  margin-left: 10px; }
+  .checkbox input {
+    display: none; }
+  .checkbox span {
+    position: absolute; }
+  .checkbox label {
+    font-size: 14px;
+    line-height: 16px;
+    height: 18px;
+    padding-left: 24px;
+    position: relative;
+    cursor: pointer; }
+
+.btn {
+  font-size: 12px;
+  padding: 0 20px;
+  line-height: 33px;
+  height: 33px; }
 
 .chevron {
   display: block;
-  width: 24px;
+  width: 14px;
+  min-width: 14px;
   height: 24px;
   background: url(/public/plugins/devopsprodigy-kubegraf-app/img/chevron.svg) center no-repeat;
-  margin-right: 6px;
-  transform: rotate(180deg); }
+  margin-right: 6px; }
+  .chevron:active {
+    transform: rotate(180deg); }
+
+.vertical-line {
+  display: inline-block;
+  width: 1px;
+  height: 33px;
+  background-color: #161719; }
+
+.namespace-counter {
+  font-size: 14px;
+  line-height: 33px;
+  height: 33px;
+  color: #8e8e8e; }
+  .namespace-counter .active {
+    color: #c74c2a; }
+
+.status-indicator {
+  display: block;
+  min-width: 6px;
+  width: 6px;
+  height: 6px;
+  border-radius: 100%;
+  margin-top: 8px;
+  margin-right: 8px; }
+  .status-indicator.red, .status-indicator.error {
+    background-color: #d34d36; }
+  .status-indicator.green, .status-indicator.success {
+    background-color: #83df57; }
+  .status-indicator.yellow, .status-indicator.warning {
+    background-color: #fcff00; }
+  .status-indicator.terminating {
+    background-color: #555555; }
+
+.dot-grey {
+  display: block;
+  min-width: 3px;
+  width: 3px;
+  height: 3px;
+  border-radius: 100%;
+  margin-top: 5px;
+  margin-right: 5px;
+  background-color: #555555; }
 
 .card-item-label {
   margin: -1px 0 0 8px;

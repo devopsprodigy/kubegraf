@@ -108,4 +108,12 @@ export class ApplicationsOverview extends K8sPage{
         return namespaces.filter(item => item.is_deleted === false)
     }
 
+    namespaceCount() {
+        return this.namespaceMap ? this.namespaceMap.length : 0
+    }
+
+    namespaceActiveCount() {
+        return this.namespaceMap ? this.namespaceMap.filter(namespace => namespace.open).length : 0
+    }
+
 }

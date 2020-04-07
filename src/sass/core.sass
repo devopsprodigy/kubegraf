@@ -7,8 +7,6 @@
       background-color: #222326
       padding: 32px 60px 0 60px
       .btn
-        font-size: 12px
-        padding: 10px 20px
         margin-left: 20px
       .hr
         height: 1px
@@ -17,27 +15,209 @@
         margin-left: -60px
     .page-body--override
       padding: 28px 60px 0
-      .overview-panel
-        background-color: #2d2d30
-        border-radius: 2px
-        padding: 16px 10px
-        &_header
-          cursor: pointer
-          display: flex
+      .header
+        display: flex
+        justify-content: space-between
+      .title
+        cursor: pointer
+        display: flex
         h1
           font-size: 24px
           color: #eaeaea
-          line-height: 1
+          line-height: 24px
           font-weight: normal
           margin-bottom: initial
-
+      .status
+        font-size: 14px
+        color: #8e8e8e
+        span
+          color: #c04c21
+      .overview-panel
+        background-color: #2d2d30
+        border-radius: 3px
+        padding: 16px 16px
+        display: flex
+        flex-direction: column
+        margin-bottom: 10px
+        &_header
+          display: flex
+          justify-content: space-between
+          padding-bottom: 24px
+        &_body
+          display: flex
+          justify-content: space-between
+          color: #b8b8b8
+          margin-top: 24px
+          h2
+            font-size: 18px
+            font-weight: normal
+            color: #b8b8b8
+            margin-bottom: 20px
+            line-height: 18px
+          &_components
+            display: flex
+            flex-direction: column
+            font-size: 14px
+            margin-right: 20px
+            .component
+              margin-bottom: 8px
+              display: flex
+          &_namespaces
+            display: flex
+            align-content: flex-start
+            flex-flow: wrap
+            max-width: 700px
+        &_btn
+          display: flex
+          min-width: 313px
+          span
+            margin: 0 10px
+          span:last-child
+            margin-right: 0
+      .namespace-panel
+        background-color: #212124
+        margin-bottom: 10px
+        padding: 16px 0
+        .header
+          padding: 0 16px
+        &_body
+          display: flex
+          margin-top: 24px
+          .column
+            width: 100%
+            display: flex
+            flex-direction: column
+            border-right: 1px solid #161719
+            &:last-child
+              border: none
+            &_header h3
+              color: #b8b8b8
+              font-size: 18px
+              margin-bottom: 24px
+              margin-left: 10px
+            &_cell
+              display: flex
+              flex-direction: column
+              border-bottom: 1px solid #161719
+              margin-bottom: 6px
+              padding: 0 10px 12px
+              i
+                color: #b8b8b8
+                font-size: 12px
+                &:hover
+                  color: #eaeaea
+              h4
+                margin-bottom: 6px
+              &:last-child
+                border: none
+              &_header
+                font-size: 14px
+                color: #8e8e8e
+                span
+                  color: #eaeaea
+              .pod
+                display: flex
+                line-height: initial
+                font-size: 12px
+                color: #b8b8b8
+                &_title
+                  top: 3px
+                  position: relative
+              .services
+                margin-top: 12px
+                color: #8e8e8e
+                h5
+                  font-size: 14px
+                  line-height: initial
+                  margin-left: 14px
+                  color: #b8b8b8
+                  margin-bottom: 6px
+                .service
+                  display: flex
+                  margin-left: 6px
+                  &_title
+                    color: #b8b8b8
+                    line-height: initial
+                    font-size: 12px
+                    span
+                      color: #8e8e8e
+                      line-height: 14px
+                      font-size: 12px
+                      border-right: 1px solid #2f2f32
+                      margin-right: 5px
+                      padding-right: 5px
+                      &:last-child
+                        border: none
+                        margin: 0
+                        padding: 0
+.checkbox
+  width: 165px
+  display: flex
+  margin-bottom: 6px
+  margin-left: 10px
+  input
+    display: none
+  span
+    position: absolute
+  label
+    font-size: 14px
+    line-height: 16px
+    height: 18px
+    padding-left: 24px
+    position: relative
+    cursor: pointer
+.btn
+  font-size: 12px
+  padding: 0 20px
+  line-height: 33px
+  height: 33px
 .chevron
   display: block
-  width: 24px
+  width: 14px
+  min-width: 14px
   height: 24px
   background: url(/public/plugins/devopsprodigy-kubegraf-app/img/chevron.svg) center no-repeat
   margin-right: 6px
-  transform: rotate(180deg)
+  &:active
+    transform: rotate(180deg)
+.vertical-line
+  display: inline-block
+  width: 1px
+  height: 33px
+  background-color: #161719
+.namespace-counter
+  font-size: 14px
+  line-height: 33px
+  height: 33px
+  color: #8e8e8e
+  .active
+    color: #c74c2a
+.status-indicator
+  display: block
+  min-width: 6px
+  width: 6px
+  height: 6px
+  border-radius: 100%
+  margin-top: 8px
+  margin-right: 8px
+  &.red, &.error
+    background-color: #d34d36
+  &.green, &.success
+    background-color: #83df57
+  &.yellow, &.warning
+    background-color: #fcff00
+  &.terminating
+    background-color: #555555
+
+.dot-grey
+  display: block
+  min-width: 3px
+  width: 3px
+  height: 3px
+  border-radius: 100%
+  margin-top: 5px
+  margin-right: 5px
+  background-color: #555555
 
 .card-item-label
   margin: -1px 0 0 8px
