@@ -1,23 +1,20 @@
 <section ng-if="ctrl.pageReady" class="page-container--override">
     <div class="page-header">
         <div class="row">
-            <nav class="gf-tabs col-lg-6 col-md-12">
+            <nav class="gf-tabs">
                 <div class="gf-tabs-item"><a class="gf-tabs-link" target="_self" href="plugins/devopsprodigy-kubegraf-app/page/cluster-status?clusterName={{ctrl.cluster.name}}">Cluster Status</a></div>
                 <div class="gf-tabs-item"><a class="gf-tabs-link" target="_self" href="plugins/devopsprodigy-kubegraf-app/page/applications-overview?clusterName={{ctrl.cluster.name}}">Applications Overview</a></div>
                 <div class="gf-tabs-item"><a class="gf-tabs-link active" target="_self" href="plugins/devopsprodigy-kubegraf-app/page/nodes-overview?clusterName={{ctrl.cluster.name}}">Nodes Overview</a></div>
             </nav>
-            <div class="header-btn col-lg-6 col-md-12" ng-if="ctrl.isAdmin">
-                <a class="btn btn-secondary timepicker-rangestring" target="_self" ng-href="{{ctrl.version < 6 ? 'plugins/devopsprodigy-kubegraf-app/edit' : 'plugins/devopsprodigy-kubegraf-app/'}}">
-                    <i class="override--fa fa fa-fw fa-cog"/>&nbsp;
-                    Plugin Config
+            <div class="header-btn" ng-if="ctrl.isAdmin">
+                <a class="btn btn-secondary timepicker-rangestring" href="plugins/devopsprodigy-kubegraf-app/?page=dashboards">
+                    Dashboards
                 </a>
                 <a class="btn btn-secondary" target="_self" href="plugins/devopsprodigy-kubegraf-app/page/cluster-config?clusterId={{ctrl.cluster.id}}">
-                    <i class="override--fa fa fa-fw fa-cog"></i>&nbsp;
                     Edit
                 </a>
-                <a class="btn btn-secondary timepicker-rangestring" href="plugins/devopsprodigy-kubegraf-app/?page=dashboards">
-                    <i class="fa fa-fw fa-tachometer"></i>&nbsp;
-                    Dashboards
+                <a class="btn btn-secondary timepicker-rangestring" target="_self" ng-href="{{ctrl.version < 6 ? 'plugins/devopsprodigy-kubegraf-app/edit' : 'plugins/devopsprodigy-kubegraf-app/'}}">
+                    Plugin Config
                 </a>
             </div>
         </div>
@@ -40,14 +37,15 @@
                         <label class="toggle-checkbox" for="{{npKey}}" ng-bind="node.name" />
                     </span>
                 </div>
-                <div class="row explore-panel" style="justify-content: flex-end; margin-top: 8px">
-                    <div class="col-md-12">
+                <div class="row explore-panel" style="margin: 8px 0 10px">
+                    <div class="col-md-12" style="justify-content: flex-end; display: flex;">
+                        <span class="btn btn-secondary" ng-click="ctrl.__showAll()">Show all</span>
                         <span class="btn btn-secondary" ng-click="ctrl.__hideAll()" data-toggle="tooltip"
-                              title="Use Ctrl+Click or ⌘+Click to select only one Node" data-placement="bottom" bs-tooltip="">
-                            HIDE ALL
+                              title="Use Ctrl+Click or ⌘+Click to select only one Node" data-placement="bottom"
+                              bs-tooltip="" style="margin-left: 20px">
+                            Hide all
                             <span class="gicon gicon-question card-item-label"></span>
                         </span>
-                        <span class="btn btn-secondary" ng-click="ctrl.__showAll()">SHOW ALL</span>
                     </div>
                 </div>
             </div>

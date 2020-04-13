@@ -13,6 +13,10 @@ export class ApplicationsOverview extends K8sPage{
     }>;
     hideAllWarningPods: boolean;
     version: number;
+    open: {[key: string]: boolean};
+    storageOpenKey: string = 'application-overview-open';
+    showColumn: {[key: string]: {[key:string]: boolean}};
+    storageShowColumnKey: string = 'application-overview-show-column';
 
     static templateUrl = 'components/applications-overview/applications-overview.html';
 
@@ -51,20 +55,25 @@ export class ApplicationsOverview extends K8sPage{
                 nsKey: 'daemonsets'
             },
             {
+                colName: 'Other',
+                nsKey: 'other'
+            },
+            {
                 colName: 'Cron Jobs',
                 nsKey: 'cronJobs'
             },
             {
                 colName: 'Jobs',
                 nsKey: 'jobs'
-            },
-            {
-                colName: 'Other',
-                nsKey: 'other'
-            },
+            }
         ];
-
         this.hideAllWarningPods = true;
+
+        const openFromStorage = localStorage.getItem(this.storageOpenKey);
+        this.open = openFromStorage ? JSON.parse(openFromStorage) : {};
+
+        const showColumnFromStorage = localStorage.getItem(this.storageShowColumnKey);
+        this.showColumn = showColumnFromStorage ? JSON.parse(showColumnFromStorage) : { "cronJobs": {},"jobs": {} }
     }
 
     __showAll(){
@@ -108,12 +117,34 @@ export class ApplicationsOverview extends K8sPage{
         return namespaces.filter(item => item.is_deleted === false)
     }
 
-    namespaceCount() {
+    namespaceCount(): number {
         return this.namespaceMap ? this.namespaceMap.length : 0
     }
 
-    namespaceActiveCount() {
+    namespaceActiveCount(): number {
         return this.namespaceMap ? this.namespaceMap.filter(namespace => namespace.open).length : 0
     }
 
+    toggleTab(namespace: string): void {
+        if(this.open[namespace] === undefined) {
+            this.open[namespace] = false;
+        } else {
+            this.open[namespace] = !this.open[namespace];
+        }
+        localStorage.setItem(this.storageOpenKey, JSON.stringify(this.open));
+    }
+
+    toggleColumn(columnName: string, namespace: string): void {
+        if(this.showColumn[columnName][namespace] === undefined) {
+            this.showColumn[columnName][namespace] = true;
+        } else {
+            this.showColumn[columnName][namespace] = !this.showColumn[columnName][namespace];
+        }
+        localStorage.setItem(this.storageShowColumnKey, JSON.stringify(this.showColumn));
+    }
+
+    showCheck(columnName: string, namespace: string): boolean {
+        return (columnName !== 'jobs' && columnName !== 'cronJobs') ||
+            (this.showColumn[columnName][namespace] !== undefined && this.showColumn[columnName][namespace] !== false)
+    }
 }

@@ -6,8 +6,18 @@
     .page-header
       background-color: #222326
       padding: 32px 60px 0 60px
+      .header-btn
+        display: flex
+      .row
+        display: flex
+        justify-content: space-between
+        margin: 0
+        padding-right: 6px
+        .gf-tabs
+          margin-left: 10px
       .btn
-        margin-left: 20px
+        margin: 0 10px
+        float: initial
       .hr
         height: 1px
         background-color: #343436
@@ -21,6 +31,7 @@
       .title
         cursor: pointer
         display: flex
+        margin-top: 2px
         h1
           font-size: 24px
           color: #eaeaea
@@ -30,6 +41,9 @@
       .status
         font-size: 14px
         color: #8e8e8e
+        margin: 4px 0 0 20px
+        min-width: 90px
+        text-align: end
         span
           color: #c04c21
       .overview-panel
@@ -70,6 +84,7 @@
         &_btn
           display: flex
           min-width: 313px
+          justify-content: flex-end
           span
             margin: 0 10px
           span:last-child
@@ -78,8 +93,12 @@
         background-color: #212124
         margin-bottom: 10px
         padding: 16px 0
+        border-radius: 3px
         .header
           padding: 0 16px
+        &_btn
+          display: flex
+          flex-wrap: wrap
         &_body
           display: flex
           margin-top: 24px
@@ -90,17 +109,22 @@
             border-right: 1px solid #161719
             &:last-child
               border: none
-            &_header h3
-              color: #b8b8b8
-              font-size: 18px
-              margin-bottom: 24px
-              margin-left: 10px
+            &_header
+              display: flex
+              justify-content: space-between
+              h3
+                color: #b8b8b8
+                font-size: 18px
+                margin: 0 0 24px 10px
             &_cell
               display: flex
               flex-direction: column
               border-bottom: 1px solid #161719
               margin-bottom: 6px
               padding: 0 10px 12px
+              .btn-grey
+                width: fit-content
+                margin-top: 10px
               i
                 color: #b8b8b8
                 font-size: 12px
@@ -150,6 +174,19 @@
                         border: none
                         margin: 0
                         padding: 0
+      .warning-panel
+        margin-bottom: 10px
+        background: #212124
+        border-radius: 3px
+        &_btn
+          display: flex
+          justify-content: flex-end
+        th:last-child
+          text-align: end
+        .btn-grey
+          height: 36px
+          padding: 0 20px
+          margin: 10px 16px
 .checkbox
   width: 165px
   display: flex
@@ -171,6 +208,15 @@
   padding: 0 20px
   line-height: 33px
   height: 33px
+  &.btn-grey
+    color: #b8b8b8
+    font-size: 12px
+    background-color: #272729
+    padding: 8px 10px
+    box-shadow: 1px 1px 1px 0 black
+    height: 30px
+    white-space: nowrap
+    margin: 0 10px
 .chevron
   display: block
   width: 14px
@@ -178,7 +224,7 @@
   height: 24px
   background: url(/public/plugins/devopsprodigy-kubegraf-app/img/chevron.svg) center no-repeat
   margin-right: 6px
-  &:active
+  &.active
     transform: rotate(180deg)
 .vertical-line
   display: inline-block
@@ -378,15 +424,17 @@ label.toggle-checkbox
     #{$i}%
       opacity: calc(1 - #{$i}/100)
 
-@media (max-width: 940px)
+@media (max-width: 980px)
   .header-btn
-    position: relative
-    top: 2px
+    order: -1
+    margin-bottom: 20px
+  .page-container--override .page-header .row
+    flex-direction: column
 
-  .page-header .btn
-    float: initial
-    margin-left: 0
-    margin-right: 15px
+@media (max-width: 769px)
+  .page-container--override
+    width: 100vw
+    left: calc((100% - 100vw)/2)
 
 .explore-toolbar-item
   list-style: inside

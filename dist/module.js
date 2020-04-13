@@ -19471,6 +19471,8 @@ function (_super) {
     _this.$location = $location;
     _this.$timeout = $timeout;
     _this.$window = $window;
+    _this.storageOpenKey = 'application-overview-open';
+    _this.storageShowColumnKey = 'application-overview-show-column';
     _this.pageReady = false;
     _this.version = (0, _helpers.__getGrafanaVersion)($window);
 
@@ -19492,16 +19494,23 @@ function (_super) {
       colName: 'Daemonsets',
       nsKey: 'daemonsets'
     }, {
+      colName: 'Other',
+      nsKey: 'other'
+    }, {
       colName: 'Cron Jobs',
       nsKey: 'cronJobs'
     }, {
       colName: 'Jobs',
       nsKey: 'jobs'
-    }, {
-      colName: 'Other',
-      nsKey: 'other'
     }];
     _this.hideAllWarningPods = true;
+    var openFromStorage = localStorage.getItem(_this.storageOpenKey);
+    _this.open = openFromStorage ? JSON.parse(openFromStorage) : {};
+    var showColumnFromStorage = localStorage.getItem(_this.storageShowColumnKey);
+    _this.showColumn = showColumnFromStorage ? JSON.parse(showColumnFromStorage) : {
+      "cronJobs": {},
+      "jobs": {}
+    };
     return _this;
   }
 
@@ -19562,6 +19571,30 @@ function (_super) {
     return this.namespaceMap ? this.namespaceMap.filter(function (namespace) {
       return namespace.open;
     }).length : 0;
+  };
+
+  ApplicationsOverview.prototype.toggleTab = function (namespace) {
+    if (this.open[namespace] === undefined) {
+      this.open[namespace] = false;
+    } else {
+      this.open[namespace] = !this.open[namespace];
+    }
+
+    localStorage.setItem(this.storageOpenKey, JSON.stringify(this.open));
+  };
+
+  ApplicationsOverview.prototype.toggleColumn = function (columnName, namespace) {
+    if (this.showColumn[columnName][namespace] === undefined) {
+      this.showColumn[columnName][namespace] = true;
+    } else {
+      this.showColumn[columnName][namespace] = !this.showColumn[columnName][namespace];
+    }
+
+    localStorage.setItem(this.storageShowColumnKey, JSON.stringify(this.showColumn));
+  };
+
+  ApplicationsOverview.prototype.showCheck = function (columnName, namespace) {
+    return columnName !== 'jobs' && columnName !== 'cronJobs' || this.showColumn[columnName][namespace] !== undefined && this.showColumn[columnName][namespace] !== false;
   };
 
   ApplicationsOverview.templateUrl = 'components/applications-overview/applications-overview.html';
