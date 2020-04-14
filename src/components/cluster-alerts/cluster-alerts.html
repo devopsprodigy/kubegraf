@@ -17,6 +17,22 @@
                     Plugin Config
                 </a>
             </div>
+            <div class="mobile-btn" ng-if="ctrl.isAdmin">
+                <span class="btn btn-grey" ng-click="ctrl.toggleMenu()">
+                   <i class="gicon gicon-cog"></i>
+                </span>
+                <div class="mobile-btn_body" ng-mouseleave="ctrl.toggleMenu()" ng-if="ctrl.showMenu">
+                    <a class="" href="plugins/devopsprodigy-kubegraf-app/?page=dashboards">
+                        Dashboards
+                    </a>
+                    <a class="" href="plugins/devopsprodigy-kubegraf-app/page/cluster-config?clusterId={{ctrl.cluster.id}}" target="_self">
+                        Edit
+                    </a>
+                    <a class="" target="_self" ng-href="{{ctrl.version < 6 ? 'plugins/devopsprodigy-kubegraf-app/edit' : 'plugins/devopsprodigy-kubegraf-app/'}}">
+                        Plugin Config
+                    </a>
+                </div>
+            </div>
         </div>
         <div class="hr"></div>
     </div>

@@ -52,7 +52,7 @@ export  class K8sPage {
     podsError: Boolean|Error = false;
     componentsError: Boolean|Error = false;
     orgId: number = 1;
-
+    showMenu: boolean = false;
     updatePods(pods: Array<Pod>) {};
 
     constructor(
@@ -1019,5 +1019,9 @@ export  class K8sPage {
 
     podIsWarning(pod: Pod) {
         return !pod.is_deleted && (pod.status === WARNING || pod.status === ERROR || pod.status === TERMINATING)
+    }
+
+    toggleMenu() {
+        this.showMenu = !this.showMenu
     }
 }

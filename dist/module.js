@@ -20091,6 +20091,7 @@ function () {
     this.podsError = false;
     this.componentsError = false;
     this.orgId = 1;
+    this.showMenu = false;
     this.$q = $q;
     this.$scope = $scope;
     this.pageReady = false;
@@ -21300,6 +21301,10 @@ function () {
 
   K8sPage.prototype.podIsWarning = function (pod) {
     return !pod.is_deleted && (pod.status === _constants.WARNING || pod.status === _constants.ERROR || pod.status === _constants.TERMINATING);
+  };
+
+  K8sPage.prototype.toggleMenu = function () {
+    this.showMenu = !this.showMenu;
   };
 
   return K8sPage;
