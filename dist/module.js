@@ -19660,6 +19660,8 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.ClusterConfig = undefined;
 
+var _tslib = __webpack_require__(/*! tslib */ "../node_modules/tslib/tslib.es6.js");
+
 var _app_events = __webpack_require__(/*! grafana/app/core/app_events */ "grafana/app/core/app_events");
 
 var _app_events2 = _interopRequireDefault(_app_events);
@@ -19675,6 +19677,8 @@ var ClusterConfig =
 /** @class */
 function () {
   function ClusterConfig($scope, $injector, backendSrv, datasourceSrv, alertSrv, $q, $location, $window) {
+    var _this = this;
+
     this.backendSrv = backendSrv;
     this.datasourceSrv = datasourceSrv;
     this.alertSrv = alertSrv;
@@ -19685,35 +19689,59 @@ function () {
     this.pageReady = false;
     this.$scope = $scope;
     this.busy = false;
-    this.getCluster();
     this.version = (0, _helpers.__getGrafanaVersion)($window);
+    this.getCluster().finally(function () {
+      _this.pageReady = true;
+
+      _this.$scope.$apply();
+    });
   }
 
   ClusterConfig.prototype.getCluster = function () {
-    var _this = this;
+    return (0, _tslib.__awaiter)(this, void 0, void 0, function () {
+      return (0, _tslib.__generator)(this, function (_a) {
+        switch (_a.label) {
+          case 0:
+            if (!("clusterId" in this.$location.search())) return [3
+            /*break*/
+            , 2];
+            return [4
+            /*yield*/
+            , this.getDatasource(this.$location.search().clusterId)];
 
-    var promises = [];
+          case 1:
+            _a.sent();
 
-    if ("clusterId" in this.$location.search()) {
-      promises.push(this.getDatasource(this.$location.search().clusterId).then(function () {
-        document.title = 'DevOpsProdigy KubeGraf | Edit cluster';
-      }));
-    } else {
-      this.cluster = {
-        type: 'devopsprodidy-kubegraf-datasource',
-        access: 'proxy',
-        jsonData: {
-          refresh_pods_rate: '60',
-          access_via_token: false,
-          prom_name: ''
+            document.title = 'DevOpsProdigy KubeGraf | Edit cluster';
+            return [3
+            /*break*/
+            , 3];
+
+          case 2:
+            this.cluster = {
+              type: 'devopsprodidy-kubegraf-datasource',
+              access: 'proxy',
+              jsonData: {
+                refresh_pods_rate: '60',
+                access_via_token: false,
+                prom_name: ''
+              }
+            };
+            document.title = 'DevOpsProdigy KubeGraf | New cluster';
+            _a.label = 3;
+
+          case 3:
+            return [4
+            /*yield*/
+            , this.getPrometheusList()];
+
+          case 4:
+            _a.sent();
+
+            return [2
+            /*return*/
+            ];
         }
-      };
-      document.title = 'DevOpsProdigy KubeGraf | New cluster';
-    }
-
-    this.$q.all(promises).then(function () {
-      _this.getPrometheusList().then(function () {
-        _this.pageReady = true;
       });
     });
   };
@@ -19754,8 +19782,7 @@ function () {
   };
 
   ClusterConfig.prototype.check = function () {
-    if (!this.pageReady) return false;
-    return this.$scope.clusterForm.$valid;
+    return !this.pageReady ? false : this.$scope.clusterForm.$valid;
   };
 
   ClusterConfig.prototype.saveDatasource = function () {
