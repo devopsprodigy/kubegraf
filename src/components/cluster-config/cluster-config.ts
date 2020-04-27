@@ -18,19 +18,17 @@ export class ClusterConfig{
         this.pageReady = false;
         this.$scope = $scope;
         this.busy = false;
-        this.getCluster();
         this.version = __getGrafanaVersion($window);
+        this.getCluster().finally(() => {
+            this.pageReady = true
+            this.$scope.$apply();
+        });
     }
 
-    getCluster(){
-        let promises = [];
+    async getCluster(): Promise<void> {
         if ("clusterId" in this.$location.search()) {
-            promises.push(
-                this.getDatasource(this.$location.search().clusterId)
-                    .then(() => {
-                        document.title = 'DevOpsProdigy KubeGraf | Edit cluster';
-                    })
-            );
+            await this.getDatasource(this.$location.search().clusterId);
+            document.title = 'DevOpsProdigy KubeGraf | Edit cluster';
         } else {
             this.cluster = {
                 type: 'devopsprodidy-kubegraf-datasource',
@@ -44,12 +42,7 @@ export class ClusterConfig{
             document.title = 'DevOpsProdigy KubeGraf | New cluster';
         }
 
-        this.$q.all(promises)
-            .then(() => {
-                this.getPrometheusList().then(() => {
-                    this.pageReady = true;
-                });
-            })
+        await this.getPrometheusList()
     }
 
     getPrometheusList(){
@@ -68,7 +61,7 @@ export class ClusterConfig{
     }
 
     saveCluster(){
-        if(this.busy) return;
+        if (this.busy) return;
         this.busy = true;
         this.cluster.jsonData.cluster_url = this.cluster.url;
 
@@ -84,10 +77,8 @@ export class ClusterConfig{
             });
     }
 
-    check(){
-        if(!this.pageReady)
-            return false;
-        return this.$scope.clusterForm.$valid;
+    check(): boolean {
+        return !this.pageReady ? false : this.$scope.clusterForm.$valid
     }
 
     saveDatasource() {

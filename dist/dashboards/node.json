@@ -2084,7 +2084,7 @@
           "format": "short",
           "label": "",
           "logBase": 1,
-          "max": "100",
+          "max": "110",
           "min": "0",
           "show": true
         },
@@ -2490,7 +2490,7 @@
           "format": "percent",
           "label": null,
           "logBase": 1,
-          "max": "100",
+          "max": "110",
           "min": "0",
           "show": true
         },
@@ -2678,7 +2678,7 @@
               "format": "short",
               "label": "Percentage",
               "logBase": 1,
-              "max": "100",
+              "max": "110",
               "min": "0",
               "show": true
             },
