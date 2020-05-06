@@ -145,6 +145,7 @@ function () {
 
     this.backendSrv = backendSrv;
     this.$window = $window;
+    this.$scope = $scope;
     this.pageReady = false;
 
     if (this.current.id) {
@@ -166,6 +167,8 @@ function () {
     this.setGrafanaVersion($window);
     this.getPrometheusList().then(function () {
       _this.pageReady = true;
+
+      _this.$scope.$apply();
     });
     $scope.$watch('ctrl.current', function () {
       _this.setUrl();

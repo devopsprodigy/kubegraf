@@ -5,10 +5,12 @@ export class DOPK8SConfig{
 
     current: any;
     prometheusList: Array<any>;
+    $scope: any;
     pageReady: boolean;
     version: number;
 
-    constructor($scope, $injector, private backendSrv, private $window){
+    constructor($scope, $injector, private backendSrv, private $window) {
+        this.$scope = $scope;
         this.pageReady = false;
         if(this.current.id){
             if(!(this.current.jsonData.prom_name))
@@ -34,6 +36,7 @@ export class DOPK8SConfig{
         this.getPrometheusList()
             .then(() => {
                 this.pageReady = true;
+                this.$scope.$apply();
             });
 
         $scope.$watch('ctrl.current', () => {
