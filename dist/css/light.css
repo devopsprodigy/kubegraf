@@ -2,6 +2,23 @@
   width: calc(100vw - 56px);
   position: relative;
   left: calc((100% - 100vw)/2 + 28px); }
+  .page-container--override .btn {
+    font-size: 12px;
+    padding: 0 20px;
+    line-height: 33px;
+    height: 33px; }
+    .page-container--override .btn .fa.override--fa {
+      top: 0; }
+    .page-container--override .btn.btn-grey {
+      color: #b8b8b8;
+      font-size: 12px;
+      background-color: #272729;
+      padding: 8px 10px;
+      box-shadow: 1px 1px 1px 0 black;
+      height: 30px;
+      white-space: nowrap;
+      margin: 0 10px;
+      width: fit-content; }
   .page-container--override .page-header {
     background-color: #222326;
     padding: 32px 60px 0 60px; }
@@ -224,22 +241,6 @@
     position: relative;
     cursor: pointer; }
 
-.btn {
-  font-size: 12px;
-  padding: 0 20px;
-  line-height: 33px;
-  height: 33px; }
-  .btn.btn-grey {
-    color: #b8b8b8;
-    font-size: 12px;
-    background-color: #272729;
-    padding: 8px 10px;
-    box-shadow: 1px 1px 1px 0 black;
-    height: 30px;
-    white-space: nowrap;
-    margin: 0 10px;
-    width: fit-content; }
-
 .chevron {
   display: block;
   width: 14px;
@@ -295,9 +296,6 @@
   margin: -1px 0 0 8px;
   position: relative;
   cursor: pointer; }
-
-.btn .fa.override--fa {
-  top: 0; }
 
 i.grey {
   opacity: 0.3; }

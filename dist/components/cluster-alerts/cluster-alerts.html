@@ -2,9 +2,9 @@
     <div class="page-header">
         <div class="row">
             <nav class="gf-tabs">
-                <div class="gf-tabs-item"><a class="gf-tabs-link active" target="_self" href="plugins/devopsprodigy-kubegraf-app/page/cluster-status?clusterName={{ctrl.cluster.name}}">Cluster Status</a></div>
-                <div class="gf-tabs-item"><a class="gf-tabs-link" target="_self" href="plugins/devopsprodigy-kubegraf-app/page/applications-overview?clusterName={{ctrl.cluster.name}}">Applications Overview</a></div>
-                <div class="gf-tabs-item"><a class="gf-tabs-link" target="_self" href="plugins/devopsprodigy-kubegraf-app/page/nodes-overview?clusterName={{ctrl.cluster.name}}">Nodes Overview</a></div>
+                <div class="gf-tabs-item"><a class="gf-tabs-link active" href="plugins/devopsprodigy-kubegraf-app/page/cluster-status?clusterName={{ctrl.cluster.name}}">Cluster Status</a></div>
+                <div class="gf-tabs-item"><a class="gf-tabs-link" href="plugins/devopsprodigy-kubegraf-app/page/applications-overview?clusterName={{ctrl.cluster.name}}">Applications Overview</a></div>
+                <div class="gf-tabs-item"><a class="gf-tabs-link" href="plugins/devopsprodigy-kubegraf-app/page/nodes-overview?clusterName={{ctrl.cluster.name}}">Nodes Overview</a></div>
             </nav>
             <div class="header-btn" ng-if="ctrl.isAdmin">
                 <a class="btn btn-secondary timepicker-rangestring" href="plugins/devopsprodigy-kubegraf-app/?page=dashboards">
