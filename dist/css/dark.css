@@ -7,8 +7,16 @@
     padding: 0 20px;
     line-height: 33px;
     height: 33px; }
-    .page-container--override .btn .fa.override--fa {
-      top: 0; }
+    .page-container--override .btn.btn-secondary {
+      color: #ffffff;
+      text-shadow: 0 1px 0 rgba(0, 0, 0, 0.1);
+      background-color: #2a6cd1;
+      background-image: -webkit-gradient(linear, left top, left bottom, from(#3274d9), to(#1f60c4));
+      background-image: -webkit-linear-gradient(top, #3274d9, #1f60c4);
+      background-image: -o-linear-gradient(top, #3274d9, #1f60c4);
+      background-image: linear-gradient(180deg, #3274d9, #1f60c4);
+      background-repeat: repeat-x;
+      border-color: #3274d9; }
     .page-container--override .btn.btn-grey {
       color: #b8b8b8;
       font-size: 12px;
@@ -19,6 +27,8 @@
       white-space: nowrap;
       margin: 0 10px;
       width: fit-content; }
+    .page-container--override .btn .fa.override--fa {
+      top: 0; }
   .page-container--override .page-header {
     background-color: #222326;
     padding: 32px 60px 0 60px; }
@@ -223,6 +233,19 @@
         height: 36px;
         padding: 0 20px;
         margin: 10px 16px; }
+  .page-container--override .card-item, .page-container--override .card-item:hover {
+    background: #2f2f32; }
+
+.btn-secondary--override {
+  color: #ffffff;
+  text-shadow: 0 1px 0 rgba(0, 0, 0, 0.1);
+  background-color: #2a6cd1;
+  background-image: -webkit-gradient(linear, left top, left bottom, from(#3274d9), to(#1f60c4));
+  background-image: -webkit-linear-gradient(top, #3274d9, #1f60c4);
+  background-image: -o-linear-gradient(top, #3274d9, #1f60c4);
+  background-image: linear-gradient(180deg, #3274d9, #1f60c4);
+  background-repeat: repeat-x;
+  border-color: #3274d9; }
 
 .checkbox {
   width: 165px;

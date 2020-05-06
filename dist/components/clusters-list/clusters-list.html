@@ -15,11 +15,11 @@
             </a>
         </div>
         <div ng-class="ctrl.isAdmin ? 'col-xs-6' : 'col-xs-12'">
-            <a class="btn btn-secondary timepicker-rangestring pull-right" ng-href="{{ctrl.version < 6 ? 'plugins/devopsprodigy-kubegraf-app/edit' : 'plugins/devopsprodigy-kubegraf-app/'}}">
+            <a class="btn btn-secondary btn-secondary--override timepicker-rangestring pull-right" ng-href="{{ctrl.version < 6 ? 'plugins/devopsprodigy-kubegraf-app/edit' : 'plugins/devopsprodigy-kubegraf-app/'}}">
                 <i class="fa fa-fw fa-cog"/>&nbsp;
                 Plugin Config
             </a>
-            <a class="btn btn-secondary timepicker-rangestring pull-right" style="margin-right: 15px" href="plugins/devopsprodigy-kubegraf-app/?page=dashboards">
+            <a class="btn btn-secondary btn-secondary--override timepicker-rangestring pull-right" style="margin-right: 15px" href="plugins/devopsprodigy-kubegraf-app/?page=dashboards">
                 <i class="fa fa-fw fa-tachometer"/>&nbsp;
                 Dashboards
             </a>
@@ -48,7 +48,7 @@
                            <i class="fa fa-fw fa-eye"/>&nbsp;
                            Nodes Overview
                        </a>
-                       &nbsp;<a ng-if="ctrl.isAdmin" class="btn btn-secondary timepicker-rangestring" href="plugins/devopsprodigy-kubegraf-app/page/cluster-config?clusterId={{cluster.id}}">
+                       &nbsp;<a ng-if="ctrl.isAdmin" class="btn btn-secondary btn-secondary--override timepicker-rangestring" href="plugins/devopsprodigy-kubegraf-app/page/cluster-config?clusterId={{cluster.id}}">
                            <i class="fa fa-fw fa-cog"/>&nbsp;
                            Edit
                        </a>&nbsp;
