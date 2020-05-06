@@ -1,7 +1,9 @@
 .page-container--override {
-  width: calc(100vw - 56px);
+  width: calc(100vw - 64px);
   position: relative;
-  left: calc((100% - 100vw)/2 + 28px); }
+  left: calc((100% - 100vw)/2 + 30px); }
+  .page-container--override.no-scroll {
+    width: calc(100vw - 60px); }
   .page-container--override .btn {
     font-size: 12px;
     padding: 0 20px;
@@ -24,6 +26,7 @@
       padding: 8px 10px;
       box-shadow: 1px 1px 1px 0 black;
       height: 30px;
+      line-height: 15px;
       white-space: nowrap;
       margin: 0 10px;
       width: fit-content; }
@@ -67,8 +70,7 @@
     .page-container--override .page-header .hr {
       height: 1px;
       background-color: #343436;
-      width: 100vw;
-      margin-left: -60px; }
+      margin: 0 -60px; }
   .page-container--override .page-body--override {
     padding: 28px 60px 0; }
     .page-container--override .page-body--override .header {
@@ -255,7 +257,22 @@
   .checkbox input {
     display: none; }
   .checkbox span {
-    position: absolute; }
+    position: absolute;
+    height: 16px;
+    width: 16px;
+    border-radius: 3px;
+    border: 1px solid #555;
+    background: #141414;
+    display: flex;
+    align-items: center;
+    justify-content: center; }
+  .checkbox input:checked + span {
+    background: linear-gradient(0deg, #eb7b18, #d44a3a);
+    border: none; }
+  .checkbox input:checked + span:before {
+    font-family: FontAwesome;
+    content: "\f00c";
+    color: #141414; }
   .checkbox label {
     font-size: 14px;
     line-height: 16px;

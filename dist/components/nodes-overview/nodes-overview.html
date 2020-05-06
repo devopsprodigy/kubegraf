@@ -7,7 +7,7 @@
                 <div class="gf-tabs-item"><a class="gf-tabs-link active" href="plugins/devopsprodigy-kubegraf-app/page/nodes-overview?clusterName={{ctrl.cluster.name}}">Nodes Overview</a></div>
             </nav>
             <div class="header-btn" ng-if="ctrl.isAdmin">
-                <a class="btn btn-secondary timepicker-rangestring" href="plugins/devopsprodigy-kubegraf-app/?page=dashboards">
+                <a class="btn btn-secondary" target="_self" ng-href="{{ctrl.version < 6 ? 'plugins/devopsprodigy-kubegraf-app/edit?tab=dashboards' : 'plugins/devopsprodigy-kubegraf-app/?page=dashboards'}}">
                     Dashboards
                 </a>
                 <a class="btn btn-secondary" target="_self" href="plugins/devopsprodigy-kubegraf-app/page/cluster-config?clusterId={{ctrl.cluster.id}}">
@@ -22,15 +22,14 @@
                    <i class="gicon gicon-cog"></i>
                 </span>
                 <div class="mobile-btn_body" ng-mouseleave="ctrl.toggleMenu()" ng-if="ctrl.showMenu">
-                    <a class="" href="plugins/devopsprodigy-kubegraf-app/?page=dashboards">
+                    <a target="_self" ng-href="{{ctrl.version < 6 ? 'plugins/devopsprodigy-kubegraf-app/edit?tab=dashboards' : 'plugins/devopsprodigy-kubegraf-app/?page=dashboards'}}">
                         Dashboards
                     </a>
-                    <a class="" href="plugins/devopsprodigy-kubegraf-app/page/cluster-config?clusterId={{ctrl.cluster.id}}" target="_self">
+                    <a target="_self" href="plugins/devopsprodigy-kubegraf-app/page/cluster-config?clusterId={{ctrl.cluster.id}}">
                         Edit
                     </a>
-                    <a class="" target="_self" ng-href="{{ctrl.version < 6 ? 'plugins/devopsprodigy-kubegraf-app/edit' : 'plugins/devopsprodigy-kubegraf-app/'}}">
+                    <a target="_self" ng-href="{{ctrl.version < 6 ? 'plugins/devopsprodigy-kubegraf-app/edit' : 'plugins/devopsprodigy-kubegraf-app/'}}">
                         Plugin Config
-                    </a>
                 </div>
             </div>
         </div>
