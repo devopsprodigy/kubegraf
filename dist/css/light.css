@@ -37,6 +37,9 @@
     padding: 32px 60px 0 60px; }
     .page-container--override .page-header .header-btn {
       display: flex; }
+      .page-container--override .page-header .header-btn__editor .fa {
+        height: 33px;
+        line-height: 33px; }
     .page-container--override .page-header .mobile-btn {
       display: none;
       flex-direction: column;
