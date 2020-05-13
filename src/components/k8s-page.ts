@@ -75,7 +75,7 @@ export  class K8sPage {
         this.timeout = timeout;
         this.orgId = ($window.grafanaBootData && $window.grafanaBootData.user) ? $window.grafanaBootData.user.orgId : 1;
         try{
-            this.isAdmin = this.contextSrv.isGrafanaAdmin;
+            this.isAdmin = this.contextSrv.hasRole('Admin');
         }catch (e) {
             console.error(e);
             this.isAdmin = false;
