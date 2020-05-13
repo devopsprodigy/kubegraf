@@ -30,7 +30,13 @@
                     </a>
                     <a target="_self" ng-href="{{ctrl.version < 6 ? 'plugins/devopsprodigy-kubegraf-app/edit' : 'plugins/devopsprodigy-kubegraf-app/'}}">
                         Plugin Config
+                    </a>
                 </div>
+            </div>
+            <div class="header-btn" ng-if="!ctrl.isAdmin">
+                <a href="/plugins/devopsprodigy-kubegraf-app/" class="btn btn-secondary">
+                    Plugin info &nbsp;&nbsp;<i class="fa fa-info-circle"></i>
+                </a>
             </div>
         </div>
         <div class="hr"></div>
