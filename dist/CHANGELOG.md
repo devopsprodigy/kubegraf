@@ -1,3 +1,16 @@
+# 1.4.0 (2020-05-13)
+
+### New features
+* Add integrations with node-exporter-full-dashboard
+* Add server' stat to nodes-overview page
+* Redesign of applications-overview page
+
+### Bug Fixes
+* Disks operations' legend in different dashboards
+* Improve compatibility with MacOS 
+* Compatibility with Grafana 6.6.* , 6.7.* , 7.0.*
+* Fix orgid on dashboards' links
+
 # 1.3.0 (2020-02-12)
 
 ### New features
