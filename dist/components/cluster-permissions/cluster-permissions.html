@@ -1,0 +1,140 @@
+<div class="page-cluster-permission">
+  <div class="page-action-bar">
+    <h3 class="page-sub-heading">Cluster Permissions</h3>
+    <div class="page-action-bar__spacer"></div>
+    <button class="btn btn-primary pull-right"
+            ng-disabled="ctrl.permissionFormOpen"
+            ng-click="ctrl.togglePermissionForm(true)">
+      Add Permission
+    </button>
+  </div>
+  <div style="transition: max-height 200ms ease-in-out 0s"
+      ng-style="{overflow: ctrl.permissionFormOpen ? 'visible' : 'hidden', maxHeight: ctrl.permissionFormOpen ? 'unset' : '0px'}">
+    <div class="gf-form-inline cta-form">
+      <button class="cta-form__close btn btn-transparent"
+              ng-click="ctrl.togglePermissionForm(false)">
+        <i class="fa fa-close"></i>
+      </button>
+      <form name="addPermission"><h5>Add Permission For</h5>
+        <div class="gf-form-inline">
+          <div class="gf-form">
+            <div class="gf-form-select-wrapper">
+              <select class="gf-form-input gf-size-auto"
+                      ng-change="ctrl.validateForm('group')"
+                      ng-model="ctrl.permissionGroup">
+                <option value="Team">Team</option>
+                <option value="User">User</option>
+                <option value="Viewer">Everyone With Viewer Role</option>
+                <option value="Editor">Everyone With Editor Role</option>
+              </select>
+            </div>
+          </div>
+          <div class="gf-form" ng-if="ctrl.permissionGroup === 'Team'">
+            <div class="user-picker">
+              <div class="gf-form-select-wrapper">
+                <select class="gf-form-input gf-size-auto"
+                        ng-change="ctrl.validateForm('team')"
+                        ng-model="ctrl.permissionReceiver">
+                  <option value="">Select a team</option>
+                  <option ng-repeat="team in ctrl.teams" value="team.id">{{team.name}}</option>
+                </select>
+              </div>
+            </div>
+          </div>
+          <div class="gf-form" ng-if="ctrl.permissionGroup === 'User'">
+            <div class="user-picker">
+              <div class="gf-form-select-wrapper">
+                <select class="gf-form-input gf-size-auto"
+                        ng-change="ctrl.validateForm('user')"
+                        ng-model="ctrl.permissionReceiver">
+                  <option value="">Select user</option>
+                  <option ng-repeat="user in ctrl.users" value="user.id">{{user.login}}</option>
+                </select>
+              </div>
+            </div>
+          </div>
+          <div class="gf-form">
+            <div class="gf-form-select-wrapper">
+              <select class="gf-form-input gf-size-auto"
+                      ng-change="ctrl.validateForm('role')"
+                      ng-model="ctrl.permissionRole">
+                <option value="">Choose</option>
+                <option value="View">View</option>
+                <option value="Edit">Edit</option>
+                <option value="User">Admin</option>
+              </select>
+            </div>
+          </div>
+          <div class="gf-form">
+            <button data-save-permission="true" class="btn btn-primary" type="submit" ng-disabled="!ctrl.permissionFormValid">Save</button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+  <table class="filter-table gf-form-group">
+    <tbody>
+    <tr class="gf-form-disabled">
+      <td style="width: 1%;"><i class="gicon gicon-shield" style="width: 25px; height: 25px;"></i></td>
+      <td style="width: 90%;">Admin<span class="filter-table__weak-italic"> (Role)</span></td>
+      <td></td>
+      <td class="query-keyword">Can</td>
+      <td>
+        <div class="gf-form">
+          <div>
+            <div
+                class="gf-form-input gf-form-input--form-dropdown gf-form-select-box__control--menu-right gf-form-select-box--is-disabled css-0">
+              <div class="gf-form-select-box__control gf-form-select-box__control--is-disabled css-0">
+                <div class="gf-form-select-box__value-container gf-form-select-box__value-container--has-value css-0">
+                  <div class="gf-form-select-box__single-value gf-form-select-box__single-value--is-disabled css-0">
+                    <div class="css-zcohbc-singleValue">Admin</div>
+                  </div>
+                  <div class="css-0">
+                    <div class="gf-form-select-box__input" style="display: inline-block;"><input disabled=""
+                                                                                                 autocapitalize="none"
+                                                                                                 autocomplete="off"
+                                                                                                 autocorrect="off"
+                                                                                                 id="react-select-16-input"
+                                                                                                 spellcheck="false"
+                                                                                                 tabindex="0"
+                                                                                                 type="text"
+                                                                                                 aria-autocomplete="list"
+                                                                                                 value=""
+                                                                                                 style="box-sizing: content-box; width: 2px; background: 0px center; border: 0px; font-size: inherit; opacity: 1; outline: 0px; padding: 0px; color: inherit;">
+                      <div
+                          style="position: absolute; top: 0px; left: 0px; visibility: hidden; height: 0px; overflow: scroll; white-space: pre; font-size: 14px; font-family: Roboto, 'Helvetica Neue', Arial, sans-serif; font-weight: 400; font-style: normal; letter-spacing: normal; text-transform: none;"></div>
+                    </div>
+                  </div>
+                </div>
+                <div class="gf-form-select-box__indicators css-0"><span
+                    class="gf-form-select-box__select-arrow "></span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </td>
+      <td>
+        <button class="btn btn-inverse btn-small"><i class="fa fa-lock"></i></button>
+      </td>
+    </tr>
+    <tr class="">
+      <td style="width: 1%;"><i class="gicon gicon-editor" style="width: 25px; height: 25px;"></i></td>
+      <td style="width: 90%;">Editor <span class="filter-table__weak-italic">(Role)</span></td>
+      <td></td>
+      <td class="query-keyword">Can</td>
+      <td>
+        <div class="gf-form">
+          <div class="gf-form-select-wrapper">
+            <select class="gf-form-input gf-size-auto">
+              <option value="View">View</option>
+              <option value="Edit">Edit</option>
+              <option value="User">Admin</option>
+            </select>
+          </div>
+        </div>
+      </td>
+      <td><a class="btn btn-danger btn-small"><i class="fa fa-remove"></i></a></td>
+    </tr>
+    </tbody>
+  </table>
+</div>

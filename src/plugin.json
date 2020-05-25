@@ -64,6 +64,13 @@
     },
     {
       "type"      : "page",
+      "name"      : "Cluster Permissions",
+      "component" : "ClusterPermissions",
+      "role"      : "Admin",
+      "addToNav"  : false
+    },
+    {
+      "type"      : "page",
       "name"      : "Cluster Overview",
       "component" : "ClusterOverview",
       "addToNav"  : false,

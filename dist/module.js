@@ -19936,6 +19936,204 @@ exports.ClusterOverview = ClusterOverview;
 
 /***/ }),
 
+/***/ "./components/cluster-permissions/cluster-permissions.ts":
+/*!***************************************************************!*\
+  !*** ./components/cluster-permissions/cluster-permissions.ts ***!
+  \***************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.ClusterPermissions = undefined;
+
+var _tslib = __webpack_require__(/*! tslib */ "../node_modules/tslib/tslib.es6.js");
+
+var _helpers = __webpack_require__(/*! ../../common/helpers */ "./common/helpers.ts");
+
+var ClusterPermissions =
+/** @class */
+function () {
+  function ClusterPermissions($scope, $injector, backendSrv, datasourceSrv, alertSrv, $q, $location, $window) {
+    var _this = this;
+
+    this.backendSrv = backendSrv;
+    this.datasourceSrv = datasourceSrv;
+    this.alertSrv = alertSrv;
+    this.$q = $q;
+    this.$location = $location;
+    this.$window = $window;
+    this.permissionFormOpen = true;
+    this.permissionFormValid = false;
+    this.permissionGroup = "Team";
+    document.title = 'DevOpsProdigy KubeGraf | Cluster Permissions';
+    this.pageReady = false;
+    this.$scope = $scope;
+    this.busy = false;
+    this.version = (0, _helpers.__getGrafanaVersion)($window);
+    this.getData().finally(function () {
+      _this.pageReady = true;
+
+      _this.$scope.$apply();
+    });
+  }
+
+  ClusterPermissions.prototype.getData = function () {
+    return (0, _tslib.__awaiter)(this, void 0, void 0, function () {
+      return (0, _tslib.__generator)(this, function (_a) {
+        switch (_a.label) {
+          case 0:
+            return [4
+            /*yield*/
+            , Promise.all([this.getCluster(), this.getUsers(), this.getTeams()])];
+
+          case 1:
+            _a.sent();
+
+            return [2
+            /*return*/
+            ];
+        }
+      });
+    });
+  };
+
+  ClusterPermissions.prototype.getCluster = function () {
+    return (0, _tslib.__awaiter)(this, void 0, void 0, function () {
+      return (0, _tslib.__generator)(this, function (_a) {
+        switch (_a.label) {
+          case 0:
+            if (!("clusterId" in this.$location.search())) return [3
+            /*break*/
+            , 2];
+            return [4
+            /*yield*/
+            , this.getDatasource(this.$location.search().clusterId)];
+
+          case 1:
+            _a.sent();
+
+            _a.label = 2;
+
+          case 2:
+            return [2
+            /*return*/
+            ];
+        }
+      });
+    });
+  };
+
+  ClusterPermissions.prototype.getUsers = function () {
+    return (0, _tslib.__awaiter)(this, void 0, void 0, function () {
+      var url;
+
+      var _this = this;
+
+      return (0, _tslib.__generator)(this, function (_a) {
+        switch (_a.label) {
+          case 0:
+            url = '/api/users/';
+            return [4
+            /*yield*/
+            , this.backendSrv.request({
+              url: url,
+              method: 'GET'
+            }).then(function (res) {
+              _this.users = res;
+            })];
+
+          case 1:
+            _a.sent();
+
+            return [2
+            /*return*/
+            ];
+        }
+      });
+    });
+  };
+
+  ClusterPermissions.prototype.getTeams = function () {
+    return (0, _tslib.__awaiter)(this, void 0, void 0, function () {
+      var url;
+
+      var _this = this;
+
+      return (0, _tslib.__generator)(this, function (_a) {
+        switch (_a.label) {
+          case 0:
+            url = '/api/teams/search';
+            return [4
+            /*yield*/
+            , this.backendSrv.request({
+              url: url,
+              method: 'GET'
+            }).then(function (res) {
+              _this.teams = res.teams;
+            })];
+
+          case 1:
+            _a.sent();
+
+            return [2
+            /*return*/
+            ];
+        }
+      });
+    });
+  };
+
+  ClusterPermissions.prototype.saveCluster = function () {
+    var _this = this;
+
+    return this.backendSrv.put('/api/datasources/' + this.cluster.id, this.cluster).then(function (res) {
+      return _this.$q.resolve(res);
+    }, function (err) {
+      return _this.$q.reject(err);
+    });
+  };
+
+  ClusterPermissions.prototype.getDatasource = function (id) {
+    var _this = this;
+
+    return this.backendSrv.get('/api/datasources/' + id).then(function (result) {
+      if (!result.jsonData.prom_name) result.jsonData.prom_name = '';
+      if (!result.jsonData.refresh_pods_rate) result.jsonData.refresh_pods_rate = '60';
+      _this.cluster = result;
+    });
+  };
+
+  ClusterPermissions.prototype.togglePermissionForm = function (open) {
+    this.permissionFormOpen = open;
+  };
+
+  ClusterPermissions.prototype.validateForm = function (field) {
+    if (field === 'group') {
+      this.permissionReceiver = null;
+    }
+
+    if (this.permissionGroup && this.permissionReceiver && this.permissionRole) {
+      this.permissionFormValid = true;
+    } else if ((this.permissionGroup === "Viewer" || this.permissionGroup === "Editor") && this.permissionRole) {
+      this.permissionFormValid = true;
+    } else {
+      this.permissionFormValid = false;
+    }
+  };
+
+  ClusterPermissions.templateUrl = 'components/cluster-permissions/cluster-permissions.html';
+  return ClusterPermissions;
+}();
+
+exports.ClusterPermissions = ClusterPermissions;
+
+/***/ }),
+
 /***/ "./components/clusters-list/clusters-list.ts":
 /*!***************************************************!*\
   !*** ./components/clusters-list/clusters-list.ts ***!
@@ -21660,13 +21858,15 @@ exports.DOPKubeGrafAppConfig = DOPKubeGrafAppConfig;
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.ConfigCtrl = exports.NodesOverview = exports.ClustersList = exports.ClusterOverview = exports.ClusterConfig = exports.ClusterAlerts = exports.ApplicationsOverview = undefined;
+exports.ConfigCtrl = exports.NodesOverview = exports.ClustersList = exports.ClusterOverview = exports.ClusterPermissions = exports.ClusterConfig = exports.ClusterAlerts = exports.ApplicationsOverview = undefined;
 
 var _applicationsOverview = __webpack_require__(/*! ./components/applications-overview/applications-overview */ "./components/applications-overview/applications-overview.ts");
 
 var _clustersList = __webpack_require__(/*! ./components/clusters-list/clusters-list */ "./components/clusters-list/clusters-list.ts");
 
 var _clusterConfig = __webpack_require__(/*! ./components/cluster-config/cluster-config */ "./components/cluster-config/cluster-config.ts");
+
+var _clusterPermissions = __webpack_require__(/*! ./components/cluster-permissions/cluster-permissions */ "./components/cluster-permissions/cluster-permissions.ts");
 
 var _clusterOverview = __webpack_require__(/*! ./components/cluster-overview/cluster-overview */ "./components/cluster-overview/cluster-overview.ts");
 
@@ -21685,6 +21885,7 @@ var _sdk = __webpack_require__(/*! grafana/app/plugins/sdk */ "grafana/app/plugi
 exports.ApplicationsOverview = _applicationsOverview.ApplicationsOverview;
 exports.ClusterAlerts = _clusterAlerts.ClusterAlerts;
 exports.ClusterConfig = _clusterConfig.ClusterConfig;
+exports.ClusterPermissions = _clusterPermissions.ClusterPermissions;
 exports.ClusterOverview = _clusterOverview.ClusterOverview;
 exports.ClustersList = _clustersList.ClustersList;
 exports.NodesOverview = _nodesOverview.NodesOverview;

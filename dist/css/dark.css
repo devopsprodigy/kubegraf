@@ -241,6 +241,10 @@
   .page-container--override .card-item, .page-container--override .card-item:hover {
     background: #2f2f32; }
 
+.page-cluster-permission {
+  padding-top: 28px;
+  padding-bottom: 56px; }
+
 .btn-secondary--override {
   color: #ffffff;
   text-shadow: 0 1px 0 rgba(0, 0, 0, 0.1);
