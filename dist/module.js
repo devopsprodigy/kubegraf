@@ -19953,8 +19953,15 @@ exports.ClusterPermissions = undefined;
 
 var _tslib = __webpack_require__(/*! tslib */ "../node_modules/tslib/tslib.es6.js");
 
+var _app_events = __webpack_require__(/*! grafana/app/core/app_events */ "grafana/app/core/app_events");
+
+var _app_events2 = _interopRequireDefault(_app_events);
+
 var _helpers = __webpack_require__(/*! ../../common/helpers */ "./common/helpers.ts");
 
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+///<reference path="../../../node_modules/grafana-sdk-mocks/app/headers/common.d.ts" />
 var ClusterPermissions =
 /** @class */
 function () {
@@ -19969,16 +19976,21 @@ function () {
     this.$window = $window;
     this.permissionFormOpen = true;
     this.permissionFormValid = false;
-    this.permissionGroup = "Team";
+    this.permissionType = "Team";
+    this.permissionUser = null;
+    this.permissionRole = null;
     document.title = 'DevOpsProdigy KubeGraf | Cluster Permissions';
     this.pageReady = false;
     this.$scope = $scope;
+    this.$q = $q;
     this.busy = false;
     this.version = (0, _helpers.__getGrafanaVersion)($window);
     this.getData().finally(function () {
       _this.pageReady = true;
 
       _this.$scope.$apply();
+
+      console.log(_this.cluster.jsonData.permissions);
     });
   }
 
@@ -20045,6 +20057,8 @@ function () {
               method: 'GET'
             }).then(function (res) {
               _this.users = res;
+            }).catch(function () {
+              _app_events2.default.emit('alert-error', ["Users not found "]);
             })];
 
           case 1:
@@ -20075,6 +20089,8 @@ function () {
               method: 'GET'
             }).then(function (res) {
               _this.teams = res.teams;
+            }).catch(function () {
+              _app_events2.default.emit('alert-error', ["Teams not found "]);
             })];
 
           case 1:
@@ -20088,14 +20104,43 @@ function () {
     });
   };
 
-  ClusterPermissions.prototype.saveCluster = function () {
-    var _this = this;
+  ClusterPermissions.prototype.addPermission = function () {
+    var permission = {
+      type: this.permissionType,
+      user: this.permissionUser,
+      role: this.permissionRole
+    };
 
-    return this.backendSrv.put('/api/datasources/' + this.cluster.id, this.cluster).then(function (res) {
-      return _this.$q.resolve(res);
-    }, function (err) {
-      return _this.$q.reject(err);
-    });
+    if (this.validate(permission)) {
+      if (typeof this.cluster.jsonData.permissions === "undefined") {
+        this.cluster.jsonData.permissions = [];
+      }
+
+      if (this.checkDuplicate(permission)) {
+        this.cluster.jsonData.permissions.push(permission);
+        this.saveCluster();
+      } else {
+        _app_events2.default.emit('alert-error', ["Permission already exists"]);
+      }
+    }
+  };
+
+  ClusterPermissions.prototype.updatePermission = function (index, role) {
+    if (this.cluster.jsonData.permissions[index]) {
+      this.cluster.jsonData.permissions[index].role = role;
+      this.saveCluster();
+    } else {
+      _app_events2.default.emit('alert-error', ["Permission not found"]);
+    }
+  };
+
+  ClusterPermissions.prototype.deletePermission = function (index) {
+    if (this.cluster.jsonData.permissions[index]) {
+      this.cluster.jsonData.permissions.splice(index, 1);
+      this.saveCluster();
+    } else {
+      _app_events2.default.emit('alert-error', ["Permission not found"]);
+    }
   };
 
   ClusterPermissions.prototype.getDatasource = function (id) {
@@ -20113,17 +20158,57 @@ function () {
   };
 
   ClusterPermissions.prototype.validateForm = function (field) {
-    if (field === 'group') {
-      this.permissionReceiver = null;
+    if (field === 'type') {
+      this.permissionUser = null;
     }
 
-    if (this.permissionGroup && this.permissionReceiver && this.permissionRole) {
+    var permission = {
+      type: this.permissionType,
+      user: this.permissionUser,
+      role: this.permissionRole
+    };
+
+    if (this.validate(permission)) {
       this.permissionFormValid = true;
-    } else if ((this.permissionGroup === "Viewer" || this.permissionGroup === "Editor") && this.permissionRole) {
-      this.permissionFormValid = true;
-    } else {
-      this.permissionFormValid = false;
+      return true;
     }
+
+    this.permissionFormValid = false;
+    return false;
+  };
+
+  ClusterPermissions.prototype.validate = function (permission) {
+    return permission.type && permission.user && permission.role || (permission.type === "Viewer" || permission.type === "Editor") && permission.role;
+  };
+
+  ClusterPermissions.prototype.checkDuplicate = function (permission) {
+    return this.cluster.jsonData.permissions.every(function (current) {
+      return !(current.type === permission.type && current.user === permission.user && current.role === permission.role);
+    });
+  };
+
+  ClusterPermissions.prototype.getName = function (permission) {
+    if (permission.type === "Viewer") {
+      return 'Viewer (Role)';
+    } else if (permission.type === "Editor") {
+      return 'Editor (Role)';
+    } else if (permission.type === "Team") {
+      return permission.user.name + " (Team)";
+    } else if (permission.type === "User") {
+      return permission.user.login + " (User)";
+    }
+
+    return "Undefined";
+  };
+
+  ClusterPermissions.prototype.saveCluster = function () {
+    var _this = this;
+
+    this.backendSrv.put('/api/datasources/' + this.cluster.id, this.cluster).then(function (res) {
+      if (res && res.datasource) {
+        _this.cluster = res.datasource;
+      }
+    });
   };
 
   ClusterPermissions.templateUrl = 'components/cluster-permissions/cluster-permissions.html';

@@ -21,7 +21,7 @@
             <div class="gf-form-select-wrapper">
               <select class="gf-form-input gf-size-auto"
                       ng-change="ctrl.validateForm('group')"
-                      ng-model="ctrl.permissionGroup">
+                      ng-model="ctrl.permissionType">
                 <option value="Team">Team</option>
                 <option value="User">User</option>
                 <option value="Viewer">Everyone With Viewer Role</option>
@@ -29,26 +29,26 @@
               </select>
             </div>
           </div>
-          <div class="gf-form" ng-if="ctrl.permissionGroup === 'Team'">
+          <div class="gf-form" ng-if="ctrl.permissionType === 'Team'">
             <div class="user-picker">
               <div class="gf-form-select-wrapper">
                 <select class="gf-form-input gf-size-auto"
                         ng-change="ctrl.validateForm('team')"
-                        ng-model="ctrl.permissionReceiver">
+                        ng-model="ctrl.permissionUser">
                   <option value="">Select a team</option>
-                  <option ng-repeat="team in ctrl.teams" value="team.id">{{team.name}}</option>
+                  <option ng-repeat="team in ctrl.teams track by team.id" ng-value="team">{{team.name}}</option>
                 </select>
               </div>
             </div>
           </div>
-          <div class="gf-form" ng-if="ctrl.permissionGroup === 'User'">
+          <div class="gf-form" ng-if="ctrl.permissionType === 'User'">
             <div class="user-picker">
               <div class="gf-form-select-wrapper">
                 <select class="gf-form-input gf-size-auto"
                         ng-change="ctrl.validateForm('user')"
-                        ng-model="ctrl.permissionReceiver">
+                        ng-model="ctrl.permissionUser">
                   <option value="">Select user</option>
-                  <option ng-repeat="user in ctrl.users" value="user.id">{{user.login}}</option>
+                  <option ng-repeat="user in ctrl.users track by user.id" ng-value="user">{{user.login}}</option>
                 </select>
               </div>
             </div>
@@ -66,7 +66,10 @@
             </div>
           </div>
           <div class="gf-form">
-            <button data-save-permission="true" class="btn btn-primary" type="submit" ng-disabled="!ctrl.permissionFormValid">Save</button>
+            <button ng-click="ctrl.addPermission()"
+                    class="btn btn-primary"
+                    type="submit"
+                    ng-disabled="!ctrl.permissionFormValid">Save</button>
           </div>
         </div>
       </form>
@@ -117,15 +120,21 @@
         <button class="btn btn-inverse btn-small"><i class="fa fa-lock"></i></button>
       </td>
     </tr>
-    <tr class="">
-      <td style="width: 1%;"><i class="gicon gicon-editor" style="width: 25px; height: 25px;"></i></td>
-      <td style="width: 90%;">Editor <span class="filter-table__weak-italic">(Role)</span></td>
+    <tr ng-repeat="(index, permission) in ctrl.cluster.jsonData.permissions">
+      <td style="width: 1%;">
+        <i ng-if="permission.type === 'Editor'" class="gicon gicon-editor" style="width: 25px; height: 25px;"></i>
+        <i ng-if="permission.type === 'Viewer'" class="gicon gicon-viewer" style="width: 25px; height: 25px;"></i>
+        <img ng-if="permission.type === 'User' || permission.type === 'Team'" class="filter-table__avatar" ng-src="{{permission.user.avatarUrl}}">
+      </td>
+      <td style="width: 90%;" ng-bind="ctrl.getName(permission)"></td>
       <td></td>
       <td class="query-keyword">Can</td>
       <td>
         <div class="gf-form">
           <div class="gf-form-select-wrapper">
-            <select class="gf-form-input gf-size-auto">
+            <select class="gf-form-input gf-size-auto"
+                    ng-model="permission.role"
+                    ng-change="ctrl.updatePermission(index,permission.role)">
               <option value="View">View</option>
               <option value="Edit">Edit</option>
               <option value="User">Admin</option>
@@ -133,7 +142,11 @@
           </div>
         </div>
       </td>
-      <td><a class="btn btn-danger btn-small"><i class="fa fa-remove"></i></a></td>
+      <td>
+        <a class="btn btn-danger btn-small" ng-click="ctrl.deletePermission(index)">
+          <i class="fa fa-remove"></i>
+        </a>
+      </td>
     </tr>
     </tbody>
   </table>
