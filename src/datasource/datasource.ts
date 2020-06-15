@@ -1,5 +1,8 @@
 ///<reference path="../../node_modules/grafana-sdk-mocks/app/headers/common.d.ts" />
 import appEvents from "grafana/app/core/app_events";
+import config from "grafana/app/core/config";
+import {ContextSrv} from "grafana/app/core/services/context_srv";
+import {TYPE_KUBEGRAF_PLUGIN} from "../common/constants";
 
 export class DOPK8SDatasource {
     name: string;
@@ -13,8 +16,9 @@ export class DOPK8SDatasource {
     statefulsetsPromise: any;
     podsPromise: any;
     accessViaToken: boolean;
+    constextSrv: ContextSrv
 
-    constructor(instanceSettings, private backendSrv, private templateSrv){
+    constructor(instanceSettings, private backendSrv, private templateSrv, private contextSrv: ContextSrv){
         this.name = instanceSettings.name;
         this.url = instanceSettings.url;
         this.id = instanceSettings.id;
@@ -25,6 +29,11 @@ export class DOPK8SDatasource {
         this.daemonsetsPromise = null;
         this.statefulsetsPromise = null;
         this.accessViaToken = instanceSettings.jsonData.access_via_token;
+
+        this.constextSrv = contextSrv
+        const teams = backendSrv.get('/api/user/teams').then(res => {
+            console.log('team', res)
+        });
     }
 
     testDatasource(silent: boolean = false){
@@ -156,6 +165,19 @@ export class DOPK8SDatasource {
                             value: ip
                         }];
                     });
+            case 'clusters':
+                return this.getClusters()
+                    .then(clusters => {
+                        if(Array.isArray(clusters)) {
+                            return clusters.map(cluster => {
+                                return {
+                                    text: cluster.name,
+                                    value: cluster.name
+                                }
+                            })
+                        }
+                        return [];
+                    })
             default:
                 return [];
         }
@@ -426,5 +448,50 @@ export class DOPK8SDatasource {
                 }
                 return result.items;
             })
+    }
+
+    checkPermission(permissions: any[]): boolean {
+        console.log(this.contextSrv)
+
+        if (this.contextSrv.isGrafanaAdmin || this.contextSrv.hasRole('Admin')) {
+            return true
+        }
+
+        return permissions.findIndex(permission => {
+            if(this.contextSrv.hasRole('Editor') && permission.type === "Editor"){
+                return true
+            }
+
+            if (this.contextSrv.hasRole('Viewer') && permission.type === "Viewer") {
+                return true
+            }
+            // @ts-ignore
+            if(permission.type === "User" && permission.user.id === this.contextSrv.user.id){
+                return true
+            }
+
+            if (permission.type === "Team"){
+
+            }
+
+            return false
+        }) > -1
+    }
+
+    getClusters() {
+        const datasources = config.datasources
+        return new Promise((resolve, reject) => {
+            if(datasources) {
+                const clusters = Object.keys(datasources)
+                    .filter(key => datasources[key].type === TYPE_KUBEGRAF_PLUGIN)
+                    .map(key => datasources[key])
+
+                resolve(clusters.filter(cluster => {
+                    return cluster.jsonData.permissions ? this.checkPermission(cluster.jsonData.permissions) : true
+                }));
+            } else {
+                reject('Datasources not found')
+            }
+        })
     }
 }

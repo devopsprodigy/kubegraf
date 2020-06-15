@@ -1,4 +1,4 @@
-define(["app/core/app_events"], function(__WEBPACK_EXTERNAL_MODULE_grafana_app_core_app_events__) { return /******/ (function(modules) { // webpackBootstrap
+define(["app/core/app_events","app/core/config"], function(__WEBPACK_EXTERNAL_MODULE_grafana_app_core_app_events__, __WEBPACK_EXTERNAL_MODULE_grafana_app_core_config__) { return /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
 /******/
@@ -108,6 +108,7 @@ var COLOR_RED = '#a52a2a';
 var COLOR_GREEN = '#299c46';
 var PODS_LIMIT = 10;
 var TYPE_PROMETHEUS = "prometheus";
+var TYPE_KUBEGRAF_PLUGIN = "devopsprodidy-kubegraf-datasource";
 exports.ERROR = ERROR;
 exports.WARNING = WARNING;
 exports.TERMINATING = TERMINATING;
@@ -117,6 +118,7 @@ exports.COLOR_RED = COLOR_RED;
 exports.COLOR_GREEN = COLOR_GREEN;
 exports.PODS_LIMIT = PODS_LIMIT;
 exports.TYPE_PROMETHEUS = TYPE_PROMETHEUS;
+exports.TYPE_KUBEGRAF_PLUGIN = TYPE_KUBEGRAF_PLUGIN;
 
 /***/ }),
 
@@ -237,15 +239,22 @@ var _app_events = __webpack_require__(/*! grafana/app/core/app_events */ "grafan
 
 var _app_events2 = _interopRequireDefault(_app_events);
 
+var _config = __webpack_require__(/*! grafana/app/core/config */ "grafana/app/core/config");
+
+var _config2 = _interopRequireDefault(_config);
+
+var _constants = __webpack_require__(/*! ../common/constants */ "./common/constants.ts");
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 ///<reference path="../../node_modules/grafana-sdk-mocks/app/headers/common.d.ts" />
 var DOPK8SDatasource =
 /** @class */
 function () {
-  function DOPK8SDatasource(instanceSettings, backendSrv, templateSrv) {
+  function DOPK8SDatasource(instanceSettings, backendSrv, templateSrv, contextSrv) {
     this.backendSrv = backendSrv;
     this.templateSrv = templateSrv;
+    this.contextSrv = contextSrv;
     this.name = instanceSettings.name;
     this.url = instanceSettings.url;
     this.id = instanceSettings.id;
@@ -256,6 +265,10 @@ function () {
     this.daemonsetsPromise = null;
     this.statefulsetsPromise = null;
     this.accessViaToken = instanceSettings.jsonData.access_via_token;
+    this.constextSrv = contextSrv;
+    var teams = backendSrv.get('/api/user/teams').then(function (res) {
+      console.log('team', res);
+    });
   }
 
   DOPK8SDatasource.prototype.testDatasource = function (silent) {
@@ -421,6 +434,20 @@ function () {
             text: ip,
             value: ip
           }];
+        });
+
+      case 'clusters':
+        return this.getClusters().then(function (clusters) {
+          if (Array.isArray(clusters)) {
+            return clusters.map(function (cluster) {
+              return {
+                text: cluster.name,
+                value: cluster.name
+              };
+            });
+          }
+
+          return [];
         });
 
       default:
@@ -747,6 +774,55 @@ function () {
     });
   };
 
+  DOPK8SDatasource.prototype.checkPermission = function (permissions) {
+    var _this = this;
+
+    console.log(this.contextSrv);
+
+    if (this.contextSrv.isGrafanaAdmin || this.contextSrv.hasRole('Admin')) {
+      return true;
+    }
+
+    return permissions.findIndex(function (permission) {
+      if (_this.contextSrv.hasRole('Editor') && permission.type === "Editor") {
+        return true;
+      }
+
+      if (_this.contextSrv.hasRole('Viewer') && permission.type === "Viewer") {
+        return true;
+      } // @ts-ignore
+
+
+      if (permission.type === "User" && permission.user.id === _this.contextSrv.user.id) {
+        return true;
+      }
+
+      if (permission.type === "Team") {}
+
+      return false;
+    }) > -1;
+  };
+
+  DOPK8SDatasource.prototype.getClusters = function () {
+    var _this = this;
+
+    var datasources = _config2.default.datasources;
+    return new Promise(function (resolve, reject) {
+      if (datasources) {
+        var clusters = Object.keys(datasources).filter(function (key) {
+          return datasources[key].type === _constants.TYPE_KUBEGRAF_PLUGIN;
+        }).map(function (key) {
+          return datasources[key];
+        });
+        resolve(clusters.filter(function (cluster) {
+          return cluster.jsonData.permissions ? _this.checkPermission(cluster.jsonData.permissions) : true;
+        }));
+      } else {
+        reject('Datasources not found');
+      }
+    });
+  };
+
   return DOPK8SDatasource;
 }();
 
@@ -786,6 +862,17 @@ exports.ConfigCtrl = _config.DOPK8SConfig;
 /***/ (function(module, exports) {
 
 module.exports = __WEBPACK_EXTERNAL_MODULE_grafana_app_core_app_events__;
+
+/***/ }),
+
+/***/ "grafana/app/core/config":
+/*!**********************************!*\
+  !*** external "app/core/config" ***!
+  \**********************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = __WEBPACK_EXTERNAL_MODULE_grafana_app_core_config__;
 
 /***/ })
 

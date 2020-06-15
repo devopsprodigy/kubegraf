@@ -8,7 +8,7 @@ export class ClusterPermissions {
     busy: boolean
     pageReady: boolean
     version: number
-    permissionFormOpen: boolean = true
+    permissionFormOpen: boolean = false
     permissionFormValid: boolean = false
     permissionType: string = "Team"
     permissionUser: number = null

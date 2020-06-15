@@ -17975,6 +17975,7 @@ var COLOR_RED = '#a52a2a';
 var COLOR_GREEN = '#299c46';
 var PODS_LIMIT = 10;
 var TYPE_PROMETHEUS = "prometheus";
+var TYPE_KUBEGRAF_PLUGIN = "devopsprodidy-kubegraf-datasource";
 exports.ERROR = ERROR;
 exports.WARNING = WARNING;
 exports.TERMINATING = TERMINATING;
@@ -17984,6 +17985,7 @@ exports.COLOR_RED = COLOR_RED;
 exports.COLOR_GREEN = COLOR_GREEN;
 exports.PODS_LIMIT = PODS_LIMIT;
 exports.TYPE_PROMETHEUS = TYPE_PROMETHEUS;
+exports.TYPE_KUBEGRAF_PLUGIN = TYPE_KUBEGRAF_PLUGIN;
 
 /***/ }),
 
@@ -19974,7 +19976,7 @@ function () {
     this.$q = $q;
     this.$location = $location;
     this.$window = $window;
-    this.permissionFormOpen = true;
+    this.permissionFormOpen = false;
     this.permissionFormValid = false;
     this.permissionType = "Team";
     this.permissionUser = null;
@@ -19989,8 +19991,6 @@ function () {
       _this.pageReady = true;
 
       _this.$scope.$apply();
-
-      console.log(_this.cluster.jsonData.permissions);
     });
   }
 
