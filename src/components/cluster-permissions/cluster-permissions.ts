@@ -28,6 +28,7 @@ export class ClusterPermissions {
         this.getData().finally(() => {
             this.pageReady = true
             this.$scope.$apply()
+            console.log(this.cluster.jsonData.permissions)
         });
     }
 

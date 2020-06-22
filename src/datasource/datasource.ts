@@ -1,6 +1,6 @@
 ///<reference path="../../node_modules/grafana-sdk-mocks/app/headers/common.d.ts" />
 import appEvents from "grafana/app/core/app_events";
-import config from "grafana/app/core/config";
+//import config from "grafana/app/core/config";
 import {ContextSrv} from "grafana/app/core/services/context_srv";
 import {TYPE_KUBEGRAF_PLUGIN} from "../common/constants";
 
@@ -18,7 +18,7 @@ export class DOPK8SDatasource {
     accessViaToken: boolean;
     constextSrv: ContextSrv
 
-    constructor(instanceSettings, private backendSrv, private templateSrv, private contextSrv: ContextSrv){
+    constructor(instanceSettings, private backendSrv, private templateSrv, private contextSrv: ContextSrv, private $window){
         this.name = instanceSettings.name;
         this.url = instanceSettings.url;
         this.id = instanceSettings.id;
@@ -29,6 +29,7 @@ export class DOPK8SDatasource {
         this.daemonsetsPromise = null;
         this.statefulsetsPromise = null;
         this.accessViaToken = instanceSettings.jsonData.access_via_token;
+        this.$window = $window;
 
         this.constextSrv = contextSrv
         const teams = backendSrv.get('/api/user/teams').then(res => {
@@ -471,7 +472,7 @@ export class DOPK8SDatasource {
             }
 
             if (permission.type === "Team"){
-
+                return false
             }
 
             return false
@@ -479,7 +480,7 @@ export class DOPK8SDatasource {
     }
 
     getClusters() {
-        const datasources = config.datasources
+        const datasources = this.$window.grafanaBootData.settings.datasources
         return new Promise((resolve, reject) => {
             if(datasources) {
                 const clusters = Object.keys(datasources)

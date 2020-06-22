@@ -1,4 +1,4 @@
-define(["app/core/app_events","app/core/config"], function(__WEBPACK_EXTERNAL_MODULE_grafana_app_core_app_events__, __WEBPACK_EXTERNAL_MODULE_grafana_app_core_config__) { return /******/ (function(modules) { // webpackBootstrap
+define(["app/core/app_events"], function(__WEBPACK_EXTERNAL_MODULE_grafana_app_core_app_events__) { return /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
 /******/
@@ -239,10 +239,6 @@ var _app_events = __webpack_require__(/*! grafana/app/core/app_events */ "grafan
 
 var _app_events2 = _interopRequireDefault(_app_events);
 
-var _config = __webpack_require__(/*! grafana/app/core/config */ "grafana/app/core/config");
-
-var _config2 = _interopRequireDefault(_config);
-
 var _constants = __webpack_require__(/*! ../common/constants */ "./common/constants.ts");
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
@@ -251,10 +247,11 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 var DOPK8SDatasource =
 /** @class */
 function () {
-  function DOPK8SDatasource(instanceSettings, backendSrv, templateSrv, contextSrv) {
+  function DOPK8SDatasource(instanceSettings, backendSrv, templateSrv, contextSrv, $window) {
     this.backendSrv = backendSrv;
     this.templateSrv = templateSrv;
     this.contextSrv = contextSrv;
+    this.$window = $window;
     this.name = instanceSettings.name;
     this.url = instanceSettings.url;
     this.id = instanceSettings.id;
@@ -265,6 +262,7 @@ function () {
     this.daemonsetsPromise = null;
     this.statefulsetsPromise = null;
     this.accessViaToken = instanceSettings.jsonData.access_via_token;
+    this.$window = $window;
     this.constextSrv = contextSrv;
     var teams = backendSrv.get('/api/user/teams').then(function (res) {
       console.log('team', res);
@@ -797,7 +795,9 @@ function () {
         return true;
       }
 
-      if (permission.type === "Team") {}
+      if (permission.type === "Team") {
+        return false;
+      }
 
       return false;
     }) > -1;
@@ -806,7 +806,7 @@ function () {
   DOPK8SDatasource.prototype.getClusters = function () {
     var _this = this;
 
-    var datasources = _config2.default.datasources;
+    var datasources = this.$window.grafanaBootData.settings.datasources;
     return new Promise(function (resolve, reject) {
       if (datasources) {
         var clusters = Object.keys(datasources).filter(function (key) {
@@ -862,17 +862,6 @@ exports.ConfigCtrl = _config.DOPK8SConfig;
 /***/ (function(module, exports) {
 
 module.exports = __WEBPACK_EXTERNAL_MODULE_grafana_app_core_app_events__;
-
-/***/ }),
-
-/***/ "grafana/app/core/config":
-/*!**********************************!*\
-  !*** external "app/core/config" ***!
-  \**********************************/
-/*! no static exports found */
-/***/ (function(module, exports) {
-
-module.exports = __WEBPACK_EXTERNAL_MODULE_grafana_app_core_config__;
 
 /***/ })
 

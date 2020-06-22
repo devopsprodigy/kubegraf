@@ -19991,6 +19991,8 @@ function () {
       _this.pageReady = true;
 
       _this.$scope.$apply();
+
+      console.log(_this.cluster.jsonData.permissions);
     });
   }
 

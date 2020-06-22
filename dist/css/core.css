@@ -715,5 +715,9 @@ label.toggle-checkbox {
 .explore-toolbar-item {
   list-style: inside; }
 
+.page-header_title {
+  display: flex;
+  justify-content: space-between; }
+
 
 /*# sourceMappingURL=core.css.map*/
