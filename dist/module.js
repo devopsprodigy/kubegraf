@@ -20149,101 +20149,47 @@ function () {
 
   ;
 
-  K8sPage.prototype.__getServerInfo = function (nodeIp) {
+  K8sPage.prototype.__getServerInfo = function (nodeIp, nodeName) {
     return (0, _tslib.__awaiter)(this, void 0, void 0, function () {
-      var job, instance, nodeInfo, jobMatch, instanceMatch, cpuCores, ramTotal, swapTotal, rootFSTotal, sysLoad, uptime;
+      var instance, result;
       return (0, _tslib.__generator)(this, function (_a) {
         switch (_a.label) {
           case 0:
-            job = "kubernetes-service-endpoints";
-            instance = nodeIp + ":.+";
+            instance = nodeName + "|" + nodeIp + ":.+";
             return [4
             /*yield*/
-            , this.prometheusDS.query({
-              expr: "node_uname_info{instance=~\"" + nodeIp + ":.+\"}",
-              legend: 'job'
-            })];
+            , Promise.all([this.prometheusDS.query({
+              expr: "count(count(node_cpu_seconds_total{instance=~\"" + instance + "\"}) by (cpu))",
+              legend: 'instance'
+            }), this.prometheusDS.query({
+              expr: "node_memory_MemTotal_bytes{instance=~\"" + instance + "\"}",
+              legend: 'instance'
+            }), this.prometheusDS.query({
+              expr: "node_memory_SwapTotal_bytes{instance=~\"" + instance + "\"}",
+              legend: 'instance'
+            }), this.prometheusDS.query({
+              expr: "node_filesystem_size_bytes{instance=~\"" + instance + "\",mountpoint=\"/\",fstype!=\"rootfs\"}",
+              legend: 'instance'
+            }), this.prometheusDS.query({
+              expr: "node_load1{instance=~\"" + instance + "\"}",
+              legend: 'instance'
+            }), this.prometheusDS.query({
+              expr: "node_time_seconds{instance=~\"" + instance + "\"} - node_boot_time_seconds{instance=~\"" + instance + "\"}",
+              legend: 'instance'
+            }) //uptime
+            ])];
 
           case 1:
-            nodeInfo = _a.sent();
-
-            if (nodeInfo[0] && nodeInfo[0].target) {
-              jobMatch = nodeInfo[0].target.match(/job="(.+?)"/);
-
-              if (jobMatch[1]) {
-                job = jobMatch[1];
-              }
-
-              instanceMatch = nodeInfo[0].target.match(/instance="(.+?)"/);
-
-              if (instanceMatch[1]) {
-                instance = instanceMatch[1];
-              }
-            }
-
-            return [4
-            /*yield*/
-            , this.prometheusDS.query({
-              expr: "count(count(node_cpu_seconds_total{instance=~\"" + instance + "\",job=~\"" + job + "\"}) by (cpu))",
-              legend: 'instance'
-            })];
-
-          case 2:
-            cpuCores = _a.sent();
-            return [4
-            /*yield*/
-            , this.prometheusDS.query({
-              expr: "node_memory_MemTotal_bytes{instance=~\"" + instance + "\",job=~\"" + job + "\"}",
-              legend: 'instance'
-            })];
-
-          case 3:
-            ramTotal = _a.sent();
-            return [4
-            /*yield*/
-            , this.prometheusDS.query({
-              expr: "node_memory_SwapTotal_bytes{instance=~\"" + instance + "\",job=~\"" + job + "\"}",
-              legend: 'instance'
-            })];
-
-          case 4:
-            swapTotal = _a.sent();
-            return [4
-            /*yield*/
-            , this.prometheusDS.query({
-              expr: "node_filesystem_size_bytes{instance=~\"" + instance + "\",job=~\"" + job + "\",mountpoint=\"/\",fstype!=\"rootfs\"}",
-              legend: 'instance'
-            })];
-
-          case 5:
-            rootFSTotal = _a.sent();
-            return [4
-            /*yield*/
-            , this.prometheusDS.query({
-              expr: "node_load1{instance=~\"" + instance + "\",job=~\"" + job + "\"}",
-              legend: 'instance'
-            })];
-
-          case 6:
-            sysLoad = _a.sent();
-            return [4
-            /*yield*/
-            , this.prometheusDS.query({
-              expr: "node_time_seconds{instance=~\"" + instance + "\",job=~\"" + job + "\"} - node_boot_time_seconds{instance=~\"" + instance + "\",job=~\"" + job + "\"}",
-              legend: 'instance'
-            })];
-
-          case 7:
-            uptime = _a.sent();
+            result = _a.sent();
             return [2
             /*return*/
             , {
-              cpuCores: cpuCores[0] && cpuCores[0].datapoint,
-              ramTotal: ramTotal[0] && (0, _helpers.__convertToGB)(ramTotal[0].datapoint),
-              swapTotal: swapTotal[0] && (0, _helpers.__convertToGB)(swapTotal[0].datapoint),
-              rootFSTotal: rootFSTotal[0] && (0, _helpers.__convertToGB)(rootFSTotal[0].datapoint),
-              sysLoad: sysLoad[0] && sysLoad[0].datapoint,
-              uptime: uptime[0] && (0, _helpers.__convertToHours)(uptime[0].datapoint * 1000)
+              cpuCores: result[0][0] && result[0][0].datapoint,
+              ramTotal: result[1][0] && (0, _helpers.__convertToGB)(result[1][0].datapoint),
+              swapTotal: result[2][0] && (0, _helpers.__convertToGB)(result[2][0].datapoint),
+              rootFSTotal: result[3][0] && (0, _helpers.__convertToGB)(result[3][0].datapoint),
+              sysLoad: result[4][0] && result[4][0].datapoint,
+              uptime: result[5][0] && (0, _helpers.__convertToHours)(result[5][0].datapoint * 1000)
             }];
         }
       });
@@ -21391,80 +21337,11 @@ function (_super) {
       _this.getEvents();
 
       _this.getNodeMap().then(function () {
-        return (0, _tslib.__awaiter)(_this, void 0, void 0, function () {
-          var _a, _b, node, _c, _d, e_1_1;
+        if (_this.nodesMap.length > 0 && _this.serverInfo === null) {
+          _this.getServerInfo();
+        }
 
-          var e_1, _e;
-
-          return (0, _tslib.__generator)(this, function (_f) {
-            switch (_f.label) {
-              case 0:
-                if (!(this.nodesMap.length > 0 && this.serverInfo === null)) return [3
-                /*break*/
-                , 8];
-                this.serverInfo = {};
-                _f.label = 1;
-
-              case 1:
-                _f.trys.push([1, 6, 7, 8]);
-
-                _a = (0, _tslib.__values)(this.nodesMap), _b = _a.next();
-                _f.label = 2;
-
-              case 2:
-                if (!!_b.done) return [3
-                /*break*/
-                , 5];
-                node = _b.value;
-                _c = this.serverInfo;
-                _d = node.name;
-                return [4
-                /*yield*/
-                , this.__getServerInfo(node.hostIp)];
-
-              case 3:
-                _c[_d] = _f.sent();
-                _f.label = 4;
-
-              case 4:
-                _b = _a.next();
-                return [3
-                /*break*/
-                , 2];
-
-              case 5:
-                return [3
-                /*break*/
-                , 8];
-
-              case 6:
-                e_1_1 = _f.sent();
-                e_1 = {
-                  error: e_1_1
-                };
-                return [3
-                /*break*/
-                , 8];
-
-              case 7:
-                try {
-                  if (_b && !_b.done && (_e = _a.return)) _e.call(_a);
-                } finally {
-                  if (e_1) throw e_1.error;
-                }
-
-                return [7
-                /*endfinally*/
-                ];
-
-              case 8:
-                this.pageReady = true;
-                return [2
-                /*return*/
-                ];
-            }
-          });
-        });
+        _this.pageReady = true;
       }).then(function () {
         _this.getResourcesMetrics().then(function () {});
       });
@@ -21472,6 +21349,40 @@ function (_super) {
 
     return _this;
   }
+
+  NodesOverview.prototype.getServerInfo = function () {
+    var e_1, _a;
+
+    var _this = this;
+
+    this.serverInfo = {};
+
+    var _loop_1 = function _loop_1(node) {
+      this_1.__getServerInfo(node.hostIp, node.name).then(function (res) {
+        _this.serverInfo[node.name] = res;
+      });
+    };
+
+    var this_1 = this;
+
+    try {
+      for (var _b = (0, _tslib.__values)(this.nodesMap), _c = _b.next(); !_c.done; _c = _b.next()) {
+        var node = _c.value;
+
+        _loop_1(node);
+      }
+    } catch (e_1_1) {
+      e_1 = {
+        error: e_1_1
+      };
+    } finally {
+      try {
+        if (_c && !_c.done && (_a = _b.return)) _a.call(_b);
+      } finally {
+        if (e_1) throw e_1.error;
+      }
+    }
+  };
 
   NodesOverview.prototype.showAllPodsNS = function (ns) {
     ns.limit = false;
