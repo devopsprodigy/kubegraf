@@ -1,3 +1,8 @@
+# 1.4.1 (2020-06-19)
+
+### Bug Fixes
+* Fix integration nodes' metrics with different node-exporter installations
+
 # 1.4.0 (2020-05-13)
 
 ### New features
