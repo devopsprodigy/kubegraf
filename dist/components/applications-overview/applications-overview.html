@@ -47,7 +47,7 @@
                 <div class="title" ng-click="ctrl.toggleTab('__overview')">
                     <span ng-class="{active:ctrl.open['__overview'] === undefined || ctrl.open['__overview'] === true}"
                           class="chevron"></span>
-                    <h1>Overview: <span ng-bind="ctrl.cluster.name"/>. Applications</h1>
+                    <h1>Overview: <span ng-bind="ctrl.cluster.name"></span>. Applications</h1>
                 </div>
                 <div class="overview-panel_btn">
                     <span class="namespace-counter" ng-if="ctrl.namespaceMapReady">
@@ -104,7 +104,7 @@
                                 <span ng-bind="pod.name"></span>
                                 <span>
                                 <a href="{{ctrl.getPodDashboardLink(pod)}}" target="_blank" style="color: #ffffff">
-                                    <i class="fa fa-eye"/>
+                                    <i class="fa fa-eye"></i>
                                 </a>
                             </span>
                             </td>
@@ -124,7 +124,7 @@
                     <div class="title" ng-click="ctrl.toggleTab(namespace.name)">
                         <span ng-class="{active:ctrl.open[namespace.name] === undefined || ctrl.open[namespace.name] === true}"
                             class="chevron"></span>
-                        <h1>Namespace: <span ng-bind="namespace.name"/></h1>
+                        <h1>Namespace: <span ng-bind="namespace.name"></span></h1>
                     </div>
                     <div class="namespace-panel_btn">
                         <span class="btn btn-grey"
@@ -137,7 +137,7 @@
                               ng-click="ctrl.toggleColumn('jobs', namespace.name)">
                             SHOW Jobs ({{ namespace.jobs ? namespace.jobs.length : 0 }})
                         </span>
-                        <div class="status">Status: <span ng-bind="namespace.data.status.phase"/></div>
+                        <div class="status">Status: <span ng-bind="namespace.data.status.phase"></span></div>
                     </div>
                 </div>
                 <div class="namespace-panel_body" ng-if="ctrl.open[namespace.name] === undefined || ctrl.open[namespace.name] === true">
@@ -157,10 +157,10 @@
                         </div>
                         <div ng-repeat="key in ctrl.namespaceFilterIsDeleted(namespace[col.nsKey])" class="column_cell">
                             <h4 class="column_cell_header" ng-click="key.toggle()">
-                                <span ng-bind="key.name"/>
+                                <span ng-bind="key.name"></span>
                                 <span ng-if="col.nsKey === 'deployments' || col.nsKey === 'daemonsets' || col.nsKey === 'statefulsets'">
                                     <a href="{{ctrl.getEntityDashboardLink(key, col.nsKey)}}" target="_blank">
-                                        <i class="fa fa-eye"/>
+                                        <i class="fa fa-eye"></i>
                                     </a>
                                 </span>
                             </h4>

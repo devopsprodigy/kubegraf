@@ -44,7 +44,7 @@
     <div class="page-body--override">
         <div class="rpw explore-pane">
             <div class="col-md-6">
-                <h1>Overview: <span ng-bind="ctrl.cluster.name"/>. Alerts</h1>
+                <h1>Overview: <span ng-bind="ctrl.cluster.name"></span>. Alerts</h1>
             </div>
         </div>
         <br>
@@ -104,10 +104,10 @@
                                     <span class="override--nodeTable_status override--pod_status_{{node.color}}"></span>
                                 </td>
                                 <td class="pointer">
-                                    <span ng-bind="node.name" />
+                                    <span ng-bind="node.name"></span>
                                     <span>
                                         <a href="{{ctrl.getNodeDashboardLink(node)}}" target="_blank" style="color: #fff">
-                                            <i class="fa fa-eye"/>
+                                            <i class="fa fa-eye"></i>
                                         </a>
                                     </span>
                                 </td>
@@ -124,28 +124,28 @@
                                     <span class="override--nodeTable_status" ng-style="{'background' : node.rowCpuColor}"></span>
                                 </td>
                                 <td>Node:
-                                    <span ng-bind="node.name" />
+                                    <span ng-bind="node.name"></span>
                                     <span>
                                         <a href="{{ctrl.getNodeDashboardLink(node)}}" target="_blank" style="color: #fff">
-                                            <i class="fa fa-eye"/>
+                                            <i class="fa fa-eye"></i>
                                         </a>
                                     </span>
                                 </td>
-                                <td>CPU used: <span ng-bind="node.cpuPercentUsed" /></td>
+                                <td>CPU used: <span ng-bind="node.cpuPercentUsed"></span></td>
                             </tr>
                             <tr ng-repeat="node in ctrl.getAlertsNodesByCPU('cpuStatusRequested')">
                                 <td>
                                     <span class="override--nodeTable_status" ng-style="{'background' : node.rowCpuRequestedColor}"></span>
                                 </td>
                                 <td>Node:
-                                    <span ng-bind="node.name" />
+                                    <span ng-bind="node.name"></span>
                                     <span>
                                         <a href="{{ctrl.getNodeDashboardLink(node)}}" target="_blank" style="color: #fff">
-                                            <i class="fa fa-eye"/>
+                                            <i class="fa fa-eye"></i>
                                         </a>
                                     </span>
                                 </td>
-                                <td>CPU requested: <span ng-bind="node.cpuPercentRequested" /></td>
+                                <td>CPU requested: <span ng-bind="node.cpuPercentRequested"></span></td>
                             </tr>
                             <!--memory used-->
                             <tr ng-repeat="node in ctrl.getAlertsNodesByMemory()">
@@ -153,28 +153,28 @@
                                     <span class="override--nodeTable_status" ng-style="{'background' : node.rowMemoryColor}"></span>
                                 </td>
                                 <td>Node:
-                                    <span ng-bind="node.name" />
+                                    <span ng-bind="node.name"></span>
                                     <span>
                                         <a href="{{ctrl.getNodeDashboardLink(node)}}" target="_blank" style="color: #fff">
-                                            <i class="fa fa-eye"/>
+                                            <i class="fa fa-eye"></i>
                                         </a>
                                     </span>
                                 </td>
-                                <td>Memory used: <span ng-bind="node.memoryPercentUsed" /></td>
+                                <td>Memory used: <span ng-bind="node.memoryPercentUsed"></span></td>
                             </tr>
                             <tr ng-repeat="node in ctrl.getAlertsNodesByMemory('memoryStatusRequested')">
                                 <td>
                                     <span class="override--nodeTable_status" ng-style="{'background' : node.rowMemoryRequestedColor}"></span>
                                 </td>
                                 <td>Node:
-                                    <span ng-bind="node.name" />
+                                    <span ng-bind="node.name"></span>
                                     <span>
                                         <a href="{{ctrl.getNodeDashboardLink(node)}}" target="_blank" style="color: #fff">
-                                            <i class="fa fa-eye"/>
+                                            <i class="fa fa-eye"></i>
                                         </a>
                                     </span>
                                 </td>
-                                <td>Memory used: <span ng-bind="node.memoryPercentRequested" /></td>
+                                <td>Memory used: <span ng-bind="node.memoryPercentRequested"></span></td>
                             </tr>
                             <!--pods used-->
                             <tr ng-repeat="node in ctrl.getAlertsNodesByPods()">
@@ -182,14 +182,14 @@
                                     <span class="override--nodeTable_status" ng-style="{'background' : node.rowPodsColor}"></span>
                                 </td>
                                 <td>Node:
-                                    <span ng-bind="node.name" />
+                                    <span ng-bind="node.name"></span>
                                     <span>
                                         <a href="{{ctrl.getNodeDashboardLink(node)}}" target="_blank" style="color: #fff">
-                                            <i class="fa fa-eye"/>
+                                            <i class="fa fa-eye"></i>
                                         </a>
                                     </span>
                                 </td>
-                                <td>Pods count used: <span ng-bind="node.podsPercentUsed" /></td>
+                                <td>Pods count used: <span ng-bind="node.podsPercentUsed"></span></td>
                             </tr>
 
                             <!--fail pods-->
@@ -202,7 +202,7 @@
                                     <span ng-bind="pod.data.metadata.namespace + ' / ' +pod.name"></span>
                                     <span>
                                         <a href="{{ctrl.getPodDashboardLink(pod)}}" target="_blank" style="color: #fff">
-                                            <i class="fa fa-eye"/>
+                                            <i class="fa fa-eye"></i>
                                         </a>
                                     </span>
                                 </td>
