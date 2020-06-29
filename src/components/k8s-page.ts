@@ -88,58 +88,43 @@ export  class K8sPage {
         document.title = 'DevOpsProdigy KubeGraf';
     }
 
-    async __getServerInfo(nodeIp: string) {
-        let job = "kubernetes-service-endpoints";
-        let instance = `${nodeIp}:.+`;
+    async __getServerInfo(nodeIp: string, nodeName: string) {
+        let instance = `${nodeName}|${nodeIp}:.+`;
 
-        const nodeInfo = await this.prometheusDS.query({
-            expr: `node_uname_info{instance=~"${nodeIp}:.+"}`,
-            legend: 'job'
-        });
-
-        if(nodeInfo[0] && nodeInfo[0].target){
-            const jobMatch = nodeInfo[0].target.match(/job="(.+?)"/);
-            if (jobMatch[1]) {
-                job = jobMatch[1];
-            }
-            const instanceMatch = nodeInfo[0].target.match(/instance="(.+?)"/);
-            if (instanceMatch[1]) {
-                instance = instanceMatch[1];
-            }
-        }
-
-        const cpuCores = await this.prometheusDS.query({
-            expr: `count(count(node_cpu_seconds_total{instance=~"${instance}",job=~"${job}"}) by (cpu))`,
-            legend: 'instance'
-        });
-        const ramTotal = await this.prometheusDS.query({
-            expr: `node_memory_MemTotal_bytes{instance=~"${instance}",job=~"${job}"}`,
-            legend: 'instance'
-        });
-        const swapTotal = await this.prometheusDS.query({
-            expr: `node_memory_SwapTotal_bytes{instance=~"${instance}",job=~"${job}"}`,
-            legend: 'instance'
-        });
-        const rootFSTotal = await this.prometheusDS.query({
-            expr: `node_filesystem_size_bytes{instance=~"${instance}",job=~"${job}",mountpoint="/",fstype!="rootfs"}`,
-            legend: 'instance'
-        });
-        const sysLoad = await this.prometheusDS.query({
-            expr: `node_load1{instance=~"${instance}",job=~"${job}"}`,
-            legend: 'instance'
-        });
-        const uptime = await this.prometheusDS.query({
-            expr: `node_time_seconds{instance=~"${instance}",job=~"${job}"} - node_boot_time_seconds{instance=~"${instance}",job=~"${job}"}`,
-            legend: 'instance'
-        });
+        const result = await Promise.all([
+            this.prometheusDS.query({
+                expr: `count(count(node_cpu_seconds_total{instance=~"${instance}"}) by (cpu))`,
+                legend: 'instance'
+            }), //cpuCores
+            this.prometheusDS.query({
+                expr: `node_memory_MemTotal_bytes{instance=~"${instance}"}`,
+                legend: 'instance'
+            }), //ramTotal
+            this.prometheusDS.query({
+                expr: `node_memory_SwapTotal_bytes{instance=~"${instance}"}`,
+                legend: 'instance'
+            }), //swapTotal
+            this.prometheusDS.query({
+                expr: `node_filesystem_size_bytes{instance=~"${instance}",mountpoint="/",fstype!="rootfs"}`,
+                legend: 'instance'
+            }), //rootFSTotal
+            this.prometheusDS.query({
+                expr: `node_load1{instance=~"${instance}"}`,
+                legend: 'instance'
+            }), //sysLoad
+            this.prometheusDS.query({
+                expr: `node_time_seconds{instance=~"${instance}"} - node_boot_time_seconds{instance=~"${instance}"}`,
+                legend: 'instance'
+            }) //uptime
+        ])
 
         return {
-            cpuCores: cpuCores[0] && cpuCores[0].datapoint,
-            ramTotal: ramTotal[0] && __convertToGB(ramTotal[0].datapoint),
-            swapTotal: swapTotal[0] && __convertToGB(swapTotal[0].datapoint),
-            rootFSTotal: rootFSTotal[0] && __convertToGB(rootFSTotal[0].datapoint),
-            sysLoad: sysLoad[0] && sysLoad[0].datapoint,
-            uptime: uptime[0] && __convertToHours(uptime[0].datapoint * 1000)
+            cpuCores: result[0][0] && result[0][0].datapoint,
+            ramTotal: result[1][0] && __convertToGB(result[1][0].datapoint),
+            swapTotal: result[2][0] && __convertToGB(result[2][0].datapoint),
+            rootFSTotal: result[3][0] && __convertToGB(result[3][0].datapoint),
+            sysLoad: result[4][0] && result[4][0].datapoint,
+            uptime: result[5][0] && __convertToHours(result[5][0].datapoint * 1000)
         }
     }
 
