@@ -1,6 +1,8 @@
 ///<reference path="../../../node_modules/grafana-sdk-mocks/app/headers/common.d.ts" />
 import appEvents from "grafana/app/core/app_events";
 import { __getGrafanaVersion } from "../../common/helpers";
+import { TYPE_KUBEGRAF_PLUGIN } from "../../common/constants";
+import { ClusterPermissions } from "../../common/cluster-permissions";
 
 export class ClustersList {
     isReady: boolean;
@@ -8,6 +10,7 @@ export class ClustersList {
     $scope: any;
     isAdmin: boolean;
     version: number;
+    clusterPermissions: ClusterPermissions;
 
     static templateUrl = 'components/clusters-list/clusters-list.html';
 
@@ -16,6 +19,8 @@ export class ClustersList {
         this.$scope = $scope;
         this.version = __getGrafanaVersion($window);
         document.title = 'DevOpsProdigy KubeGraf';
+        this.clusterPermissions = new ClusterPermissions(backendSrv, contextSrv);
+        this.isAdmin = this.clusterPermissions.isAdmin();
 
         try {
             this.getClusters();
@@ -24,27 +29,23 @@ export class ClustersList {
         } finally {
             this.isReady = true;
         }
-
-        try {
-            this.isAdmin = this.contextSrv.hasRole('Admin');
-        } catch (e) {
-            console.error(e);
-            this.isAdmin = false;
-        }
     }
 
     getClusters() {
         const list = this.datasourceSrv.getAll();
-        const type = 'devopsprodidy-kubegraf-datasource';
         if (Array.isArray(list)) {
             this.clusters = list.filter(item => {
-                return item.type === type
+                return item.type === TYPE_KUBEGRAF_PLUGIN
+            }).filter(item => {
+                return item.jsonData ? this.clusterPermissions.checkPermission(item.jsonData.permissions) : false
             });
         } else {
             let clusters = [];
             Object.keys(list).forEach(key => {
-                if (list[key].type === type) {
-                    clusters.push(list[key])
+                if (list[key].type === TYPE_KUBEGRAF_PLUGIN) {
+                    if (list[key].jsonData ? this.clusterPermissions.checkPermission(list[key].jsonData.permissions) : false) {
+                        clusters.push(list[key])
+                    }
                 }
             });
             this.clusters = clusters;

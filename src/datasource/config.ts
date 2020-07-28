@@ -1,4 +1,4 @@
-import {TYPE_PROMETHEUS} from "../common/constants";
+import { TYPE_KUBEGRAF_PLUGIN, TYPE_PROMETHEUS } from "../common/constants";
 
 export class DOPK8SConfig{
     static templateUrl = 'datasource/partials/config.html';
@@ -12,22 +12,26 @@ export class DOPK8SConfig{
     constructor($scope, $injector, private backendSrv, private $window) {
         this.$scope = $scope;
         this.pageReady = false;
-        if(this.current.id){
-            if(!(this.current.jsonData.prom_name))
+        if (this.current.id) {
+            if (!(this.current.jsonData.prom_name))
                 this.current.jsonData.prom_name = '';
 
-            if(!(this.current.jsonData.refresh_pods_rate))
+            if (!(this.current.jsonData.refresh_pods_rate))
                 this.current.jsonData.refresh_pods_rate = '60';
 
             this.current.jsonData.cluster_url = this.current.url;
-        }else{
+        } else {
             this.current = {
-                type: 'devopsprodidy-kubegraf-datasource',
+                type: TYPE_KUBEGRAF_PLUGIN,
                 access: 'proxy',
                 jsonData: {
                     refresh_pods_rate: '60',
                     access_via_token: false,
-                    prom_name: ''
+                    prom_name: '',
+                    permissions: [
+                        {role: "Edit", type: "Editor", user: null},
+                        {role: "View", type: "Viewer", user: null}
+                    ]
                 }
 
             };

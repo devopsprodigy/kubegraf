@@ -17953,6 +17953,196 @@ module.exports = function(module) {
 
 /***/ }),
 
+/***/ "./common/cluster-permissions.ts":
+/*!***************************************!*\
+  !*** ./common/cluster-permissions.ts ***!
+  \***************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.ClusterPermissions = undefined;
+
+var _tslib = __webpack_require__(/*! tslib */ "../node_modules/tslib/tslib.es6.js");
+
+var _app_events = __webpack_require__(/*! grafana/app/core/app_events */ "grafana/app/core/app_events");
+
+var _app_events2 = _interopRequireDefault(_app_events);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var ClusterPermissions =
+/** @class */
+function () {
+  function ClusterPermissions(backendSrv, contextSrv) {
+    var _this = this;
+
+    this.backendSrv = backendSrv;
+    this.contextSrv = contextSrv;
+    this.userTeams = null;
+    this.getUserTeams().then(function (res) {
+      _this.userTeams = res;
+    });
+  }
+
+  ClusterPermissions.prototype.checkPermission = function (permissions) {
+    var _this = this;
+
+    if (typeof permissions === "undefined") {
+      return true;
+    }
+
+    if (this.contextSrv.isGrafanaAdmin || this.contextSrv.hasRole('Admin')) {
+      return true;
+    }
+
+    return permissions.findIndex(function (permission) {
+      return (0, _tslib.__awaiter)(_this, void 0, void 0, function () {
+        var _a;
+
+        return (0, _tslib.__generator)(this, function (_b) {
+          switch (_b.label) {
+            case 0:
+              if (this.contextSrv.hasRole('Editor') && permission.type === "Editor") {
+                return [2
+                /*return*/
+                , true];
+              }
+
+              if (this.contextSrv.hasRole('Viewer') && permission.type === "Viewer") {
+                return [2
+                /*return*/
+                , true];
+              } // @ts-ignore
+
+
+              if (permission.type === "User" && permission.user.id === this.contextSrv.user.id) {
+                return [2
+                /*return*/
+                , true];
+              }
+
+              if (!(permission.type === "Team")) return [3
+              /*break*/
+              , 3];
+              if (!(this.userTeams === null)) return [3
+              /*break*/
+              , 2];
+              _a = this;
+              return [4
+              /*yield*/
+              , this.getUserTeams()];
+
+            case 1:
+              _a.userTeams = _b.sent();
+              _b.label = 2;
+
+            case 2:
+              if (this.userTeams.findIndex(function (team) {
+                return permission.user.id === team.id;
+              }) > -1) {
+                return [2
+                /*return*/
+                , true];
+              }
+
+              _b.label = 3;
+
+            case 3:
+              return [2
+              /*return*/
+              , false];
+          }
+        });
+      });
+    }) > -1;
+  };
+
+  ClusterPermissions.prototype.getUserTeams = function (force) {
+    if (force === void 0) {
+      force = false;
+    }
+
+    return (0, _tslib.__awaiter)(this, void 0, void 0, function () {
+      var teams;
+      return (0, _tslib.__generator)(this, function (_a) {
+        switch (_a.label) {
+          case 0:
+            if (!(this.userTeams === null && force === false)) return [3
+            /*break*/
+            , 2];
+            return [4
+            /*yield*/
+            , this.backendSrv.get('/api/user/teams')];
+
+          case 1:
+            teams = _a.sent();
+
+            if (Array.isArray(teams)) {
+              return [2
+              /*return*/
+              , teams];
+            }
+
+            _app_events2.default.emit('alert-error', ["Teams not received"]);
+
+            return [2
+            /*return*/
+            , []];
+
+          case 2:
+            return [2
+            /*return*/
+            , this.userTeams];
+        }
+      });
+    });
+  };
+
+  ClusterPermissions.prototype.isAdmin = function () {
+    var isAdmin = false;
+
+    try {
+      isAdmin = this.contextSrv.hasRole('Admin');
+    } catch (e) {
+      console.error(e);
+    }
+
+    return isAdmin;
+  };
+
+  ClusterPermissions.prototype.checkPermissionByClusterName = function (clusterName) {
+    var _this = this;
+
+    var datasources = window.grafanaBootData.settings.datasources;
+
+    if (datasources) {
+      var clusters = Object.keys(datasources).filter(function (key) {
+        return datasources[key].name === clusterName;
+      }).filter(function (key) {
+        return datasources[key].jsonData ? _this.checkPermission(datasources[key].jsonData.permissions) : false;
+      });
+
+      if (clusters.length > 0) {
+        return true;
+      }
+    }
+
+    return false;
+  };
+
+  return ClusterPermissions;
+}();
+
+exports.ClusterPermissions = ClusterPermissions;
+
+/***/ }),
+
 /***/ "./common/constants.ts":
 /*!*****************************!*\
   !*** ./common/constants.ts ***!
@@ -19764,12 +19954,21 @@ function () {
 
           case 2:
             this.cluster = {
-              type: 'devopsprodidy-kubegraf-datasource',
+              type: _constants.TYPE_KUBEGRAF_PLUGIN,
               access: 'proxy',
               jsonData: {
                 refresh_pods_rate: '60',
                 access_via_token: false,
-                prom_name: ''
+                prom_name: '',
+                permissions: [{
+                  role: "Edit",
+                  type: "Editor",
+                  user: null
+                }, {
+                  role: "View",
+                  type: "Viewer",
+                  user: null
+                }]
               }
             };
             document.title = 'DevOpsProdigy KubeGraf | New cluster';
@@ -20242,6 +20441,10 @@ var _app_events2 = _interopRequireDefault(_app_events);
 
 var _helpers = __webpack_require__(/*! ../../common/helpers */ "./common/helpers.ts");
 
+var _constants = __webpack_require__(/*! ../../common/constants */ "./common/constants.ts");
+
+var _clusterPermissions = __webpack_require__(/*! ../../common/cluster-permissions */ "./common/cluster-permissions.ts");
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 ///<reference path="../../../node_modules/grafana-sdk-mocks/app/headers/common.d.ts" />
@@ -20258,6 +20461,8 @@ function () {
     this.$scope = $scope;
     this.version = (0, _helpers.__getGrafanaVersion)($window);
     document.title = 'DevOpsProdigy KubeGraf';
+    this.clusterPermissions = new _clusterPermissions.ClusterPermissions(backendSrv, contextSrv);
+    this.isAdmin = this.clusterPermissions.isAdmin();
 
     try {
       this.getClusters();
@@ -20266,28 +20471,26 @@ function () {
     } finally {
       this.isReady = true;
     }
-
-    try {
-      this.isAdmin = this.contextSrv.hasRole('Admin');
-    } catch (e) {
-      console.error(e);
-      this.isAdmin = false;
-    }
   }
 
   ClustersList.prototype.getClusters = function () {
+    var _this = this;
+
     var list = this.datasourceSrv.getAll();
-    var type = 'devopsprodidy-kubegraf-datasource';
 
     if (Array.isArray(list)) {
       this.clusters = list.filter(function (item) {
-        return item.type === type;
+        return item.type === _constants.TYPE_KUBEGRAF_PLUGIN;
+      }).filter(function (item) {
+        return item.jsonData ? _this.clusterPermissions.checkPermission(item.jsonData.permissions) : false;
       });
     } else {
       var clusters_1 = [];
       Object.keys(list).forEach(function (key) {
-        if (list[key].type === type) {
-          clusters_1.push(list[key]);
+        if (list[key].type === _constants.TYPE_KUBEGRAF_PLUGIN) {
+          if (list[key].jsonData ? _this.clusterPermissions.checkPermission(list[key].jsonData.permissions) : false) {
+            clusters_1.push(list[key]);
+          }
         }
       });
       this.clusters = clusters_1;
@@ -20377,6 +20580,8 @@ var _node = __webpack_require__(/*! ../common/types/node */ "./common/types/node
 
 var _helpers = __webpack_require__(/*! ../common/helpers */ "./common/helpers.ts");
 
+var _clusterPermissions = __webpack_require__(/*! ../common/cluster-permissions */ "./common/cluster-permissions.ts");
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 ///<reference path="../../node_modules/grafana-sdk-mocks/app/headers/common.d.ts" />
@@ -20413,13 +20618,8 @@ function () {
     this.datasourceSrv = datasourceSrv;
     this.timeout = timeout;
     this.orgId = $window.grafanaBootData && $window.grafanaBootData.user ? $window.grafanaBootData.user.orgId : 1;
-
-    try {
-      this.isAdmin = this.contextSrv.hasRole('Admin');
-    } catch (e) {
-      console.error(e);
-      this.isAdmin = false;
-    }
+    this.clusterPermissions = new _clusterPermissions.ClusterPermissions(backendSrv, contextSrv);
+    this.isAdmin = this.clusterPermissions.isAdmin();
 
     if (!("clusterName" in $location.search())) {
       _app_events2.default.emit('alert-error', ['Cluster not specified']);
@@ -21240,13 +21440,17 @@ function () {
     var _this = this;
 
     return this.datasourceSrv.get(this.location.search().clusterName).then(function (ds) {
-      _this.cluster = ds;
+      if (_this.clusterPermissions.checkPermissionByClusterName(_this.location.search().clusterName)) {
+        _this.cluster = ds;
 
-      _this.__setRefreshRate(_this.cluster.refreshRate);
+        _this.__setRefreshRate(_this.cluster.refreshRate);
 
-      _this.getPrometheusDS(_this.cluster.prometheus).then(function () {
-        _this.pageReady = true;
-      });
+        _this.getPrometheusDS(_this.cluster.prometheus).then(function () {
+          _this.pageReady = true;
+        });
+      } else {
+        _app_events2.default.emit('alert-error', ['Permission denied']);
+      }
     });
   };
 

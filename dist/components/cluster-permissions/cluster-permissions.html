@@ -6,9 +6,7 @@
     <div ng-show="ctrl.cluster.id" class="page-header_title">
       <h1 ng-bind="ctrl.cluster.name"></h1>
       <a ng-href="/plugins/devopsprodigy-kubegraf-app/page/cluster-config?clusterId={{ctrl.cluster.id}}"
-         class="btn btn-primary"
-         ng-disabled="ctrl.permissionFormOpen"
-         ng-click="ctrl.togglePermissionForm(true)">
+         class="btn btn-primary">
         Edit
       </a>
     </div>

@@ -86,6 +86,425 @@ define(["app/core/app_events"], function(__WEBPACK_EXTERNAL_MODULE_grafana_app_c
 /************************************************************************/
 /******/ ({
 
+/***/ "../node_modules/tslib/tslib.es6.js":
+/*!******************************************!*\
+  !*** ../node_modules/tslib/tslib.es6.js ***!
+  \******************************************/
+/*! exports provided: __extends, __assign, __rest, __decorate, __param, __metadata, __awaiter, __generator, __exportStar, __values, __read, __spread, __spreadArrays, __await, __asyncGenerator, __asyncDelegator, __asyncValues, __makeTemplateObject, __importStar, __importDefault */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "__extends", function() { return __extends; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "__assign", function() { return __assign; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "__rest", function() { return __rest; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "__decorate", function() { return __decorate; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "__param", function() { return __param; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "__metadata", function() { return __metadata; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "__awaiter", function() { return __awaiter; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "__generator", function() { return __generator; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "__exportStar", function() { return __exportStar; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "__values", function() { return __values; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "__read", function() { return __read; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "__spread", function() { return __spread; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "__spreadArrays", function() { return __spreadArrays; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "__await", function() { return __await; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "__asyncGenerator", function() { return __asyncGenerator; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "__asyncDelegator", function() { return __asyncDelegator; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "__asyncValues", function() { return __asyncValues; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "__makeTemplateObject", function() { return __makeTemplateObject; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "__importStar", function() { return __importStar; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "__importDefault", function() { return __importDefault; });
+/*! *****************************************************************************
+Copyright (c) Microsoft Corporation. All rights reserved.
+Licensed under the Apache License, Version 2.0 (the "License"); you may not use
+this file except in compliance with the License. You may obtain a copy of the
+License at http://www.apache.org/licenses/LICENSE-2.0
+
+THIS CODE IS PROVIDED ON AN *AS IS* BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+KIND, EITHER EXPRESS OR IMPLIED, INCLUDING WITHOUT LIMITATION ANY IMPLIED
+WARRANTIES OR CONDITIONS OF TITLE, FITNESS FOR A PARTICULAR PURPOSE,
+MERCHANTABLITY OR NON-INFRINGEMENT.
+
+See the Apache Version 2.0 License for specific language governing permissions
+and limitations under the License.
+***************************************************************************** */
+/* global Reflect, Promise */
+
+var extendStatics = function(d, b) {
+    extendStatics = Object.setPrototypeOf ||
+        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+    return extendStatics(d, b);
+};
+
+function __extends(d, b) {
+    extendStatics(d, b);
+    function __() { this.constructor = d; }
+    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+}
+
+var __assign = function() {
+    __assign = Object.assign || function __assign(t) {
+        for (var s, i = 1, n = arguments.length; i < n; i++) {
+            s = arguments[i];
+            for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p)) t[p] = s[p];
+        }
+        return t;
+    }
+    return __assign.apply(this, arguments);
+}
+
+function __rest(s, e) {
+    var t = {};
+    for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p) && e.indexOf(p) < 0)
+        t[p] = s[p];
+    if (s != null && typeof Object.getOwnPropertySymbols === "function")
+        for (var i = 0, p = Object.getOwnPropertySymbols(s); i < p.length; i++) {
+            if (e.indexOf(p[i]) < 0 && Object.prototype.propertyIsEnumerable.call(s, p[i]))
+                t[p[i]] = s[p[i]];
+        }
+    return t;
+}
+
+function __decorate(decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+}
+
+function __param(paramIndex, decorator) {
+    return function (target, key) { decorator(target, key, paramIndex); }
+}
+
+function __metadata(metadataKey, metadataValue) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(metadataKey, metadataValue);
+}
+
+function __awaiter(thisArg, _arguments, P, generator) {
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : new P(function (resolve) { resolve(result.value); }).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+}
+
+function __generator(thisArg, body) {
+    var _ = { label: 0, sent: function() { if (t[0] & 1) throw t[1]; return t[1]; }, trys: [], ops: [] }, f, y, t, g;
+    return g = { next: verb(0), "throw": verb(1), "return": verb(2) }, typeof Symbol === "function" && (g[Symbol.iterator] = function() { return this; }), g;
+    function verb(n) { return function (v) { return step([n, v]); }; }
+    function step(op) {
+        if (f) throw new TypeError("Generator is already executing.");
+        while (_) try {
+            if (f = 1, y && (t = op[0] & 2 ? y["return"] : op[0] ? y["throw"] || ((t = y["return"]) && t.call(y), 0) : y.next) && !(t = t.call(y, op[1])).done) return t;
+            if (y = 0, t) op = [op[0] & 2, t.value];
+            switch (op[0]) {
+                case 0: case 1: t = op; break;
+                case 4: _.label++; return { value: op[1], done: false };
+                case 5: _.label++; y = op[1]; op = [0]; continue;
+                case 7: op = _.ops.pop(); _.trys.pop(); continue;
+                default:
+                    if (!(t = _.trys, t = t.length > 0 && t[t.length - 1]) && (op[0] === 6 || op[0] === 2)) { _ = 0; continue; }
+                    if (op[0] === 3 && (!t || (op[1] > t[0] && op[1] < t[3]))) { _.label = op[1]; break; }
+                    if (op[0] === 6 && _.label < t[1]) { _.label = t[1]; t = op; break; }
+                    if (t && _.label < t[2]) { _.label = t[2]; _.ops.push(op); break; }
+                    if (t[2]) _.ops.pop();
+                    _.trys.pop(); continue;
+            }
+            op = body.call(thisArg, _);
+        } catch (e) { op = [6, e]; y = 0; } finally { f = t = 0; }
+        if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
+    }
+}
+
+function __exportStar(m, exports) {
+    for (var p in m) if (!exports.hasOwnProperty(p)) exports[p] = m[p];
+}
+
+function __values(o) {
+    var m = typeof Symbol === "function" && o[Symbol.iterator], i = 0;
+    if (m) return m.call(o);
+    return {
+        next: function () {
+            if (o && i >= o.length) o = void 0;
+            return { value: o && o[i++], done: !o };
+        }
+    };
+}
+
+function __read(o, n) {
+    var m = typeof Symbol === "function" && o[Symbol.iterator];
+    if (!m) return o;
+    var i = m.call(o), r, ar = [], e;
+    try {
+        while ((n === void 0 || n-- > 0) && !(r = i.next()).done) ar.push(r.value);
+    }
+    catch (error) { e = { error: error }; }
+    finally {
+        try {
+            if (r && !r.done && (m = i["return"])) m.call(i);
+        }
+        finally { if (e) throw e.error; }
+    }
+    return ar;
+}
+
+function __spread() {
+    for (var ar = [], i = 0; i < arguments.length; i++)
+        ar = ar.concat(__read(arguments[i]));
+    return ar;
+}
+
+function __spreadArrays() {
+    for (var s = 0, i = 0, il = arguments.length; i < il; i++) s += arguments[i].length;
+    for (var r = Array(s), k = 0, i = 0; i < il; i++)
+        for (var a = arguments[i], j = 0, jl = a.length; j < jl; j++, k++)
+            r[k] = a[j];
+    return r;
+};
+
+function __await(v) {
+    return this instanceof __await ? (this.v = v, this) : new __await(v);
+}
+
+function __asyncGenerator(thisArg, _arguments, generator) {
+    if (!Symbol.asyncIterator) throw new TypeError("Symbol.asyncIterator is not defined.");
+    var g = generator.apply(thisArg, _arguments || []), i, q = [];
+    return i = {}, verb("next"), verb("throw"), verb("return"), i[Symbol.asyncIterator] = function () { return this; }, i;
+    function verb(n) { if (g[n]) i[n] = function (v) { return new Promise(function (a, b) { q.push([n, v, a, b]) > 1 || resume(n, v); }); }; }
+    function resume(n, v) { try { step(g[n](v)); } catch (e) { settle(q[0][3], e); } }
+    function step(r) { r.value instanceof __await ? Promise.resolve(r.value.v).then(fulfill, reject) : settle(q[0][2], r); }
+    function fulfill(value) { resume("next", value); }
+    function reject(value) { resume("throw", value); }
+    function settle(f, v) { if (f(v), q.shift(), q.length) resume(q[0][0], q[0][1]); }
+}
+
+function __asyncDelegator(o) {
+    var i, p;
+    return i = {}, verb("next"), verb("throw", function (e) { throw e; }), verb("return"), i[Symbol.iterator] = function () { return this; }, i;
+    function verb(n, f) { i[n] = o[n] ? function (v) { return (p = !p) ? { value: __await(o[n](v)), done: n === "return" } : f ? f(v) : v; } : f; }
+}
+
+function __asyncValues(o) {
+    if (!Symbol.asyncIterator) throw new TypeError("Symbol.asyncIterator is not defined.");
+    var m = o[Symbol.asyncIterator], i;
+    return m ? m.call(o) : (o = typeof __values === "function" ? __values(o) : o[Symbol.iterator](), i = {}, verb("next"), verb("throw"), verb("return"), i[Symbol.asyncIterator] = function () { return this; }, i);
+    function verb(n) { i[n] = o[n] && function (v) { return new Promise(function (resolve, reject) { v = o[n](v), settle(resolve, reject, v.done, v.value); }); }; }
+    function settle(resolve, reject, d, v) { Promise.resolve(v).then(function(v) { resolve({ value: v, done: d }); }, reject); }
+}
+
+function __makeTemplateObject(cooked, raw) {
+    if (Object.defineProperty) { Object.defineProperty(cooked, "raw", { value: raw }); } else { cooked.raw = raw; }
+    return cooked;
+};
+
+function __importStar(mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (Object.hasOwnProperty.call(mod, k)) result[k] = mod[k];
+    result.default = mod;
+    return result;
+}
+
+function __importDefault(mod) {
+    return (mod && mod.__esModule) ? mod : { default: mod };
+}
+
+
+/***/ }),
+
+/***/ "./common/cluster-permissions.ts":
+/*!***************************************!*\
+  !*** ./common/cluster-permissions.ts ***!
+  \***************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.ClusterPermissions = undefined;
+
+var _tslib = __webpack_require__(/*! tslib */ "../node_modules/tslib/tslib.es6.js");
+
+var _app_events = __webpack_require__(/*! grafana/app/core/app_events */ "grafana/app/core/app_events");
+
+var _app_events2 = _interopRequireDefault(_app_events);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var ClusterPermissions =
+/** @class */
+function () {
+  function ClusterPermissions(backendSrv, contextSrv) {
+    var _this = this;
+
+    this.backendSrv = backendSrv;
+    this.contextSrv = contextSrv;
+    this.userTeams = null;
+    this.getUserTeams().then(function (res) {
+      _this.userTeams = res;
+    });
+  }
+
+  ClusterPermissions.prototype.checkPermission = function (permissions) {
+    var _this = this;
+
+    if (typeof permissions === "undefined") {
+      return true;
+    }
+
+    if (this.contextSrv.isGrafanaAdmin || this.contextSrv.hasRole('Admin')) {
+      return true;
+    }
+
+    return permissions.findIndex(function (permission) {
+      return (0, _tslib.__awaiter)(_this, void 0, void 0, function () {
+        var _a;
+
+        return (0, _tslib.__generator)(this, function (_b) {
+          switch (_b.label) {
+            case 0:
+              if (this.contextSrv.hasRole('Editor') && permission.type === "Editor") {
+                return [2
+                /*return*/
+                , true];
+              }
+
+              if (this.contextSrv.hasRole('Viewer') && permission.type === "Viewer") {
+                return [2
+                /*return*/
+                , true];
+              } // @ts-ignore
+
+
+              if (permission.type === "User" && permission.user.id === this.contextSrv.user.id) {
+                return [2
+                /*return*/
+                , true];
+              }
+
+              if (!(permission.type === "Team")) return [3
+              /*break*/
+              , 3];
+              if (!(this.userTeams === null)) return [3
+              /*break*/
+              , 2];
+              _a = this;
+              return [4
+              /*yield*/
+              , this.getUserTeams()];
+
+            case 1:
+              _a.userTeams = _b.sent();
+              _b.label = 2;
+
+            case 2:
+              if (this.userTeams.findIndex(function (team) {
+                return permission.user.id === team.id;
+              }) > -1) {
+                return [2
+                /*return*/
+                , true];
+              }
+
+              _b.label = 3;
+
+            case 3:
+              return [2
+              /*return*/
+              , false];
+          }
+        });
+      });
+    }) > -1;
+  };
+
+  ClusterPermissions.prototype.getUserTeams = function (force) {
+    if (force === void 0) {
+      force = false;
+    }
+
+    return (0, _tslib.__awaiter)(this, void 0, void 0, function () {
+      var teams;
+      return (0, _tslib.__generator)(this, function (_a) {
+        switch (_a.label) {
+          case 0:
+            if (!(this.userTeams === null && force === false)) return [3
+            /*break*/
+            , 2];
+            return [4
+            /*yield*/
+            , this.backendSrv.get('/api/user/teams')];
+
+          case 1:
+            teams = _a.sent();
+
+            if (Array.isArray(teams)) {
+              return [2
+              /*return*/
+              , teams];
+            }
+
+            _app_events2.default.emit('alert-error', ["Teams not received"]);
+
+            return [2
+            /*return*/
+            , []];
+
+          case 2:
+            return [2
+            /*return*/
+            , this.userTeams];
+        }
+      });
+    });
+  };
+
+  ClusterPermissions.prototype.isAdmin = function () {
+    var isAdmin = false;
+
+    try {
+      isAdmin = this.contextSrv.hasRole('Admin');
+    } catch (e) {
+      console.error(e);
+    }
+
+    return isAdmin;
+  };
+
+  ClusterPermissions.prototype.checkPermissionByClusterName = function (clusterName) {
+    var _this = this;
+
+    var datasources = window.grafanaBootData.settings.datasources;
+
+    if (datasources) {
+      var clusters = Object.keys(datasources).filter(function (key) {
+        return datasources[key].name === clusterName;
+      }).filter(function (key) {
+        return datasources[key].jsonData ? _this.checkPermission(datasources[key].jsonData.permissions) : false;
+      });
+
+      if (clusters.length > 0) {
+        return true;
+      }
+    }
+
+    return false;
+  };
+
+  return ClusterPermissions;
+}();
+
+exports.ClusterPermissions = ClusterPermissions;
+
+/***/ }),
+
 /***/ "./common/constants.ts":
 /*!*****************************!*\
   !*** ./common/constants.ts ***!
@@ -156,12 +575,21 @@ function () {
       this.current.jsonData.cluster_url = this.current.url;
     } else {
       this.current = {
-        type: 'devopsprodidy-kubegraf-datasource',
+        type: _constants.TYPE_KUBEGRAF_PLUGIN,
         access: 'proxy',
         jsonData: {
           refresh_pods_rate: '60',
           access_via_token: false,
-          prom_name: ''
+          prom_name: '',
+          permissions: [{
+            role: "Edit",
+            type: "Editor",
+            user: null
+          }, {
+            role: "View",
+            type: "Viewer",
+            user: null
+          }]
         }
       };
     }
@@ -241,6 +669,8 @@ var _app_events2 = _interopRequireDefault(_app_events);
 
 var _constants = __webpack_require__(/*! ../common/constants */ "./common/constants.ts");
 
+var _clusterPermissions = __webpack_require__(/*! ../common/cluster-permissions */ "./common/cluster-permissions.ts");
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 ///<reference path="../../node_modules/grafana-sdk-mocks/app/headers/common.d.ts" />
@@ -252,6 +682,7 @@ function () {
     this.templateSrv = templateSrv;
     this.contextSrv = contextSrv;
     this.$window = $window;
+    this.clusterPermissions = new _clusterPermissions.ClusterPermissions(backendSrv, contextSrv);
     this.name = instanceSettings.name;
     this.url = instanceSettings.url;
     this.id = instanceSettings.id;
@@ -264,9 +695,6 @@ function () {
     this.accessViaToken = instanceSettings.jsonData.access_via_token;
     this.$window = $window;
     this.constextSrv = contextSrv;
-    var teams = backendSrv.get('/api/user/teams').then(function (res) {
-      console.log('team', res);
-    });
   }
 
   DOPK8SDatasource.prototype.testDatasource = function (silent) {
@@ -772,37 +1200,6 @@ function () {
     });
   };
 
-  DOPK8SDatasource.prototype.checkPermission = function (permissions) {
-    var _this = this;
-
-    console.log(this.contextSrv);
-
-    if (this.contextSrv.isGrafanaAdmin || this.contextSrv.hasRole('Admin')) {
-      return true;
-    }
-
-    return permissions.findIndex(function (permission) {
-      if (_this.contextSrv.hasRole('Editor') && permission.type === "Editor") {
-        return true;
-      }
-
-      if (_this.contextSrv.hasRole('Viewer') && permission.type === "Viewer") {
-        return true;
-      } // @ts-ignore
-
-
-      if (permission.type === "User" && permission.user.id === _this.contextSrv.user.id) {
-        return true;
-      }
-
-      if (permission.type === "Team") {
-        return false;
-      }
-
-      return false;
-    }) > -1;
-  };
-
   DOPK8SDatasource.prototype.getClusters = function () {
     var _this = this;
 
@@ -811,12 +1208,12 @@ function () {
       if (datasources) {
         var clusters = Object.keys(datasources).filter(function (key) {
           return datasources[key].type === _constants.TYPE_KUBEGRAF_PLUGIN;
+        }).filter(function (key) {
+          return datasources[key].jsonData ? _this.clusterPermissions.checkPermission(datasources[key].jsonData.permissions) : false;
         }).map(function (key) {
           return datasources[key];
         });
-        resolve(clusters.filter(function (cluster) {
-          return cluster.jsonData.permissions ? _this.checkPermission(cluster.jsonData.permissions) : true;
-        }));
+        resolve(clusters);
       } else {
         reject('Datasources not found');
       }

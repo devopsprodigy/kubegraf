@@ -17,6 +17,7 @@ import {Daemonset} from "../common/types/daemonset";
 import {Node} from "../common/types/node";
 import {__convertToGB, __convertToMicro, __convertToHours, __roundCpu} from "../common/helpers";
 import {BaseModel} from '../common/types/traits/baseModel';
+import { ClusterPermissions } from "../common/cluster-permissions";
 
 const REFRESH_RATE_DEFAULT = 60000;
 
@@ -53,6 +54,7 @@ export  class K8sPage {
     componentsError: Boolean|Error = false;
     orgId: number = 1;
     showMenu: boolean = false;
+    clusterPermissions: ClusterPermissions;
     updatePods(pods: Array<Pod>) {};
 
     constructor(
@@ -74,17 +76,15 @@ export  class K8sPage {
         this.datasourceSrv = datasourceSrv;
         this.timeout = timeout;
         this.orgId = ($window.grafanaBootData && $window.grafanaBootData.user) ? $window.grafanaBootData.user.orgId : 1;
-        try{
-            this.isAdmin = this.contextSrv.hasRole('Admin');
-        }catch (e) {
-            console.error(e);
-            this.isAdmin = false;
-        }
-        if( ! ("clusterName" in $location.search())){
-            appEvents.emit('alert-error', ['Cluster not specified']);
 
+        this.clusterPermissions = new ClusterPermissions(backendSrv, contextSrv);
+        this.isAdmin = this.clusterPermissions.isAdmin();
+
+        if(!("clusterName" in $location.search())){
+            appEvents.emit('alert-error', ['Cluster not specified']);
             return;
         }
+
         document.title = 'DevOpsProdigy KubeGraf';
     }
 
@@ -767,12 +767,16 @@ export  class K8sPage {
     __prepareDS(){
         return this.datasourceSrv.get(this.location.search().clusterName)
             .then(ds => {
-                this.cluster = ds;
-                this.__setRefreshRate(this.cluster.refreshRate);
-                this.getPrometheusDS(this.cluster.prometheus)
-                    .then(() => {
-                        this.pageReady = true;
-                    })
+                if(this.clusterPermissions.checkPermissionByClusterName(this.location.search().clusterName)) {
+                    this.cluster = ds;
+                    this.__setRefreshRate(this.cluster.refreshRate);
+                    this.getPrometheusDS(this.cluster.prometheus)
+                        .then(() => {
+                            this.pageReady = true;
+                        })
+                } else {
+                    appEvents.emit('alert-error', ['Permission denied']);
+                }
             })
     }
 
