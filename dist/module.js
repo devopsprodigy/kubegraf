@@ -18830,7 +18830,7 @@ function (_super) {
         cpu = parseInt(cpu) / 1000;
       }
 
-      return (0, _helpers.__roundCpu)(this.metrics.cpuUsed) + ' / ' + this.data.status.allocatable.cpu + ' ( ' + (0, _helpers.__percentUsed)(this.metrics.cpuUsed, cpu) + ' )';
+      return (0, _helpers.__roundCpu)(this.metrics.cpuUsed) + ' / ' + cpu + ' ( ' + (0, _helpers.__percentUsed)(this.metrics.cpuUsed, cpu) + ' )';
     },
     enumerable: true,
     configurable: true
@@ -18843,7 +18843,7 @@ function (_super) {
         cpu = parseInt(cpu) / 1000;
       }
 
-      return (0, _helpers.__roundCpu)(this.metrics.cpuRequested) + ' / ' + this.data.status.allocatable.cpu + ' ( ' + (0, _helpers.__percentUsed)(this.metrics.cpuRequested, cpu) + ' )';
+      return (0, _helpers.__roundCpu)(this.metrics.cpuRequested) + ' / ' + cpu + ' ( ' + (0, _helpers.__percentUsed)(this.metrics.cpuRequested, cpu) + ' )';
     },
     enumerable: true,
     configurable: true

@@ -185,18 +185,18 @@ export class Node extends BaseModel {
 
     get cpuPercentUsed(){
         let cpu = this.data.status.allocatable.cpu;
-        if(cpu.indexOf('m') > -1){
+        if (cpu.indexOf('m') > -1) {
             cpu = parseInt(cpu)/1000;
         }
-        return __roundCpu(this.metrics.cpuUsed) + ' / ' + this.data.status.allocatable.cpu + ' ( '+ __percentUsed(this.metrics.cpuUsed, cpu) + ' )';
+        return __roundCpu(this.metrics.cpuUsed) + ' / ' + cpu + ' ( '+ __percentUsed(this.metrics.cpuUsed, cpu) + ' )';
     }
 
     get cpuPercentRequested(){
         let cpu = this.data.status.allocatable.cpu;
-        if(cpu.indexOf('m') > -1){
+        if (cpu.indexOf('m') > -1){
             cpu = parseInt(cpu)/1000;
         }
-        return __roundCpu(this.metrics.cpuRequested) + ' / ' + this.data.status.allocatable.cpu + ' ( '+ __percentUsed(this.metrics.cpuRequested, cpu) + ' )';
+        return __roundCpu(this.metrics.cpuRequested) + ' / ' + cpu + ' ( '+ __percentUsed(this.metrics.cpuRequested, cpu) + ' )';
     }
 
     get memoryPercentUsed(){
