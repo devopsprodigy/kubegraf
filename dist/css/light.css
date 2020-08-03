@@ -134,7 +134,7 @@
           max-width: 700px; }
       .page-container--override .page-body--override .overview-panel_btn {
         display: flex;
-        min-width: 313px;
+        min-width: 325px;
         justify-content: flex-end; }
         .page-container--override .page-body--override .overview-panel_btn span {
           margin: 0 10px; }
@@ -229,15 +229,18 @@
       margin-bottom: 10px;
       background: #212124;
       border-radius: 3px; }
+      .page-container--override .page-body--override .warning-panel th > span {
+        line-height: 33px; }
       .page-container--override .page-body--override .warning-panel_btn {
         display: flex;
         justify-content: flex-end; }
-      .page-container--override .page-body--override .warning-panel th:last-child {
-        text-align: end; }
       .page-container--override .page-body--override .warning-panel .btn-grey {
         height: 36px;
         padding: 0 20px;
-        margin: 10px 16px; }
+        margin: 0;
+        float: right; }
+      .page-container--override .page-body--override .warning-panel .btn-danger {
+        float: right; }
   .page-container--override .card-item, .page-container--override .card-item:hover {
     background: #2f2f32; }
 
