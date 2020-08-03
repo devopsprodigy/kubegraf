@@ -268,7 +268,7 @@
     background: #141414;
     display: flex;
     align-items: center;
-    justify-content: center; }
+    align-self: center; }
   .checkbox input:checked + span {
     background: linear-gradient(0deg, #eb7b18, #d44a3a);
     border: none; }
@@ -279,10 +279,11 @@
   .checkbox label {
     font-size: 14px;
     line-height: 16px;
-    height: 18px;
+    min-height: 18px;
     padding-left: 24px;
     position: relative;
-    cursor: pointer; }
+    cursor: pointer;
+    align-self: center; }
 
 .chevron {
   display: block;

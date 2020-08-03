@@ -135,7 +135,7 @@
             max-width: 700px
         &_btn
           display: flex
-          min-width: 313px
+          min-width: 325px
           justify-content: flex-end
           span
             margin: 0 10px
@@ -269,7 +269,8 @@
     background: #141414
     display: flex
     align-items: center
-    justify-content: center
+    //justify-content: center
+    align-self: center
   input:checked+span
     background: linear-gradient(0deg,#eb7b18,#d44a3a)
     border: none
@@ -280,10 +281,11 @@
   label
     font-size: 14px
     line-height: 16px
-    height: 18px
+    min-height: 18px
     padding-left: 24px
     position: relative
     cursor: pointer
+    align-self: center
 .chevron
   display: block
   width: 14px
