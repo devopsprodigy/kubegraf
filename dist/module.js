@@ -18597,7 +18597,9 @@ function (_super) {
       memoryUsed: 'N/A',
       podsCount: 'N/A',
       cpuRequested: 'N/A',
-      memoryRequested: 'N/A'
+      memoryRequested: 'N/A',
+      cpuLimit: 'N/A',
+      memoryLimit: 'N/A'
     };
     _this.cpuIndicate = false;
     _this.memoryIndicate = false;
@@ -18605,6 +18607,8 @@ function (_super) {
     _this.cpuRequestedIndicate = false;
     _this.memoryRequestedIndicate = false;
     _this.podsRequestedIndicate = false;
+    _this.cpuLimitIndicate = false;
+    _this.memoryLimitIndicate = false;
 
     _this.nsListState();
 
@@ -18632,11 +18636,9 @@ function (_super) {
 
     if (state === undefined) {
       _store2.default.set(this.name + 'NsList', false);
-
-      return _store2.default.get(this.name + 'NsList');
-    } else {
-      return _store2.default.get(this.name + 'NsList');
     }
+
+    return _store2.default.get(this.name + 'NsList');
   };
 
   Object.defineProperty(Node.prototype, "status", {
@@ -18702,6 +18704,19 @@ function (_super) {
     enumerable: true,
     configurable: true
   });
+  Object.defineProperty(Node.prototype, "cpuLimitStatus", {
+    get: function get() {
+      var cpu = this.data.status.allocatable.cpu;
+
+      if (cpu.indexOf('m') > -1) {
+        cpu = parseInt(cpu) / 1000;
+      }
+
+      return this.__getStatusLimit(this.metrics.cpuLimit, cpu);
+    },
+    enumerable: true,
+    configurable: true
+  });
   Object.defineProperty(Node.prototype, "memoryStatus", {
     get: function get() {
       return this.__getStatus(this.metrics.memoryUsed, this.__getBytes(this.data.status.allocatable.memory));
@@ -18712,6 +18727,13 @@ function (_super) {
   Object.defineProperty(Node.prototype, "memoryStatusRequested", {
     get: function get() {
       return this.__getStatusRequested(this.metrics.memoryRequested, this.__getBytes(this.data.status.allocatable.memory));
+    },
+    enumerable: true,
+    configurable: true
+  });
+  Object.defineProperty(Node.prototype, "memoryLimitStatus", {
+    get: function get() {
+      return this.__getStatusLimit(this.metrics.memoryLimit, this.__getBytes(this.data.status.allocatable.memory));
     },
     enumerable: true,
     configurable: true
@@ -18781,6 +18803,13 @@ function (_super) {
     enumerable: true,
     configurable: true
   });
+  Object.defineProperty(Node.prototype, "memoryLimitFormatted", {
+    get: function get() {
+      return (0, _helpers.__convertToGB)(this.metrics.memoryLimit) + ' (' + (0, _helpers.__percentUsed)(this.metrics.memoryLimit, this.__getBytes(this.data.status.allocatable.memory)) + ')';
+    },
+    enumerable: true,
+    configurable: true
+  });
   Object.defineProperty(Node.prototype, "cpuUsedFormatted", {
     get: function get() {
       var cpu = this.data.status.allocatable.cpu;
@@ -18803,6 +18832,19 @@ function (_super) {
       }
 
       return (0, _helpers.__roundCpu)(this.metrics.cpuRequested) + ' (' + (0, _helpers.__percentUsed)(this.metrics.cpuRequested, cpu) + ')';
+    },
+    enumerable: true,
+    configurable: true
+  });
+  Object.defineProperty(Node.prototype, "cpuLimitFormatted", {
+    get: function get() {
+      var cpu = this.data.status.allocatable.cpu;
+
+      if (cpu.indexOf('m') > -1) {
+        cpu = parseInt(cpu) / 1000;
+      }
+
+      return (0, _helpers.__roundCpu)(this.metrics.cpuLimit) + ' (' + (0, _helpers.__percentUsed)(this.metrics.cpuLimit, cpu) + ')';
     },
     enumerable: true,
     configurable: true
@@ -18895,6 +18937,13 @@ function (_super) {
     enumerable: true,
     configurable: true
   });
+  Object.defineProperty(Node.prototype, "rowCpuLimitColor", {
+    get: function get() {
+      return this.__getColor(this.cpuLimitStatus);
+    },
+    enumerable: true,
+    configurable: true
+  });
   Object.defineProperty(Node.prototype, "rowMemoryColor", {
     get: function get() {
       return this.__getColor(this.memoryStatus);
@@ -18905,6 +18954,13 @@ function (_super) {
   Object.defineProperty(Node.prototype, "rowMemoryRequestedColor", {
     get: function get() {
       return this.__getColor(this.memoryStatusRequested);
+    },
+    enumerable: true,
+    configurable: true
+  });
+  Object.defineProperty(Node.prototype, "rowMemoryLimitColor", {
+    get: function get() {
+      return this.__getColor(this.memoryLimitStatus);
     },
     enumerable: true,
     configurable: true
@@ -18924,82 +18980,52 @@ function (_super) {
     configurable: true
   });
 
-  Node.prototype.parseMetrics = function (cpuReq, memoryReq, pods, cpuUsed, memoryUsed) {
-    var currentCpuStatus = this.cpuStatus;
-    var currentMemoryStatus = this.memoryStatus;
-    var currentPodsStatus = this.podsStatus;
-    var currentCpuStatusRequested = this.cpuStatusRequested;
-    var currentMemoryStatusRequested = this.memoryStatusRequested;
-    var currentPodsStatusRequested = this.podsStatusRequested;
+  Node.prototype.parseMetrics = function (cpuReq, memoryReq, pods, cpuUsed, memoryUsed, cpuLimit, memoryLimit) {
+    var currentStatus = {
+      "podsStatus": this.podsStatus,
+      "podsStatusRequested": this.podsStatusRequested,
+      "cpuStatus": this.cpuStatus,
+      "cpuStatusRequested": this.cpuStatusRequested,
+      "cpuLimitStatus": this.cpuLimitStatus,
+      "memoryStatus": this.memoryStatus,
+      "memoryStatusRequested": this.memoryStatusRequested,
+      "memoryLimitStatus": this.memoryLimitStatus
+    };
     this.metrics.cpuRequested = this.__getLastMetric(cpuReq);
     this.metrics.memoryRequested = this.__getLastMetric(memoryReq);
     this.metrics.podsCount = this.__getLastMetricByInstance(pods);
     this.metrics.cpuUsed = this.__getLastMetricByInstance(cpuUsed);
     this.metrics.memoryUsed = this.__getLastMetricByInstance(memoryUsed);
-    currentCpuStatus !== undefined && currentCpuStatus != this.cpuStatus && this.setCpuMetricIndicated();
-    currentMemoryStatus !== undefined && currentMemoryStatus != this.memoryStatus && this.setMemoryMetricIndicated();
-    currentPodsStatus !== undefined && currentPodsStatus != this.podsStatus && this.setPodsMetricIndicated();
-    currentCpuStatusRequested !== undefined && currentCpuStatusRequested != this.cpuStatusRequested && this.setCpuMetricIndicated(true);
-    currentMemoryStatusRequested !== undefined && currentMemoryStatusRequested != this.memoryStatusRequested && this.setMemoryMetricIndicated(true);
-    currentPodsStatusRequested !== undefined && currentPodsStatusRequested != this.podsStatusRequested && this.setPodsMetricIndicated(true);
-  };
+    this.metrics.cpuLimit = this.__getLastMetricByInstance(cpuLimit);
+    this.metrics.memoryLimit = this.__getLastMetricByInstance(memoryLimit);
 
-  Node.prototype.setCpuMetricIndicated = function (requested) {
-    var _this = this;
-
-    if (requested === void 0) {
-      requested = false;
-    }
-
-    if (requested) {
-      this.cpuRequestedIndicate = true;
-      setTimeout(function () {
-        _this.cpuRequestedIndicate = false;
-      }, 10000);
-    } else {
-      this.cpuIndicate = true;
-      setTimeout(function () {
-        _this.cpuIndicate = false;
-      }, 10000);
+    for (var type in currentStatus) {
+      if (currentStatus.hasOwnProperty(type) && this.hasOwnProperty(type)) {
+        if (currentStatus[type] !== undefined && currentStatus[type] != this[type]) {
+          this.setMetricIndicated(type);
+        }
+      }
     }
   };
 
-  Node.prototype.setMemoryMetricIndicated = function (requested) {
+  Node.prototype.setMetricIndicated = function (metricStatus) {
     var _this = this;
 
-    if (requested === void 0) {
-      requested = false;
-    }
+    var map = {
+      "podsStatus": "podsIndicate",
+      "podsStatusRequested": "podsRequestedIndicate",
+      "cpuStatus": "cpuIndicate",
+      "cpuStatusRequested": "cpuRequestedIndicate",
+      "cpuLimitStatus": "cpuLimitIndicate",
+      "memoryStatus": "memoryIndicate",
+      "memoryStatusRequested": "memoryRequestedIndicate",
+      "memoryLimitStatus": "memoryLimitIndicate"
+    };
 
-    if (requested) {
-      this.memoryRequestedIndicate = true;
+    if (map[metricStatus] && this.hasOwnProperty(map[metricStatus])) {
+      this[map[metricStatus]] = true;
       setTimeout(function () {
-        _this.memoryRequestedIndicate = false;
-      }, 10000);
-    } else {
-      this.memoryIndicate = true;
-      setTimeout(function () {
-        _this.memoryIndicate = false;
-      }, 10000);
-    }
-  };
-
-  Node.prototype.setPodsMetricIndicated = function (requested) {
-    var _this = this;
-
-    if (requested === void 0) {
-      requested = false;
-    }
-
-    if (requested) {
-      this.podsRequestedIndicate = true;
-      setTimeout(function () {
-        _this.podsRequestedIndicate = false;
-      }, 10000);
-    } else {
-      this.podsIndicate = true;
-      setTimeout(function () {
-        _this.podsIndicate = false;
+        _this[map[metricStatus]] = false;
       }, 10000);
     }
   };
@@ -19013,9 +19039,9 @@ function (_super) {
 
     if (datapoints !== undefined) {
       return datapoints.datapoint;
-    } else {
-      return 'N/A';
     }
+
+    return 'N/A';
   };
 
   Node.prototype.__getLastMetric = function (metrics) {
@@ -19027,9 +19053,9 @@ function (_super) {
 
     if (datapoints !== undefined) {
       return datapoints.datapoint;
-    } else {
-      return 'N/A';
     }
+
+    return 'N/A';
   };
 
   Node.prototype.__getBytes = function (str) {
@@ -19072,6 +19098,20 @@ function (_super) {
     } else {
       return;
     }
+  };
+
+  Node.prototype.__getStatusLimit = function (limit, allocatable) {
+    var diff = limit / allocatable;
+
+    if (diff <= 0.9) {
+      return _constants.SUCCESS;
+    } else if (diff > 0.9 && diff <= 1) {
+      return _constants.WARNING;
+    } else if (diff > 1) {
+      return _constants.ERROR;
+    }
+
+    return;
   };
 
   Node.prototype.__getColor = function (status) {
@@ -20260,9 +20300,13 @@ function () {
 
     _promises.push(this.__getMemoryMetricsUsed());
 
+    _promises.push(this.__getCpuLimitMetrics());
+
+    _promises.push(this.__getMemoryLimitMetrics());
+
     return this.$q.all(_promises).then(function (results) {
       _this.nodesMap.forEach(function (node) {
-        node.parseMetrics(results[0], results[1], results[2], results[3], results[4]);
+        node.parseMetrics(results[0], results[1], results[2], results[3], results[4], results[5], results[6]);
       });
 
       _this.timeout(function () {
@@ -20291,9 +20335,29 @@ function () {
     });
   };
 
+  K8sPage.prototype.__getCpuLimitMetrics = function () {
+    var promQuery = {
+      expr: 'sum(sum(kube_pod_container_resource_limits_cpu_cores) by (namespace, pod, node) * on (pod) group_left()  (sum(kube_pod_status_phase{phase="Running"}) by (pod, namespace) == 1)) by (node)',
+      legend: 'node'
+    };
+    return this.prometheusDS.query(promQuery).then(function (res) {
+      return res;
+    });
+  };
+
   K8sPage.prototype.__getMemoryMetricsRequested = function () {
     var promQuery = {
       expr: 'sum(sum(kube_pod_container_resource_requests_memory_bytes) by (namespace, pod, node) * on (pod) group_left()  (sum(kube_pod_status_phase{phase="Running"}) by (pod, namespace) == 1)) by (node)',
+      legend: "node"
+    };
+    return this.prometheusDS.query(promQuery).then(function (res) {
+      return res;
+    });
+  };
+
+  K8sPage.prototype.__getMemoryLimitMetrics = function () {
+    var promQuery = {
+      expr: 'sum(sum(kube_pod_container_resource_limits_memory_bytes) by (namespace, pod, node) * on (pod) group_left()  (sum(kube_pod_status_phase{phase="Running"}) by (pod, namespace) == 1)) by (node)',
       legend: "node"
     };
     return this.prometheusDS.query(promQuery).then(function (res) {

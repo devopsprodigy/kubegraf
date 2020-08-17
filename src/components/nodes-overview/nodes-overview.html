@@ -133,6 +133,12 @@
                                                 <td ng-bind="node.memoryRequestedFormatted" ng-style="{'background-color': node.rowMemoryRequestedColor}" ng-class="{'pulse': node.memoryRequestedIndicate}"></td>
                                             </tr>
                                             <tr>
+                                                <td>Limits</td>
+                                                <td></td>
+                                                <td ng-bind="node.cpuLimitFormatted" ng-style="{'background-color': node.rowCpuLimitColor}" ng-class="{'pulse': node.cpuLimitIndicate}"></td>
+                                                <td ng-bind="node.memoryLimitFormatted" ng-style="{'background-color': node.rowMemoryLimitColor}" ng-class="{'pulse': node.memory:limitIndicate}"></td>
+                                            </tr>
+                                            <tr>
                                                 <td>Allocatable</td>
                                                 <td ng-bind="node.data.status.allocatable.pods"></td>
                                                 <td ng-bind="node.cpuAllocatableFormatted"></td>

@@ -180,11 +180,13 @@ export  class K8sPage {
         _promises.push(this.__getPodsCountMetrics());
         _promises.push(this.__getCpuMetricsUsed());
         _promises.push(this.__getMemoryMetricsUsed());
+        _promises.push(this.__getCpuLimitMetrics());
+        _promises.push(this.__getMemoryLimitMetrics());
 
         return this.$q.all(_promises)
             .then((results) => {
                 this.nodesMap.forEach(node => {
-                    node.parseMetrics(results[0], results[1], results[2], results[3], results[4]);
+                    node.parseMetrics(results[0], results[1], results[2], results[3], results[4], results[5], results[6]);
                 });
 
                 this.timeout(() => {
@@ -212,9 +214,29 @@ export  class K8sPage {
             .then(res => res);
     }
 
+    __getCpuLimitMetrics(){
+        const promQuery = {
+            expr: 'sum(sum(kube_pod_container_resource_limits_cpu_cores) by (namespace, pod, node) * on (pod) group_left()  (sum(kube_pod_status_phase{phase="Running"}) by (pod, namespace) == 1)) by (node)',
+            legend: 'node'
+        };
+
+        return this.prometheusDS.query(promQuery)
+            .then(res => res);
+    }
+
     __getMemoryMetricsRequested(){
         const promQuery = {
             expr: 'sum(sum(kube_pod_container_resource_requests_memory_bytes) by (namespace, pod, node) * on (pod) group_left()  (sum(kube_pod_status_phase{phase="Running"}) by (pod, namespace) == 1)) by (node)',
+            legend: "node"
+        };
+
+        return this.prometheusDS.query(promQuery)
+            .then(res => res);
+    }
+
+    __getMemoryLimitMetrics(){
+        const promQuery = {
+            expr: 'sum(sum(kube_pod_container_resource_limits_memory_bytes) by (namespace, pod, node) * on (pod) group_left()  (sum(kube_pod_status_phase{phase="Running"}) by (pod, namespace) == 1)) by (node)',
             legend: "node"
         };
 

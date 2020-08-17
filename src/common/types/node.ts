@@ -9,15 +9,17 @@ export class Node extends BaseModel {
     namespaces: Array<{
         name: string,
         limit: number | boolean,
-        pods: Array<Pod>
-        sort: string
+        pods: Array<Pod>,
+        sort: string,
     }>;
     metrics: {
-        cpuRequested: number|string;
-        memoryRequested: number|string;
+        cpuRequested: number|string,
+        memoryRequested: number|string,
         cpuUsed: number|string,
         memoryUsed: number|string,
-        podsCount: number|string
+        podsCount: number|string,
+        cpuLimit: number|string,
+        memoryLimit: number|string,
     };
 
     cpuIndicate: boolean;
@@ -26,6 +28,8 @@ export class Node extends BaseModel {
     cpuRequestedIndicate: boolean;
     memoryRequestedIndicate: boolean;
     podsRequestedIndicate: boolean;
+    cpuLimitIndicate: boolean;
+    memoryLimitIndicate: boolean;
 
     constructor(data){
         super(data);
@@ -35,7 +39,9 @@ export class Node extends BaseModel {
             memoryUsed: 'N/A',
             podsCount: 'N/A',
             cpuRequested: 'N/A',
-            memoryRequested: 'N/A'
+            memoryRequested: 'N/A',
+            cpuLimit: 'N/A',
+            memoryLimit: 'N/A'
         };
         this.cpuIndicate = false;
         this.memoryIndicate = false;
@@ -43,6 +49,8 @@ export class Node extends BaseModel {
         this.cpuRequestedIndicate = false;
         this.memoryRequestedIndicate = false;
         this.podsRequestedIndicate = false;
+        this.cpuLimitIndicate = false;
+        this.memoryLimitIndicate = false;
         this.nsListState();
         this.hideNs = store.getBool(this.name + 'NsList', false);
     }
@@ -56,15 +64,13 @@ export class Node extends BaseModel {
     }
 
     nsListState(){
-
         let state = store.get(this.name + 'NsList');
 
-        if(state === undefined){
+        if (state === undefined) {
             store.set(this.name + 'NsList', false);
-            return store.get(this.name + 'NsList');
-        }else{
-            return store.get(this.name + 'NsList');
         }
+
+        return store.get(this.name + 'NsList');
     }
 
     get status(){
@@ -109,12 +115,24 @@ export class Node extends BaseModel {
         return this.__getStatusRequested(this.metrics.cpuRequested, cpu);
     }
 
+    get cpuLimitStatus(){
+        let cpu = this.data.status.allocatable.cpu;
+        if(cpu.indexOf('m') > -1){
+            cpu = parseInt(cpu)/1000;
+        }
+        return this.__getStatusLimit(this.metrics.cpuLimit, cpu);
+    }
+
     get memoryStatus(){
         return this.__getStatus(this.metrics.memoryUsed, this.__getBytes(this.data.status.allocatable.memory));
     }
 
     get memoryStatusRequested(){
         return this.__getStatusRequested(this.metrics.memoryRequested, this.__getBytes(this.data.status.allocatable.memory));
+    }
+
+    get memoryLimitStatus() {
+        return this.__getStatusLimit(this.metrics.memoryLimit, this.__getBytes(this.data.status.allocatable.memory));
     }
 
     get podsStatus(){
@@ -155,6 +173,10 @@ export class Node extends BaseModel {
         return __convertToGB(this.metrics.memoryRequested) +  ' (' +  __percentUsed(this.metrics.memoryRequested, this.__getBytes(this.data.status.allocatable.memory)) + ')';
     }
 
+    get memoryLimitFormatted(){
+        return __convertToGB(this.metrics.memoryLimit) +  ' (' +  __percentUsed(this.metrics.memoryLimit, this.__getBytes(this.data.status.allocatable.memory)) + ')';
+    }
+
     get cpuUsedFormatted(){
         let cpu = this.data.status.allocatable.cpu;
         if(cpu.indexOf('m') > -1){
@@ -171,6 +193,15 @@ export class Node extends BaseModel {
         }
 
         return __roundCpu(this.metrics.cpuRequested) + ' (' + __percentUsed(this.metrics.cpuRequested, cpu) + ')';
+    }
+
+    get cpuLimitFormatted(){
+        let cpu = this.data.status.allocatable.cpu;
+        if(cpu.indexOf('m') > -1){
+            cpu = parseInt(cpu)/1000;
+        }
+
+        return __roundCpu(this.metrics.cpuLimit) + ' (' + __percentUsed(this.metrics.cpuLimit, cpu) + ')';
     }
 
     get podsUsedFormatted() {
@@ -229,12 +260,20 @@ export class Node extends BaseModel {
         return this.__getColor(this.cpuStatusRequested);
     }
 
+    get rowCpuLimitColor(){
+        return this.__getColor(this.cpuLimitStatus);
+    }
+
     get rowMemoryColor(){
         return this.__getColor(this.memoryStatus);
     }
 
     get rowMemoryRequestedColor(){
         return this.__getColor(this.memoryStatusRequested);
+    }
+
+    get rowMemoryLimitColor(){
+        return this.__getColor(this.memoryLimitStatus);
     }
 
     get rowPodsColor(){
@@ -245,91 +284,74 @@ export class Node extends BaseModel {
         return this.__getColor(this.podsStatusRequested);
     }
 
-    parseMetrics(cpuReq, memoryReq, pods, cpuUsed, memoryUsed){
-        let currentCpuStatus = this.cpuStatus;
-        let currentMemoryStatus = this.memoryStatus;
-        let currentPodsStatus = this.podsStatus;
-        let currentCpuStatusRequested = this.cpuStatusRequested;
-        let currentMemoryStatusRequested = this.memoryStatusRequested;
-        let currentPodsStatusRequested = this.podsStatusRequested;
+    parseMetrics(cpuReq, memoryReq, pods, cpuUsed, memoryUsed, cpuLimit, memoryLimit) {
+        const currentStatus = {
+            "podsStatus": this.podsStatus,
+            "podsStatusRequested": this.podsStatusRequested,
+            "cpuStatus": this.cpuStatus,
+            "cpuStatusRequested": this.cpuStatusRequested,
+            "cpuLimitStatus": this.cpuLimitStatus,
+            "memoryStatus": this.memoryStatus,
+            "memoryStatusRequested": this.memoryStatusRequested,
+            "memoryLimitStatus": this.memoryLimitStatus
+        }
 
         this.metrics.cpuRequested = this.__getLastMetric(cpuReq);
         this.metrics.memoryRequested = this.__getLastMetric(memoryReq);
         this.metrics.podsCount = this.__getLastMetricByInstance(pods);
         this.metrics.cpuUsed = this.__getLastMetricByInstance(cpuUsed);
         this.metrics.memoryUsed = this.__getLastMetricByInstance(memoryUsed);
+        this.metrics.cpuLimit = this.__getLastMetricByInstance(cpuLimit);
+        this.metrics.memoryLimit = this.__getLastMetricByInstance(memoryLimit);
 
-        currentCpuStatus !== undefined && currentCpuStatus != this.cpuStatus && this.setCpuMetricIndicated();
-        currentMemoryStatus !== undefined && currentMemoryStatus != this.memoryStatus && this.setMemoryMetricIndicated();
-        currentPodsStatus !== undefined && currentPodsStatus != this.podsStatus && this.setPodsMetricIndicated();
-        currentCpuStatusRequested !== undefined && currentCpuStatusRequested != this.cpuStatusRequested && this.setCpuMetricIndicated(true);
-        currentMemoryStatusRequested !== undefined && currentMemoryStatusRequested != this.memoryStatusRequested && this.setMemoryMetricIndicated(true);
-        currentPodsStatusRequested !== undefined && currentPodsStatusRequested != this.podsStatusRequested && this.setPodsMetricIndicated(true);
-    }
-
-    setCpuMetricIndicated(requested = false){
-        if (requested) {
-            this.cpuRequestedIndicate = true;
-            setTimeout(() => {
-                this.cpuRequestedIndicate = false
-            }, 10000);
-        } else {
-            this.cpuIndicate = true;
-            setTimeout(() => {
-                this.cpuIndicate = false
-            }, 10000);
+        for (const type in currentStatus) {
+            if(currentStatus.hasOwnProperty(type) && this.hasOwnProperty(type)) {
+                if (currentStatus[type] !== undefined && currentStatus[type] != this[type]) {
+                    this.setMetricIndicated(type);
+                }
+            }
         }
     }
 
-    setMemoryMetricIndicated(requested = false){
-        if (requested){
-            this.memoryRequestedIndicate = true;
-            setTimeout(() => {
-                this.memoryRequestedIndicate = false
-            }, 10000);
-        } else {
-            this.memoryIndicate = true;
-            setTimeout(() => {
-                this.memoryIndicate = false
-            }, 10000);
+    setMetricIndicated(metricStatus){
+        const map = {
+            "podsStatus": "podsIndicate",
+            "podsStatusRequested": "podsRequestedIndicate",
+            "cpuStatus": "cpuIndicate",
+            "cpuStatusRequested": "cpuRequestedIndicate",
+            "cpuLimitStatus": "cpuLimitIndicate",
+            "memoryStatus": "memoryIndicate",
+            "memoryStatusRequested": "memoryRequestedIndicate",
+            "memoryLimitStatus": "memoryLimitIndicate"
         }
-    }
-
-    setPodsMetricIndicated(requested = false){
-        if (requested) {
-            this.podsRequestedIndicate = true;
+        if (map[metricStatus] && this.hasOwnProperty(map[metricStatus])) {
+            this[map[metricStatus]] = true;
             setTimeout(() => {
-                this.podsRequestedIndicate = false
-            }, 10000);
-        } else {
-            this.podsIndicate = true;
-            setTimeout(() => {
-                this.podsIndicate = false
+                this[map[metricStatus]] = false
             }, 10000);
         }
     }
 
     __getLastMetricByInstance(metrics){
-        let datapoints = metrics.filter(item => {
+        const datapoints = metrics.filter(item => {
             return item.target.includes(this.hostIp) || item.target.includes(this.name);
         })[0];
+
         if(datapoints !== undefined){
             return datapoints.datapoint;
-        }else{
-            return 'N/A';
         }
+        return 'N/A';
     }
 
     __getLastMetric(metrics){
-        let datapoints = metrics.filter(item => {
+        const datapoints = metrics.filter(item => {
             return item.target === this.name;
         })[0];
 
-        if(datapoints !== undefined){
+        if (datapoints !== undefined) {
             return datapoints.datapoint;
-        }else{
-            return 'N/A';
         }
+        return 'N/A';
     }
 
     __getBytes(str: string): number{
@@ -380,8 +402,20 @@ export class Node extends BaseModel {
         }
     }
 
-    __getColor(status){
+    __getStatusLimit(limit, allocatable): number{
+        let diff = limit/allocatable;
 
+        if(diff <= 0.9){
+            return SUCCESS
+        } else if(diff > 0.9 && diff <= 1){
+            return WARNING
+        } else if(diff > 1){
+            return ERROR
+        }
+        return
+    }
+
+    __getColor(status): string{
         switch (status) {
             case SUCCESS:
                 return COLOR_GREEN;
