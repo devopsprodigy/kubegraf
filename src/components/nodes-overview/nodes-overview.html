@@ -149,17 +149,16 @@
                                     </div>
                                 </div>
                             </div>
-
+                            <span class="btn btn-secondary" ng-if="!node.hideNs" ng-click="ctrl.toggleNsList(node)">
+                                Hide Applications
+                            </span>
+                            <span class="btn btn-secondary" ng-if="node.hideNs" ng-click="ctrl.toggleNsList(node)">
+                                Show Applications
+                            </span>
                             <a class="btn btn-success" href="{{ctrl.getNodeDashboardLink(node)}}" target="_blank">
                                 <i class="fa fa-fw fa-eye"></i>&nbsp;
                                 Open Dashboard
                             </a>
-                            <div class="btn btn-danger" ng-if="!node.hideNs" ng-click="ctrl.toggleNsList(node)">
-                                Hide Applications
-                            </div>
-                            <div class="btn btn-secondary" ng-if="node.hideNs" ng-click="ctrl.toggleNsList(node)">
-                                Show Applications
-                            </div>
                             <hr>
                             <div ng-repeat="(nsIndex, ns) in node.namespaces" ng-show="ctrl.podsFilterIsDeleted(ns.pods).length > 0" ng-if="!node.hideNs">
                                 <div class="row">

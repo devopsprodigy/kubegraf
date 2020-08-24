@@ -18628,15 +18628,11 @@ function (_super) {
   };
 
   Node.prototype.nsListState = function () {
-    var state = _store2.default.get(this.name + 'NsList');
-
-    if (state === undefined) {
-      _store2.default.set(this.name + 'NsList', false);
-
-      return _store2.default.get(this.name + 'NsList');
-    } else {
-      return _store2.default.get(this.name + 'NsList');
+    if (_store2.default.get(this.name + 'NsList') === undefined) {
+      _store2.default.set(this.name + 'NsList', true);
     }
+
+    return _store2.default.get(this.name + 'NsList');
   };
 
   Object.defineProperty(Node.prototype, "status", {
