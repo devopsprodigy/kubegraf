@@ -19668,15 +19668,10 @@ function (_super) {
   }
 
   ClusterAlerts.prototype.clusterProblem = function () {
-    var node = this.getWarningNodes().length === 0;
-    var usedCpu = this.getAlertsNodesByCPU().length === 0;
-    var usedMemory = this.getAlertsNodesByMemory().length === 0;
-    var usedPods = this.getAlertsNodesByPods().length === 0;
-    var requestedCpu = this.getAlertsNodesByCPU('cpuStatusRequested').length === 0;
-    var requestedMemory = this.getAlertsNodesByMemory('memoryStatusRequested').length === 0;
-    var failPods = this.getWarningPods().length === 0;
-    var components = this.getAlertsComponents.length === 0;
-    return this.nodesError || this.componentsError || this.podsError || !(node && usedCpu && usedMemory && usedPods && failPods && components && requestedCpu && requestedMemory);
+    var warnings = [this.getWarningNodes().length === 0, this.getAlertsNodesByCPU().length === 0, this.getAlertsNodesByMemory().length === 0, this.getAlertsNodesByPods().length === 0, this.getAlertsNodesByCPU('cpuStatusRequested').length === 0, this.getAlertsNodesByMemory('memoryStatusRequested').length === 0, this.getWarningPods().length === 0, this.getAlertsComponents.length === 0];
+    return this.nodesError || this.componentsError || this.podsError || warnings.some(function (w) {
+      return w !== true;
+    });
   };
 
   ;
@@ -20096,6 +20091,10 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 ///<reference path="../../node_modules/grafana-sdk-mocks/app/headers/common.d.ts" />
 var REFRESH_RATE_DEFAULT = 60000;
+var ERROR_MSG_MEMORY_REQUEST = 'memory request';
+var ERROR_MSG_MEMORY_LIMIT = 'memory limit';
+var ERROR_MSG_CPU_REQUEST = 'cpu request';
+var ERROR_MSG_CPU_LIMIT = 'cpu limit';
 
 var K8sPage =
 /** @class */
@@ -21273,7 +21272,44 @@ function () {
   };
 
   K8sPage.prototype.podIsWarning = function (pod) {
-    return !pod.is_deleted && (pod.status === _constants.WARNING || pod.status === _constants.ERROR || pod.status === _constants.TERMINATING);
+    if (!pod.is_deleted) {
+      if (pod.status === _constants.WARNING || pod.status === _constants.ERROR || pod.status === _constants.TERMINATING) {
+        return true;
+      }
+
+      return !this.validResources(pod);
+    }
+
+    return false;
+  };
+
+  K8sPage.prototype.validResources = function (pod) {
+    return pod.data.spec.containers.every(function (container) {
+      var msg = '';
+
+      if (!container.resources.requests || !container.resources.requests.cpu) {
+        msg += ERROR_MSG_CPU_REQUEST + '; ';
+      }
+
+      if (!container.resources.limits || !container.resources.limits.cpu) {
+        msg += ERROR_MSG_CPU_LIMIT + '; ';
+      }
+
+      if (!container.resources.requests || !container.resources.requests.memory) {
+        msg += ERROR_MSG_MEMORY_REQUEST + '; ';
+      }
+
+      if (!container.resources.limits || !container.resources.limits.memory) {
+        msg += ERROR_MSG_MEMORY_LIMIT + '; ';
+      }
+
+      if (msg) {
+        pod.message = msg;
+        return false;
+      }
+
+      return true;
+    });
   };
 
   K8sPage.prototype.toggleMenu = function () {

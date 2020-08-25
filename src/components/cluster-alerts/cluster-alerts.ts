@@ -42,15 +42,17 @@ export class ClusterAlerts extends K8sPage{
     }
 
     clusterProblem() {
-        let node = this.getWarningNodes().length === 0;
-        let usedCpu = this.getAlertsNodesByCPU().length === 0;
-        let usedMemory = this.getAlertsNodesByMemory().length === 0;
-        let usedPods = this.getAlertsNodesByPods().length === 0;
-        let requestedCpu = this.getAlertsNodesByCPU('cpuStatusRequested').length === 0;
-        let requestedMemory = this.getAlertsNodesByMemory('memoryStatusRequested').length === 0;
-        let failPods = this.getWarningPods().length === 0;
-        let components = this.getAlertsComponents.length === 0;
+        const warnings = [
+            this.getWarningNodes().length === 0,
+            this.getAlertsNodesByCPU().length === 0,
+            this.getAlertsNodesByMemory().length === 0,
+            this.getAlertsNodesByPods().length === 0,
+            this.getAlertsNodesByCPU('cpuStatusRequested').length === 0,
+            this.getAlertsNodesByMemory('memoryStatusRequested').length === 0,
+            this.getWarningPods().length === 0,
+            this.getAlertsComponents.length === 0
+        ];
 
-        return this.nodesError || this.componentsError || this.podsError || !(node && usedCpu && usedMemory && usedPods && failPods && components && requestedCpu && requestedMemory);
+        return this.nodesError || this.componentsError || this.podsError || warnings.some(w => w !== true);
     };
 }
