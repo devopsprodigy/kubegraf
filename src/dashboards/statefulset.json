@@ -113,7 +113,7 @@
         "datasource": "$cluster",
         "type": "query",
         "name": "namespace",
-        "query": "namespace",
+        "query": "namespace statefulset",
         "hide": 0,
         "label": null,
         "options": [],
