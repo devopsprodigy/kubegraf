@@ -19,10 +19,8 @@ import {__convertToGB, __convertToMicro, __convertToHours, __roundCpu} from "../
 import {BaseModel} from '../common/types/traits/baseModel';
 
 const REFRESH_RATE_DEFAULT = 60000;
-const ERROR_MSG_MEMORY_REQUEST = 'memory request'
-const ERROR_MSG_MEMORY_LIMIT = 'memory limit'
-const ERROR_MSG_CPU_REQUEST = 'cpu request'
-const ERROR_MSG_CPU_LIMIT = 'cpu limit'
+const ERROR_MSG_MEMORY_REQUESTS_LIMITS = 'Memory limits and requests not configured'
+const ERROR_MSG_CPU_REQUESTS_LIMITS = 'CPU limits and requests not configured'
 
 export  class K8sPage {
     pageReady: boolean;
@@ -1020,17 +1018,14 @@ export  class K8sPage {
         return pod.data.spec.containers.every(container => {
             let msg = ''
 
-            if (!container.resources.requests || !container.resources.requests.cpu) {
-                msg += ERROR_MSG_CPU_REQUEST + '; '
+            if ((!container.resources.requests || !container.resources.requests.cpu)
+                || (!container.resources.limits || !container.resources.limits.cpu)) {
+                msg += ERROR_MSG_CPU_REQUESTS_LIMITS + '; '
             }
-            if (!container.resources.limits || !container.resources.limits.cpu) {
-                msg += ERROR_MSG_CPU_LIMIT + '; '
-            }
-            if (!container.resources.requests || !container.resources.requests.memory) {
-                msg += ERROR_MSG_MEMORY_REQUEST + '; '
-            }
-            if (!container.resources.limits || !container.resources.limits.memory) {
-                msg += ERROR_MSG_MEMORY_LIMIT + '; '
+
+            if ((!container.resources.requests || !container.resources.requests.memory)
+                || (!container.resources.limits || !container.resources.limits.memory)) {
+                msg += ERROR_MSG_MEMORY_REQUESTS_LIMITS + '; '
             }
 
             if(msg){
