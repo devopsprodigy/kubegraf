@@ -191,7 +191,20 @@
       "pointradius": 2,
       "points": false,
       "renderer": "flot",
-      "seriesOverrides": [],
+      "seriesOverrides": [
+        {
+          "alias": "Limit",
+          "color": "#F2495C"
+        },
+        {
+          "alias": "Requested",
+          "color": "#FADE2A"
+        },
+        {
+          "alias": "Used",
+          "color": "#73BF69"
+        }
+      ],
       "stack": false,
       "steppedLine": false,
       "targets": [
@@ -208,6 +221,14 @@
           "intervalFactor": 1,
           "legendFormat": "Requested",
           "refId": "A"
+        },
+        {
+          "expr": "sum(kube_pod_container_resource_limits_memory_bytes{namespace=\"$namespace\", pod=\"$pod\"})",
+          "format": "time_series",
+          "interval": "",
+          "intervalFactor": 1,
+          "legendFormat": "Limit",
+          "refId": "C"
         }
       ],
       "thresholds": [],
@@ -284,7 +305,20 @@
       "pointradius": 2,
       "points": false,
       "renderer": "flot",
-      "seriesOverrides": [],
+      "seriesOverrides": [
+        {
+          "alias": "Limit",
+          "color": "#F2495C"
+        },
+        {
+          "alias": "Requested",
+          "color": "#FADE2A"
+        },
+        {
+          "alias": "Used",
+          "color": "#73BF69"
+        }
+      ],
       "stack": false,
       "steppedLine": false,
       "targets": [
@@ -299,6 +333,11 @@
           "expr": "sum(kube_pod_container_resource_requests_cpu_cores{namespace=\"$namespace\", pod=~\"$pod\"})",
           "legendFormat": "Requested",
           "refId": "B"
+        },
+        {
+          "expr": "sum(kube_pod_container_resource_limits_cpu_cores{namespace=\"$namespace\", pod=~\"$pod\"})",
+          "legendFormat": "Limit",
+          "refId": "C"
         }
       ],
       "thresholds": [],
