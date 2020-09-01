@@ -19,6 +19,8 @@ import {__convertToGB, __convertToMicro, __convertToHours, __roundCpu} from "../
 import {BaseModel} from '../common/types/traits/baseModel';
 
 const REFRESH_RATE_DEFAULT = 60000;
+const ERROR_MSG_MEMORY_REQUESTS_LIMITS = 'Memory limits and requests not configured'
+const ERROR_MSG_CPU_REQUESTS_LIMITS = 'CPU limits and requests not configured'
 
 export  class K8sPage {
     pageReady: boolean;
@@ -1002,8 +1004,37 @@ export  class K8sPage {
         });
     }
 
-    podIsWarning(pod: Pod) {
-        return !pod.is_deleted && (pod.status === WARNING || pod.status === ERROR || pod.status === TERMINATING)
+    podIsWarning(pod: Pod): boolean {
+        if (!pod.is_deleted) {
+            if (pod.status === WARNING || pod.status === ERROR || pod.status === TERMINATING) {
+                return true
+            }
+            return !this.validResources(pod)
+        }
+        return false
+    }
+
+    validResources(pod: Pod): boolean {
+        return pod.data.spec.containers.every(container => {
+            let msg = ''
+
+            if ((!container.resources.requests || !container.resources.requests.cpu)
+                || (!container.resources.limits || !container.resources.limits.cpu)) {
+                msg += ERROR_MSG_CPU_REQUESTS_LIMITS + '; '
+            }
+
+            if ((!container.resources.requests || !container.resources.requests.memory)
+                || (!container.resources.limits || !container.resources.limits.memory)) {
+                msg += ERROR_MSG_MEMORY_REQUESTS_LIMITS + '; '
+            }
+
+            if(msg){
+                pod.message = msg;
+                return false
+            }
+
+            return true
+        })
     }
 
     toggleMenu() {
