@@ -78,9 +78,6 @@ export class NodesOverview extends K8sPage {
 
         if (ns.pods) {
             res = ns.pods.reduce((prevValue, pod) => {
-                if(ns.name === "kube-system") {
-                    console.log(pod)
-                }
                 if (pod.sourceMetrics[metric]) {
                     return prevValue + pod.sourceMetrics[metric];
                 }

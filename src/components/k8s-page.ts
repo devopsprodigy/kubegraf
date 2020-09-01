@@ -1,22 +1,20 @@
 ///<reference path="../../node_modules/grafana-sdk-mocks/app/headers/common.d.ts" />
 import appEvents from "grafana/app/core/app_events";
 
-import {Pod} from "../common/types/pod";
-import angular from "angular";
-import {PrometheusProxy} from "../common/proxies/prometheusProxy";
-import {ERROR, PODS_LIMIT, TERMINATING, WARNING} from "../common/constants";
-import {Component} from "../common/types/component";
-import {Service} from "../common/types/service";
-import {Job} from "../common/types/job";
-import {Cronjob} from "../common/types/cronjob";
-import {Namespace} from "../common/types/namespace";
+import { Pod } from "../common/types/pod";
+import { PrometheusProxy } from "../common/proxies/prometheusProxy";
+import { ERROR, PODS_LIMIT, SUCCEEDED, TERMINATING, WARNING } from "../common/constants";
+import { Component } from "../common/types/component";
+import { Service } from "../common/types/service";
+import { Job } from "../common/types/job";
+import { Cronjob } from "../common/types/cronjob";
+import { Namespace } from "../common/types/namespace";
 import store from "../common/store";
-import {Deployment} from "../common/types/deployment";
-import {Statefulset} from "../common/types/statefulset";
-import {Daemonset} from "../common/types/daemonset";
-import {Node} from "../common/types/node";
-import {__convertToGB, __convertToMicro, __convertToHours, __roundCpu} from "../common/helpers";
-import {BaseModel} from '../common/types/traits/baseModel';
+import { Deployment } from "../common/types/deployment";
+import { Statefulset } from "../common/types/statefulset";
+import { Daemonset } from "../common/types/daemonset";
+import { Node } from "../common/types/node";
+import { __convertToGB, __convertToHours, __convertToMicro, __roundCpu } from "../common/helpers";
 
 const REFRESH_RATE_DEFAULT = 60000;
 const ERROR_MSG_MEMORY_REQUESTS_LIMITS = 'Memory limits and requests not configured'
@@ -1071,14 +1069,16 @@ export  class K8sPage {
         return pod.data.spec.containers.every(container => {
             let msg = ''
 
-            if ((!container.resources.requests || !container.resources.requests.cpu)
-                || (!container.resources.limits || !container.resources.limits.cpu)) {
-                msg += ERROR_MSG_CPU_REQUESTS_LIMITS + '; '
-            }
+            if (pod.data.metadata.namespace !== 'kube-system' && pod.status !== SUCCEEDED) {
+                if ((!container.resources.requests || !container.resources.requests.cpu)
+                    || (!container.resources.limits || !container.resources.limits.cpu)) {
+                    msg += ERROR_MSG_CPU_REQUESTS_LIMITS + '; '
+                }
 
-            if ((!container.resources.requests || !container.resources.requests.memory)
-                || (!container.resources.limits || !container.resources.limits.memory)) {
-                msg += ERROR_MSG_MEMORY_REQUESTS_LIMITS + '; '
+                if ((!container.resources.requests || !container.resources.requests.memory)
+                    || (!container.resources.limits || !container.resources.limits.memory)) {
+                    msg += ERROR_MSG_MEMORY_REQUESTS_LIMITS + '; '
+                }
             }
 
             if(msg){
