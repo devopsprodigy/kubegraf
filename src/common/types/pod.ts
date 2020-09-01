@@ -1,5 +1,5 @@
-import { ERROR, WARNING, TERMINATING, SUCCESS } from '../constants';
-import {BaseModel} from '../../common/types/traits/baseModel';
+import { ERROR, SUCCEEDED, SUCCESS, TERMINATING, WARNING } from '../constants';
+import { BaseModel } from '../../common/types/traits/baseModel';
 
 export class Pod extends BaseModel{
     metrics: {
@@ -66,9 +66,10 @@ export class Pod extends BaseModel{
                 case 'Pending':
                     return WARNING;
                 case 'Succeeded':
-                    return SUCCESS;
+                    return SUCCEEDED;
                 case 'Failed':
-                case 'Unknow':
+                    return ERROR;
+                case 'Unknown':
                     return ERROR;
                 default:
                     return ERROR;
@@ -86,6 +87,8 @@ export class Pod extends BaseModel{
                 return 'terminating';
             case SUCCESS:
                 return 'success';
+            case SUCCEEDED:
+                return 'succeeded'
             default:
                 return 'success';
         }
