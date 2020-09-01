@@ -78,6 +78,9 @@ export class NodesOverview extends K8sPage {
 
         if (ns.pods) {
             res = ns.pods.reduce((prevValue, pod) => {
+                if(ns.name === "kube-system") {
+                    console.log(pod)
+                }
                 if (pod.sourceMetrics[metric]) {
                     return prevValue + pod.sourceMetrics[metric];
                 }
@@ -85,15 +88,18 @@ export class NodesOverview extends K8sPage {
             }, 0)
         }
 
-
         switch (metric) {
             case "cpuUsed":
                 return __convertToMicro(res.toFixed(3));
             case "cpuRequested":
                 return __convertToMicro(__roundCpu(res));
+            case "cpuLimit":
+                return __convertToMicro(__roundCpu(res));
             case "memoryUsed":
                 return __convertToGB(res);
             case "memoryRequested":
+                return __convertToGB(res);
+            case "memoryLimit":
                 return __convertToGB(res);
             default:
                 return 'N-A'

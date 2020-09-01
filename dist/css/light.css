@@ -436,32 +436,31 @@ i.active {
 
 .override--table_ns_6 {
   width: 100%; }
-  .override--table_ns_6 tr {
-    width: 100%; }
-    .override--table_ns_6 tr th:nth-child(1) {
-      width: 5%; }
-    .override--table_ns_6 tr th:nth-child(2) {
-      width: 45%; }
-    .override--table_ns_6 tr th:nth-child(3) {
-      width: 12.5%; }
-    .override--table_ns_6 tr th:nth-child(4) {
-      width: 12.5%; }
-    .override--table_ns_6 tr th:nth-child(5) {
-      width: 12.5%; }
-    .override--table_ns_6 tr th:nth-child(6) {
-      width: 12.5%; }
-    .override--table_ns_6 tr td:nth-child(1) {
-      width: 5%; }
-    .override--table_ns_6 tr td:nth-child(2) {
-      width: 45%; }
-    .override--table_ns_6 tr td:nth-child(3) {
-      width: 12.5%; }
-    .override--table_ns_6 tr td:nth-child(4) {
-      width: 12.5%; }
-    .override--table_ns_6 tr td:nth-child(5) {
-      width: 12.5%; }
-    .override--table_ns_6 tr td:nth-child(6) {
-      width: 12.5%; }
+  .override--table_ns_6 thead td div {
+    display: flex;
+    justify-content: space-between;
+    font-size: 14px;
+    align-items: center; }
+    .override--table_ns_6 thead td div .btn {
+      min-width: 100px; }
+  .override--table_ns_6 thead .thead-sort {
+    justify-content: space-between;
+    display: flex;
+    font-size: 12px;
+    align-items: center; }
+    .override--table_ns_6 thead .thead-sort i {
+      margin-left: 8px; }
+  .override--table_ns_6 thead td {
+    width: 40%; }
+  .override--table_ns_6 thead th {
+    width: 10%;
+    padding: 8px 12px 8px 16px; }
+  .override--table_ns_6 tbody td:nth-child(1) {
+    width: 40px; }
+  .override--table_ns_6 tbody td:nth-child(2) {
+    width: 35%; }
+  .override--table_ns_6 tbody td {
+    width: 10%; }
 
 .override--card-item {
   display: inline-block;

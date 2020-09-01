@@ -3,16 +3,20 @@ import {BaseModel} from '../../common/types/traits/baseModel';
 
 export class Pod extends BaseModel{
     metrics: {
-        cpuUsed: number|string,
-        memoryUsed: number|string,
-        cpuRequested: number|string,
-        memoryRequested: number|string
+        cpuUsed: number | string,
+        memoryUsed: number | string,
+        cpuRequested: number | string,
+        memoryRequested: number | string,
+        cpuLimit: number | string,
+        memoryLimit: number | string,
     };
     sourceMetrics: {
         cpuUsed: number,
         memoryUsed: number,
         cpuRequested: number,
-        memoryRequested: number
+        memoryRequested: number,
+        cpuLimit: number,
+        memoryLimit: number,
     };
     used: boolean;
     private eventMessage: string = null;
@@ -23,19 +27,22 @@ export class Pod extends BaseModel{
             cpuUsed: 'N-A',
             memoryUsed: 'N-A',
             cpuRequested: 'N-A',
-            memoryRequested: 'N-A'
+            memoryRequested: 'N-A',
+            cpuLimit: 'N-A',
+            memoryLimit: 'N-A'
         };
         this.sourceMetrics = {
             cpuUsed: null,
             memoryUsed: null,
             cpuRequested: null,
-            memoryRequested: null
+            memoryRequested: null,
+            cpuLimit: null,
+            memoryLimit: null
         };
         this.used = false;
     }
 
     get status(){
-
         if(this.data.metadata.deletionTimestamp){
             return TERMINATING;
         }else if(this.data.status.phase === 'Running'){

@@ -428,32 +428,33 @@ i.active
         width: 25%
   &table_ns_6
     width: 100%
-    tr
-      width: 100%
-      th:nth-child(1)
-        width: 5%
-      th:nth-child(2)
-        width: 45%
-      th:nth-child(3)
-        width: 12.5%
-      th:nth-child(4)
-        width: 12.5%
-      th:nth-child(5)
-        width: 12.5%
-      th:nth-child(6)
-        width: 12.5%
+    thead
+      td div
+        display: flex
+        justify-content: space-between
+        font-size: 14px
+        align-items: center
+        .btn
+          min-width: 100px
+      .thead-sort
+        justify-content: space-between
+        display: flex
+        font-size: 12px
+        align-items: center
+        & i
+          margin-left: 8px
+      td
+        width: 40%
+      th
+        width: 10%
+        padding: 8px 12px 8px 16px
+    tbody
       td:nth-child(1)
-        width: 5%
+        width: 40px
       td:nth-child(2)
-        width: 45%
-      td:nth-child(3)
-        width: 12.5%
-      td:nth-child(4)
-        width: 12.5%
-      td:nth-child(5)
-        width: 12.5%
-      td:nth-child(6)
-        width: 12.5%
+        width: 35%
+      td
+        width: 10%
   &card-item
     display: inline-block
     padding: 5px
