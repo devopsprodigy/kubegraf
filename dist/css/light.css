@@ -326,7 +326,7 @@
     background-color: #83df57; }
   .status-indicator.yellow, .status-indicator.warning {
     background-color: #fcff00; }
-  .status-indicator.terminating {
+  .status-indicator.terminating, .status-indicator.succeeded {
     background-color: #555555; }
 
 .dot-grey {

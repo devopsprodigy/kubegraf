@@ -17970,6 +17970,7 @@ var ERROR = 3;
 var WARNING = 2;
 var TERMINATING = 1;
 var SUCCESS = 0;
+var SUCCEEDED = 4;
 var COLOR_YELLOW = '#ffff0096';
 var COLOR_RED = '#a52a2a';
 var COLOR_GREEN = '#299c46';
@@ -17979,6 +17980,7 @@ exports.ERROR = ERROR;
 exports.WARNING = WARNING;
 exports.TERMINATING = TERMINATING;
 exports.SUCCESS = SUCCESS;
+exports.SUCCEEDED = SUCCEEDED;
 exports.COLOR_YELLOW = COLOR_YELLOW;
 exports.COLOR_RED = COLOR_RED;
 exports.COLOR_GREEN = COLOR_GREEN;
@@ -19180,10 +19182,12 @@ function (_super) {
             return _constants.WARNING;
 
           case 'Succeeded':
-            return _constants.SUCCESS;
+            return _constants.SUCCEEDED;
 
           case 'Failed':
-          case 'Unknow':
+            return _constants.ERROR;
+
+          case 'Unknown':
             return _constants.ERROR;
 
           default:
@@ -19208,6 +19212,9 @@ function (_super) {
 
         case _constants.SUCCESS:
           return 'success';
+
+        case _constants.SUCCEEDED:
+          return 'succeeded';
 
         default:
           return 'success';
