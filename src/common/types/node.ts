@@ -56,15 +56,11 @@ export class Node extends BaseModel {
     }
 
     nsListState(){
-
-        let state = store.get(this.name + 'NsList');
-
-        if(state === undefined){
-            store.set(this.name + 'NsList', false);
-            return store.get(this.name + 'NsList');
-        }else{
-            return store.get(this.name + 'NsList');
+        if(store.get(this.name + 'NsList') === undefined){
+            store.set(this.name + 'NsList', true);
         }
+
+        return store.get(this.name + 'NsList');
     }
 
     get status(){
