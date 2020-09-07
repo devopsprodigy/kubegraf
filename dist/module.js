@@ -21395,7 +21395,6 @@ function () {
   };
 
   K8sPage.prototype.validResources = function (pod) {
-    console.log(pod);
     return pod.data.spec.containers.every(function (container) {
       var msg = '';
 
