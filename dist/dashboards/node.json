@@ -218,7 +218,7 @@
           "expr": "(((count(count(node_cpu_seconds_total{instance=~\"$node|$nodeHost:$port\"}) by (cpu))) - avg(sum by (mode)(irate(node_cpu_seconds_total{mode='idle',instance=~\"$node|$nodeHost:$port\"}[5m])))) * 100) / count(count(node_cpu_seconds_total{instance=~\"$node|$nodeHost:$port\"}) by (cpu))",
           "hide": false,
           "intervalFactor": 1,
-          "legendFormat": "",
+          "legendFormat": "{{hide}}",
           "refId": "A",
           "step": 900
         }
@@ -439,6 +439,7 @@
           "expr": "100 - ((node_filesystem_avail_bytes{instance=~\"$node|$nodeHost:$port\",mountpoint=\"/\",fstype!=\"rootfs\"} * 100) / node_filesystem_size_bytes{instance=~\"$node|$nodeHost:$port\",mountpoint=\"/\",fstype!=\"rootfs\"})",
           "format": "time_series",
           "intervalFactor": 1,
+          "legendFormat": "{{hide}}",
           "refId": "A",
           "step": 900
         }
@@ -512,6 +513,7 @@
           "format": "time_series",
           "hide": false,
           "intervalFactor": 1,
+          "legendFormat": "{{hide}}",
           "refId": "A",
           "step": 900
         }
@@ -584,6 +586,7 @@
           "expr": "avg(node_load15{instance=~\"$node|$nodeHost:$port\"}) /  count(count(node_cpu_seconds_total{instance=~\"$node|$nodeHost:$port\"}) by (cpu)) * 100",
           "hide": false,
           "intervalFactor": 1,
+          "legendFormat": "{{hide}}",
           "refId": "A",
           "step": 900
         }
