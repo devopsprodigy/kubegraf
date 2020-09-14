@@ -19924,7 +19924,6 @@ function () {
       }
     }).then(function (response) {
       if (response && response.status === 200) {
-        //window.location.href = 'plugins/devopsprodigy-kubegraf-app/page/clusters';
         setTimeout(function () {
           window.history.back();
         }, 800);
@@ -19995,6 +19994,8 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.ClustersList = undefined;
 
+var _tslib = __webpack_require__(/*! tslib */ "../node_modules/tslib/tslib.es6.js");
+
 var _app_events = __webpack_require__(/*! grafana/app/core/app_events */ "grafana/app/core/app_events");
 
 var _app_events2 = _interopRequireDefault(_app_events);
@@ -20008,6 +20009,8 @@ var ClustersList =
 /** @class */
 function () {
   function ClustersList($scope, $injector, backendSrv, datasourceSrv, contextSrv, utilSrv, $window) {
+    var _this = this;
+
     this.backendSrv = backendSrv;
     this.datasourceSrv = datasourceSrv;
     this.contextSrv = contextSrv;
@@ -20019,11 +20022,13 @@ function () {
     document.title = 'DevOpsProdigy KubeGraf';
 
     try {
-      this.getClusters();
+      this.getClusters().then(function () {
+        _this.isReady = true;
+
+        _this.$scope.$apply();
+      });
     } catch (e) {
       console.error(e);
-    } finally {
-      this.isReady = true;
     }
 
     try {
@@ -20035,22 +20040,39 @@ function () {
   }
 
   ClustersList.prototype.getClusters = function () {
-    var list = this.datasourceSrv.getAll();
-    var type = 'devopsprodidy-kubegraf-datasource';
+    return (0, _tslib.__awaiter)(this, void 0, void 0, function () {
+      var datasources, type, clusters_1;
+      return (0, _tslib.__generator)(this, function (_a) {
+        switch (_a.label) {
+          case 0:
+            return [4
+            /*yield*/
+            , this.backendSrv.get('/api/datasources/')];
 
-    if (Array.isArray(list)) {
-      this.clusters = list.filter(function (item) {
-        return item.type === type;
-      });
-    } else {
-      var clusters_1 = [];
-      Object.keys(list).forEach(function (key) {
-        if (list[key].type === type) {
-          clusters_1.push(list[key]);
+          case 1:
+            datasources = _a.sent();
+            type = 'devopsprodidy-kubegraf-datasource';
+
+            if (Array.isArray(datasources)) {
+              this.clusters = datasources.filter(function (item) {
+                return item.type === type;
+              });
+            } else {
+              clusters_1 = [];
+              Object.keys(datasources).forEach(function (key) {
+                if (datasources[key].type === type) {
+                  clusters_1.push(datasources[key]);
+                }
+              });
+              this.clusters = clusters_1;
+            }
+
+            return [2
+            /*return*/
+            ];
         }
       });
-      this.clusters = clusters_1;
-    }
+    });
   };
 
   ClustersList.prototype.deleteCluster = function (cluster) {
@@ -20073,7 +20095,9 @@ function () {
     this.backendSrv.delete('/api/datasources/' + id).then(function () {
       _this.clusters = _this.clusters.filter(function (item) {
         return item.id !== id;
-      }); // this.getClusters();
+      });
+
+      _this.$scope.$apply();
     });
   };
 

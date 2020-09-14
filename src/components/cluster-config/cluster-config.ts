@@ -19,6 +19,7 @@ export class ClusterConfig{
         this.$scope = $scope;
         this.busy = false;
         this.version = __getGrafanaVersion($window);
+
         this.getCluster().finally(() => {
             this.pageReady = true
             this.$scope.$apply();
@@ -68,7 +69,7 @@ export class ClusterConfig{
         return this.saveDatasource()
             .then((res) => {
                 if(res && res.datasource) {
-                    this.cluster = res.datasource;
+                    this.cluster = res.datasource
                     this.testCluster()
                 }
             })
@@ -130,8 +131,9 @@ export class ClusterConfig{
         })
             .then(response => {
                 if (response && response.status === 200) {
-                    //window.location.href = 'plugins/devopsprodigy-kubegraf-app/page/clusters';
-                    setTimeout(()=>{window.history.back()},800);
+                    setTimeout(() => {
+                        window.history.back()
+                    }, 800)
                 } else {
                     appEvents.emit('alert-error', ['Unhandled error']);
                 }
