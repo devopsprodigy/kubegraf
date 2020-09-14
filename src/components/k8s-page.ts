@@ -3,7 +3,7 @@ import appEvents from "grafana/app/core/app_events";
 
 import { Pod } from "../common/types/pod";
 import { PrometheusProxy } from "../common/proxies/prometheusProxy";
-import { ERROR, PODS_LIMIT, SUCCEEDED, TERMINATING, WARNING } from "../common/constants";
+import { ERROR, PODS_LIMIT, SUCCEEDED, SUCCESS, TERMINATING, WARNING } from "../common/constants";
 import { Component } from "../common/types/component";
 import { Service } from "../common/types/service";
 import { Job } from "../common/types/job";
@@ -1012,7 +1012,17 @@ export  class K8sPage {
                 }
             })
         }
-        return warningPods
+
+        return this.sortByStatus(warningPods)
+    }
+
+    sortByStatus(pods: Pod[], rule = [ERROR, WARNING, SUCCESS, SUCCEEDED, TERMINATING]): any[] {
+        const sorted = []
+        rule.forEach(status => {
+            sorted.push(...pods.filter(pod => pod.status === status))
+        })
+        console.log(sorted)
+        return sorted
     }
 
     getWarningNodes(){

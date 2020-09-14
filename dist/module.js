@@ -21334,7 +21334,22 @@ function () {
       });
     }
 
-    return warningPods;
+    return this.sortByStatus(warningPods);
+  };
+
+  K8sPage.prototype.sortByStatus = function (pods, rule) {
+    if (rule === void 0) {
+      rule = [_constants.ERROR, _constants.WARNING, _constants.SUCCESS, _constants.SUCCEEDED, _constants.TERMINATING];
+    }
+
+    var sorted = [];
+    rule.forEach(function (status) {
+      sorted.push.apply(sorted, (0, _tslib.__spread)(pods.filter(function (pod) {
+        return pod.status === status;
+      })));
+    });
+    console.log(sorted);
+    return sorted;
   };
 
   K8sPage.prototype.getWarningNodes = function () {
