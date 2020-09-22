@@ -20357,7 +20357,7 @@ function () {
 
   K8sPage.prototype.__getCpuMetricsRequested = function () {
     var promQuery = {
-      expr: 'sum(sum(kube_pod_container_resource_requests_cpu_cores) by (namespace, pod, node) * on (pod) group_left()  (sum(kube_pod_status_phase{phase="Running"}) by (pod, namespace) == 1)) by (node)',
+      expr: 'sum(sum(kube_pod_container_resource_requests_cpu_cores) by (namespace, pod, node) * on (pod, namespace) group_left()  (sum(kube_pod_status_phase{phase="Running"}) by (pod, namespace) == 1)) by (node)',
       legend: 'node'
     };
     return this.prometheusDS.query(promQuery).then(function (res) {
@@ -20367,7 +20367,7 @@ function () {
 
   K8sPage.prototype.__getCpuLimitMetrics = function () {
     var promQuery = {
-      expr: 'sum(sum(kube_pod_container_resource_limits_cpu_cores) by (namespace, pod, node) * on (pod) group_left()  (sum(kube_pod_status_phase{phase="Running"}) by (pod, namespace) == 1)) by (node)',
+      expr: 'sum(sum(kube_pod_container_resource_limits_cpu_cores) by (namespace, pod, node) * on (pod, namespace) group_left()  (sum(kube_pod_status_phase{phase="Running"}) by (pod, namespace) == 1)) by (node)',
       legend: 'node'
     };
     return this.prometheusDS.query(promQuery).then(function (res) {
@@ -20377,7 +20377,7 @@ function () {
 
   K8sPage.prototype.__getMemoryMetricsRequested = function () {
     var promQuery = {
-      expr: 'sum(sum(kube_pod_container_resource_requests_memory_bytes) by (namespace, pod, node) * on (pod) group_left()  (sum(kube_pod_status_phase{phase="Running"}) by (pod, namespace) == 1)) by (node)',
+      expr: 'sum(sum(kube_pod_container_resource_requests_memory_bytes) by (namespace, pod, node) * on (pod, namespace) group_left()  (sum(kube_pod_status_phase{phase="Running"}) by (pod, namespace) == 1)) by (node)',
       legend: "node"
     };
     return this.prometheusDS.query(promQuery).then(function (res) {
@@ -20387,7 +20387,7 @@ function () {
 
   K8sPage.prototype.__getMemoryLimitMetrics = function () {
     var promQuery = {
-      expr: 'sum(sum(kube_pod_container_resource_limits_memory_bytes) by (namespace, pod, node) * on (pod) group_left()  (sum(kube_pod_status_phase{phase="Running"}) by (pod, namespace) == 1)) by (node)',
+      expr: 'sum(sum(kube_pod_container_resource_limits_memory_bytes) by (namespace, pod, node) * on (pod, namespace) group_left()  (sum(kube_pod_status_phase{phase="Running"}) by (pod, namespace) == 1)) by (node)',
       legend: "node"
     };
     return this.prometheusDS.query(promQuery).then(function (res) {
@@ -21192,6 +21192,7 @@ function () {
 
     this.cluster.getComponents().then(function (components) {
       if (components instanceof Array) {
+        console.log(components);
         _this.componentsError = false;
         _this.storeComponents = components.map(function (component) {
           return new _component.Component(component);
@@ -21348,7 +21349,6 @@ function () {
         return pod.status === status;
       })));
     });
-    console.log(sorted);
     return sorted;
   };
 

@@ -206,7 +206,7 @@ export  class K8sPage {
 
     __getCpuMetricsRequested(){
         const promQuery = {
-            expr: 'sum(sum(kube_pod_container_resource_requests_cpu_cores) by (namespace, pod, node) * on (pod) group_left()  (sum(kube_pod_status_phase{phase="Running"}) by (pod, namespace) == 1)) by (node)',
+            expr: 'sum(sum(kube_pod_container_resource_requests_cpu_cores) by (namespace, pod, node) * on (pod, namespace) group_left()  (sum(kube_pod_status_phase{phase="Running"}) by (pod, namespace) == 1)) by (node)',
             legend: 'node'
         };
 
@@ -216,7 +216,7 @@ export  class K8sPage {
 
     __getCpuLimitMetrics(){
         const promQuery = {
-            expr: 'sum(sum(kube_pod_container_resource_limits_cpu_cores) by (namespace, pod, node) * on (pod) group_left()  (sum(kube_pod_status_phase{phase="Running"}) by (pod, namespace) == 1)) by (node)',
+            expr: 'sum(sum(kube_pod_container_resource_limits_cpu_cores) by (namespace, pod, node) * on (pod, namespace) group_left()  (sum(kube_pod_status_phase{phase="Running"}) by (pod, namespace) == 1)) by (node)',
             legend: 'node'
         };
 
@@ -226,7 +226,7 @@ export  class K8sPage {
 
     __getMemoryMetricsRequested(){
         const promQuery = {
-            expr: 'sum(sum(kube_pod_container_resource_requests_memory_bytes) by (namespace, pod, node) * on (pod) group_left()  (sum(kube_pod_status_phase{phase="Running"}) by (pod, namespace) == 1)) by (node)',
+            expr: 'sum(sum(kube_pod_container_resource_requests_memory_bytes) by (namespace, pod, node) * on (pod, namespace) group_left()  (sum(kube_pod_status_phase{phase="Running"}) by (pod, namespace) == 1)) by (node)',
             legend: "node"
         };
 
@@ -236,7 +236,7 @@ export  class K8sPage {
 
     __getMemoryLimitMetrics(){
         const promQuery = {
-            expr: 'sum(sum(kube_pod_container_resource_limits_memory_bytes) by (namespace, pod, node) * on (pod) group_left()  (sum(kube_pod_status_phase{phase="Running"}) by (pod, namespace) == 1)) by (node)',
+            expr: 'sum(sum(kube_pod_container_resource_limits_memory_bytes) by (namespace, pod, node) * on (pod, namespace) group_left()  (sum(kube_pod_status_phase{phase="Running"}) by (pod, namespace) == 1)) by (node)',
             legend: "node"
         };
 
@@ -901,6 +901,7 @@ export  class K8sPage {
             .then(components => {
 
                 if(components instanceof Array) {
+                    console.log(components)
                     this.componentsError = false;
                     this.storeComponents = components.map(component => new Component(component));
                 } else if (components instanceof Error){
@@ -1018,10 +1019,11 @@ export  class K8sPage {
 
     sortByStatus(pods: Pod[], rule = [ERROR, WARNING, SUCCESS, SUCCEEDED, TERMINATING]): any[] {
         const sorted = []
+
         rule.forEach(status => {
             sorted.push(...pods.filter(pod => pod.status === status))
         })
-        console.log(sorted)
+
         return sorted
     }
 
