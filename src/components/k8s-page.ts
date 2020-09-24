@@ -901,7 +901,6 @@ export  class K8sPage {
             .then(components => {
 
                 if(components instanceof Array) {
-                    console.log(components)
                     this.componentsError = false;
                     this.storeComponents = components.map(component => new Component(component));
                 } else if (components instanceof Error){
@@ -1017,11 +1016,11 @@ export  class K8sPage {
         return this.sortByStatus(warningPods)
     }
 
-    sortByStatus(pods: Pod[], rule = [ERROR, WARNING, SUCCESS, SUCCEEDED, TERMINATING]): any[] {
+    sortByStatus(array: {status: number}[], rule = [ERROR, WARNING, SUCCESS, SUCCEEDED, TERMINATING]): any[] {
         const sorted = []
 
         rule.forEach(status => {
-            sorted.push(...pods.filter(pod => pod.status === status))
+            sorted.push(...array.filter(pod => pod.status === status))
         })
 
         return sorted

@@ -114,82 +114,22 @@
                                 <td ng-bind="node.message"></td>
                             </tr>
                             <!--Resources-->
-                            <tr ng-if="ctrl.getAlertsNodesByCPU().length > 0 || ctrl.getAlertsNodesByMemory().length > 0 || ctrl.getAlertsNodesByPods().length > 0"
-                            >
+                            <tr ng-if="ctrl.getAlertsNodesByCPU().length > 0 || ctrl.getAlertsNodesByMemory().length > 0 || ctrl.getAlertsNodesByPods().length > 0">
                                 <td colspan="3"><b>Resources</b></td>
                             </tr>
-                            <!--cpu used-->
-                            <tr ng-repeat="node in ctrl.getAlertsNodesByCPU()">
+                            <tr ng-repeat="node in ctrl.getAlertsNodesByResources('cpuStatusRequested') track by node.name">
                                 <td>
-                                    <span class="override--nodeTable_status" ng-style="{'background' : node.rowCpuColor}"></span>
+                                    <span class="override--nodeTable_status" ng-style="{'background' : node.statusColor}"></span>
                                 </td>
                                 <td>Node:
                                     <span ng-bind="node.name"></span>
                                     <span>
-                                        <a href="{{ctrl.getNodeDashboardLink(node)}}" target="_blank" style="color: #fff">
+                                        <a href="{{node.link}}" target="_blank" style="color: #fff">
                                             <i class="fa fa-eye"></i>
                                         </a>
                                     </span>
                                 </td>
-                                <td>CPU used: <span ng-bind="node.cpuPercentUsed"></span></td>
-                            </tr>
-                            <tr ng-repeat="node in ctrl.getAlertsNodesByCPU('cpuStatusRequested')">
-                                <td>
-                                    <span class="override--nodeTable_status" ng-style="{'background' : node.rowCpuRequestedColor}"></span>
-                                </td>
-                                <td>Node:
-                                    <span ng-bind="node.name"></span>
-                                    <span>
-                                        <a href="{{ctrl.getNodeDashboardLink(node)}}" target="_blank" style="color: #fff">
-                                            <i class="fa fa-eye"></i>
-                                        </a>
-                                    </span>
-                                </td>
-                                <td>CPU requested: <span ng-bind="node.cpuPercentRequested"></span></td>
-                            </tr>
-                            <!--memory used-->
-                            <tr ng-repeat="node in ctrl.getAlertsNodesByMemory()">
-                                <td>
-                                    <span class="override--nodeTable_status" ng-style="{'background' : node.rowMemoryColor}"></span>
-                                </td>
-                                <td>Node:
-                                    <span ng-bind="node.name"></span>
-                                    <span>
-                                        <a href="{{ctrl.getNodeDashboardLink(node)}}" target="_blank" style="color: #fff">
-                                            <i class="fa fa-eye"></i>
-                                        </a>
-                                    </span>
-                                </td>
-                                <td>Memory used: <span ng-bind="node.memoryPercentUsed"></span></td>
-                            </tr>
-                            <tr ng-repeat="node in ctrl.getAlertsNodesByMemory('memoryStatusRequested')">
-                                <td>
-                                    <span class="override--nodeTable_status" ng-style="{'background' : node.rowMemoryRequestedColor}"></span>
-                                </td>
-                                <td>Node:
-                                    <span ng-bind="node.name"></span>
-                                    <span>
-                                        <a href="{{ctrl.getNodeDashboardLink(node)}}" target="_blank" style="color: #fff">
-                                            <i class="fa fa-eye"></i>
-                                        </a>
-                                    </span>
-                                </td>
-                                <td>Memory used: <span ng-bind="node.memoryPercentRequested"></span></td>
-                            </tr>
-                            <!--pods used-->
-                            <tr ng-repeat="node in ctrl.getAlertsNodesByPods()">
-                                <td>
-                                    <span class="override--nodeTable_status" ng-style="{'background' : node.rowPodsColor}"></span>
-                                </td>
-                                <td>Node:
-                                    <span ng-bind="node.name"></span>
-                                    <span>
-                                        <a href="{{ctrl.getNodeDashboardLink(node)}}" target="_blank" style="color: #fff">
-                                            <i class="fa fa-eye"></i>
-                                        </a>
-                                    </span>
-                                </td>
-                                <td>Pods count used: <span ng-bind="node.podsPercentUsed"></span></td>
+                                <td ng-bind-html="node.statusMessage"></td>
                             </tr>
 
                             <!--fail pods-->

@@ -217,7 +217,7 @@ export class Node extends BaseModel {
         if (cpu.indexOf('m') > -1) {
             cpu = parseInt(cpu)/1000;
         }
-        return __roundCpu(this.metrics.cpuUsed) + ' / ' + cpu + ' ( '+ __percentUsed(this.metrics.cpuUsed, cpu) + ' )';
+        return __roundCpu(this.metrics.cpuUsed) + ' / ' + cpu + ' ('+ __percentUsed(this.metrics.cpuUsed, cpu) + ')';
     }
 
     get cpuPercentRequested(){
@@ -225,27 +225,27 @@ export class Node extends BaseModel {
         if (cpu.indexOf('m') > -1){
             cpu = parseInt(cpu)/1000;
         }
-        return __roundCpu(this.metrics.cpuRequested) + ' / ' + cpu + ' ( '+ __percentUsed(this.metrics.cpuRequested, cpu) + ' )';
+        return __roundCpu(this.metrics.cpuRequested) + ' / ' + cpu + ' ('+ __percentUsed(this.metrics.cpuRequested, cpu) + ')';
     }
 
     get memoryPercentUsed(){
         let used = this.metrics.memoryUsed;
         let allocatable = this.__getBytes(this.data.status.allocatable.memory);
         let percent = __percentUsed(used, allocatable);
-        return __convertToGB(used) + ' / ' + __convertToGB(allocatable) + ' ( ' + percent + ' ) ';
+        return __convertToGB(used) + ' / ' + __convertToGB(allocatable) + ' (' + percent + ') ';
     }
 
     get memoryPercentRequested(){
         let allocatable = this.__getBytes(this.data.status.allocatable.memory);
         let percent = __percentUsed(this.metrics.memoryRequested, allocatable);
-        return __convertToGB(this.metrics.memoryRequested) + ' / ' + __convertToGB(allocatable) + ' ( ' + percent + ' ) ';
+        return __convertToGB(this.metrics.memoryRequested) + ' / ' + __convertToGB(allocatable) + ' (' + percent + ') ';
     }
 
     get podsPercentUsed(){
         let used = this.metrics.podsCount;
         let allocatable = this.data.status.allocatable.pods;
         let percent = __percentUsed(used, allocatable);
-        return used + ' / ' + allocatable + ' ( ' + percent + ' ) ';
+        return used + ' / ' + allocatable + ' (' + percent + ') ';
     }
 
     /*color*/

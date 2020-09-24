@@ -43,7 +43,7 @@ let __getLastNonNullValue = dataset => {
 };
 
 let __percentUsed = (used, allocatable) => {
-  return ((parseFloat(used) / parseFloat(allocatable))*100).toFixed(2) + ' %';
+  return ((parseFloat(used) / parseFloat(allocatable))*100).toFixed(2) + '%';
 };
 
 const __getGrafanaVersion = (window) => {

@@ -18054,7 +18054,7 @@ var __getLastNonNullValue = function __getLastNonNullValue(dataset) {
 };
 
 var __percentUsed = function __percentUsed(used, allocatable) {
-  return (parseFloat(used) / parseFloat(allocatable) * 100).toFixed(2) + ' %';
+  return (parseFloat(used) / parseFloat(allocatable) * 100).toFixed(2) + '%';
 };
 
 var __getGrafanaVersion = function __getGrafanaVersion(window) {
@@ -18872,7 +18872,7 @@ function (_super) {
         cpu = parseInt(cpu) / 1000;
       }
 
-      return (0, _helpers.__roundCpu)(this.metrics.cpuUsed) + ' / ' + cpu + ' ( ' + (0, _helpers.__percentUsed)(this.metrics.cpuUsed, cpu) + ' )';
+      return (0, _helpers.__roundCpu)(this.metrics.cpuUsed) + ' / ' + cpu + ' (' + (0, _helpers.__percentUsed)(this.metrics.cpuUsed, cpu) + ')';
     },
     enumerable: true,
     configurable: true
@@ -18885,7 +18885,7 @@ function (_super) {
         cpu = parseInt(cpu) / 1000;
       }
 
-      return (0, _helpers.__roundCpu)(this.metrics.cpuRequested) + ' / ' + cpu + ' ( ' + (0, _helpers.__percentUsed)(this.metrics.cpuRequested, cpu) + ' )';
+      return (0, _helpers.__roundCpu)(this.metrics.cpuRequested) + ' / ' + cpu + ' (' + (0, _helpers.__percentUsed)(this.metrics.cpuRequested, cpu) + ')';
     },
     enumerable: true,
     configurable: true
@@ -18897,7 +18897,7 @@ function (_super) {
       var allocatable = this.__getBytes(this.data.status.allocatable.memory);
 
       var percent = (0, _helpers.__percentUsed)(used, allocatable);
-      return (0, _helpers.__convertToGB)(used) + ' / ' + (0, _helpers.__convertToGB)(allocatable) + ' ( ' + percent + ' ) ';
+      return (0, _helpers.__convertToGB)(used) + ' / ' + (0, _helpers.__convertToGB)(allocatable) + ' (' + percent + ') ';
     },
     enumerable: true,
     configurable: true
@@ -18907,7 +18907,7 @@ function (_super) {
       var allocatable = this.__getBytes(this.data.status.allocatable.memory);
 
       var percent = (0, _helpers.__percentUsed)(this.metrics.memoryRequested, allocatable);
-      return (0, _helpers.__convertToGB)(this.metrics.memoryRequested) + ' / ' + (0, _helpers.__convertToGB)(allocatable) + ' ( ' + percent + ' ) ';
+      return (0, _helpers.__convertToGB)(this.metrics.memoryRequested) + ' / ' + (0, _helpers.__convertToGB)(allocatable) + ' (' + percent + ') ';
     },
     enumerable: true,
     configurable: true
@@ -18917,7 +18917,7 @@ function (_super) {
       var used = this.metrics.podsCount;
       var allocatable = this.data.status.allocatable.pods;
       var percent = (0, _helpers.__percentUsed)(used, allocatable);
-      return used + ' / ' + allocatable + ' ( ' + percent + ' ) ';
+      return used + ' / ' + allocatable + ' (' + percent + ') ';
     },
     enumerable: true,
     configurable: true
@@ -19675,6 +19675,8 @@ var _k8sPage = __webpack_require__(/*! ../k8s-page */ "./components/k8s-page.ts"
 
 var _helpers = __webpack_require__(/*! ../../common/helpers */ "./common/helpers.ts");
 
+var _constants = __webpack_require__(/*! ../../common/constants */ "./common/constants.ts");
+
 var ClusterAlerts =
 /** @class */
 function (_super) {
@@ -19716,6 +19718,31 @@ function (_super) {
     return _this;
   }
 
+  ClusterAlerts.prototype.getAlertsNodesByCPU2 = function (status) {
+    if (status === void 0) {
+      status = 'cpuStatus';
+    }
+  };
+
+  ClusterAlerts.prototype.getAlertsNodesByResources = function () {
+    var _this = this;
+
+    return this.nodesMap.filter(this.resourceProblem).map(function (node) {
+      if (node.cpuStatus === _constants.ERROR || node.cpuStatusRequested === _constants.ERROR || node.memoryStatus === _constants.ERROR || node.memoryStatusRequested === _constants.ERROR || node.podsStatus === _constants.ERROR) {
+        node.statusColor = _constants.COLOR_RED;
+        node.statusForSort = _constants.ERROR;
+      } else {
+        node.statusColor = _constants.COLOR_YELLOW;
+        node.statusForSort = _constants.WARNING;
+      }
+
+      node.statusMessage = _this.nodeMessages(node).join(';<br/>');
+      return node;
+    }).sort(function (a, b) {
+      return b.statusForSort - a.statusForSort;
+    });
+  };
+
   ClusterAlerts.prototype.clusterProblem = function () {
     var warnings = [this.getWarningNodes().length === 0, this.getAlertsNodesByCPU().length === 0, this.getAlertsNodesByMemory().length === 0, this.getAlertsNodesByPods().length === 0, this.getAlertsNodesByCPU('cpuStatusRequested').length === 0, this.getAlertsNodesByMemory('memoryStatusRequested').length === 0, this.getWarningPods().length === 0, this.getAlertsComponents.length === 0];
     return this.nodesError || this.componentsError || this.podsError || warnings.some(function (w) {
@@ -19724,6 +19751,37 @@ function (_super) {
   };
 
   ;
+
+  ClusterAlerts.prototype.resourceProblem = function (node) {
+    return node.cpuStatus === _constants.WARNING || node.cpuStatus === _constants.ERROR || node.cpuStatusRequested === _constants.ERROR || node.cpuStatusRequested === _constants.WARNING || node.memoryStatus === _constants.ERROR || node.memoryStatus === _constants.WARNING || node.memoryStatusRequested === _constants.ERROR || node.memoryStatusRequested === _constants.WARNING || node.podsStatus === _constants.WARNING || node.podsStatus === _constants.ERROR;
+  };
+
+  ClusterAlerts.prototype.nodeMessages = function (node) {
+    var messages = [];
+
+    if (node.cpuStatus === _constants.ERROR || node.cpuStatus === _constants.WARNING) {
+      messages.push("CPU used: " + node.cpuPercentUsed);
+    }
+
+    if (node.cpuStatusRequested === _constants.ERROR || node.cpuStatusRequested === _constants.WARNING) {
+      messages.push("CPU requested: " + node.cpuPercentRequested);
+    }
+
+    if (node.memoryStatus === _constants.ERROR || node.memoryStatus === _constants.WARNING) {
+      messages.push("Memory used: " + node.memoryPercentUsed);
+    }
+
+    if (node.memoryStatusRequested === _constants.ERROR || node.memoryStatusRequested === _constants.WARNING) {
+      messages.push("Memory requested: " + node.memoryPercentUsed);
+    }
+
+    if (node.podsStatus === _constants.ERROR || node.podsStatus === _constants.WARNING) {
+      messages.push("Pods count used: " + node.podsPercentUsed);
+    }
+
+    return messages;
+  };
+
   ClusterAlerts.templateUrl = 'components/cluster-alerts/cluster-alerts.html';
   return ClusterAlerts;
 }(_k8sPage.K8sPage);
@@ -21192,7 +21250,6 @@ function () {
 
     this.cluster.getComponents().then(function (components) {
       if (components instanceof Array) {
-        console.log(components);
         _this.componentsError = false;
         _this.storeComponents = components.map(function (component) {
           return new _component.Component(component);
@@ -21338,14 +21395,14 @@ function () {
     return this.sortByStatus(warningPods);
   };
 
-  K8sPage.prototype.sortByStatus = function (pods, rule) {
+  K8sPage.prototype.sortByStatus = function (array, rule) {
     if (rule === void 0) {
       rule = [_constants.ERROR, _constants.WARNING, _constants.SUCCESS, _constants.SUCCEEDED, _constants.TERMINATING];
     }
 
     var sorted = [];
     rule.forEach(function (status) {
-      sorted.push.apply(sorted, (0, _tslib.__spread)(pods.filter(function (pod) {
+      sorted.push.apply(sorted, (0, _tslib.__spread)(array.filter(function (pod) {
         return pod.status === status;
       })));
     });
