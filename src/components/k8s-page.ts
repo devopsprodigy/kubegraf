@@ -1078,22 +1078,28 @@ export  class K8sPage {
 
     validResources(pod: Pod): boolean {
         return pod.data.spec.containers.every(container => {
-            let msg = ''
+            const msgCpu = []
+            const msgMemory = []
 
             if (pod.data.metadata.namespace !== 'kube-system' && pod.status !== SUCCEEDED) {
-                if ((!container.resources.requests || !container.resources.requests.cpu)
-                    || (!container.resources.limits || !container.resources.limits.cpu)) {
-                    msg += ERROR_MSG_CPU_REQUESTS_LIMITS + '; '
+                if (!container.resources.requests || !container.resources.requests.cpu) {
+                    msgCpu.push('CPU request')
                 }
-
-                if ((!container.resources.requests || !container.resources.requests.memory)
-                    || (!container.resources.limits || !container.resources.limits.memory)) {
-                    msg += ERROR_MSG_MEMORY_REQUESTS_LIMITS + '; '
+                if (!container.resources.limits || !container.resources.limits.cpu){
+                    msgCpu.push('CPU limit')
+                }
+                if (!container.resources.requests || !container.resources.requests.memory) {
+                    msgMemory.push('Memory request')
+                }
+                if (!container.resources.limits || !container.resources.limits.memory) {
+                    msgMemory.push('Memory limit')
                 }
             }
 
-            if(msg){
-                pod.message = msg;
+            if(msgCpu.length > 0 || msgMemory.length > 0){
+                pod.message = `Container "${container.name}":
+                 ${msgCpu.length && 'Specify ' + msgCpu.join(' and ') + ';'}
+                 ${msgMemory.length && 'Specify ' + msgMemory.join(' and ') + ';'}`;
                 return false
             }
 
