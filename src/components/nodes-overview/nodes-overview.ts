@@ -9,6 +9,7 @@ export class NodesOverview extends K8sPage {
     static templateUrl = 'components/nodes-overview/nodes-overview.html';
     version: number;
     serverInfo: any = null;
+    hideAllWarningPods: boolean = true;
 
     constructor(
         $scope,
@@ -155,5 +156,9 @@ export class NodesOverview extends K8sPage {
             }
         }
         return '<i class="fa fa-long-arrow-up grey"></i>'
+    }
+
+    toggleAllWarningPods(){
+        this.hideAllWarningPods = !this.hideAllWarningPods;
     }
 }

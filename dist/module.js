@@ -21567,6 +21567,7 @@ function (_super) {
     _this.$timeout = $timeout;
     _this.$window = $window;
     _this.serverInfo = null;
+    _this.hideAllWarningPods = true;
     _this.pageReady = false;
     _this.version = (0, _helpers.__getGrafanaVersion)($window);
 
@@ -21744,6 +21745,10 @@ function (_super) {
     }
 
     return '<i class="fa fa-long-arrow-up grey"></i>';
+  };
+
+  NodesOverview.prototype.toggleAllWarningPods = function () {
+    this.hideAllWarningPods = !this.hideAllWarningPods;
   };
 
   NodesOverview.templateUrl = 'components/nodes-overview/nodes-overview.html';

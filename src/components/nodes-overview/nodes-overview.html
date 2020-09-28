@@ -72,24 +72,36 @@
             </div>
         </div>
         <section>
-            <section ng-if="ctrl.getWarningPods().length > 0">
-                <div class="row">
-                    <div class="col-md-12">
-                        <div class="markdown-html explore-panel">
-                            <table style="width: 100%">
-                                <tr>
-                                    <th>Status</th>
-                                    <th>Pod Name</th>
-                                    <th>Error message</th>
-                                </tr>
-                                <tr ng-repeat="pod in ctrl.getWarningPods()" ng-if="!pod.is_deleted">
-                                    <td>
-                                        <span class="override--nodeTable_status override--pod_status_{{pod.color}}"></span>
-                                    </td>
-                                    <td class="pointer" ng-bind="pod.name" ng-click="ctrl.goTo(pod.name)"></td>
-                                    <td ng-bind="pod.message"></td>
-                                </tr>
-                            </table>
+            <section ng-if="ctrl.getWarningPods().length > 0" class="warning-panel">
+                <div class="markdown-html explore-panel">
+                    <table style="width: 100%">
+                        <tr>
+                            <th>Status</th>
+                            <th>Pod Name</th>
+                            <th>
+                                <span>Error message</span>
+                                <div ng-show="ctrl.hideAllWarningPods" class="btn btn-danger" ng-click="ctrl.toggleAllWarningPods()">
+                                    <span class="btn gicon gicon-alert-alt"></span>
+                                    <span ng-bind="'Show warnings ('+ctrl.getWarningPods().length+')'"></span>
+                                </div>
+                                <div ng-show="!ctrl.hideAllWarningPods" class="btn btn-grey" ng-click="ctrl.toggleAllWarningPods()" ng-hide="ctrl.hideAllWarningPods">
+                                    <span class="btn gicon gicon-alert-alt"></span>
+                                    Hide warnings (<span ng-bind="ctrl.getWarningPods().length"></span>)
+                                </div>
+                            </th>
+                        </tr>
+                        <tr ng-repeat="pod in ctrl.getWarningPods()" ng-if="!pod.is_deleted && !ctrl.hideAllWarningPods">
+                            <td>
+                                <span class="override--nodeTable_status override--pod_status_{{pod.color}}"></span>
+                            </td>
+                            <td class="pointer" ng-bind="pod.name" ng-click="ctrl.goTo(pod.name)"></td>
+                            <td ng-bind="pod.message"></td>
+                        </tr>
+                    </table>
+                    <div class="warning-panel_btn" ng-hide="ctrl.hideAllWarningPods">
+                        <div class="btn btn-grey" ng-click="ctrl.toggleAllWarningPods()">
+                            <span class="btn gicon gicon-alert-alt"></span>
+                            Hide warnings (<span ng-bind="ctrl.getWarningPods().length"></span>)
                         </div>
                     </div>
                 </div>
