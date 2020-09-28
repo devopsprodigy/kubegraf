@@ -364,8 +364,8 @@ i.active {
     background: yellow; }
   .override--pod_status_success {
     background: #18e018; }
-  .override--pod_status_terminating {
-    background: #056b11; }
+  .override--pod_status_terminating, .override--pod_status_succeeded {
+    background: #606060; }
 
 .override--node_status {
   display: inline-block;

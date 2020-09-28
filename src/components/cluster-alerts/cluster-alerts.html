@@ -97,6 +97,7 @@
                                 <td ng-bind="component.name"></td>
                                 <td ng-bind="component.message"></td>
                             </tr>
+
                             <!--Node-->
                             <tr ng-if="ctrl.getWarningNodes().length > 0"><td colspan="3"><b>Node</b></td></tr>
                             <tr ng-repeat="node in ctrl.getWarningNodes()">
@@ -113,6 +114,7 @@
                                 </td>
                                 <td ng-bind="node.message"></td>
                             </tr>
+
                             <!--Resources-->
                             <tr ng-if="ctrl.getAlertsNodesByCPU().length > 0 || ctrl.getAlertsNodesByMemory().length > 0 || ctrl.getAlertsNodesByPods().length > 0">
                                 <td colspan="3"><b>Resources</b></td>
