@@ -19345,6 +19345,48 @@ function (_super) {
     enumerable: true,
     configurable: true
   });
+  Object.defineProperty(Pod.prototype, "usageCpuColor", {
+    get: function get() {
+      if (this.sourceMetrics.cpuUsed === null) {
+        return "";
+      }
+
+      if (this.sourceMetrics.cpuRequested && this.sourceMetrics.cpuLimit) {
+        if (this.sourceMetrics.cpuUsed / this.sourceMetrics.cpuRequested < 0.5 && this.sourceMetrics.cpuUsed / this.sourceMetrics.cpuLimit < 0.5) {
+          return "green";
+        } else if (this.sourceMetrics.cpuUsed / this.sourceMetrics.cpuRequested > 0.8 && this.sourceMetrics.cpuUsed / this.sourceMetrics.cpuLimit > 0.8) {
+          return "red";
+        } else {
+          return "yellow";
+        }
+      }
+
+      return "red";
+    },
+    enumerable: true,
+    configurable: true
+  });
+  Object.defineProperty(Pod.prototype, "usageMemoryColor", {
+    get: function get() {
+      if (this.sourceMetrics.memoryUsed === null) {
+        return "";
+      }
+
+      if (this.sourceMetrics.memoryRequested && this.sourceMetrics.memoryLimit) {
+        if (this.sourceMetrics.memoryUsed / this.sourceMetrics.memoryRequested < 0.5 && this.sourceMetrics.memoryUsed / this.sourceMetrics.memoryLimit < 0.5) {
+          return "green";
+        } else if (this.sourceMetrics.memoryUsed / this.sourceMetrics.memoryRequested > 0.8 && this.sourceMetrics.memoryUsed / this.sourceMetrics.memoryLimit > 0.8) {
+          return "red";
+        } else {
+          return "yellow";
+        }
+      }
+
+      return "red";
+    },
+    enumerable: true,
+    configurable: true
+  });
   return Pod;
 }(_baseModel.BaseModel);
 

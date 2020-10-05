@@ -245,10 +245,10 @@
                                                     <td>
                                                         <span ng-bind="pod.name" bs-tooltip="pod.message" data-placement="right" class="pointer {{pod.name}}"></span>
                                                         <span>
-                                                    <a href="{{ctrl.getPodDashboardLink(pod)}}" target="_blank" style="color: #fff">
-                                                        <i class="fa fa-eye"></i>
-                                                    </a>
-                                                </span>
+                                                            <a href="{{ctrl.getPodDashboardLink(pod)}}" target="_blank" style="color: #fff">
+                                                                <i class="fa fa-eye"></i>
+                                                            </a>
+                                                        </span>
                                                     </td>
                                                     <td>
                                                         <span ng-bind="pod.metrics.cpuRequested"></span>
@@ -258,7 +258,7 @@
                                                               ng-if="pod.metrics.cpuRequested === 'N-A'"
                                                         ></span>
                                                     </td>
-                                                    <td>
+                                                    <td ng-class="'pod-usage-border-'+pod.usageCpuColor">
                                                         <span ng-bind="pod.metrics.cpuUsed"></span>
                                                         <span class="gicon gicon-question card-item-label"
                                                               bs-tooltip="pod.NaMessage"
@@ -282,13 +282,12 @@
                                                               ng-if="pod.metrics.memoryRequested === 'N-A'"
                                                         ></span>
                                                     </td>
-                                                    <td>
+                                                    <td ng-class="'pod-usage-border-'+pod.usageMemoryColor">
                                                         <span ng-bind="pod.metrics.memoryUsed"></span>
                                                         <span class="gicon gicon-question card-item-label"
                                                               bs-tooltip="pod.NaMessage"
                                                               data-placement="right"
-                                                              ng-if="pod.metrics.memoryUsed === 'N-A'"
-                                                        ></span>
+                                                              ng-if="pod.metrics.memoryUsed === 'N-A'"></span>
                                                     </td>
                                                     <td>
                                                         <span ng-bind="pod.metrics.memoryLimit"></span>

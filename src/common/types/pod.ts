@@ -101,7 +101,6 @@ export class Pod extends BaseModel{
         }
     }
 
-
     get message(){
         if (this.eventMessage) {
             return this.eventMessage
@@ -156,8 +155,45 @@ export class Pod extends BaseModel{
         this.eventMessage = msg;
     }
 
-    get NaMessage(){
+    get NaMessage() {
         return "Prometheus metrics unavailable"
     }
 
+    get usageCpuColor() {
+        if (this.sourceMetrics.cpuUsed === null) {
+            return ""
+        }
+
+        if (this.sourceMetrics.cpuRequested && this.sourceMetrics.cpuLimit) {
+            if (this.sourceMetrics.cpuUsed / this.sourceMetrics.cpuRequested < 0.5
+                && this.sourceMetrics.cpuUsed / this.sourceMetrics.cpuLimit < 0.5) {
+                return "green"
+            } else if (this.sourceMetrics.cpuUsed / this.sourceMetrics.cpuRequested > 0.8
+                && this.sourceMetrics.cpuUsed / this.sourceMetrics.cpuLimit > 0.8) {
+                return "red"
+            } else {
+                return "yellow"
+            }
+        }
+        return "red"
+    }
+
+    get usageMemoryColor() {
+        if (this.sourceMetrics.memoryUsed === null) {
+            return ""
+        }
+
+        if (this.sourceMetrics.memoryRequested && this.sourceMetrics.memoryLimit) {
+            if (this.sourceMetrics.memoryUsed / this.sourceMetrics.memoryRequested < 0.5
+                && this.sourceMetrics.memoryUsed / this.sourceMetrics.memoryLimit < 0.5) {
+                return "green"
+            } else if (this.sourceMetrics.memoryUsed / this.sourceMetrics.memoryRequested > 0.8
+                && this.sourceMetrics.memoryUsed / this.sourceMetrics.memoryLimit > 0.8) {
+                return "red"
+            } else {
+                return "yellow"
+            }
+        }
+        return "red"
+    }
 }
