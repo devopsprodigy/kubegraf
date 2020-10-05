@@ -20,11 +20,8 @@
       background-repeat: repeat-x;
       border-color: #3274d9; }
     .page-container--override .btn.btn-grey {
-      color: #b8b8b8;
       font-size: 12px;
-      background-color: #272729;
       padding: 8px 10px;
-      box-shadow: 1px 1px 1px 0 black;
       height: 30px;
       line-height: 15px;
       white-space: nowrap;
@@ -33,7 +30,6 @@
     .page-container--override .btn .fa.override--fa {
       top: 0; }
   .page-container--override .page-header {
-    background-color: #222326;
     padding: 32px 60px 0 60px; }
     .page-container--override .page-header .header-btn {
       display: flex; }
@@ -48,17 +44,13 @@
         display: flex;
         position: absolute;
         flex-direction: column;
-        background-color: #2d2d30;
         z-index: 1;
         border-radius: 3px;
-        box-shadow: 1px 1px 1px 0 black;
         margin-left: -30px; }
         .page-container--override .page-header .mobile-btn_body.active {
           display: flex; }
         .page-container--override .page-header .mobile-btn_body a {
           padding: 5px 15px; }
-          .page-container--override .page-header .mobile-btn_body a:hover {
-            background: #212124; }
     .page-container--override .page-header .row {
       display: flex;
       justify-content: space-between;
@@ -72,7 +64,6 @@
       float: initial; }
     .page-container--override .page-header .hr {
       height: 1px;
-      background-color: #343436;
       margin: 0 -60px; }
   .page-container--override .page-body--override {
     padding: 28px 60px 0; }
@@ -98,7 +89,6 @@
       .page-container--override .page-body--override .status span {
         color: #c04c21; }
     .page-container--override .page-body--override .overview-panel {
-      background-color: #2d2d30;
       border-radius: 3px;
       padding: 16px 16px;
       display: flex;
@@ -111,12 +101,10 @@
       .page-container--override .page-body--override .overview-panel_body {
         display: flex;
         justify-content: space-between;
-        color: #b8b8b8;
         margin-top: 24px; }
         .page-container--override .page-body--override .overview-panel_body h2 {
           font-size: 18px;
           font-weight: normal;
-          color: #b8b8b8;
           margin-bottom: 20px;
           line-height: 18px; }
         .page-container--override .page-body--override .overview-panel_body_components {
@@ -164,7 +152,6 @@
             display: flex;
             justify-content: space-between; }
             .page-container--override .page-body--override .namespace-panel_body .column_header h3 {
-              color: #b8b8b8;
               font-size: 18px;
               margin: 0 0 24px 10px; }
           .page-container--override .page-body--override .namespace-panel_body .column_cell {
@@ -186,32 +173,25 @@
             .page-container--override .page-body--override .namespace-panel_body .column_cell:last-child {
               border: none; }
             .page-container--override .page-body--override .namespace-panel_body .column_cell_header {
-              font-size: 14px;
-              color: #8e8e8e; }
-              .page-container--override .page-body--override .namespace-panel_body .column_cell_header span {
-                color: #eaeaea; }
+              font-size: 14px; }
             .page-container--override .page-body--override .namespace-panel_body .column_cell .pod {
               display: flex;
               line-height: initial;
-              font-size: 12px;
-              color: #b8b8b8; }
+              font-size: 12px; }
               .page-container--override .page-body--override .namespace-panel_body .column_cell .pod_title {
                 top: 3px;
                 position: relative; }
             .page-container--override .page-body--override .namespace-panel_body .column_cell .services {
-              margin-top: 12px;
-              color: #8e8e8e; }
+              margin-top: 12px; }
               .page-container--override .page-body--override .namespace-panel_body .column_cell .services h5 {
                 font-size: 14px;
                 line-height: initial;
                 margin-left: 14px;
-                color: #b8b8b8;
                 margin-bottom: 6px; }
               .page-container--override .page-body--override .namespace-panel_body .column_cell .services .service {
                 display: flex;
                 margin-left: 6px; }
                 .page-container--override .page-body--override .namespace-panel_body .column_cell .services .service_title {
-                  color: #b8b8b8;
                   line-height: initial;
                   font-size: 12px; }
                   .page-container--override .page-body--override .namespace-panel_body .column_cell .services .service_title span {
@@ -242,8 +222,6 @@
         float: right; }
       .page-container--override .page-body--override .warning-panel .btn-danger {
         float: right; }
-  .page-container--override .card-item, .page-container--override .card-item:hover {
-    background: #2f2f32; }
 
 .btn-secondary--override {
   color: #ffffff;
@@ -723,6 +701,50 @@ label.toggle-checkbox {
 
 .explore-toolbar-item {
   list-style: inside; }
+
+.page-container--override {
+  background-color: #fff; }
+  .page-container--override .page-body--override .namespace-panel {
+    background-color: #f1f5f9; }
+    .page-container--override .page-body--override .namespace-panel_body .column_header h3 {
+      color: initial; }
+    .page-container--override .page-body--override .namespace-panel_body .column_cell_header {
+      color: initial; }
+      .page-container--override .page-body--override .namespace-panel_body .column_cell_header span {
+        color: #676767; }
+    .page-container--override .page-body--override .namespace-panel_body .column_cell .pod {
+      color: #4b4b4b; }
+    .page-container--override .page-body--override .namespace-panel_body .column_cell .services {
+      color: #7d7d7d; }
+      .page-container--override .page-body--override .namespace-panel_body .column_cell .services h5 {
+        color: #4b4b4b; }
+      .page-container--override .page-body--override .namespace-panel_body .column_cell .services .service_title {
+        color: #7d7d7d; }
+    .page-container--override .page-body--override .namespace-panel .card-item, .page-container--override .page-body--override .namespace-panel .card-item:hover {
+      background: #f1f5f9; }
+  .page-container--override .page-body--override .overview-panel {
+    background-color: #f1f5f9; }
+    .page-container--override .page-body--override .overview-panel_body {
+      color: initial; }
+      .page-container--override .page-body--override .overview-panel_body h2 {
+        color: initial; }
+  .page-container--override .page-body--override .title h1 {
+    color: initial; }
+  .page-container--override .page-body--override .warning-panel {
+    background: #fafafa; }
+  .page-container--override .mobile-btn_body {
+    background-color: #f1f5f9;
+    box-shadow: 1px 1px 1px 0 #b8b8b8; }
+    .page-container--override .mobile-btn_body a:hover {
+      background: #b8b8b8; }
+  .page-container--override .hr {
+    background-color: #dde4ed; }
+  .page-container--override .btn.btn-grey {
+    color: initial;
+    background-color: #dce1e6;
+    box-shadow: 1px 1px 1px 0 #b8b8b8; }
+  .page-container--override .markdown-html table td {
+    background: #fafafa; }
 
 
 /*# sourceMappingURL=light.css.map*/
