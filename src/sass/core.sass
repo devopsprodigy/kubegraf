@@ -21,11 +21,8 @@
         background-repeat: repeat-x
         border-color: #3274d9
       &.btn-grey
-        color: #b8b8b8
         font-size: 12px
-        background-color: #272729
         padding: 8px 10px
-        box-shadow: 1px 1px 1px 0 black
         height: 30px
         line-height: 15px
         white-space: nowrap
@@ -34,7 +31,6 @@
       .fa.override--fa
         top: 0
     .page-header
-      background-color: #222326
       padding: 32px 60px 0 60px
       .header-btn
         display: flex
@@ -49,17 +45,13 @@
           display: flex
           position: absolute
           flex-direction: column
-          background-color: #2d2d30
           z-index: 1
           border-radius: 3px
-          box-shadow: 1px 1px 1px 0 black
           margin-left: -30px
           &.active
             display: flex
           a
             padding: 5px 15px
-            &:hover
-              background: #212124
       .row
         display: flex
         justify-content: space-between
@@ -73,7 +65,6 @@
         float: initial
       .hr
         height: 1px
-        background-color: #343436
         margin: 0 -60px
     .page-body--override
       padding: 28px 60px 0
@@ -99,7 +90,6 @@
         span
           color: #c04c21
       .overview-panel
-        background-color: #2d2d30
         border-radius: 3px
         padding: 16px 16px
         display: flex
@@ -112,12 +102,10 @@
         &_body
           display: flex
           justify-content: space-between
-          color: #b8b8b8
           margin-top: 24px
           h2
             font-size: 18px
             font-weight: normal
-            color: #b8b8b8
             margin-bottom: 20px
             line-height: 18px
           &_components
@@ -135,7 +123,7 @@
             max-width: 700px
         &_btn
           display: flex
-          min-width: 313px
+          min-width: 325px
           justify-content: flex-end
           span
             margin: 0 10px
@@ -165,7 +153,6 @@
               display: flex
               justify-content: space-between
               h3
-                color: #b8b8b8
                 font-size: 18px
                 margin: 0 0 24px 10px
             &_cell
@@ -188,31 +175,24 @@
                 border: none
               &_header
                 font-size: 14px
-                color: #8e8e8e
-                span
-                  color: #eaeaea
               .pod
                 display: flex
                 line-height: initial
                 font-size: 12px
-                color: #b8b8b8
                 &_title
                   top: 3px
                   position: relative
               .services
                 margin-top: 12px
-                color: #8e8e8e
                 h5
                   font-size: 14px
                   line-height: initial
                   margin-left: 14px
-                  color: #b8b8b8
                   margin-bottom: 6px
                 .service
                   display: flex
                   margin-left: 6px
                   &_title
-                    color: #b8b8b8
                     line-height: initial
                     font-size: 12px
                     span
@@ -230,17 +210,19 @@
         margin-bottom: 10px
         background: #212124
         border-radius: 3px
+        th>span
+          line-height: 33px
         &_btn
           display: flex
           justify-content: flex-end
-        th:last-child
-          text-align: end
+          padding: 8px 16px
         .btn-grey
           height: 36px
           padding: 0 20px
-          margin: 10px 16px
-    .card-item, .card-item:hover
-      background: #2f2f32
+          margin: 0
+          float: right
+        .btn-danger
+          float: right
 
 
 .page-cluster-permission
@@ -258,6 +240,18 @@
   background-repeat: repeat-x
   border-color: #3274d9
 
+td.pod
+  &-usage-border
+    &-red
+      color: #d34d36
+    &-yellow
+      color: #fcff00
+    &-green
+      color: #83df57
+  &-background-red
+    background: #d34d36
+
+
 .checkbox
   width: 165px
   display: flex
@@ -274,7 +268,8 @@
     background: #141414
     display: flex
     align-items: center
-    justify-content: center
+    //justify-content: center
+    align-self: center
   input:checked+span
     background: linear-gradient(0deg,#eb7b18,#d44a3a)
     border: none
@@ -285,10 +280,11 @@
   label
     font-size: 14px
     line-height: 16px
-    height: 18px
+    min-height: 18px
     padding-left: 24px
     position: relative
     cursor: pointer
+    align-self: center
 .chevron
   display: block
   width: 14px
@@ -324,7 +320,7 @@
     background-color: #83df57
   &.yellow, &.warning
     background-color: #fcff00
-  &.terminating
+  &.terminating, &.succeeded
     background-color: #555555
 
 .dot-grey
@@ -363,8 +359,8 @@ i.active
       background: yellow
     &_success
       background: #18e018
-    &_terminating
-      background: #056b11
+    &_terminating, &_succeeded
+      background: #606060
   &node_status
     display: inline-block
     width: 10px
@@ -428,32 +424,33 @@ i.active
         width: 25%
   &table_ns_6
     width: 100%
-    tr
-      width: 100%
-      th:nth-child(1)
-        width: 5%
-      th:nth-child(2)
-        width: 45%
-      th:nth-child(3)
-        width: 12.5%
-      th:nth-child(4)
-        width: 12.5%
-      th:nth-child(5)
-        width: 12.5%
-      th:nth-child(6)
-        width: 12.5%
+    thead
+      td div
+        display: flex
+        justify-content: space-between
+        font-size: 14px
+        align-items: center
+        .btn
+          min-width: 100px
+      .thead-sort
+        justify-content: space-between
+        display: flex
+        font-size: 12px
+        align-items: center
+        & i
+          margin-left: 8px
+      td
+        width: 40%
+      th
+        width: 10%
+        padding: 8px 12px 8px 16px
+    tbody
       td:nth-child(1)
-        width: 5%
+        width: 40px
       td:nth-child(2)
-        width: 45%
-      td:nth-child(3)
-        width: 12.5%
-      td:nth-child(4)
-        width: 12.5%
-      td:nth-child(5)
-        width: 12.5%
-      td:nth-child(6)
-        width: 12.5%
+        width: 35%
+      td
+        width: 10%
   &card-item
     display: inline-block
     padding: 5px

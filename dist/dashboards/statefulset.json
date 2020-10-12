@@ -113,7 +113,7 @@
         "datasource": "$cluster",
         "type": "query",
         "name": "namespace",
-        "query": "namespace",
+        "query": "namespace statefulset",
         "hide": 0,
         "label": null,
         "options": [],
@@ -133,24 +133,19 @@
       },
       {
         "allValue": null,
-        "current": {
-          "tags": [],
-          "text": "All",
-          "value": "$__all"
-        },
         "datasource": "$PromDs",
-        "definition": "query_result(container_memory_usage_bytes{namespace=\"$namespace\", pod_name=~\"$statefulset-.*\", container_name!=\"\", container_name!=\"POD\"} or container_memory_usage_bytes{namespace=\"$namespace\", pod=~\"$statefulset-.*\", container!=\"POD\", container!=\"\"})",
+        "definition": "query_result(avg_over_time(kube_pod_info{namespace=\"$namespace\",pod=~\"$statefulset-.*\"}[$__range]))",
         "hide": 0,
         "includeAll": true,
         "label": null,
-        "multi": false,
-        "name": "container",
+        "multi": true,
+        "name": "pod",
         "options": [],
-        "query": "query_result(container_memory_usage_bytes{namespace=\"$namespace\", pod_name=~\"$statefulset-.*\", container_name!=\"\", container_name!=\"POD\"} or container_memory_usage_bytes{namespace=\"$namespace\", pod=~\"$statefulset-.*\", container!=\"POD\", container!=\"\"})",
-        "refresh": 2,
-        "regex": "/container_?n?a?m?e?=\\\"(.+?)\\\"/",
+        "query": "query_result(avg_over_time(kube_pod_info{namespace=\"$namespace\",pod=~\"$statefulset-.*\"}[$__range]))",
+        "refresh": 1,
+        "regex": "/pod(?:_name)?=\\\"(.+?)\\\"/",
         "skipUrlSync": false,
-        "sort": 1,
+        "sort": 0,
         "tagValuesQuery": "",
         "tags": [],
         "tagsQuery": "",
@@ -160,22 +155,23 @@
       {
         "allValue": null,
         "current": {
-          "text": "elastic-gke-logging-1-elasticsearch-0",
-          "value": "elastic-gke-logging-1-elasticsearch-0"
+          "selected": false,
+          "text": "All",
+          "value": "$__all"
         },
         "datasource": "$PromDs",
-        "definition": "query_result(container_memory_usage_bytes{namespace=\"$namespace\", pod_name=~\"$statefulset-.*\", container_name!=\"\", container_name!=\"POD\"} or container_memory_usage_bytes{namespace=\"$namespace\", pod=~\"$statefulset-.*\", container!=\"POD\", container!=\"\"})",
+        "definition": "query_result(avg_over_time(kube_pod_container_info{namespace=\"$namespace\",pod=~\"$statefulset-.*\",container!=\"\",container!=\"POD\"}[$__range]))",
         "hide": 0,
         "includeAll": true,
         "label": null,
-        "multi": true,
-        "name": "pod",
+        "multi": false,
+        "name": "container",
         "options": [],
-        "query": "query_result(container_memory_usage_bytes{namespace=\"$namespace\", pod_name=~\"$statefulset-.*\", container_name!=\"\", container_name!=\"POD\"} or container_memory_usage_bytes{namespace=\"$namespace\", pod=~\"$statefulset-.*\", container!=\"POD\", container!=\"\"})",
-        "refresh": 1,
-        "regex": "/pod_?n?a?m?e?=\\\"(.+?)\\\"/",
+        "query": "query_result(avg_over_time(kube_pod_container_info{namespace=\"$namespace\",pod=~\"$statefulset-.*\",container!=\"\",container!=\"POD\"}[$__range]))",
+        "refresh": 2,
+        "regex": "/container(?:_name)?=\\\"(.+?)\\\"/",
         "skipUrlSync": false,
-        "sort": 0,
+        "sort": 1,
         "tagValuesQuery": "",
         "tags": [],
         "tagsQuery": "",
@@ -690,21 +686,43 @@
       "pointradius": 2,
       "points": false,
       "renderer": "flot",
-      "seriesOverrides": [],
+      "seriesOverrides": [
+        {
+          "alias": "/Used.+/",
+          "color": "#73BF69"
+        },
+        {
+          "alias": "/Requested.+/",
+          "color": "#FADE2A"
+        },
+        {
+          "alias": "/Limited.+/",
+          "color": "#F2495C"
+        }
+      ],
       "spaceLength": 10,
       "stack": false,
       "steppedLine": false,
       "targets": [
         {
-          "expr": "sum(container_memory_usage_bytes{namespace=\"$namespace\", pod=~\"$pod\", container!=\"\", container!=\"POD\", container=~\"$container\"}) by (pod) or\nsum(label_replace(container_memory_usage_bytes{namespace=\"$namespace\", pod_name=~\"$pod\", container_name!=\"\", container_name!=\"POD\", container_name=~\"$container\"},\"pod\", \"$1\", \"pod_name\", \"(.*)\")) by (pod)",
-          "legendFormat": "Used: {{pod}} / {{$container}}",
+          "expr": "sum(container_memory_usage_bytes{namespace=\"$namespace\", pod=~\"$pod\", container!=\"\", container!=\"POD\", container=~\"$container\"}) by (pod,container) or\nsum(label_replace(label_replace(container_memory_usage_bytes{namespace=\"$namespace\", pod_name=~\"$pod\", container_name!=\"\", container_name!=\"POD\", container_name=~\"$container\"},\"pod\", \"$1\", \"pod_name\", \"(.*)\"),\"container\", \"$1\", \"container_name\", \"(.*)\")) by (pod,container)",
+          "interval": "",
+          "legendFormat": "Used: {{pod}} / {{container}}",
           "refId": "A"
         },
         {
-          "expr": "sum(kube_pod_container_resource_requests_memory_bytes{ namespace=\"$namespace\", pod=~\"$pod\", container=~\"$container\"}) by (pod)",
+          "expr": "sum(kube_pod_container_resource_requests_memory_bytes{ namespace=\"$namespace\", pod=~\"$pod\", container=~\"$container\"}) by (pod,container)",
           "hide": false,
-          "legendFormat": "Requested: {{pod}} / {{$container}}",
+          "interval": "",
+          "legendFormat": "Requested: {{pod}} / {{container}}",
           "refId": "B"
+        },
+        {
+          "expr": "sum(kube_pod_container_resource_limits_memory_bytes{ namespace=\"$namespace\", pod=~\"$pod\", container=~\"$container\"}) by (pod,container)",
+          "hide": false,
+          "interval": "",
+          "legendFormat": "Limited: {{pod}} / {{container}}",
+          "refId": "C"
         }
       ],
       "thresholds": [],
@@ -785,20 +803,41 @@
       "pointradius": 2,
       "points": false,
       "renderer": "flot",
-      "seriesOverrides": [],
+      "seriesOverrides": [
+        {
+          "alias": "/Used.+/",
+          "color": "#73BF69"
+        },
+        {
+          "alias": "/Requested.+/",
+          "color": "#FADE2A"
+        },
+        {
+          "alias": "/Limited.+/",
+          "color": "#F2495C"
+        }
+      ],
       "spaceLength": 10,
       "stack": false,
       "steppedLine": false,
       "targets": [
         {
-          "expr": "sum(rate(container_cpu_usage_seconds_total{namespace=\"$namespace\", pod=~\"$pod\", container=~\"$container\"}[2m])) by (pod) or\nsum(label_replace(rate(container_cpu_usage_seconds_total{namespace=\"$namespace\", pod_name=~\"$pod\", container_name=~\"$container\"}[2m]), \"pod\", \"$1\", \"pod_name\", \"(.*)\")) by (pod)",
-          "legendFormat": "Used: {{pod}} / {{$container}}",
+          "expr": "sum(rate(container_cpu_usage_seconds_total{namespace=\"$namespace\", pod=~\"$pod\", container=~\"$container\"}[2m])) by (pod,container) or\nsum(label_replace(label_replace(rate(container_cpu_usage_seconds_total{namespace=\"$namespace\", pod_name=~\"$pod\", container_name=~\"$container\"}[2m]), \"pod\", \"$1\", \"pod_name\", \"(.*)\"), \"container\", \"$1\", \"container_name\", \"(.*)\")) by (pod,container)",
+          "interval": "",
+          "legendFormat": "Used: {{pod}} / {{container}}",
           "refId": "A"
         },
         {
-          "expr": "sum(kube_pod_container_resource_requests_cpu_cores{namespace=\"$namespace\", pod=~\"$pod\", container_name=~\"$container\"}) by (pod)",
-          "legendFormat": "Requested: {{pod}} / {{$container}}",
+          "expr": "sum(kube_pod_container_resource_requests_cpu_cores{namespace=\"$namespace\", pod=~\"$pod\", container_name=~\"$container\"}) by (pod,container)",
+          "interval": "",
+          "legendFormat": "Requested: {{pod}} / {{container}}",
           "refId": "B"
+        },
+        {
+          "expr": "sum(kube_pod_container_resource_limits_cpu_cores{namespace=\"$namespace\", pod=~\"$pod\", container_name=~\"$container\"}) by (pod,container)",
+          "interval": "",
+          "legendFormat": "Limited: {{pod}} / {{container}}",
+          "refId": "C"
         }
       ],
       "thresholds": [],

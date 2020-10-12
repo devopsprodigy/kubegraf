@@ -163,7 +163,7 @@ export  class K8sPage {
 
     __getCpuMetricsRequested(){
         const promQuery = {
-            expr: 'sum(kube_pod_container_resource_requests_cpu_cores) by (node)',
+            expr: 'sum(sum(kube_pod_container_resource_requests_cpu_cores) by (namespace, pod, node) * on (pod) group_left()  (sum(kube_pod_status_phase{phase="Running"}) by (pod, namespace) == 1)) by (node)',
             legend: 'node'
         };
 
@@ -173,7 +173,7 @@ export  class K8sPage {
 
     __getMemoryMetricsRequested(){
         const promQuery = {
-            expr: 'sum(kube_pod_container_resource_requests_memory_bytes) by (node)',
+            expr: 'sum(sum(kube_pod_container_resource_requests_memory_bytes) by (namespace, pod, node) * on (pod) group_left()  (sum(kube_pod_status_phase{phase="Running"}) by (pod, namespace) == 1)) by (node)',
             legend: "node"
         };
 

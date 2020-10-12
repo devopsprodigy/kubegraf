@@ -64,6 +64,7 @@ export class DOPK8SDatasource {
     metricFindQuery(query){
         let interpolated = this.templateSrv.replace(query, {});
         let queryData = interpolated.split(" ");
+
         switch (queryData[0]) {
             case 'prom':
                 return Promise.resolve([{
@@ -81,12 +82,47 @@ export class DOPK8SDatasource {
 
             case 'namespace':
                 return this.getNamespaces()
-                    .then(namespaces => namespaces.map(ns => {
-                        return {
-                            text: ns.metadata.name,
-                            value: ns.metadata.name
+                    .then(async (namespaces) => {
+                        switch (queryData[1]) {
+                            case 'deployment':
+                                const deployments = await this.getDeployments()
+                                const deploymentsNamespace = deployments.map(deployment => deployment.metadata.namespace)
+                                return namespaces.filter(ns => deploymentsNamespace.includes(ns.metadata.name))
+                                    .map(ns => {
+                                        return {
+                                            text: ns.metadata.name,
+                                            value: ns.metadata.name
+                                        }
+                                    })
+                            case 'statefulset':
+                                const statefulsets = await this.getStatefulsets()
+                                const statefulsetsNamespace = statefulsets.map(statefulset => statefulset.metadata.namespace)
+                                return namespaces.filter(ns => statefulsetsNamespace.includes(ns.metadata.name))
+                                    .map(ns => {
+                                        return {
+                                            text: ns.metadata.name,
+                                            value: ns.metadata.name
+                                        }
+                                    })
+                            case 'daemonset':
+                                const daemonsets = await this.getDaemonsets()
+                                const daemonsetsNamespace = daemonsets.map(daemonset => daemonset.metadata.namespace)
+                                return namespaces.filter(ns => daemonsetsNamespace.includes(ns.metadata.name))
+                                    .map(ns => {
+                                        return {
+                                            text: ns.metadata.name,
+                                            value: ns.metadata.name
+                                        }
+                                     })
+                            default:
+                                return namespaces.map(ns => {
+                                    return {
+                                        text: ns.metadata.name,
+                                        value: ns.metadata.name
+                                    }
+                                })
                         }
-                    }));
+                    });
 
             case 'pod':
                 return this.getPods(queryData[1])

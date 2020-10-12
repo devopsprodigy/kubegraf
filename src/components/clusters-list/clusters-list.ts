@@ -14,7 +14,7 @@ export class ClustersList {
 
     static templateUrl = 'components/clusters-list/clusters-list.html';
 
-    constructor($scope, $injector, private backendSrv, private datasourceSrv, private contextSrv, private utilSrv, private $window){
+    constructor($scope, $injector, private backendSrv, private datasourceSrv, private contextSrv, private utilSrv, private $window) {
         this.isReady = false;
         this.$scope = $scope;
         this.version = __getGrafanaVersion($window);
@@ -23,36 +23,37 @@ export class ClustersList {
         this.isAdmin = this.clusterPermissions.isAdmin();
 
         try {
-            this.getClusters();
+            this.getClusters().then(() => {
+                this.isReady = true
+                this.$scope.$apply()
+            });
         } catch (e) {
             console.error(e);
-        } finally {
-            this.isReady = true;
         }
     }
 
-    getClusters() {
-        const list = this.datasourceSrv.getAll();
-        if (Array.isArray(list)) {
-            this.clusters = list.filter(item => {
+    async getClusters() {
+        const datasources = await this.backendSrv.get('/api/datasources/');
+        if (Array.isArray(datasources)) {
+            this.clusters = datasources.filter(item => {
                 return item.type === TYPE_KUBEGRAF_PLUGIN
             }).filter(item => {
                 return item.jsonData ? this.clusterPermissions.checkPermission(item.jsonData.permissions) : false
             });
         } else {
             let clusters = [];
-            Object.keys(list).forEach(key => {
-                if (list[key].type === TYPE_KUBEGRAF_PLUGIN) {
-                    if (list[key].jsonData ? this.clusterPermissions.checkPermission(list[key].jsonData.permissions) : false) {
-                        clusters.push(list[key])
+            Object.keys(datasources).forEach(key => {
+                if (datasources[key].type === TYPE_KUBEGRAF_PLUGIN) {
+                    if (datasources[key].jsonData ? this.clusterPermissions.checkPermission(datasources[key].jsonData.permissions) : false) {
+                        clusters.push(datasources[key])
                     }
                 }
             });
-            this.clusters = clusters;
+            this.clusters = clusters
         }
     }
 
-    deleteCluster(cluster){
+    deleteCluster(cluster) {
         appEvents.emit('confirm-modal', {
             title: 'Delete',
             text: 'Are you sure you want to delete this cluster?',
@@ -65,13 +66,13 @@ export class ClustersList {
 
     }
 
-    confirmDelete(id){
+    confirmDelete(id) {
         this.backendSrv.delete('/api/datasources/' + id)
             .then(() => {
                 this.clusters = this.clusters.filter(item => {
                     return item.id !== id
                 });
-                // this.getClusters();
+                this.$scope.$apply();
             });
     }
 }

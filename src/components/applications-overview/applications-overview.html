@@ -88,11 +88,15 @@
                         <tr>
                             <th>Status</th>
                             <th>Pod Name</th>
-                            <th>Error message </th>
-                            <th ng-show="ctrl.hideAllWarningPods">
-                                <div class="btn btn-danger" ng-click="ctrl.toggleAllWarningPods()">
+                            <th>
+                                <span>Error message</span>
+                                <div ng-show="ctrl.hideAllWarningPods" class="btn btn-danger" ng-click="ctrl.toggleAllWarningPods()">
                                     <span class="btn gicon gicon-alert-alt"></span>
                                     <span ng-bind="'Show warnings ('+ctrl.getWarningPods().length+')'"></span>
+                                </div>
+                                <div ng-show="!ctrl.hideAllWarningPods" class="btn btn-grey" ng-click="ctrl.toggleAllWarningPods()" ng-hide="ctrl.hideAllWarningPods">
+                                    <span class="btn gicon gicon-alert-alt"></span>
+                                    Hide warnings (<span ng-bind="ctrl.getWarningPods().length"></span>)
                                 </div>
                             </th>
                         </tr>
@@ -111,8 +115,8 @@
                             <td ng-bind="pod.message"></td>
                         </tr>
                     </table>
-                    <div class="warning-panel_btn">
-                        <div class="btn btn-grey" ng-click="ctrl.toggleAllWarningPods()" ng-hide="ctrl.hideAllWarningPods">
+                    <div class="warning-panel_btn" ng-hide="ctrl.hideAllWarningPods">
+                        <div class="btn btn-grey" ng-click="ctrl.toggleAllWarningPods()">
                             <span class="btn gicon gicon-alert-alt"></span>
                             Hide warnings (<span ng-bind="ctrl.getWarningPods().length"></span>)
                         </div>

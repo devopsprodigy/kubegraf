@@ -1,25 +1,26 @@
 ///<reference path="../../node_modules/grafana-sdk-mocks/app/headers/common.d.ts" />
 import appEvents from "grafana/app/core/app_events";
 
-import {Pod} from "../common/types/pod";
-import angular from "angular";
-import {PrometheusProxy} from "../common/proxies/prometheusProxy";
-import {ERROR, PODS_LIMIT, TERMINATING, WARNING} from "../common/constants";
-import {Component} from "../common/types/component";
-import {Service} from "../common/types/service";
-import {Job} from "../common/types/job";
-import {Cronjob} from "../common/types/cronjob";
-import {Namespace} from "../common/types/namespace";
+import { Pod } from "../common/types/pod";
+import { PrometheusProxy } from "../common/proxies/prometheusProxy";
+import { ERROR, PODS_LIMIT, SUCCEEDED, SUCCESS, TERMINATING, WARNING } from "../common/constants";
+import { Component } from "../common/types/component";
+import { Service } from "../common/types/service";
+import { Job } from "../common/types/job";
+import { Cronjob } from "../common/types/cronjob";
+import { Namespace } from "../common/types/namespace";
 import store from "../common/store";
-import {Deployment} from "../common/types/deployment";
-import {Statefulset} from "../common/types/statefulset";
-import {Daemonset} from "../common/types/daemonset";
-import {Node} from "../common/types/node";
-import {__convertToGB, __convertToMicro, __convertToHours, __roundCpu} from "../common/helpers";
-import {BaseModel} from '../common/types/traits/baseModel';
+import { Deployment } from "../common/types/deployment";
+import { Statefulset } from "../common/types/statefulset";
+import { Daemonset } from "../common/types/daemonset";
+import { Node } from "../common/types/node";
+import { __convertToGB, __convertToMicro, __convertToHours, __roundCpu } from "../common/helpers";
+import { BaseModel } from '../common/types/traits/baseModel';
 import { ClusterPermissions } from "../common/cluster-permissions";
 
 const REFRESH_RATE_DEFAULT = 60000;
+const ERROR_MSG_MEMORY_REQUESTS_LIMITS = 'Memory limits and requests not configured'
+const ERROR_MSG_CPU_REQUESTS_LIMITS = 'CPU limits and requests not configured'
 
 export  class K8sPage {
     pageReady: boolean;
@@ -180,11 +181,13 @@ export  class K8sPage {
         _promises.push(this.__getPodsCountMetrics());
         _promises.push(this.__getCpuMetricsUsed());
         _promises.push(this.__getMemoryMetricsUsed());
+        _promises.push(this.__getCpuLimitMetrics());
+        _promises.push(this.__getMemoryLimitMetrics());
 
         return this.$q.all(_promises)
             .then((results) => {
                 this.nodesMap.forEach(node => {
-                    node.parseMetrics(results[0], results[1], results[2], results[3], results[4]);
+                    node.parseMetrics(results[0], results[1], results[2], results[3], results[4], results[5], results[6]);
                 });
 
                 this.timeout(() => {
@@ -204,7 +207,17 @@ export  class K8sPage {
 
     __getCpuMetricsRequested(){
         const promQuery = {
-            expr: 'sum(kube_pod_container_resource_requests_cpu_cores) by (node)',
+            expr: 'sum(sum(kube_pod_container_resource_requests_cpu_cores) by (namespace, pod, node) * on (pod, namespace) group_left()  (sum(kube_pod_status_phase{phase="Running"}) by (pod, namespace) == 1)) by (node)',
+            legend: 'node'
+        };
+
+        return this.prometheusDS.query(promQuery)
+            .then(res => res);
+    }
+
+    __getCpuLimitMetrics(){
+        const promQuery = {
+            expr: 'sum(sum(kube_pod_container_resource_limits_cpu_cores) by (namespace, pod, node) * on (pod, namespace) group_left()  (sum(kube_pod_status_phase{phase="Running"}) by (pod, namespace) == 1)) by (node)',
             legend: 'node'
         };
 
@@ -214,7 +227,17 @@ export  class K8sPage {
 
     __getMemoryMetricsRequested(){
         const promQuery = {
-            expr: 'sum(kube_pod_container_resource_requests_memory_bytes) by (node)',
+            expr: 'sum(sum(kube_pod_container_resource_requests_memory_bytes) by (namespace, pod, node) * on (pod, namespace) group_left()  (sum(kube_pod_status_phase{phase="Running"}) by (pod, namespace) == 1)) by (node)',
+            legend: "node"
+        };
+
+        return this.prometheusDS.query(promQuery)
+            .then(res => res);
+    }
+
+    __getMemoryLimitMetrics(){
+        const promQuery = {
+            expr: 'sum(sum(kube_pod_container_resource_limits_memory_bytes) by (namespace, pod, node) * on (pod, namespace) group_left()  (sum(kube_pod_status_phase{phase="Running"}) by (pod, namespace) == 1)) by (node)',
             legend: "node"
         };
 
@@ -278,17 +301,20 @@ export  class K8sPage {
         _promises.push(this.__getPodsUsedMemory());
         _promises.push(this.__getPodsRequestedCpu());
         _promises.push(this.__getPodsRequestedMemory());
-
+        _promises.push(this.__getPodsLimitCpu());
+        _promises.push(this.__getPodsLimitMemory());
 
         this.$q.all(_promises)
             .then(results => {
                 this.nodesMap.forEach(node => {
                     node.namespaces.map(namespace => {
                         namespace.pods.map(pod => {
-                            let cpu = results[0].find(item => item.target === pod.name);
-                            let mem = results[1].find(item => item.target === pod.name);
-                            let cpuReq = results[2].find(item => item.target === pod.name);
-                            let memReq = results[3].find(item => item.target === pod.name);
+                            const cpu = results[0].find(item => item.target === pod.name);
+                            const mem = results[1].find(item => item.target === pod.name);
+                            const cpuReq = results[2].find(item => item.target === pod.name);
+                            const memReq = results[3].find(item => item.target === pod.name);
+                            const cpuLimit = results[4].find(item => item.target === pod.name);
+                            const memLimit = results[5].find(item => item.target === pod.name);
 
                             if (cpu !== undefined) {
                                 pod.sourceMetrics.cpuUsed = cpu.datapoint;
@@ -298,13 +324,21 @@ export  class K8sPage {
                                 pod.sourceMetrics.memoryUsed = mem.datapoint;
                                 pod.metrics.memoryUsed = __convertToGB(mem.datapoint);
                             }
-                            if(cpuReq !== undefined){
+                            if (cpuReq !== undefined) {
                                 pod.sourceMetrics.cpuRequested = cpuReq.datapoint;
                                 pod.metrics.cpuRequested = __convertToMicro(__roundCpu(cpuReq.datapoint));
                             }
-                            if(memReq !== undefined){
+                            if (memReq !== undefined) {
                                 pod.sourceMetrics.memoryRequested = memReq.datapoint;
                                 pod.metrics.memoryRequested = __convertToGB(memReq.datapoint);
+                            }
+                            if (cpuLimit !== undefined) {
+                                pod.sourceMetrics.cpuLimit = cpuLimit.datapoint;
+                                pod.metrics.cpuLimit = __convertToMicro(__roundCpu(cpuLimit.datapoint));
+                            }
+                            if (memLimit !== undefined) {
+                                pod.sourceMetrics.memoryLimit = memLimit.datapoint;
+                                pod.metrics.memoryLimit = __convertToGB(memLimit.datapoint);
                             }
                         });
                     });
@@ -351,6 +385,16 @@ export  class K8sPage {
             .then(res => res);
     }
 
+    __getPodsLimitCpu(){
+        const podsLimitCpu = {
+            expr: 'sum(kube_pod_container_resource_limits_cpu_cores) by (pod)',
+            legend: 'pod'
+        };
+
+        return this.prometheusDS.query(podsLimitCpu)
+            .then(res => res);
+    }
+
     __getPodsRequestedMemory(){
         const podsUsedMemory = {
             expr: 'sum(kube_pod_container_resource_requests_memory_bytes) by (pod)',
@@ -358,6 +402,16 @@ export  class K8sPage {
         };
 
         return this.prometheusDS.query(podsUsedMemory)
+            .then(res => res);
+    }
+
+    __getPodsLimitMemory(){
+        const podsLimitMemory = {
+            expr: 'sum(kube_pod_container_resource_limits_memory_bytes) by (pod)',
+            legend: 'pod'
+        };
+
+        return this.prometheusDS.query(podsLimitMemory)
             .then(res => res);
     }
 
@@ -963,7 +1017,18 @@ export  class K8sPage {
                 }
             })
         }
-        return warningPods
+
+        return this.sortByStatus(warningPods)
+    }
+
+    sortByStatus(array: {status: number}[], rule = [ERROR, WARNING, SUCCESS, SUCCEEDED, TERMINATING]): any[] {
+        const sorted = []
+
+        rule.forEach(status => {
+            sorted.push(...array.filter(pod => pod.status === status))
+        })
+
+        return sorted
     }
 
     getWarningNodes(){
@@ -1006,8 +1071,45 @@ export  class K8sPage {
         });
     }
 
-    podIsWarning(pod: Pod) {
-        return !pod.is_deleted && (pod.status === WARNING || pod.status === ERROR || pod.status === TERMINATING)
+    podIsWarning(pod: Pod): boolean {
+        if (!pod.is_deleted) {
+            if (pod.status === WARNING || pod.status === ERROR || pod.status === TERMINATING) {
+                return true
+            }
+            return !this.validResources(pod)
+        }
+        return false
+    }
+
+    validResources(pod: Pod): boolean {
+        return pod.data.spec.containers.every(container => {
+            const msgCpu = []
+            const msgMemory = []
+
+            if (pod.data.metadata.namespace !== 'kube-system' && pod.status !== SUCCEEDED) {
+                if (!container.resources.requests || !container.resources.requests.cpu) {
+                    msgCpu.push('CPU request')
+                }
+                if (!container.resources.limits || !container.resources.limits.cpu){
+                    msgCpu.push('CPU limit')
+                }
+                if (!container.resources.requests || !container.resources.requests.memory) {
+                    msgMemory.push('Memory request')
+                }
+                if (!container.resources.limits || !container.resources.limits.memory) {
+                    msgMemory.push('Memory limit')
+                }
+            }
+
+            if(msgCpu.length > 0 || msgMemory.length > 0){
+                pod.message = `Container "${container.name}":
+                 ${msgCpu.length && 'Specify ' + msgCpu.join(' and ') + ';'}
+                 ${msgMemory.length && 'Specify ' + msgMemory.join(' and ') + ';'}`;
+                return false
+            }
+
+            return true
+        })
     }
 
     toggleMenu() {

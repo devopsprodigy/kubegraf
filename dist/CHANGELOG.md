@@ -1,3 +1,9 @@
+# 1.4.2 (2020-07-13)
+
+### Bug Fixes
+* Compatibility with Grafana >= 7.0.4 [#35](https://github.com/devopsprodigy/kubegraf/issues/35)
+* Restore metrics from old/deleted pods to dashboards [#33](https://github.com/devopsprodigy/kubegraf/issues/33)
+
 # 1.4.1 (2020-06-19)
 
 ### Bug Fixes

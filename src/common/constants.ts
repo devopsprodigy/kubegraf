@@ -2,6 +2,7 @@ const ERROR = 3;
 const WARNING = 2;
 const TERMINATING = 1;
 const SUCCESS = 0;
+const SUCCEEDED = 4;
 
 const COLOR_YELLOW = '#ffff0096';
 const COLOR_RED = '#a52a2a';
@@ -17,6 +18,7 @@ export {
     WARNING,
     TERMINATING,
     SUCCESS,
+    SUCCEEDED,
     COLOR_YELLOW,
     COLOR_RED,
     COLOR_GREEN,

@@ -1,18 +1,22 @@
-import { ERROR, WARNING, TERMINATING, SUCCESS } from '../constants';
-import {BaseModel} from '../../common/types/traits/baseModel';
+import { ERROR, SUCCEEDED, SUCCESS, TERMINATING, WARNING } from '../constants';
+import { BaseModel } from '../../common/types/traits/baseModel';
 
 export class Pod extends BaseModel{
     metrics: {
-        cpuUsed: number|string,
-        memoryUsed: number|string,
-        cpuRequested: number|string,
-        memoryRequested: number|string
+        cpuUsed: number | string,
+        memoryUsed: number | string,
+        cpuRequested: number | string,
+        memoryRequested: number | string,
+        cpuLimit: number | string,
+        memoryLimit: number | string,
     };
     sourceMetrics: {
         cpuUsed: number,
         memoryUsed: number,
         cpuRequested: number,
-        memoryRequested: number
+        memoryRequested: number,
+        cpuLimit: number,
+        memoryLimit: number,
     };
     used: boolean;
     private eventMessage: string = null;
@@ -23,19 +27,22 @@ export class Pod extends BaseModel{
             cpuUsed: 'N-A',
             memoryUsed: 'N-A',
             cpuRequested: 'N-A',
-            memoryRequested: 'N-A'
+            memoryRequested: 'N-A',
+            cpuLimit: 'N-A',
+            memoryLimit: 'N-A'
         };
         this.sourceMetrics = {
             cpuUsed: null,
             memoryUsed: null,
             cpuRequested: null,
-            memoryRequested: null
+            memoryRequested: null,
+            cpuLimit: null,
+            memoryLimit: null
         };
         this.used = false;
     }
 
     get status(){
-
         if(this.data.metadata.deletionTimestamp){
             return TERMINATING;
         }else if(this.data.status.phase === 'Running'){
@@ -66,9 +73,10 @@ export class Pod extends BaseModel{
                 case 'Pending':
                     return WARNING;
                 case 'Succeeded':
-                    return SUCCESS;
+                    return SUCCEEDED;
                 case 'Failed':
-                case 'Unknow':
+                    return ERROR;
+                case 'Unknown':
                     return ERROR;
                 default:
                     return ERROR;
@@ -86,11 +94,12 @@ export class Pod extends BaseModel{
                 return 'terminating';
             case SUCCESS:
                 return 'success';
+            case SUCCEEDED:
+                return 'succeeded'
             default:
                 return 'success';
         }
     }
-
 
     get message(){
         if (this.eventMessage) {
@@ -146,8 +155,48 @@ export class Pod extends BaseModel{
         this.eventMessage = msg;
     }
 
-    get NaMessage(){
+    get NaMessage() {
         return "Prometheus metrics unavailable"
     }
 
+    get usageCpuColor() {
+        if (this.sourceMetrics.cpuUsed === null) {
+            return ""
+        }
+
+        if (this.sourceMetrics.cpuRequested && this.sourceMetrics.cpuLimit) {
+            const min = (this.sourceMetrics.cpuLimit - this.sourceMetrics.cpuRequested) * 0.5 + this.sourceMetrics.cpuRequested
+            const max = (this.sourceMetrics.cpuLimit - this.sourceMetrics.cpuRequested) * 0.8 + this.sourceMetrics.cpuRequested
+
+            if (this.sourceMetrics.cpuUsed < min) {
+                return "green"
+            } else if (this.sourceMetrics.cpuUsed >= max) {
+                return "red"
+            } else {
+                return "yellow"
+            }
+        }
+        return "red"
+    }
+
+    get usageMemoryColor() {
+        if (this.sourceMetrics.memoryUsed === null) {
+            return ""
+        }
+
+        if (this.sourceMetrics.memoryRequested && this.sourceMetrics.memoryLimit) {
+            const min = (this.sourceMetrics.memoryLimit - this.sourceMetrics.memoryRequested) * 0.5 + this.sourceMetrics.memoryRequested
+            const max = (this.sourceMetrics.memoryLimit - this.sourceMetrics.memoryRequested) * 0.8 + this.sourceMetrics.memoryRequested
+
+            if (this.sourceMetrics.memoryUsed < min) {
+                return "green"
+            } else if (this.sourceMetrics.memoryUsed >= max) {
+                return "red"
+            } else {
+                return "yellow"
+            }
+        }
+
+        return "red"
+    }
 }
