@@ -165,11 +165,12 @@ export class Pod extends BaseModel{
         }
 
         if (this.sourceMetrics.cpuRequested && this.sourceMetrics.cpuLimit) {
-            if (this.sourceMetrics.cpuUsed / this.sourceMetrics.cpuRequested < 0.5
-                && this.sourceMetrics.cpuUsed / this.sourceMetrics.cpuLimit < 0.5) {
+            const min = (this.sourceMetrics.cpuLimit - this.sourceMetrics.cpuRequested) * 0.5 + this.sourceMetrics.cpuRequested
+            const max = (this.sourceMetrics.cpuLimit - this.sourceMetrics.cpuRequested) * 0.8 + this.sourceMetrics.cpuRequested
+
+            if (this.sourceMetrics.cpuUsed < min) {
                 return "green"
-            } else if (this.sourceMetrics.cpuUsed / this.sourceMetrics.cpuRequested > 0.8
-                && this.sourceMetrics.cpuUsed / this.sourceMetrics.cpuLimit > 0.8) {
+            } else if (this.sourceMetrics.cpuUsed >= max) {
                 return "red"
             } else {
                 return "yellow"
@@ -184,16 +185,18 @@ export class Pod extends BaseModel{
         }
 
         if (this.sourceMetrics.memoryRequested && this.sourceMetrics.memoryLimit) {
-            if (this.sourceMetrics.memoryUsed / this.sourceMetrics.memoryRequested < 0.5
-                && this.sourceMetrics.memoryUsed / this.sourceMetrics.memoryLimit < 0.5) {
+            const min = (this.sourceMetrics.memoryLimit - this.sourceMetrics.memoryRequested) * 0.5 + this.sourceMetrics.memoryRequested
+            const max = (this.sourceMetrics.memoryLimit - this.sourceMetrics.memoryRequested) * 0.8 + this.sourceMetrics.memoryRequested
+
+            if (this.sourceMetrics.memoryUsed < min) {
                 return "green"
-            } else if (this.sourceMetrics.memoryUsed / this.sourceMetrics.memoryRequested > 0.8
-                && this.sourceMetrics.memoryUsed / this.sourceMetrics.memoryLimit > 0.8) {
+            } else if (this.sourceMetrics.memoryUsed >= max) {
                 return "red"
             } else {
                 return "yellow"
             }
         }
+
         return "red"
     }
 }

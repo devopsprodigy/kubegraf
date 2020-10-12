@@ -243,6 +243,9 @@ td.pod-usage-border-yellow {
 td.pod-usage-border-green {
   color: #83df57; }
 
+td.pod-background-red {
+  background: #d34d36; }
+
 .checkbox {
   width: 165px;
   display: flex;
