@@ -18160,6 +18160,7 @@ var ERROR = 3;
 var WARNING = 2;
 var TERMINATING = 1;
 var SUCCESS = 0;
+var SUCCEEDED = 4;
 var COLOR_YELLOW = '#ffff0096';
 var COLOR_RED = '#a52a2a';
 var COLOR_GREEN = '#299c46';
@@ -18170,6 +18171,7 @@ exports.ERROR = ERROR;
 exports.WARNING = WARNING;
 exports.TERMINATING = TERMINATING;
 exports.SUCCESS = SUCCESS;
+exports.SUCCEEDED = SUCCEEDED;
 exports.COLOR_YELLOW = COLOR_YELLOW;
 exports.COLOR_RED = COLOR_RED;
 exports.COLOR_GREEN = COLOR_GREEN;
@@ -18244,7 +18246,7 @@ var __getLastNonNullValue = function __getLastNonNullValue(dataset) {
 };
 
 var __percentUsed = function __percentUsed(used, allocatable) {
-  return (parseFloat(used) / parseFloat(allocatable) * 100).toFixed(2) + ' %';
+  return (parseFloat(used) / parseFloat(allocatable) * 100).toFixed(2) + '%';
 };
 
 var __getGrafanaVersion = function __getGrafanaVersion(window) {
@@ -18789,7 +18791,9 @@ function (_super) {
       memoryUsed: 'N/A',
       podsCount: 'N/A',
       cpuRequested: 'N/A',
-      memoryRequested: 'N/A'
+      memoryRequested: 'N/A',
+      cpuLimit: 'N/A',
+      memoryLimit: 'N/A'
     };
     _this.cpuIndicate = false;
     _this.memoryIndicate = false;
@@ -18797,6 +18801,8 @@ function (_super) {
     _this.cpuRequestedIndicate = false;
     _this.memoryRequestedIndicate = false;
     _this.podsRequestedIndicate = false;
+    _this.cpuLimitIndicate = false;
+    _this.memoryLimitIndicate = false;
 
     _this.nsListState();
 
@@ -18820,15 +18826,11 @@ function (_super) {
   };
 
   Node.prototype.nsListState = function () {
-    var state = _store2.default.get(this.name + 'NsList');
-
-    if (state === undefined) {
-      _store2.default.set(this.name + 'NsList', false);
-
-      return _store2.default.get(this.name + 'NsList');
-    } else {
-      return _store2.default.get(this.name + 'NsList');
+    if (_store2.default.get(this.name + 'NsList') === undefined) {
+      _store2.default.set(this.name + 'NsList', true);
     }
+
+    return _store2.default.get(this.name + 'NsList');
   };
 
   Object.defineProperty(Node.prototype, "status", {
@@ -18894,6 +18896,19 @@ function (_super) {
     enumerable: true,
     configurable: true
   });
+  Object.defineProperty(Node.prototype, "cpuLimitStatus", {
+    get: function get() {
+      var cpu = this.data.status.allocatable.cpu;
+
+      if (cpu.indexOf('m') > -1) {
+        cpu = parseInt(cpu) / 1000;
+      }
+
+      return this.__getStatusLimit(this.metrics.cpuLimit, cpu);
+    },
+    enumerable: true,
+    configurable: true
+  });
   Object.defineProperty(Node.prototype, "memoryStatus", {
     get: function get() {
       return this.__getStatus(this.metrics.memoryUsed, this.__getBytes(this.data.status.allocatable.memory));
@@ -18904,6 +18919,13 @@ function (_super) {
   Object.defineProperty(Node.prototype, "memoryStatusRequested", {
     get: function get() {
       return this.__getStatusRequested(this.metrics.memoryRequested, this.__getBytes(this.data.status.allocatable.memory));
+    },
+    enumerable: true,
+    configurable: true
+  });
+  Object.defineProperty(Node.prototype, "memoryLimitStatus", {
+    get: function get() {
+      return this.__getStatusLimit(this.metrics.memoryLimit, this.__getBytes(this.data.status.allocatable.memory));
     },
     enumerable: true,
     configurable: true
@@ -18973,6 +18995,13 @@ function (_super) {
     enumerable: true,
     configurable: true
   });
+  Object.defineProperty(Node.prototype, "memoryLimitFormatted", {
+    get: function get() {
+      return (0, _helpers.__convertToGB)(this.metrics.memoryLimit) + ' (' + (0, _helpers.__percentUsed)(this.metrics.memoryLimit, this.__getBytes(this.data.status.allocatable.memory)) + ')';
+    },
+    enumerable: true,
+    configurable: true
+  });
   Object.defineProperty(Node.prototype, "cpuUsedFormatted", {
     get: function get() {
       var cpu = this.data.status.allocatable.cpu;
@@ -18995,6 +19024,19 @@ function (_super) {
       }
 
       return (0, _helpers.__roundCpu)(this.metrics.cpuRequested) + ' (' + (0, _helpers.__percentUsed)(this.metrics.cpuRequested, cpu) + ')';
+    },
+    enumerable: true,
+    configurable: true
+  });
+  Object.defineProperty(Node.prototype, "cpuLimitFormatted", {
+    get: function get() {
+      var cpu = this.data.status.allocatable.cpu;
+
+      if (cpu.indexOf('m') > -1) {
+        cpu = parseInt(cpu) / 1000;
+      }
+
+      return (0, _helpers.__roundCpu)(this.metrics.cpuLimit) + ' (' + (0, _helpers.__percentUsed)(this.metrics.cpuLimit, cpu) + ')';
     },
     enumerable: true,
     configurable: true
@@ -19022,7 +19064,7 @@ function (_super) {
         cpu = parseInt(cpu) / 1000;
       }
 
-      return (0, _helpers.__roundCpu)(this.metrics.cpuUsed) + ' / ' + this.data.status.allocatable.cpu + ' ( ' + (0, _helpers.__percentUsed)(this.metrics.cpuUsed, cpu) + ' )';
+      return (0, _helpers.__roundCpu)(this.metrics.cpuUsed) + ' / ' + cpu + ' (' + (0, _helpers.__percentUsed)(this.metrics.cpuUsed, cpu) + ')';
     },
     enumerable: true,
     configurable: true
@@ -19035,7 +19077,7 @@ function (_super) {
         cpu = parseInt(cpu) / 1000;
       }
 
-      return (0, _helpers.__roundCpu)(this.metrics.cpuRequested) + ' / ' + this.data.status.allocatable.cpu + ' ( ' + (0, _helpers.__percentUsed)(this.metrics.cpuRequested, cpu) + ' )';
+      return (0, _helpers.__roundCpu)(this.metrics.cpuRequested) + ' / ' + cpu + ' (' + (0, _helpers.__percentUsed)(this.metrics.cpuRequested, cpu) + ')';
     },
     enumerable: true,
     configurable: true
@@ -19047,7 +19089,7 @@ function (_super) {
       var allocatable = this.__getBytes(this.data.status.allocatable.memory);
 
       var percent = (0, _helpers.__percentUsed)(used, allocatable);
-      return (0, _helpers.__convertToGB)(used) + ' / ' + (0, _helpers.__convertToGB)(allocatable) + ' ( ' + percent + ' ) ';
+      return (0, _helpers.__convertToGB)(used) + ' / ' + (0, _helpers.__convertToGB)(allocatable) + ' (' + percent + ') ';
     },
     enumerable: true,
     configurable: true
@@ -19057,7 +19099,7 @@ function (_super) {
       var allocatable = this.__getBytes(this.data.status.allocatable.memory);
 
       var percent = (0, _helpers.__percentUsed)(this.metrics.memoryRequested, allocatable);
-      return (0, _helpers.__convertToGB)(this.metrics.memoryRequested) + ' / ' + (0, _helpers.__convertToGB)(allocatable) + ' ( ' + percent + ' ) ';
+      return (0, _helpers.__convertToGB)(this.metrics.memoryRequested) + ' / ' + (0, _helpers.__convertToGB)(allocatable) + ' (' + percent + ') ';
     },
     enumerable: true,
     configurable: true
@@ -19067,7 +19109,7 @@ function (_super) {
       var used = this.metrics.podsCount;
       var allocatable = this.data.status.allocatable.pods;
       var percent = (0, _helpers.__percentUsed)(used, allocatable);
-      return used + ' / ' + allocatable + ' ( ' + percent + ' ) ';
+      return used + ' / ' + allocatable + ' (' + percent + ') ';
     },
     enumerable: true,
     configurable: true
@@ -19087,6 +19129,13 @@ function (_super) {
     enumerable: true,
     configurable: true
   });
+  Object.defineProperty(Node.prototype, "rowCpuLimitColor", {
+    get: function get() {
+      return this.__getColor(this.cpuLimitStatus);
+    },
+    enumerable: true,
+    configurable: true
+  });
   Object.defineProperty(Node.prototype, "rowMemoryColor", {
     get: function get() {
       return this.__getColor(this.memoryStatus);
@@ -19097,6 +19146,13 @@ function (_super) {
   Object.defineProperty(Node.prototype, "rowMemoryRequestedColor", {
     get: function get() {
       return this.__getColor(this.memoryStatusRequested);
+    },
+    enumerable: true,
+    configurable: true
+  });
+  Object.defineProperty(Node.prototype, "rowMemoryLimitColor", {
+    get: function get() {
+      return this.__getColor(this.memoryLimitStatus);
     },
     enumerable: true,
     configurable: true
@@ -19116,82 +19172,52 @@ function (_super) {
     configurable: true
   });
 
-  Node.prototype.parseMetrics = function (cpuReq, memoryReq, pods, cpuUsed, memoryUsed) {
-    var currentCpuStatus = this.cpuStatus;
-    var currentMemoryStatus = this.memoryStatus;
-    var currentPodsStatus = this.podsStatus;
-    var currentCpuStatusRequested = this.cpuStatusRequested;
-    var currentMemoryStatusRequested = this.memoryStatusRequested;
-    var currentPodsStatusRequested = this.podsStatusRequested;
+  Node.prototype.parseMetrics = function (cpuReq, memoryReq, pods, cpuUsed, memoryUsed, cpuLimit, memoryLimit) {
+    var currentStatus = {
+      "podsStatus": this.podsStatus,
+      "podsStatusRequested": this.podsStatusRequested,
+      "cpuStatus": this.cpuStatus,
+      "cpuStatusRequested": this.cpuStatusRequested,
+      "cpuLimitStatus": this.cpuLimitStatus,
+      "memoryStatus": this.memoryStatus,
+      "memoryStatusRequested": this.memoryStatusRequested,
+      "memoryLimitStatus": this.memoryLimitStatus
+    };
     this.metrics.cpuRequested = this.__getLastMetric(cpuReq);
     this.metrics.memoryRequested = this.__getLastMetric(memoryReq);
     this.metrics.podsCount = this.__getLastMetricByInstance(pods);
     this.metrics.cpuUsed = this.__getLastMetricByInstance(cpuUsed);
     this.metrics.memoryUsed = this.__getLastMetricByInstance(memoryUsed);
-    currentCpuStatus !== undefined && currentCpuStatus != this.cpuStatus && this.setCpuMetricIndicated();
-    currentMemoryStatus !== undefined && currentMemoryStatus != this.memoryStatus && this.setMemoryMetricIndicated();
-    currentPodsStatus !== undefined && currentPodsStatus != this.podsStatus && this.setPodsMetricIndicated();
-    currentCpuStatusRequested !== undefined && currentCpuStatusRequested != this.cpuStatusRequested && this.setCpuMetricIndicated(true);
-    currentMemoryStatusRequested !== undefined && currentMemoryStatusRequested != this.memoryStatusRequested && this.setMemoryMetricIndicated(true);
-    currentPodsStatusRequested !== undefined && currentPodsStatusRequested != this.podsStatusRequested && this.setPodsMetricIndicated(true);
-  };
+    this.metrics.cpuLimit = this.__getLastMetricByInstance(cpuLimit);
+    this.metrics.memoryLimit = this.__getLastMetricByInstance(memoryLimit);
 
-  Node.prototype.setCpuMetricIndicated = function (requested) {
-    var _this = this;
-
-    if (requested === void 0) {
-      requested = false;
-    }
-
-    if (requested) {
-      this.cpuRequestedIndicate = true;
-      setTimeout(function () {
-        _this.cpuRequestedIndicate = false;
-      }, 10000);
-    } else {
-      this.cpuIndicate = true;
-      setTimeout(function () {
-        _this.cpuIndicate = false;
-      }, 10000);
+    for (var type in currentStatus) {
+      if (currentStatus.hasOwnProperty(type) && this.hasOwnProperty(type)) {
+        if (currentStatus[type] !== undefined && currentStatus[type] != this[type]) {
+          this.setMetricIndicated(type);
+        }
+      }
     }
   };
 
-  Node.prototype.setMemoryMetricIndicated = function (requested) {
+  Node.prototype.setMetricIndicated = function (metricStatus) {
     var _this = this;
 
-    if (requested === void 0) {
-      requested = false;
-    }
+    var map = {
+      "podsStatus": "podsIndicate",
+      "podsStatusRequested": "podsRequestedIndicate",
+      "cpuStatus": "cpuIndicate",
+      "cpuStatusRequested": "cpuRequestedIndicate",
+      "cpuLimitStatus": "cpuLimitIndicate",
+      "memoryStatus": "memoryIndicate",
+      "memoryStatusRequested": "memoryRequestedIndicate",
+      "memoryLimitStatus": "memoryLimitIndicate"
+    };
 
-    if (requested) {
-      this.memoryRequestedIndicate = true;
+    if (map[metricStatus] && this.hasOwnProperty(map[metricStatus])) {
+      this[map[metricStatus]] = true;
       setTimeout(function () {
-        _this.memoryRequestedIndicate = false;
-      }, 10000);
-    } else {
-      this.memoryIndicate = true;
-      setTimeout(function () {
-        _this.memoryIndicate = false;
-      }, 10000);
-    }
-  };
-
-  Node.prototype.setPodsMetricIndicated = function (requested) {
-    var _this = this;
-
-    if (requested === void 0) {
-      requested = false;
-    }
-
-    if (requested) {
-      this.podsRequestedIndicate = true;
-      setTimeout(function () {
-        _this.podsRequestedIndicate = false;
-      }, 10000);
-    } else {
-      this.podsIndicate = true;
-      setTimeout(function () {
-        _this.podsIndicate = false;
+        _this[map[metricStatus]] = false;
       }, 10000);
     }
   };
@@ -19205,9 +19231,9 @@ function (_super) {
 
     if (datapoints !== undefined) {
       return datapoints.datapoint;
-    } else {
-      return 'N/A';
     }
+
+    return 'N/A';
   };
 
   Node.prototype.__getLastMetric = function (metrics) {
@@ -19219,9 +19245,9 @@ function (_super) {
 
     if (datapoints !== undefined) {
       return datapoints.datapoint;
-    } else {
-      return 'N/A';
     }
+
+    return 'N/A';
   };
 
   Node.prototype.__getBytes = function (str) {
@@ -19264,6 +19290,20 @@ function (_super) {
     } else {
       return;
     }
+  };
+
+  Node.prototype.__getStatusLimit = function (limit, allocatable) {
+    var diff = limit / allocatable;
+
+    if (diff <= 0.9) {
+      return _constants.SUCCESS;
+    } else if (diff > 0.9 && diff <= 1) {
+      return _constants.WARNING;
+    } else if (diff > 1) {
+      return _constants.ERROR;
+    }
+
+    return;
   };
 
   Node.prototype.__getColor = function (status) {
@@ -19323,13 +19363,17 @@ function (_super) {
       cpuUsed: 'N-A',
       memoryUsed: 'N-A',
       cpuRequested: 'N-A',
-      memoryRequested: 'N-A'
+      memoryRequested: 'N-A',
+      cpuLimit: 'N-A',
+      memoryLimit: 'N-A'
     };
     _this.sourceMetrics = {
       cpuUsed: null,
       memoryUsed: null,
       cpuRequested: null,
-      memoryRequested: null
+      memoryRequested: null,
+      cpuLimit: null,
+      memoryLimit: null
     };
     _this.used = false;
     return _this;
@@ -19376,10 +19420,12 @@ function (_super) {
             return _constants.WARNING;
 
           case 'Succeeded':
-            return _constants.SUCCESS;
+            return _constants.SUCCEEDED;
 
           case 'Failed':
-          case 'Unknow':
+            return _constants.ERROR;
+
+          case 'Unknown':
             return _constants.ERROR;
 
           default:
@@ -19404,6 +19450,9 @@ function (_super) {
 
         case _constants.SUCCESS:
           return 'success';
+
+        case _constants.SUCCEEDED:
+          return 'succeeded';
 
         default:
           return 'success';
@@ -19484,6 +19533,54 @@ function (_super) {
   Object.defineProperty(Pod.prototype, "NaMessage", {
     get: function get() {
       return "Prometheus metrics unavailable";
+    },
+    enumerable: true,
+    configurable: true
+  });
+  Object.defineProperty(Pod.prototype, "usageCpuColor", {
+    get: function get() {
+      if (this.sourceMetrics.cpuUsed === null) {
+        return "";
+      }
+
+      if (this.sourceMetrics.cpuRequested && this.sourceMetrics.cpuLimit) {
+        var min = (this.sourceMetrics.cpuLimit - this.sourceMetrics.cpuRequested) * 0.5 + this.sourceMetrics.cpuRequested;
+        var max = (this.sourceMetrics.cpuLimit - this.sourceMetrics.cpuRequested) * 0.8 + this.sourceMetrics.cpuRequested;
+
+        if (this.sourceMetrics.cpuUsed < min) {
+          return "green";
+        } else if (this.sourceMetrics.cpuUsed >= max) {
+          return "red";
+        } else {
+          return "yellow";
+        }
+      }
+
+      return "red";
+    },
+    enumerable: true,
+    configurable: true
+  });
+  Object.defineProperty(Pod.prototype, "usageMemoryColor", {
+    get: function get() {
+      if (this.sourceMetrics.memoryUsed === null) {
+        return "";
+      }
+
+      if (this.sourceMetrics.memoryRequested && this.sourceMetrics.memoryLimit) {
+        var min = (this.sourceMetrics.memoryLimit - this.sourceMetrics.memoryRequested) * 0.5 + this.sourceMetrics.memoryRequested;
+        var max = (this.sourceMetrics.memoryLimit - this.sourceMetrics.memoryRequested) * 0.8 + this.sourceMetrics.memoryRequested;
+
+        if (this.sourceMetrics.memoryUsed < min) {
+          return "green";
+        } else if (this.sourceMetrics.memoryUsed >= max) {
+          return "red";
+        } else {
+          return "yellow";
+        }
+      }
+
+      return "red";
     },
     enumerable: true,
     configurable: true
@@ -19818,6 +19915,8 @@ var _k8sPage = __webpack_require__(/*! ../k8s-page */ "./components/k8s-page.ts"
 
 var _helpers = __webpack_require__(/*! ../../common/helpers */ "./common/helpers.ts");
 
+var _constants = __webpack_require__(/*! ../../common/constants */ "./common/constants.ts");
+
 var ClusterAlerts =
 /** @class */
 function (_super) {
@@ -19859,19 +19958,70 @@ function (_super) {
     return _this;
   }
 
+  ClusterAlerts.prototype.getAlertsNodesByCPU2 = function (status) {
+    if (status === void 0) {
+      status = 'cpuStatus';
+    }
+  };
+
+  ClusterAlerts.prototype.getAlertsNodesByResources = function () {
+    var _this = this;
+
+    return this.nodesMap.filter(this.resourceProblem).map(function (node) {
+      if (node.cpuStatus === _constants.ERROR || node.cpuStatusRequested === _constants.ERROR || node.memoryStatus === _constants.ERROR || node.memoryStatusRequested === _constants.ERROR || node.podsStatus === _constants.ERROR) {
+        node.statusColor = _constants.COLOR_RED;
+        node.statusForSort = _constants.ERROR;
+      } else {
+        node.statusColor = _constants.COLOR_YELLOW;
+        node.statusForSort = _constants.WARNING;
+      }
+
+      node.statusMessage = _this.nodeMessages(node).join(';<br/>');
+      return node;
+    }).sort(function (a, b) {
+      return b.statusForSort - a.statusForSort;
+    });
+  };
+
   ClusterAlerts.prototype.clusterProblem = function () {
-    var node = this.getWarningNodes().length === 0;
-    var usedCpu = this.getAlertsNodesByCPU().length === 0;
-    var usedMemory = this.getAlertsNodesByMemory().length === 0;
-    var usedPods = this.getAlertsNodesByPods().length === 0;
-    var requestedCpu = this.getAlertsNodesByCPU('cpuStatusRequested').length === 0;
-    var requestedMemory = this.getAlertsNodesByMemory('memoryStatusRequested').length === 0;
-    var failPods = this.getWarningPods().length === 0;
-    var components = this.getAlertsComponents.length === 0;
-    return this.nodesError || this.componentsError || this.podsError || !(node && usedCpu && usedMemory && usedPods && failPods && components && requestedCpu && requestedMemory);
+    var warnings = [this.getWarningNodes().length === 0, this.getAlertsNodesByCPU().length === 0, this.getAlertsNodesByMemory().length === 0, this.getAlertsNodesByPods().length === 0, this.getAlertsNodesByCPU('cpuStatusRequested').length === 0, this.getAlertsNodesByMemory('memoryStatusRequested').length === 0, this.getWarningPods().length === 0, this.getAlertsComponents.length === 0];
+    return this.nodesError || this.componentsError || this.podsError || warnings.some(function (w) {
+      return w !== true;
+    });
   };
 
   ;
+
+  ClusterAlerts.prototype.resourceProblem = function (node) {
+    return node.cpuStatus === _constants.WARNING || node.cpuStatus === _constants.ERROR || node.cpuStatusRequested === _constants.ERROR || node.cpuStatusRequested === _constants.WARNING || node.memoryStatus === _constants.ERROR || node.memoryStatus === _constants.WARNING || node.memoryStatusRequested === _constants.ERROR || node.memoryStatusRequested === _constants.WARNING || node.podsStatus === _constants.WARNING || node.podsStatus === _constants.ERROR;
+  };
+
+  ClusterAlerts.prototype.nodeMessages = function (node) {
+    var messages = [];
+
+    if (node.cpuStatus === _constants.ERROR || node.cpuStatus === _constants.WARNING) {
+      messages.push("CPU used: " + node.cpuPercentUsed);
+    }
+
+    if (node.cpuStatusRequested === _constants.ERROR || node.cpuStatusRequested === _constants.WARNING) {
+      messages.push("CPU requested: " + node.cpuPercentRequested);
+    }
+
+    if (node.memoryStatus === _constants.ERROR || node.memoryStatus === _constants.WARNING) {
+      messages.push("Memory used: " + node.memoryPercentUsed);
+    }
+
+    if (node.memoryStatusRequested === _constants.ERROR || node.memoryStatusRequested === _constants.WARNING) {
+      messages.push("Memory requested: " + node.memoryPercentUsed);
+    }
+
+    if (node.podsStatus === _constants.ERROR || node.podsStatus === _constants.WARNING) {
+      messages.push("Pods count used: " + node.podsPercentUsed);
+    }
+
+    return messages;
+  };
+
   ClusterAlerts.templateUrl = 'components/cluster-alerts/cluster-alerts.html';
   return ClusterAlerts;
 }(_k8sPage.K8sPage);
@@ -20081,7 +20231,6 @@ function () {
       }
     }).then(function (response) {
       if (response && response.status === 200) {
-        //window.location.href = 'plugins/devopsprodigy-kubegraf-app/page/clusters';
         setTimeout(function () {
           window.history.back();
         }, 800);
@@ -20435,6 +20584,8 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.ClustersList = undefined;
 
+var _tslib = __webpack_require__(/*! tslib */ "../node_modules/tslib/tslib.es6.js");
+
 var _app_events = __webpack_require__(/*! grafana/app/core/app_events */ "grafana/app/core/app_events");
 
 var _app_events2 = _interopRequireDefault(_app_events);
@@ -20452,6 +20603,8 @@ var ClustersList =
 /** @class */
 function () {
   function ClustersList($scope, $injector, backendSrv, datasourceSrv, contextSrv, utilSrv, $window) {
+    var _this = this;
+
     this.backendSrv = backendSrv;
     this.datasourceSrv = datasourceSrv;
     this.contextSrv = contextSrv;
@@ -20465,36 +20618,56 @@ function () {
     this.isAdmin = this.clusterPermissions.isAdmin();
 
     try {
-      this.getClusters();
+      this.getClusters().then(function () {
+        _this.isReady = true;
+
+        _this.$scope.$apply();
+      });
     } catch (e) {
       console.error(e);
-    } finally {
-      this.isReady = true;
     }
   }
 
   ClustersList.prototype.getClusters = function () {
-    var _this = this;
+    return (0, _tslib.__awaiter)(this, void 0, void 0, function () {
+      var datasources, clusters_1;
 
-    var list = this.datasourceSrv.getAll();
+      var _this = this;
 
-    if (Array.isArray(list)) {
-      this.clusters = list.filter(function (item) {
-        return item.type === _constants.TYPE_KUBEGRAF_PLUGIN;
-      }).filter(function (item) {
-        return item.jsonData ? _this.clusterPermissions.checkPermission(item.jsonData.permissions) : false;
-      });
-    } else {
-      var clusters_1 = [];
-      Object.keys(list).forEach(function (key) {
-        if (list[key].type === _constants.TYPE_KUBEGRAF_PLUGIN) {
-          if (list[key].jsonData ? _this.clusterPermissions.checkPermission(list[key].jsonData.permissions) : false) {
-            clusters_1.push(list[key]);
-          }
+      return (0, _tslib.__generator)(this, function (_a) {
+        switch (_a.label) {
+          case 0:
+            return [4
+            /*yield*/
+            , this.backendSrv.get('/api/datasources/')];
+
+          case 1:
+            datasources = _a.sent();
+
+            if (Array.isArray(datasources)) {
+              this.clusters = datasources.filter(function (item) {
+                return item.type === _constants.TYPE_KUBEGRAF_PLUGIN;
+              }).filter(function (item) {
+                return item.jsonData ? _this.clusterPermissions.checkPermission(item.jsonData.permissions) : false;
+              });
+            } else {
+              clusters_1 = [];
+              Object.keys(datasources).forEach(function (key) {
+                if (datasources[key].type === _constants.TYPE_KUBEGRAF_PLUGIN) {
+                  if (datasources[key].jsonData ? _this.clusterPermissions.checkPermission(datasources[key].jsonData.permissions) : false) {
+                    clusters_1.push(datasources[key]);
+                  }
+                }
+              });
+              this.clusters = clusters_1;
+            }
+
+            return [2
+            /*return*/
+            ];
         }
       });
-      this.clusters = clusters_1;
-    }
+    });
   };
 
   ClustersList.prototype.deleteCluster = function (cluster) {
@@ -20517,7 +20690,9 @@ function () {
     this.backendSrv.delete('/api/datasources/' + id).then(function () {
       _this.clusters = _this.clusters.filter(function (item) {
         return item.id !== id;
-      }); // this.getClusters();
+      });
+
+      _this.$scope.$apply();
     });
   };
 
@@ -20586,6 +20761,8 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 ///<reference path="../../node_modules/grafana-sdk-mocks/app/headers/common.d.ts" />
 var REFRESH_RATE_DEFAULT = 60000;
+var ERROR_MSG_MEMORY_REQUESTS_LIMITS = 'Memory limits and requests not configured';
+var ERROR_MSG_CPU_REQUESTS_LIMITS = 'CPU limits and requests not configured';
 
 var K8sPage =
 /** @class */
@@ -20745,9 +20922,13 @@ function () {
 
     _promises.push(this.__getMemoryMetricsUsed());
 
+    _promises.push(this.__getCpuLimitMetrics());
+
+    _promises.push(this.__getMemoryLimitMetrics());
+
     return this.$q.all(_promises).then(function (results) {
       _this.nodesMap.forEach(function (node) {
-        node.parseMetrics(results[0], results[1], results[2], results[3], results[4]);
+        node.parseMetrics(results[0], results[1], results[2], results[3], results[4], results[5], results[6]);
       });
 
       _this.timeout(function () {
@@ -20768,7 +20949,17 @@ function () {
 
   K8sPage.prototype.__getCpuMetricsRequested = function () {
     var promQuery = {
-      expr: 'sum(kube_pod_container_resource_requests_cpu_cores) by (node)',
+      expr: 'sum(sum(kube_pod_container_resource_requests_cpu_cores) by (namespace, pod, node) * on (pod, namespace) group_left()  (sum(kube_pod_status_phase{phase="Running"}) by (pod, namespace) == 1)) by (node)',
+      legend: 'node'
+    };
+    return this.prometheusDS.query(promQuery).then(function (res) {
+      return res;
+    });
+  };
+
+  K8sPage.prototype.__getCpuLimitMetrics = function () {
+    var promQuery = {
+      expr: 'sum(sum(kube_pod_container_resource_limits_cpu_cores) by (namespace, pod, node) * on (pod, namespace) group_left()  (sum(kube_pod_status_phase{phase="Running"}) by (pod, namespace) == 1)) by (node)',
       legend: 'node'
     };
     return this.prometheusDS.query(promQuery).then(function (res) {
@@ -20778,7 +20969,17 @@ function () {
 
   K8sPage.prototype.__getMemoryMetricsRequested = function () {
     var promQuery = {
-      expr: 'sum(kube_pod_container_resource_requests_memory_bytes) by (node)',
+      expr: 'sum(sum(kube_pod_container_resource_requests_memory_bytes) by (namespace, pod, node) * on (pod, namespace) group_left()  (sum(kube_pod_status_phase{phase="Running"}) by (pod, namespace) == 1)) by (node)',
+      legend: "node"
+    };
+    return this.prometheusDS.query(promQuery).then(function (res) {
+      return res;
+    });
+  };
+
+  K8sPage.prototype.__getMemoryLimitMetrics = function () {
+    var promQuery = {
+      expr: 'sum(sum(kube_pod_container_resource_limits_memory_bytes) by (namespace, pod, node) * on (pod, namespace) group_left()  (sum(kube_pod_status_phase{phase="Running"}) by (pod, namespace) == 1)) by (node)',
       legend: "node"
     };
     return this.prometheusDS.query(promQuery).then(function (res) {
@@ -20859,6 +21060,10 @@ function () {
 
     _promises.push(this.__getPodsRequestedMemory());
 
+    _promises.push(this.__getPodsLimitCpu());
+
+    _promises.push(this.__getPodsLimitMemory());
+
     this.$q.all(_promises).then(function (results) {
       _this.nodesMap.forEach(function (node) {
         node.namespaces.map(function (namespace) {
@@ -20873,6 +21078,12 @@ function () {
               return item.target === pod.name;
             });
             var memReq = results[3].find(function (item) {
+              return item.target === pod.name;
+            });
+            var cpuLimit = results[4].find(function (item) {
+              return item.target === pod.name;
+            });
+            var memLimit = results[5].find(function (item) {
               return item.target === pod.name;
             });
 
@@ -20894,6 +21105,16 @@ function () {
             if (memReq !== undefined) {
               pod.sourceMetrics.memoryRequested = memReq.datapoint;
               pod.metrics.memoryRequested = (0, _helpers.__convertToGB)(memReq.datapoint);
+            }
+
+            if (cpuLimit !== undefined) {
+              pod.sourceMetrics.cpuLimit = cpuLimit.datapoint;
+              pod.metrics.cpuLimit = (0, _helpers.__convertToMicro)((0, _helpers.__roundCpu)(cpuLimit.datapoint));
+            }
+
+            if (memLimit !== undefined) {
+              pod.sourceMetrics.memoryLimit = memLimit.datapoint;
+              pod.metrics.memoryLimit = (0, _helpers.__convertToGB)(memLimit.datapoint);
             }
           });
         });
@@ -20937,12 +21158,32 @@ function () {
     });
   };
 
+  K8sPage.prototype.__getPodsLimitCpu = function () {
+    var podsLimitCpu = {
+      expr: 'sum(kube_pod_container_resource_limits_cpu_cores) by (pod)',
+      legend: 'pod'
+    };
+    return this.prometheusDS.query(podsLimitCpu).then(function (res) {
+      return res;
+    });
+  };
+
   K8sPage.prototype.__getPodsRequestedMemory = function () {
     var podsUsedMemory = {
       expr: 'sum(kube_pod_container_resource_requests_memory_bytes) by (pod)',
       legend: 'pod'
     };
     return this.prometheusDS.query(podsUsedMemory).then(function (res) {
+      return res;
+    });
+  };
+
+  K8sPage.prototype.__getPodsLimitMemory = function () {
+    var podsLimitMemory = {
+      expr: 'sum(kube_pod_container_resource_limits_memory_bytes) by (pod)',
+      legend: 'pod'
+    };
+    return this.prometheusDS.query(podsLimitMemory).then(function (res) {
       return res;
     });
   };
@@ -21689,7 +21930,21 @@ function () {
       });
     }
 
-    return warningPods;
+    return this.sortByStatus(warningPods);
+  };
+
+  K8sPage.prototype.sortByStatus = function (array, rule) {
+    if (rule === void 0) {
+      rule = [_constants.ERROR, _constants.WARNING, _constants.SUCCESS, _constants.SUCCEEDED, _constants.TERMINATING];
+    }
+
+    var sorted = [];
+    rule.forEach(function (status) {
+      sorted.push.apply(sorted, (0, _tslib.__spread)(array.filter(function (pod) {
+        return pod.status === status;
+      })));
+    });
+    return sorted;
   };
 
   K8sPage.prototype.getWarningNodes = function () {
@@ -21762,7 +22017,47 @@ function () {
   };
 
   K8sPage.prototype.podIsWarning = function (pod) {
-    return !pod.is_deleted && (pod.status === _constants.WARNING || pod.status === _constants.ERROR || pod.status === _constants.TERMINATING);
+    if (!pod.is_deleted) {
+      if (pod.status === _constants.WARNING || pod.status === _constants.ERROR || pod.status === _constants.TERMINATING) {
+        return true;
+      }
+
+      return !this.validResources(pod);
+    }
+
+    return false;
+  };
+
+  K8sPage.prototype.validResources = function (pod) {
+    return pod.data.spec.containers.every(function (container) {
+      var msgCpu = [];
+      var msgMemory = [];
+
+      if (pod.data.metadata.namespace !== 'kube-system' && pod.status !== _constants.SUCCEEDED) {
+        if (!container.resources.requests || !container.resources.requests.cpu) {
+          msgCpu.push('CPU request');
+        }
+
+        if (!container.resources.limits || !container.resources.limits.cpu) {
+          msgCpu.push('CPU limit');
+        }
+
+        if (!container.resources.requests || !container.resources.requests.memory) {
+          msgMemory.push('Memory request');
+        }
+
+        if (!container.resources.limits || !container.resources.limits.memory) {
+          msgMemory.push('Memory limit');
+        }
+      }
+
+      if (msgCpu.length > 0 || msgMemory.length > 0) {
+        pod.message = "Container \"" + container.name + "\":\n                 " + (msgCpu.length && 'Specify ' + msgCpu.join(' and ') + ';') + "\n                 " + (msgMemory.length && 'Specify ' + msgMemory.join(' and ') + ';');
+        return false;
+      }
+
+      return true;
+    });
   };
 
   K8sPage.prototype.toggleMenu = function () {
@@ -21819,6 +22114,7 @@ function (_super) {
     _this.$timeout = $timeout;
     _this.$window = $window;
     _this.serverInfo = null;
+    _this.hideAllWarningPods = true;
     _this.pageReady = false;
     _this.version = (0, _helpers.__getGrafanaVersion)($window);
 
@@ -21918,10 +22214,16 @@ function (_super) {
       case "cpuRequested":
         return (0, _helpers.__convertToMicro)((0, _helpers.__roundCpu)(res));
 
+      case "cpuLimit":
+        return (0, _helpers.__convertToMicro)((0, _helpers.__roundCpu)(res));
+
       case "memoryUsed":
         return (0, _helpers.__convertToGB)(res);
 
       case "memoryRequested":
+        return (0, _helpers.__convertToGB)(res);
+
+      case "memoryLimit":
         return (0, _helpers.__convertToGB)(res);
 
       default:
@@ -21990,6 +22292,10 @@ function (_super) {
     }
 
     return '<i class="fa fa-long-arrow-up grey"></i>';
+  };
+
+  NodesOverview.prototype.toggleAllWarningPods = function () {
+    this.hideAllWarningPods = !this.hideAllWarningPods;
   };
 
   NodesOverview.templateUrl = 'components/nodes-overview/nodes-overview.html';

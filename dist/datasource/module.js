@@ -522,6 +522,7 @@ var ERROR = 3;
 var WARNING = 2;
 var TERMINATING = 1;
 var SUCCESS = 0;
+var SUCCEEDED = 4;
 var COLOR_YELLOW = '#ffff0096';
 var COLOR_RED = '#a52a2a';
 var COLOR_GREEN = '#299c46';
@@ -532,6 +533,7 @@ exports.ERROR = ERROR;
 exports.WARNING = WARNING;
 exports.TERMINATING = TERMINATING;
 exports.SUCCESS = SUCCESS;
+exports.SUCCEEDED = SUCCEEDED;
 exports.COLOR_YELLOW = COLOR_YELLOW;
 exports.COLOR_RED = COLOR_RED;
 exports.COLOR_GREEN = COLOR_GREEN;
@@ -663,6 +665,8 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.DOPK8SDatasource = undefined;
 
+var _tslib = __webpack_require__(/*! tslib */ "../node_modules/tslib/tslib.es6.js");
+
 var _app_events = __webpack_require__(/*! grafana/app/core/app_events */ "grafana/app/core/app_events");
 
 var _app_events2 = _interopRequireDefault(_app_events);
@@ -769,11 +773,109 @@ function () {
 
       case 'namespace':
         return this.getNamespaces().then(function (namespaces) {
-          return namespaces.map(function (ns) {
-            return {
-              text: ns.metadata.name,
-              value: ns.metadata.name
-            };
+          return (0, _tslib.__awaiter)(_this, void 0, void 0, function () {
+            var _a, deployments, deploymentsNamespace_1, statefulsets, statefulsetsNamespace_1, daemonsets, daemonsetsNamespace_1;
+
+            return (0, _tslib.__generator)(this, function (_b) {
+              switch (_b.label) {
+                case 0:
+                  _a = queryData[1];
+
+                  switch (_a) {
+                    case 'deployment':
+                      return [3
+                      /*break*/
+                      , 1];
+
+                    case 'statefulset':
+                      return [3
+                      /*break*/
+                      , 3];
+
+                    case 'daemonset':
+                      return [3
+                      /*break*/
+                      , 5];
+                  }
+
+                  return [3
+                  /*break*/
+                  , 7];
+
+                case 1:
+                  return [4
+                  /*yield*/
+                  , this.getDeployments()];
+
+                case 2:
+                  deployments = _b.sent();
+                  deploymentsNamespace_1 = deployments.map(function (deployment) {
+                    return deployment.metadata.namespace;
+                  });
+                  return [2
+                  /*return*/
+                  , namespaces.filter(function (ns) {
+                    return deploymentsNamespace_1.includes(ns.metadata.name);
+                  }).map(function (ns) {
+                    return {
+                      text: ns.metadata.name,
+                      value: ns.metadata.name
+                    };
+                  })];
+
+                case 3:
+                  return [4
+                  /*yield*/
+                  , this.getStatefulsets()];
+
+                case 4:
+                  statefulsets = _b.sent();
+                  statefulsetsNamespace_1 = statefulsets.map(function (statefulset) {
+                    return statefulset.metadata.namespace;
+                  });
+                  return [2
+                  /*return*/
+                  , namespaces.filter(function (ns) {
+                    return statefulsetsNamespace_1.includes(ns.metadata.name);
+                  }).map(function (ns) {
+                    return {
+                      text: ns.metadata.name,
+                      value: ns.metadata.name
+                    };
+                  })];
+
+                case 5:
+                  return [4
+                  /*yield*/
+                  , this.getDaemonsets()];
+
+                case 6:
+                  daemonsets = _b.sent();
+                  daemonsetsNamespace_1 = daemonsets.map(function (daemonset) {
+                    return daemonset.metadata.namespace;
+                  });
+                  return [2
+                  /*return*/
+                  , namespaces.filter(function (ns) {
+                    return daemonsetsNamespace_1.includes(ns.metadata.name);
+                  }).map(function (ns) {
+                    return {
+                      text: ns.metadata.name,
+                      value: ns.metadata.name
+                    };
+                  })];
+
+                case 7:
+                  return [2
+                  /*return*/
+                  , namespaces.map(function (ns) {
+                    return {
+                      text: ns.metadata.name,
+                      value: ns.metadata.name
+                    };
+                  })];
+              }
+            });
           });
         });
 
