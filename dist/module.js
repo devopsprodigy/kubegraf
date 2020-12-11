@@ -18118,8 +18118,12 @@ function () {
     this.ds = ds;
   }
 
-  PrometheusProxy.prototype.query = function (query) {
+  PrometheusProxy.prototype.query = function (query, debug) {
     var _this = this;
+
+    if (debug === void 0) {
+      debug = false;
+    }
 
     var body = {
       range: {
@@ -18133,6 +18137,7 @@ function () {
       legendFormat: '{{' + query.legend + '}}',
       interval: '15s'
     };
+    if (debug) console.log(body);
     var res = this.ds.query(body);
 
     if (typeof res.then !== "function") {
@@ -18141,17 +18146,32 @@ function () {
 
     return res.then(function (res) {
       if (res && res.data) {
-        return _this.formData(res.data, query);
+        return _this.formData(res.data, query, debug);
       } else {
         return {};
       }
     });
   };
 
-  PrometheusProxy.prototype.formData = function (data, query) {
+  PrometheusProxy.prototype.formData = function (data, query, debug) {
     var _this = this;
 
+    if (debug === void 0) {
+      debug = false;
+    }
+
+    if (debug) {
+      console.log(data);
+      console.log(query);
+    }
+
     return data.map(function (item) {
+      if (debug) {
+        console.log(item.target);
+        console.log(query.legend);
+        console.log(item.target.substring(query.legend.length + 3, item.target.length - 2));
+      }
+
       return {
         target: item.target.substring(query.legend.length + 3, item.target.length - 2),
         datapoint: _this.__getLastNonNullValue(item.datapoints)
@@ -20335,24 +20355,24 @@ function () {
             return [4
             /*yield*/
             , Promise.all([this.prometheusDS.query({
-              expr: "count(count(node_cpu_seconds_total{instance=~\"" + instance + "\"}) by (cpu))",
+              expr: "count(count(node_cpu_seconds_total{instance=~\"" + instance + "\"}) by (cpu, instance)) by (instance)",
               legend: 'instance'
-            }), this.prometheusDS.query({
-              expr: "node_memory_MemTotal_bytes{instance=~\"" + instance + "\"}",
+            }, false), this.prometheusDS.query({
+              expr: "sum(node_memory_MemTotal_bytes{instance=~\"" + instance + "\"}) by (instance)",
               legend: 'instance'
-            }), this.prometheusDS.query({
+            }, false), this.prometheusDS.query({
               expr: "node_memory_SwapTotal_bytes{instance=~\"" + instance + "\"}",
               legend: 'instance'
             }), this.prometheusDS.query({
-              expr: "node_filesystem_size_bytes{instance=~\"" + instance + "\",mountpoint=\"/\",fstype!=\"rootfs\"}",
+              expr: "sum(node_filesystem_size_bytes{instance=~\"" + instance + "\",mountpoint=\"/\",fstype!=\"rootfs\"}) by (instance)",
               legend: 'instance'
-            }), this.prometheusDS.query({
-              expr: "node_load1{instance=~\"" + instance + "\"}",
+            }, false), this.prometheusDS.query({
+              expr: "sum(node_load1{instance=~\"" + instance + "\"}) by (instance)",
               legend: 'instance'
-            }), this.prometheusDS.query({
-              expr: "node_time_seconds{instance=~\"" + instance + "\"} - node_boot_time_seconds{instance=~\"" + instance + "\"}",
+            }, false), this.prometheusDS.query({
+              expr: "sum(node_time_seconds{instance=~\"" + instance + "\"} - node_boot_time_seconds{instance=~\"" + instance + "\"}) by (instance)",
               legend: 'instance'
-            }) //uptime
+            }, false) //uptime
             ])];
 
           case 1:
@@ -20454,9 +20474,9 @@ function () {
   K8sPage.prototype.__getCpuMetricsUsed = function () {
     var promQuery = {
       expr: 'sum(rate(container_cpu_usage_seconds_total{id="/"}[2m])) by (instance)',
-      legend: 'node'
+      legend: 'instance'
     };
-    return this.prometheusDS.query(promQuery).then(function (res) {
+    return this.prometheusDS.query(promQuery, false).then(function (res) {
       return res;
     });
   };
@@ -20466,7 +20486,7 @@ function () {
       expr: 'sum(sum(kube_pod_container_resource_requests_cpu_cores) by (namespace, pod, node) * on (pod, namespace) group_left()  (sum(kube_pod_status_phase{phase="Running"}) by (pod, namespace) == 1)) by (node)',
       legend: 'node'
     };
-    return this.prometheusDS.query(promQuery).then(function (res) {
+    return this.prometheusDS.query(promQuery, false).then(function (res) {
       return res;
     });
   };
@@ -20476,7 +20496,7 @@ function () {
       expr: 'sum(sum(kube_pod_container_resource_limits_cpu_cores) by (namespace, pod, node) * on (pod, namespace) group_left()  (sum(kube_pod_status_phase{phase="Running"}) by (pod, namespace) == 1)) by (node)',
       legend: 'node'
     };
-    return this.prometheusDS.query(promQuery).then(function (res) {
+    return this.prometheusDS.query(promQuery, false).then(function (res) {
       return res;
     });
   };
@@ -20486,7 +20506,7 @@ function () {
       expr: 'sum(sum(kube_pod_container_resource_requests_memory_bytes) by (namespace, pod, node) * on (pod, namespace) group_left()  (sum(kube_pod_status_phase{phase="Running"}) by (pod, namespace) == 1)) by (node)',
       legend: "node"
     };
-    return this.prometheusDS.query(promQuery).then(function (res) {
+    return this.prometheusDS.query(promQuery, false).then(function (res) {
       return res;
     });
   };
@@ -20496,7 +20516,7 @@ function () {
       expr: 'sum(sum(kube_pod_container_resource_limits_memory_bytes) by (namespace, pod, node) * on (pod, namespace) group_left()  (sum(kube_pod_status_phase{phase="Running"}) by (pod, namespace) == 1)) by (node)',
       legend: "node"
     };
-    return this.prometheusDS.query(promQuery).then(function (res) {
+    return this.prometheusDS.query(promQuery, false).then(function (res) {
       return res;
     });
   };
@@ -20506,7 +20526,7 @@ function () {
       expr: 'sum(node_memory_MemTotal_bytes) by (instance) - sum(node_memory_MemFree_bytes) by (instance) - sum(node_memory_Buffers_bytes) by (instance) - sum(node_memory_Cached_bytes) by (instance) ',
       legend: 'instance'
     };
-    return this.prometheusDS.query(promQuery).then(function (res) {
+    return this.prometheusDS.query(promQuery, false).then(function (res) {
       return res;
     });
   };
@@ -20514,9 +20534,9 @@ function () {
   K8sPage.prototype.__getPodsCountMetrics = function () {
     var promQuery = {
       expr: 'sum(kubelet_running_pod_count) by (instance)',
-      legend: 'node'
+      legend: 'instance'
     };
-    return this.prometheusDS.query(promQuery).then(function (res) {
+    return this.prometheusDS.query(promQuery, false).then(function (res) {
       return res;
     });
   };
@@ -20646,7 +20666,7 @@ function () {
       expr: 'sum(rate(container_cpu_usage_seconds_total{pod!="", container!="", container!="POD"}[2m])) by (pod) or ' + 'sum(label_replace(rate(container_cpu_usage_seconds_total{pod_name!="", container_name!="", container_name!="POD"}[2m]), "pod", "$1", "pod_name", "(.*)")) by (pod)',
       legend: 'pod'
     };
-    return this.prometheusDS.query(podsUsedCpu).then(function (res) {
+    return this.prometheusDS.query(podsUsedCpu, false).then(function (res) {
       return res;
     });
   };
@@ -20657,7 +20677,7 @@ function () {
       expr: 'sum(container_memory_usage_bytes{container!="", container!="POD"}) by (pod) or ' + 'sum(label_replace(container_memory_usage_bytes{container_name!="", container_name!="POD"}, "pod", "$1", "pod_name", "(.*)")) by (pod)',
       legend: 'pod'
     };
-    return this.prometheusDS.query(podsUsedMemory).then(function (res) {
+    return this.prometheusDS.query(podsUsedMemory, false).then(function (res) {
       return res;
     });
   };
@@ -20667,7 +20687,7 @@ function () {
       expr: 'sum(kube_pod_container_resource_requests_cpu_cores) by (pod)',
       legend: 'pod'
     };
-    return this.prometheusDS.query(podsUsedCpu).then(function (res) {
+    return this.prometheusDS.query(podsUsedCpu, false).then(function (res) {
       return res;
     });
   };
@@ -20677,7 +20697,7 @@ function () {
       expr: 'sum(kube_pod_container_resource_limits_cpu_cores) by (pod)',
       legend: 'pod'
     };
-    return this.prometheusDS.query(podsLimitCpu).then(function (res) {
+    return this.prometheusDS.query(podsLimitCpu, false).then(function (res) {
       return res;
     });
   };
@@ -20687,7 +20707,7 @@ function () {
       expr: 'sum(kube_pod_container_resource_requests_memory_bytes) by (pod)',
       legend: 'pod'
     };
-    return this.prometheusDS.query(podsUsedMemory).then(function (res) {
+    return this.prometheusDS.query(podsUsedMemory, false).then(function (res) {
       return res;
     });
   };
@@ -20697,7 +20717,7 @@ function () {
       expr: 'sum(kube_pod_container_resource_limits_memory_bytes) by (pod)',
       legend: 'pod'
     };
-    return this.prometheusDS.query(podsLimitMemory).then(function (res) {
+    return this.prometheusDS.query(podsLimitMemory, false).then(function (res) {
       return res;
     });
   };

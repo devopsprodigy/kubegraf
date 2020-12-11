@@ -90,32 +90,31 @@ export  class K8sPage {
 
     async __getServerInfo(nodeIp: string, nodeName: string) {
         let instance = `${nodeName}|${nodeIp}:.+`;
-
         const result = await Promise.all([
             this.prometheusDS.query({
-                expr: `count(count(node_cpu_seconds_total{instance=~"${instance}"}) by (cpu))`,
+                expr: `count(count(node_cpu_seconds_total{instance=~"${instance}"}) by (cpu, instance)) by (instance)`,
                 legend: 'instance'
-            }), //cpuCores
+            }, false), //cpuCores
             this.prometheusDS.query({
-                expr: `node_memory_MemTotal_bytes{instance=~"${instance}"}`,
+                expr: `sum(node_memory_MemTotal_bytes{instance=~"${instance}"}) by (instance)`,
                 legend: 'instance'
-            }), //ramTotal
+            }, false), //ramTotal
             this.prometheusDS.query({
                 expr: `node_memory_SwapTotal_bytes{instance=~"${instance}"}`,
                 legend: 'instance'
             }), //swapTotal
             this.prometheusDS.query({
-                expr: `node_filesystem_size_bytes{instance=~"${instance}",mountpoint="/",fstype!="rootfs"}`,
+                expr: `sum(node_filesystem_size_bytes{instance=~"${instance}",mountpoint="/",fstype!="rootfs"}) by (instance)`,
                 legend: 'instance'
-            }), //rootFSTotal
+            },false), //rootFSTotal
             this.prometheusDS.query({
-                expr: `node_load1{instance=~"${instance}"}`,
+                expr: `sum(node_load1{instance=~"${instance}"}) by (instance)`,
                 legend: 'instance'
-            }), //sysLoad
+            }, false), //sysLoad
             this.prometheusDS.query({
-                expr: `node_time_seconds{instance=~"${instance}"} - node_boot_time_seconds{instance=~"${instance}"}`,
+                expr: `sum(node_time_seconds{instance=~"${instance}"} - node_boot_time_seconds{instance=~"${instance}"}) by (instance)`,
                 legend: 'instance'
-            }) //uptime
+            }, false) //uptime
         ])
 
         return {
@@ -198,9 +197,9 @@ export  class K8sPage {
     __getCpuMetricsUsed(){
         const promQuery = {
             expr: 'sum(rate(container_cpu_usage_seconds_total{id="/"}[2m])) by (instance)',
-            legend: 'node'
+            legend: 'instance'
         }
-        return this.prometheusDS.query(promQuery)
+        return this.prometheusDS.query(promQuery, false)
             .then(res => res)
     }
 
@@ -210,7 +209,7 @@ export  class K8sPage {
             legend: 'node'
         };
 
-        return this.prometheusDS.query(promQuery)
+        return this.prometheusDS.query(promQuery, false)
             .then(res => res);
     }
 
@@ -220,7 +219,7 @@ export  class K8sPage {
             legend: 'node'
         };
 
-        return this.prometheusDS.query(promQuery)
+        return this.prometheusDS.query(promQuery, false)
             .then(res => res);
     }
 
@@ -230,7 +229,7 @@ export  class K8sPage {
             legend: "node"
         };
 
-        return this.prometheusDS.query(promQuery)
+        return this.prometheusDS.query(promQuery, false)
             .then(res => res);
     }
 
@@ -240,7 +239,7 @@ export  class K8sPage {
             legend: "node"
         };
 
-        return this.prometheusDS.query(promQuery)
+        return this.prometheusDS.query(promQuery, false)
             .then(res => res);
     }
 
@@ -249,18 +248,17 @@ export  class K8sPage {
             expr: 'sum(node_memory_MemTotal_bytes) by (instance) - sum(node_memory_MemFree_bytes) by (instance) - sum(node_memory_Buffers_bytes) by (instance) - sum(node_memory_Cached_bytes) by (instance) ',
             legend: 'instance'
         };
-
-        return this.prometheusDS.query(promQuery)
+        return this.prometheusDS.query(promQuery, false)
             .then(res => res);
     }
 
     __getPodsCountMetrics(){
         const promQuery = {
             expr: 'sum(kubelet_running_pod_count) by (instance)',
-            legend: 'node'
+            legend: 'instance'
         };
 
-        return this.prometheusDS.query(promQuery)
+        return this.prometheusDS.query(promQuery, false)
             .then(res => res);
     }
 
@@ -358,7 +356,7 @@ export  class K8sPage {
             legend: 'pod'
         };
 
-        return this.prometheusDS.query(podsUsedCpu)
+        return this.prometheusDS.query(podsUsedCpu, false)
             .then(res => res);
     }
 
@@ -370,7 +368,7 @@ export  class K8sPage {
             legend: 'pod'
         };
 
-        return this.prometheusDS.query(podsUsedMemory)
+        return this.prometheusDS.query(podsUsedMemory, false)
             .then(res => res);
     }
 
@@ -380,7 +378,7 @@ export  class K8sPage {
             legend: 'pod'
         };
 
-        return this.prometheusDS.query(podsUsedCpu)
+        return this.prometheusDS.query(podsUsedCpu, false)
             .then(res => res);
     }
 
@@ -390,7 +388,7 @@ export  class K8sPage {
             legend: 'pod'
         };
 
-        return this.prometheusDS.query(podsLimitCpu)
+        return this.prometheusDS.query(podsLimitCpu, false)
             .then(res => res);
     }
 
@@ -400,7 +398,7 @@ export  class K8sPage {
             legend: 'pod'
         };
 
-        return this.prometheusDS.query(podsUsedMemory)
+        return this.prometheusDS.query(podsUsedMemory, false)
             .then(res => res);
     }
 
@@ -410,7 +408,7 @@ export  class K8sPage {
             legend: 'pod'
         };
 
-        return this.prometheusDS.query(podsLimitMemory)
+        return this.prometheusDS.query(podsLimitMemory, false)
             .then(res => res);
     }
 

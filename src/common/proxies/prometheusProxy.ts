@@ -7,13 +7,16 @@ export class PrometheusProxy {
         this.ds = ds;
     }
 
-    query(query: any){
+    query(query: any, debug: boolean = false){
         let body = {
             range: { from: moment().subtract(2, 'minute'), to: moment() },
             targets: [{expr: query.expr, format: 'time_series'}],
             legendFormat: '{{' + query.legend + '}}',
             interval: '15s'
         };
+
+        if(debug)
+            console.log(body);
 
         let res = this.ds.query(body)
 
@@ -23,16 +26,27 @@ export class PrometheusProxy {
 
         return res.then(res => {
             if (res && res.data){
-                return  this.formData(res.data, query);
+                return  this.formData(res.data, query, debug);
             }else{
                 return {}
             }
         })
     }
 
-    formData(data, query){
+    formData(data, query, debug = false){
+        if(debug){
+            console.log(data);
+            console.log(query);
+        }
         return data.map(item =>
             {
+                if(debug){
+                    console.log(item.target);
+                    console.log(query.legend);
+                    console.log(item.target.substring(query.legend.length + 3, item.target.length - 2));
+                }
+
+
                 return {
                     target : item.target.substring(query.legend.length + 3, item.target.length - 2),
                     datapoint : this.__getLastNonNullValue(item.datapoints)
