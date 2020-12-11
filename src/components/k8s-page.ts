@@ -820,11 +820,11 @@ export  class K8sPage {
             .then(ds => {
                 this.cluster = ds;
                 this.__setRefreshRate(this.cluster.refreshRate);
-                this.getPrometheusDS(this.cluster.prometheus)
+                return this.getPrometheusDS(this.cluster.prometheus)
                     .then(() => {
                         this.pageReady = true;
                     })
-            })
+            });
     }
 
     getPrometheusDS(name){

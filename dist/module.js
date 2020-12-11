@@ -21219,7 +21219,7 @@ function () {
 
       _this.__setRefreshRate(_this.cluster.refreshRate);
 
-      _this.getPrometheusDS(_this.cluster.prometheus).then(function () {
+      return _this.getPrometheusDS(_this.cluster.prometheus).then(function () {
         _this.pageReady = true;
       });
     });
