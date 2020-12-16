@@ -98,9 +98,10 @@ The above three dashboards show the number of available / unavailable applicatio
 
 	`grafana-cli plugins install devopsprodigy-kubegraf-app` and restart grafana-server.
 
-3. Apply Kubernetes manifests from [kubernetes/](kubernetes/) directory to give
+3. Create namespace "kubegraf" and apply Kubernetes manifests from [kubernetes/](kubernetes/) directory to give
      required permissions to the user `grafana-kubegraf`:
       ```
+      kubectl create ns kubegraf
       kubectl apply -f https://raw.githubusercontent.com/devopsprodigy/kubegraf/master/kubernetes/serviceaccount.yaml
       kubectl apply -f https://raw.githubusercontent.com/devopsprodigy/kubegraf/master/kubernetes/clusterrole.yaml
       kubectl apply -f https://raw.githubusercontent.com/devopsprodigy/kubegraf/master/kubernetes/clusterrolebinding.yaml
@@ -120,7 +121,7 @@ The above three dashboards show the number of available / unavailable applicatio
 
     Get the token
     ```
-    kubectl get secret grafana-kubegraf-secret -o jsonpath={.data.token} | base64 -d
+    kubectl get secret grafana-kubegraf-secret -o jsonpath={.data.token} -n kubegraf | base64 -d
     ```
 
 5. Go to /configuration-plugins in Grafana and click on the plugin. Then click “enable”.
