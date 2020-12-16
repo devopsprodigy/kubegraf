@@ -4,10 +4,9 @@
   "description": "",
   "private": true,
   "scripts": {
-    "dev": "grunt && grunt watch",
-    "build": "grunt",
     "webpack": "webpack",
-    "webpack:watch": "webpack --watch"
+    "webpack:watch": "webpack --watch",
+    "sign": "grafana-toolkit plugin:sign"
   },
   "author": "",
   "license": "ISC",
@@ -40,6 +39,7 @@
     "webpack-cli": "^3.3.10"
   },
   "dependencies": {
+    "@grafana/toolkit": "^7.3.5",
     "bindings": "^1.5.0",
     "lodash": "^4.17.4",
     "moment": "^2.24.0"
