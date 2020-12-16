@@ -2,9 +2,11 @@ import q from "q";
 import moment from 'moment';
 export class PrometheusProxy {
     ds: any;
+    version: any;
 
     constructor(ds){
         this.ds = ds;
+
     }
 
     query(query: any, debug: boolean = false){
@@ -15,11 +17,7 @@ export class PrometheusProxy {
             interval: '15s'
         };
 
-        if(debug)
-            console.log(body);
-
         let res = this.ds.query(body)
-
         if (typeof res.then !== "function") {
             res = res.toPromise()
         }
@@ -34,32 +32,54 @@ export class PrometheusProxy {
     }
 
     formData(data, query, debug = false){
-        if(debug){
-            console.log(data);
-            console.log(query);
-        }
         return data.map(item =>
             {
                 if(debug){
-                    console.log(item.target);
-                    console.log(query.legend);
-                    console.log(item.target.substring(query.legend.length + 3, item.target.length - 2));
+                    console.log(item);
                 }
 
 
                 return {
-                    target : item.target.substring(query.legend.length + 3, item.target.length - 2),
-                    datapoint : this.__getLastNonNullValue(item.datapoints)
+                    target : this.__getName(item, query),
+                    datapoint : this.__getLastNonNullValue(item)
                 };
             }
 
         );
     }
 
-    __getLastNonNullValue = dataset => {
-        if(dataset){
-            let skiper = dataset.filter(item => item[0]!= null);
+    __getLastNonNullValue = item => {
+        if(item.fields){
+            let valueField = item.fields.filter(row => {
+                return row.name && row.name === "Value";
+            })
+
+            if (valueField){
+                let vArr = valueField[0].values.buffer.filter(point => point != null);
+                let value = vArr[vArr.length - 1];
+                if(value == null){
+                    console.log(item);
+                }
+                return value;
+
+            }
+        }else if(item.dataset){
+            let skiper = item.dataset.filter(item => item[0]!= null);
             return skiper[skiper.length-1][0];
+        }else{
+            return 0;
         }
     };
+
+    __getName = (item, query) => {
+        if(item.target !== undefined){
+            return item.target.substring(query.legend.length + 3, item.target.length - 2);
+
+        }
+
+        if(item.name !== undefined){
+            return item.name.substring(query.legend.length + 3, item.name.length - 2);
+        }
+
+    }
 }

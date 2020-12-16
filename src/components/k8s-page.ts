@@ -100,9 +100,9 @@ export  class K8sPage {
                 legend: 'instance'
             }, false), //ramTotal
             this.prometheusDS.query({
-                expr: `node_memory_SwapTotal_bytes{instance=~"${instance}"}`,
+                expr: `sum(node_memory_SwapTotal_bytes{instance=~"${instance}"}) by (instance)`,
                 legend: 'instance'
-            }), //swapTotal
+            }, false), //swapTotal
             this.prometheusDS.query({
                 expr: `sum(node_filesystem_size_bytes{instance=~"${instance}",mountpoint="/",fstype!="rootfs"}) by (instance)`,
                 legend: 'instance'

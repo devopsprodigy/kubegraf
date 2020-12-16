@@ -18106,12 +18106,41 @@ var PrometheusProxy =
 /** @class */
 function () {
   function PrometheusProxy(ds) {
-    this.__getLastNonNullValue = function (dataset) {
-      if (dataset) {
-        var skiper = dataset.filter(function (item) {
+    this.__getLastNonNullValue = function (item) {
+      if (item.fields) {
+        var valueField = item.fields.filter(function (row) {
+          return row.name && row.name === "Value";
+        });
+
+        if (valueField) {
+          var vArr = valueField[0].values.buffer.filter(function (point) {
+            return point != null;
+          });
+          var value = vArr[vArr.length - 1];
+
+          if (value == null) {
+            console.log(item);
+          }
+
+          return value;
+        }
+      } else if (item.dataset) {
+        var skiper = item.dataset.filter(function (item) {
           return item[0] != null;
         });
         return skiper[skiper.length - 1][0];
+      } else {
+        return 0;
+      }
+    };
+
+    this.__getName = function (item, query) {
+      if (item.target !== undefined) {
+        return item.target.substring(query.legend.length + 3, item.target.length - 2);
+      }
+
+      if (item.name !== undefined) {
+        return item.name.substring(query.legend.length + 3, item.name.length - 2);
       }
     };
 
@@ -18137,7 +18166,6 @@ function () {
       legendFormat: '{{' + query.legend + '}}',
       interval: '15s'
     };
-    if (debug) console.log(body);
     var res = this.ds.query(body);
 
     if (typeof res.then !== "function") {
@@ -18160,21 +18188,14 @@ function () {
       debug = false;
     }
 
-    if (debug) {
-      console.log(data);
-      console.log(query);
-    }
-
     return data.map(function (item) {
       if (debug) {
-        console.log(item.target);
-        console.log(query.legend);
-        console.log(item.target.substring(query.legend.length + 3, item.target.length - 2));
+        console.log(item);
       }
 
       return {
-        target: item.target.substring(query.legend.length + 3, item.target.length - 2),
-        datapoint: _this.__getLastNonNullValue(item.datapoints)
+        target: _this.__getName(item, query),
+        datapoint: _this.__getLastNonNullValue(item)
       };
     });
   };
@@ -20361,9 +20382,9 @@ function () {
               expr: "sum(node_memory_MemTotal_bytes{instance=~\"" + instance + "\"}) by (instance)",
               legend: 'instance'
             }, false), this.prometheusDS.query({
-              expr: "node_memory_SwapTotal_bytes{instance=~\"" + instance + "\"}",
+              expr: "sum(node_memory_SwapTotal_bytes{instance=~\"" + instance + "\"}) by (instance)",
               legend: 'instance'
-            }), this.prometheusDS.query({
+            }, false), this.prometheusDS.query({
               expr: "sum(node_filesystem_size_bytes{instance=~\"" + instance + "\",mountpoint=\"/\",fstype!=\"rootfs\"}) by (instance)",
               legend: 'instance'
             }, false), this.prometheusDS.query({
