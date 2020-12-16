@@ -12,4 +12,4 @@ subjects:
     name: grafana-kubegraf
   - kind: ServiceAccount
     name: grafana-kubegraf
-    namespace: default
+    namespace: kubegraf
