@@ -9,7 +9,7 @@ Hash: SHA512
   "signedByOrgName": "DevOpsProdigy",
   "plugin": "devopsprodigy-kubegraf-app",
   "version": "1.5.0",
-  "time": 1608130093894,
+  "time": 1608130575269,
   "keyId": "7e4d0c6a708866e7",
   "files": {
     "common/types/pod.ts": "6808a417dd10e6017a93e2898b63f2fc02b125334148ef61408158b0ac00eaf8",
@@ -28,7 +28,7 @@ Hash: SHA512
     "dashboards/deployment.json": "842b2ef72ba809987dadf3b3212d8b3f1c72bd80a00dac4369e052f13b3e0e45",
     "dashboards/statefulset.json": "59f31c9c47335e17e364c78b3d4d8e93f3d42292f0c1031c9455024a0447a98b",
     "dashboards/daemonset.json": "4070df3e192c660f67b1e9ebd370fa00ab1dec32959eb05e9ff0d312435b8280",
-    "module.js": "6f564647222ebfb837c04417541fe11f0e89f3717203a34884a6ed4b8a276f17",
+    "module.js": "7f668f5cd643bf03272116bddf6adc8d3873983110fa86ffac547c3527a6174c",
     "img/loading.gif": "be9413d2f13321c983026c9f6b815ba820c5b1d91c4d2b763a9ef044afe0f187",
     "img/node_dashboard_2.png": "0fed6422877e5c2167a7b97dabe740bb4dd7f9851fdca00cc16c6cbe862bc35a",
     "img/node_dashboard_1.png": "e0ee82f5ce50283c483b166218ea3b29b9ebc622ed44c2a5c015424fa72c92b0",
@@ -88,7 +88,7 @@ Hash: SHA512
     "module.js.map": "e080e48b5304486d5cfed44d3235e548a3c3a13e4bd1c545d7936ad7bbcb9432",
     "config/config.html": "236c453fb0720a1306b43f44163fdda4af485ac4d302747e2d8c94bbc27d1dd4",
     "CHANGELOG.md": "7769c643b683eef2b2b0922cf83272f6c3d1104ea16649cac7cc7e440c5a4a5d",
-    "datasource/module.js": "cb63617a24090a4ee4cc99935225cb60abdfb8b51615f4961d7459f54dd90662",
+    "datasource/module.js": "19cc9028bd7ca279b60cd7e0dbd3357ab0a505190485255efa89c10775f2a4cf",
     "datasource/img/loading.gif": "be9413d2f13321c983026c9f6b815ba820c5b1d91c4d2b763a9ef044afe0f187",
     "datasource/img/grafanaLogo.png": "93a573bd1bfc6cd7431ccd78f5b1ce3898dd204e410b2c8233c0bb2198436634",
     "datasource/plugin.json": "e3925ea4662c5cf45b510fea4113a7de048e0b4249b735fbe7535368ed661e55",
@@ -100,9 +100,9 @@ Hash: SHA512
 Version: OpenPGP.js v4.10.1
 Comment: https://openpgpjs.org
 
-wqEEARMKAAYFAl/aHi4ACgkQfk0ManCIZuerAgIHa7n6aWBZR32RoAJ1xZmP
-ETOyF/YPYE7a4lKU01LxppSU1ZcAcbZPXncA6gH0qL3dAuCD3yWAqhCzOO6K
-JMkBH+QCCQHJjJGxgq56H2xmDancCOl+euf4Gd1ZqTRLms0/q9h0snqEK4dQ
-BAmYdmvPKexG3Pp7vVlfdakEWzWsSDNeWVGeKw==
-=v+ee
+wqAEARMKAAYFAl/aIA8ACgkQfk0ManCIZueeywIIm5xReUx630klcvbzsFe9
+e8hb45enYe/JupbxgU/IMjfc11EkDAXFfxp+4khv1O90B6iXlVkkCE7gFp8b
+FQOilCkCCLE9QiKcD3fk7P6ElOXQXQ5Lkyz8kgUgAtmFvUlDaeyGb0T1zqpR
+qMJneC9CMU4Nb3Au5mvPR79yDzrmVGCC9SJu
+=sxJe
 -----END PGP SIGNATURE-----
