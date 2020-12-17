@@ -45,7 +45,7 @@ The plugin consists of three main info pages with detailed information about the
 - Information about used and allocated resources (RAM, CPU utilization) and the number of pods;
 - Physical distribution of pods.
 
-![](https://devopsprodigy.com/img/dop-kubegraf/v140/n_node_overview.png)
+![](https://devopsprodigy.com/img/dop-kubegraf/v150/n5_node_overview.png)
 
 *Pic. 3: Nodes overview*
 
@@ -65,7 +65,7 @@ This is a dashboard with node metrics. It displays the employment of resources l
 
 Displays how much of the resources the selected pod has used.
 
-![](https://devopsprodigy.com/img/dop-kubegraf/v120/pods_dashboard.png)
+![](https://devopsprodigy.com/img/dop-kubegraf/v150/n5_pods_dashboard.png)
 
 *Pic. 5: Pod resources*
 
@@ -74,7 +74,7 @@ Displays how much of the resources the selected pod has used.
 ![](https://devopsprodigy.com/img/dop-kubegraf/v120/deployments_dashboard_1.png)
 
 *Pic. 6: Deployment dashboard*
-![](https://devopsprodigy.com/img/dop-kubegraf/v120/deployments_dashboard_2.png)
+![](https://devopsprodigy.com/img/dop-kubegraf/v150/n5_deployments_dashboard_2.png)
 
 *Pic. 7: Deployment dashboard*
 

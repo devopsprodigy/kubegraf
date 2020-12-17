@@ -9,7 +9,7 @@ Hash: SHA512
   "signedByOrgName": "DevOpsProdigy",
   "plugin": "devopsprodigy-kubegraf-app",
   "version": "1.5.0",
-  "time": 1608203713131,
+  "time": 1608203904643,
   "keyId": "7e4d0c6a708866e7",
   "files": {
     "common/types/pod.ts": "6808a417dd10e6017a93e2898b63f2fc02b125334148ef61408158b0ac00eaf8",
@@ -62,7 +62,7 @@ Hash: SHA512
     "img/n_applications_overview_1.png": "e3f20444ecb4165fa07bea021ea30a293ce59c66883634f33ffab7a392f04bdb",
     "img/applications_overview_1.png": "a8a816d3d45acbc126febdbe98b29a7852fde7afa2d148f5036a41027c2bbd99",
     "LICENSE": "6446f747cbb3a962079309035085cb6c9c515801653f36299fed6b9aa420958f",
-    "README.md": "2d4b5be6a3b830b3654005dd146308a9cd7390ce266a29b5b8f766881f796df3",
+    "README.md": "72d4d3b17cddced3900f36fdfe50f66a0b99142ab47cf3d04711a331fce9e8a2",
     "plugin.json": "6475e4ae061372a3b1dc49e2af795a7b6929308d6ade4dae6b127fe1d51f949f",
     "css/dark.css.map": "3057121642e6e658d848d0e31f13a7750e6f7130bf72b439561ed637fcf39934",
     "css/core.css.map": "7a717563b0d5115eab1d1d83e1a1226fd186a5d82c8226c89b53663ac25f2f54",
@@ -103,9 +103,9 @@ Hash: SHA512
 Version: OpenPGP.js v4.10.1
 Comment: https://openpgpjs.org
 
-wqIEARMKAAYFAl/bPcEACgkQfk0ManCIZueDVgIJAWIdU7PUURoyOZYSPaO7
-baun1/mOJ6YwULBi6mn70kJLMyeNpOMAMnK3YZGqrOTa65mUQtGPxZ8+FVp8
-2xmiQInRAgkBCtjv+0KvEy9kUGy0QcRfhTbV96JmRtJWW51fzJaoPb86b2Tu
-dZSvpZi+CEYz0tW5ej5RI0HtGNirMtU3hDiofO0=
-=P20q
+wqEEARMKAAYFAl/bPoAACgkQfk0ManCIZuclSgIJAZVhf5U3U5dUIECYf7Gt
+V/KB9LKRChp9eX2hTSlkfhSdP4rkAN0IsROqNaWWL2sXqz8z7REY2QLCOCyz
+8V+cquz3AgYmoAXFDH4njx9mzROVphn9g9lYJ02Rkh9m972Lv+yXGbfRXcS9
+swvbKt7/PcSUEwsOJDFi0u+Vky+aXJZMvbhUQA==
+=2zaH
 -----END PGP SIGNATURE-----
