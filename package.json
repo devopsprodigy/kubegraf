@@ -4,8 +4,8 @@
   "description": "",
   "private": true,
   "scripts": {
-    "webpack": "webpack",
-    "webpack:watch": "webpack --watch",
+    "build": "webpack",
+    "watch": "webpack --watch",
     "sign": "grafana-toolkit plugin:sign"
   },
   "author": "",

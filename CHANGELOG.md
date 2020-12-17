@@ -1,3 +1,23 @@
+# 1.5.0 (2020-12-16)
+
+### New Features 
+* Indicate when limits or requests are not setup for application
+* Add cpu/memory limits of containers to Nodes' overview page
+* Indicate cpu/memory usage of pod depending on the requests & limits on Nodes' overview page
+* Add cpu/memory limits of containers to deployments/statefulsets/daemonsets/pods dashboards
+* Hide empty namespaces on deployments/statefulsets/daemonsets dashboards
+* Add NAMESPACE for k8s-manifests [#44](https://github.com/devopsprodigy/kubegraf/issues/44)  
+* Sort alerts via priority  
+* Little navigations improvements
+* Add hide-button for alerts' table
+
+### Bug Fixes
+* Compatibility with Grafana >= 7.3.* [#48](https://github.com/devopsprodigy/kubegraf/issues/48)
+* Show memory/cpu usage of pod on pod's dashboard [#41](https://github.com/devopsprodigy/kubegraf/pull/41)
+* Fix white theme on new versions of Grafana
+* Fix legends on all dashboards 
+
+
 # 1.4.2 (2020-07-13)
 
 ### Bug Fixes
@@ -11,7 +31,7 @@
 
 # 1.4.0 (2020-05-13)
 
-### New features
+### New Features
 * Add integrations with node-exporter-full-dashboard
 * Add server' stat to nodes-overview page
 * Redesign of applications-overview page
@@ -24,7 +44,7 @@
 
 # 1.3.0 (2020-02-12)
 
-### New features
+### New Features
 * Add requested resource metrics (CPU, memory) to node's dashboard
 * Add order for pods (by cpu, memory) at Nodes overview page
 * Add disk metrics to dashboards
@@ -40,7 +60,7 @@
 
 # 1.2.0 (2019-12-20)
 
-### New features
+### New Features
 * Navigation improvement: 
     * Hide all button (for nodes and namespaces)
     * Show one node or namespace (by click with ctrl)
@@ -68,7 +88,7 @@
 
 # 1.1.0 (2019-09-25)
 
-### New features
+### New Features
 * **k8s v1.16 support** (Deployments, Daemonsets and Statefulsets migrate to use the apps/v1 API)
 * **Bearer token access** (restart your grafana-server after update) [#5](https://github.com/devopsprodigy/kubegraf/issues/5) [#4](https://github.com/devopsprodigy/kubegraf/issues/4)
 
