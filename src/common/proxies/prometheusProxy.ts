@@ -22,6 +22,7 @@ export class PrometheusProxy {
             res = res.toPromise()
         }
 
+
         return res.then(res => {
             if (res && res.data){
                 return  this.formData(res.data, query, debug);
@@ -63,8 +64,8 @@ export class PrometheusProxy {
                 return value;
 
             }
-        }else if(item.dataset){
-            let skiper = item.dataset.filter(item => item[0]!= null);
+        }else if(item.datapoints){
+            let skiper = item.datapoints.filter(item => item[0]!= null);
             return skiper[skiper.length-1][0];
         }else{
             return 0;

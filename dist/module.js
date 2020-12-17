@@ -22124,8 +22124,8 @@ function () {
 
           return value;
         }
-      } else if (item.dataset) {
-        var skiper = item.dataset.filter(function (item) {
+      } else if (item.datapoints) {
+        var skiper = item.datapoints.filter(function (item) {
           return item[0] != null;
         });
         return skiper[skiper.length - 1][0];
