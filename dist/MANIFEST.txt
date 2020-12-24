@@ -9,7 +9,7 @@ Hash: SHA512
   "signedByOrgName": "DevOpsProdigy",
   "plugin": "devopsprodigy-kubegraf-app",
   "version": "1.5.0",
-  "time": 1608207435996,
+  "time": 1608798939199,
   "keyId": "7e4d0c6a708866e7",
   "files": {
     "common/types/pod.ts": "6808a417dd10e6017a93e2898b63f2fc02b125334148ef61408158b0ac00eaf8",
@@ -103,9 +103,9 @@ Hash: SHA512
 Version: OpenPGP.js v4.10.1
 Comment: https://openpgpjs.org
 
-wqAEARMKAAYFAl/bTEwACgkQfk0ManCIZufDVAIHc/5H3DdwxlTtgTCcYqGi
-v5R8nPp8Ua1WdPjTKAYVogm1Oe9P1Fwqk/OHAqznnvhoafpWhlOb1AbaifgO
-O0pAl+QCB3GVf4aJKQ0sQTbvyXeLWtNi8qwHyhqZe24eH81wbBBmNeJhQpd7
-lXK9jrSC1xGnktZ321Jws/QxEL0szwPp5X0/
-=kAqa
+wqEEARMKAAYFAl/kUtsACgkQfk0ManCIZudqVgIJAUlrrrdE5e4lTmPq1ghm
+JSUt1tucO6j8agJTqPAHshTqBIm/fqsc8KOdufwNuTY0ipLdZLUCrmGJGM5f
+6F98QmeqAgdNxxDR5ef0J04ujIKtu9TcNRZWHCm2ub74Ph8SNQiMni+Sb7T4
+77/QSTralKl6c3711+GetqN4RNfwKLhDrjb2sA==
+=XmiM
 -----END PGP SIGNATURE-----
