@@ -640,24 +640,32 @@
       "dashLength": 10,
       "dashes": false,
       "datasource": "$PromDs",
-      "fill": 1,
+      "fieldConfig": {
+        "defaults": {
+          "custom": {},
+          "links": []
+        },
+        "overrides": []
+      },
+      "fill": 0,
       "fillGradient": 0,
       "gridPos": {
         "h": 8,
-        "w": 12,
+        "w": 24,
         "x": 0,
         "y": 23
       },
+      "hiddenSeries": false,
       "id": 8,
       "legend": {
-        "alignAsTable": true,
+        "alignAsTable": false,
         "avg": false,
         "current": false,
         "max": false,
         "min": false,
-        "rightSide": true,
-        "sideWidth": 300,
+        "rightSide": false,
         "show": true,
+        "sideWidth": 300,
         "total": false,
         "values": false
       },
@@ -665,7 +673,7 @@
       "linewidth": 1,
       "nullPointMode": "null",
       "options": {
-        "dataLinks": []
+        "alertThreshold": true
       },
       "percentage": false,
       "pointradius": 2,
@@ -757,24 +765,32 @@
       "dashLength": 10,
       "dashes": false,
       "datasource": "$PromDs",
-      "fill": 1,
+      "fieldConfig": {
+        "defaults": {
+          "custom": {},
+          "links": []
+        },
+        "overrides": []
+      },
+      "fill": 0,
       "fillGradient": 0,
       "gridPos": {
         "h": 8,
-        "w": 12,
-        "x": 12,
+        "w": 24,
+        "x": 0,
         "y": 28
       },
+      "hiddenSeries": false,
       "id": 9,
       "legend": {
-        "alignAsTable": true,
+        "alignAsTable": false,
         "avg": false,
         "current": false,
-        "rightSide": true,
-        "sideWidth": 300,
         "max": false,
         "min": false,
+        "rightSide": false,
         "show": true,
+        "sideWidth": 300,
         "total": false,
         "values": false
       },
@@ -782,7 +798,7 @@
       "linewidth": 1,
       "nullPointMode": "null",
       "options": {
-        "dataLinks": []
+        "alertThreshold": true
       },
       "percentage": false,
       "pointradius": 2,
@@ -872,22 +888,30 @@
       "dashLength": 10,
       "dashes": false,
       "datasource": "$PromDs",
-      "fill": 1,
+      "fieldConfig": {
+        "defaults": {
+          "custom": {},
+          "links": []
+        },
+        "overrides": []
+      },
+      "fill": 0,
       "fillGradient": 0,
       "gridPos": {
         "h": 8,
-        "w": 12,
+        "w": 24,
         "x": 0,
         "y": 36
       },
+      "hiddenSeries": false,
       "id": 10,
       "legend": {
-        "alignAsTable": true,
+        "alignAsTable": false,
         "avg": false,
         "current": false,
         "max": false,
         "min": false,
-        "rightSide": true,
+        "rightSide": false,
         "show": true,
         "total": false,
         "values": false
@@ -896,116 +920,40 @@
       "linewidth": 1,
       "nullPointMode": "null",
       "options": {
-        "dataLinks": []
+        "alertThreshold": true
       },
       "percentage": false,
       "pointradius": 2,
       "points": false,
       "renderer": "flot",
-      "seriesOverrides": [],
+      "seriesOverrides": [
+        {
+          "alias": "/.*trans.*/",
+          "transform": "negative-Y"
+        }
+      ],
       "spaceLength": 10,
       "stack": false,
       "steppedLine": false,
       "targets": [
         {
           "expr": "irate(container_network_transmit_bytes_total{namespace=\"$namespace\", pod=~\"$pod\"}[2m]) or label_replace(irate(container_network_transmit_bytes_total{namespace=\"$namespace\", pod_name=~\"$pod\"}[2m]), \"pod\", \"$1\", \"pod_name\", \"(.*)\")",
-          "legendFormat": "{{interface}} : [{{pod}}]",
+          "interval": "",
+          "legendFormat": "trans: [{{pod}}]",
           "refId": "A"
-        }
-      ],
-      "thresholds": [],
-      "timeFrom": null,
-      "timeRegions": [],
-      "timeShift": null,
-      "title": "Traffic transmit",
-      "tooltip": {
-        "shared": true,
-        "sort": 0,
-        "value_type": "individual"
-      },
-      "type": "graph",
-      "xaxis": {
-        "buckets": null,
-        "mode": "time",
-        "name": null,
-        "show": true,
-        "values": []
-      },
-      "yaxes": [
-        {
-          "format": "Bps",
-          "label": null,
-          "logBase": 1,
-          "max": null,
-          "min": null,
-          "show": true
         },
-        {
-          "format": "short",
-          "label": null,
-          "logBase": 1,
-          "max": null,
-          "min": null,
-          "show": true
-        }
-      ],
-      "yaxis": {
-        "align": false,
-        "alignLevel": null
-      }
-    },
-    {
-      "aliasColors": {},
-      "bars": false,
-      "dashLength": 10,
-      "dashes": false,
-      "datasource": "$PromDs",
-      "fill": 1,
-      "fillGradient": 0,
-      "gridPos": {
-        "h": 8,
-        "w": 12,
-        "x": 12,
-        "y": 31
-      },
-      "id": 11,
-      "legend": {
-        "alignAsTable": true,
-        "avg": false,
-        "current": false,
-        "max": false,
-        "min": false,
-        "rightSide": true,
-        "show": true,
-        "total": false,
-        "values": false
-      },
-      "lines": true,
-      "linewidth": 1,
-      "nullPointMode": "null",
-      "options": {
-        "dataLinks": []
-      },
-      "percentage": false,
-      "pointradius": 2,
-      "points": false,
-      "renderer": "flot",
-      "seriesOverrides": [],
-      "spaceLength": 10,
-      "stack": false,
-      "steppedLine": false,
-      "targets": [
         {
           "expr": "irate(container_network_receive_bytes_total{namespace=\"$namespace\", pod=~\"$pod\"}[2m]) or label_replace(irate(container_network_receive_bytes_total{namespace=\"$namespace\", pod_name=~\"$pod\"}[2m]), \"pod\", \"$1\", \"pod_name\", \"(.*)\")",
-          "legendFormat": "{{interface}} : [{{pod}}]",
-          "refId": "A"
+          "interval": "",
+          "legendFormat": "recv : [{{pod}}]",
+          "refId": "B"
         }
       ],
       "thresholds": [],
       "timeFrom": null,
       "timeRegions": [],
       "timeShift": null,
-      "title": "Traffic receive",
+      "title": "Network Traffic",
       "tooltip": {
         "shared": true,
         "sort": 0,
@@ -1022,7 +970,7 @@
       "yaxes": [
         {
           "format": "Bps",
-          "label": null,
+          "label": "Bytes out (-) / in (+)",
           "logBase": 1,
           "max": null,
           "min": null,
@@ -1044,141 +992,78 @@
     },
     {
       "aliasColors": {},
-      "datasource": "$PromDs",
       "bars": false,
       "dashLength": 10,
       "dashes": false,
-      "fill": 1,
+      "datasource": "$PromDs",
+      "fieldConfig": {
+        "defaults": {
+          "custom": {}
+        },
+        "overrides": []
+      },
+      "fill": 0,
+      "fillGradient": 0,
       "gridPos": {
         "h": 6,
-        "w": 12,
+        "w": 24,
         "x": 0,
         "y": 38
       },
+      "hiddenSeries": false,
       "id": 12,
       "legend": {
         "avg": false,
         "current": false,
         "max": false,
         "min": false,
+        "rightSide": false,
         "show": true,
         "total": false,
-        "values": false,
-        "rightSide": true
+        "values": false
       },
       "lines": true,
       "linewidth": 1,
       "links": [],
       "nullPointMode": "null",
+      "options": {
+        "alertThreshold": true
+      },
       "paceLength": 10,
       "percentage": false,
       "pointradius": 2,
       "points": false,
       "renderer": "flot",
-      "seriesOverrides": [],
+      "seriesOverrides": [
+        {
+          "alias": "/.*Reads.*/",
+          "transform": "negative-Y"
+        }
+      ],
+      "spaceLength": 10,
       "stack": false,
       "steppedLine": false,
       "targets": [
         {
           "expr": "rate(container_fs_reads_total{namespace=\"$namespace\", pod=~\"$pod\", container!=\"\", container!=\"POD\"}[5m]) or label_replace(label_replace(rate(container_fs_reads_total{namespace=\"$namespace\", pod_name=~\"$pod\", container_name!=\"\", container_name!=\"POD\"}[5m]), \"pod\", \"$1\", \"pod_name\", \"(.*)\"), \"container\", \"$1\", \"container_name\", \"(.*)\")",
           "format": "time_series",
+          "interval": "",
           "intervalFactor": 1,
           "legendFormat": "Reads {{ device }} [{{ pod }} / {{ container }}]",
           "refId": "A"
-        }
-      ],
-      "thresholds": [],
-      "timeFrom": null,
-      "timeRegions": [],
-      "timeShift": null,
-      "title": "Read IOPS",
-      "tooltip": {
-        "shared": true,
-        "sort": 0,
-        "value_type": "individual"
-      },
-      "type": "graph",
-      "xaxis": {
-        "buckets": null,
-        "mode": "time",
-        "name": null,
-        "show": true,
-        "values": []
-      },
-      "yaxes": [
-        {
-          "format": "iops",
-          "label": null,
-          "logBase": 1,
-          "max": null,
-          "min": "0",
-          "show": true,
-          "decimals": 2
         },
-        {
-          "format": "short",
-          "label": null,
-          "logBase": 1,
-          "max": null,
-          "min": null,
-          "show": true
-        }
-      ],
-      "yaxis": {
-        "align": false,
-        "alignLevel": null
-      }
-    },
-    {
-      "aliasColors": {},
-      "datasource": "$PromDs",
-      "bars": false,
-      "dashLength": 10,
-      "dashes": false,
-      "fill": 1,
-      "gridPos": {
-        "h": 6,
-        "w": 12,
-        "x": 12,
-        "y": 38
-      },
-      "id": 13,
-      "legend": {
-        "avg": false,
-        "current": false,
-        "max": false,
-        "min": false,
-        "show": true,
-        "total": false,
-        "values": false,
-        "rightSide": true
-      },
-      "lines": true,
-      "linewidth": 1,
-      "links": [],
-      "nullPointMode": "null",
-      "paceLength": 10,
-      "percentage": false,
-      "pointradius": 2,
-      "points": false,
-      "renderer": "flot",
-      "seriesOverrides": [],
-      "stack": false,
-      "steppedLine": false,
-      "targets": [
         {
           "expr": "rate(container_fs_writes_total{namespace=\"$namespace\", pod=~\"$pod\", container!=\"\", container!=\"POD\"}[5m]) or label_replace(label_replace(rate(container_fs_writes_total{namespace=\"$namespace\", pod_name=~\"$pod\", container_name!=\"\", container_name!=\"POD\"}[5m]), \"pod\", \"$1\", \"pod_name\", \"(.*)\"), \"container\", \"$1\", \"container_name\", \"(.*)\")",
-          "format": "time_series",
-          "intervalFactor": 1,
+          "interval": "",
           "legendFormat": "Writes {{ device }} [{{ pod }} / {{ container }}]",
-          "refId": "A"
+          "refId": "B"
         }
       ],
       "thresholds": [],
       "timeFrom": null,
       "timeRegions": [],
       "timeShift": null,
-      "title": "Write IOPS",
+      "title": "Disk IOps",
       "tooltip": {
         "shared": true,
         "sort": 0,
@@ -1194,13 +1079,13 @@
       },
       "yaxes": [
         {
+          "decimals": null,
           "format": "iops",
-          "label": null,
+          "label": "IO read (-) / write (+)",
           "logBase": 1,
           "max": null,
-          "min": "0",
-          "show": true,
-          "decimals": 2
+          "min": null,
+          "show": true
         },
         {
           "format": "short",
@@ -1208,7 +1093,7 @@
           "logBase": 1,
           "max": null,
           "min": null,
-          "show": true
+          "show": false
         }
       ],
       "yaxis": {
