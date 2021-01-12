@@ -43,11 +43,9 @@ export class NodesOverview extends K8sPage {
 
     getServerInfo() {
         this.serverInfo = {};
-        for (const node of this.nodesMap) {
-            this.__getServerInfo(node.hostIp, node.name).then(res => {
-                this.serverInfo[node.name] = res;
-            })
-        }
+        this.__getServersInfo(this.nodesMap).then(res => {
+            this.serverInfo = res;
+        })
     }
 
     showAllPodsNS(ns) {

@@ -88,8 +88,10 @@ export  class K8sPage {
         document.title = 'DevOpsProdigy KubeGraf';
     }
 
-    async __getServerInfo(nodeIp: string, nodeName: string) {
-        let instance = `${nodeName}|${nodeIp}:.+`;
+    async __getServersInfo(nodes: Node[]) {
+        const info = []
+        const instance = nodes.reduce((accumulator: string[], node) => [...accumulator, `${node.name}|${node.hostIp}:.+`], []).join('|')
+
         const result = await Promise.all([
             this.prometheusDS.query({
                 expr: `count(count(node_cpu_seconds_total{instance=~"${instance}"}) by (cpu, instance)) by (instance)`,
@@ -117,14 +119,22 @@ export  class K8sPage {
             }, false) //uptime
         ])
 
-        return {
-            cpuCores: result[0][0] && result[0][0].datapoint,
-            ramTotal: result[1][0] && __convertToGB(result[1][0].datapoint),
-            swapTotal: result[2][0] && __convertToGB(result[2][0].datapoint),
-            rootFSTotal: result[3][0] && __convertToGB(result[3][0].datapoint),
-            sysLoad: result[4][0] && result[4][0].datapoint,
-            uptime: result[5][0] && __convertToHours(result[5][0].datapoint * 1000)
+        for (const node of nodes) {
+            const datapoints = result.map(item => {
+                return item.find(element => element.target === node.name || element.target.indexOf(`${node.hostIp}:`) === 0)
+            })
+
+            info[node.name] = {
+                cpuCores: datapoints[0] && datapoints[0].datapoint,
+                ramTotal: datapoints[1] && __convertToGB(datapoints[1].datapoint),
+                swapTotal: datapoints[2] && __convertToGB(datapoints[2].datapoint),
+                rootFSTotal: datapoints[3] && __convertToGB(datapoints[3].datapoint),
+                sysLoad: datapoints[4] && datapoints[4].datapoint,
+                uptime: datapoints[5] && __convertToHours(datapoints[5].datapoint * 1000)
+            }
         }
+
+        return info
     }
 
     getNodeDashboardLink(node){
