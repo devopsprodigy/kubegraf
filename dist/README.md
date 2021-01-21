@@ -92,7 +92,7 @@ The above three dashboards show the number of available / unavailable applicatio
 
 2. Copy the repository:
 
-	`git clone https://github.com/devopsprodigy/kubegraf  /var/lib/grafana/plugins` and restart grafana-server
+	`git clone https://github.com/devopsprodigy/kubegraf  /var/lib/grafana/plugins/devopsprodigy-kubegraf-app` and restart grafana-server
 
 	or
 
