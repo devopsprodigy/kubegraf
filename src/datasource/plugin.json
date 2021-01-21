@@ -2,6 +2,10 @@
   "name"        : "DevOpsProdigy KubeGraf DS",
   "id"          : "devopsprodidy-kubegraf-datasource",
   "type"        : "datasource",
+  "dependencies": {
+    "grafanaDependency": ">=6.0.0",
+    "plugins": []
+  },
   "info": {
     "description" : "DevOpsProdigy KubeGraf datasource",
     "author"      : {
