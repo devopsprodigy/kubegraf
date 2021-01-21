@@ -5,7 +5,12 @@
   "dependencies": {
     "grafanaDependency": ">=6.0.0",
     "plugins": [
-      "grafana-piechart-panel"
+      {
+        "name": "Pie Chart",
+        "id": "grafana-piechart-panel",
+        "type" : "panel",
+        "version": ">=1.3.7"
+      }
     ]
   },
   "info"  : {
