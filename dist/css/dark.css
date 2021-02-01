@@ -222,6 +222,25 @@
         float: right; }
       .page-container--override .page-body--override .warning-panel .btn-danger {
         float: right; }
+    .page-container--override .page-body--override .card-section {
+      margin-bottom: 10px; }
+    .page-container--override .page-body--override .card-item-header {
+      margin-bottom: 0; }
+      .page-container--override .page-body--override .card-item-header h2 {
+        margin-bottom: 0; }
+    .page-container--override .page-body--override .card-item-body {
+      display: flex;
+      flex-direction: column; }
+      .page-container--override .page-body--override .card-item-body .node-info {
+        display: flex;
+        flex-direction: column;
+        margin-bottom: 10px;
+        margin-top: 10px;
+        color: #c7d0d9;
+        font-size: 14px; }
+      .page-container--override .page-body--override .card-item-body .node-resources {
+        display: flex;
+        margin-bottom: 16px; }
 
 .btn-secondary--override {
   color: #ffffff;
@@ -262,7 +281,7 @@ td.pod-background-red {
     background: #141414;
     display: flex;
     align-items: center;
-    align-self: center; }
+    justify-content: center; }
   .checkbox input:checked + span {
     background: linear-gradient(0deg, #eb7b18, #d44a3a);
     border: none; }
@@ -276,8 +295,7 @@ td.pod-background-red {
     min-height: 18px;
     padding-left: 24px;
     position: relative;
-    cursor: pointer;
-    align-self: center; }
+    cursor: pointer; }
 
 .chevron {
   display: block;

@@ -81,6 +81,15 @@ export class Node extends BaseModel {
         }
     }
 
+    get podsCount() {
+        if (this.namespaces) {
+            return this.namespaces.reduce((accumulator, currentValue) => {
+                return accumulator + currentValue.pods.length
+            }, 0)
+        }
+        return 0
+    }
+
     get color(){
         if(this.status === SUCCESS){
             return '#18e018';

@@ -223,6 +223,28 @@
           float: right
         .btn-danger
           float: right
+      .card-section
+        margin-bottom: 10px
+      .card-item
+        &-header
+          margin-bottom: 0
+          h2
+            margin-bottom: 0
+        &-body
+          display: flex
+          flex-direction: column
+          .node-info
+            display: flex
+            flex-direction: column
+            margin-bottom: 10px
+            margin-top: 10px
+            color: #c7d0d9
+            font-size: 14px
+          .node-resources
+            display: flex
+            margin-bottom: 16px
+
+
 
 .btn-secondary--override
   color: #ffffff
@@ -263,8 +285,8 @@ td.pod
     background: #141414
     display: flex
     align-items: center
-    //justify-content: center
-    align-self: center
+    justify-content: center
+    //align-self: center
   input:checked+span
     background: linear-gradient(0deg,#eb7b18,#d44a3a)
     border: none
@@ -279,7 +301,7 @@ td.pod
     padding-left: 24px
     position: relative
     cursor: pointer
-    align-self: center
+    //align-self: center
 .chevron
   display: block
   width: 14px

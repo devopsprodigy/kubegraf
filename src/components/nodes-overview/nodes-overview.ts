@@ -8,6 +8,8 @@ export class NodesOverview extends K8sPage {
 
     static templateUrl = 'components/nodes-overview/nodes-overview.html';
     version: number;
+    open: {[key: string]: boolean};
+    storageOpenKey: string = 'nodes-overview-open';
     serverInfo: any = null;
     hideAllWarningPods: boolean = true;
 
@@ -34,11 +36,15 @@ export class NodesOverview extends K8sPage {
                         this.getServerInfo();
                     }
                     this.pageReady = true;
+                    console.log(this.nodesMap[0])
                 })
                 .then(() => {
                     this.getResourcesMetrics().then(() => {})
                 });
         });
+
+        const openFromStorage = localStorage.getItem(this.storageOpenKey);
+        this.open = openFromStorage ? JSON.parse(openFromStorage) : {};
     }
 
     getServerInfo() {
@@ -53,10 +59,9 @@ export class NodesOverview extends K8sPage {
     }
 
     toggleNsList(node) {
-
         node.hideNs = !node.hideNs;
 
-        let key = node.name + 'NsList';
+        /*let key = node.name + 'NsList';
         let state = store.get(key);
 
         if (state === 'false') {
@@ -65,7 +70,7 @@ export class NodesOverview extends K8sPage {
             state = true;
         }
 
-        store.set(key, !state);
+        store.set(key, !state);*/
     };
 
     updatePods(newPods:Array<Pod>): void {
@@ -158,5 +163,22 @@ export class NodesOverview extends K8sPage {
 
     toggleAllWarningPods(){
         this.hideAllWarningPods = !this.hideAllWarningPods;
+    }
+
+    nodeCount(): number {
+        return this.nodesMap ? this.nodesMap.length : 0
+    }
+
+    nodeActiveCount(): number {
+        return this.nodesMap ? this.nodesMap.filter(node => node.open).length : 0
+    }
+
+    toggleTab(nodeName: string): void {
+        if(this.open[nodeName] === undefined) {
+            this.open[nodeName] = false;
+        } else {
+            this.open[nodeName] = !this.open[nodeName];
+        }
+        localStorage.setItem(this.storageOpenKey, JSON.stringify(this.open));
     }
 }

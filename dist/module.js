@@ -18697,6 +18697,19 @@ function (_super) {
     enumerable: true,
     configurable: true
   });
+  Object.defineProperty(Node.prototype, "podsCount", {
+    get: function get() {
+      if (this.namespaces) {
+        return this.namespaces.reduce(function (accumulator, currentValue) {
+          return accumulator + currentValue.pods.length;
+        }, 0);
+      }
+
+      return 0;
+    },
+    enumerable: true,
+    configurable: true
+  });
   Object.defineProperty(Node.prototype, "color", {
     get: function get() {
       if (this.status === _constants.SUCCESS) {
@@ -21698,6 +21711,7 @@ function (_super) {
     _this.$location = $location;
     _this.$timeout = $timeout;
     _this.$window = $window;
+    _this.storageOpenKey = 'nodes-overview-open';
     _this.serverInfo = null;
     _this.hideAllWarningPods = true;
     _this.pageReady = false;
@@ -21712,11 +21726,14 @@ function (_super) {
         }
 
         _this.pageReady = true;
+        console.log(_this.nodesMap[0]);
       }).then(function () {
         _this.getResourcesMetrics().then(function () {});
       });
     });
 
+    var openFromStorage = localStorage.getItem(_this.storageOpenKey);
+    _this.open = openFromStorage ? JSON.parse(openFromStorage) : {};
     return _this;
   }
 
@@ -21736,17 +21753,14 @@ function (_super) {
 
   NodesOverview.prototype.toggleNsList = function (node) {
     node.hideNs = !node.hideNs;
-    var key = node.name + 'NsList';
-
-    var state = _store2.default.get(key);
-
-    if (state === 'false') {
-      state = false;
+    /*let key = node.name + 'NsList';
+    let state = store.get(key);
+     if (state === 'false') {
+        state = false;
     } else if (state === 'true') {
-      state = true;
+        state = true;
     }
-
-    _store2.default.set(key, !state);
+     store.set(key, !state);*/
   };
 
   ;
@@ -21857,6 +21871,26 @@ function (_super) {
 
   NodesOverview.prototype.toggleAllWarningPods = function () {
     this.hideAllWarningPods = !this.hideAllWarningPods;
+  };
+
+  NodesOverview.prototype.nodeCount = function () {
+    return this.nodesMap ? this.nodesMap.length : 0;
+  };
+
+  NodesOverview.prototype.nodeActiveCount = function () {
+    return this.nodesMap ? this.nodesMap.filter(function (node) {
+      return node.open;
+    }).length : 0;
+  };
+
+  NodesOverview.prototype.toggleTab = function (nodeName) {
+    if (this.open[nodeName] === undefined) {
+      this.open[nodeName] = false;
+    } else {
+      this.open[nodeName] = !this.open[nodeName];
+    }
+
+    localStorage.setItem(this.storageOpenKey, JSON.stringify(this.open));
   };
 
   NodesOverview.templateUrl = 'components/nodes-overview/nodes-overview.html';
