@@ -1,8 +1,7 @@
-import {BaseModel} from '../../common/types/traits/baseModel';
+import { BaseModel } from '../../common/types/traits/baseModel';
 
-export class Service extends BaseModel{
-
-    constructor(data){
-        super(data);
-    }
+export class Service extends BaseModel {
+  constructor(data) {
+    super(data);
+  }
 }

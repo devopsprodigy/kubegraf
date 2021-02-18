@@ -77,7 +77,7 @@ define(["app/core/app_events"], function(__WEBPACK_EXTERNAL_MODULE_grafana_app_c
 /******/ 	__webpack_require__.o = function(object, property) { return Object.prototype.hasOwnProperty.call(object, property); };
 /******/
 /******/ 	// __webpack_public_path__
-/******/ 	__webpack_require__.p = "";
+/******/ 	__webpack_require__.p = "/";
 /******/
 /******/
 /******/ 	// Load entry module and return exports
@@ -90,7 +90,7 @@ define(["app/core/app_events"], function(__WEBPACK_EXTERNAL_MODULE_grafana_app_c
 /*!******************************************!*\
   !*** ../node_modules/tslib/tslib.es6.js ***!
   \******************************************/
-/*! exports provided: __extends, __assign, __rest, __decorate, __param, __metadata, __awaiter, __generator, __exportStar, __values, __read, __spread, __spreadArrays, __await, __asyncGenerator, __asyncDelegator, __asyncValues, __makeTemplateObject, __importStar, __importDefault */
+/*! exports provided: __extends, __assign, __rest, __decorate, __param, __metadata, __awaiter, __generator, __createBinding, __exportStar, __values, __read, __spread, __spreadArrays, __await, __asyncGenerator, __asyncDelegator, __asyncValues, __makeTemplateObject, __importStar, __importDefault, __classPrivateFieldGet, __classPrivateFieldSet */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -103,6 +103,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "__metadata", function() { return __metadata; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "__awaiter", function() { return __awaiter; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "__generator", function() { return __generator; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "__createBinding", function() { return __createBinding; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "__exportStar", function() { return __exportStar; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "__values", function() { return __values; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "__read", function() { return __read; });
@@ -115,19 +116,21 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "__makeTemplateObject", function() { return __makeTemplateObject; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "__importStar", function() { return __importStar; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "__importDefault", function() { return __importDefault; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "__classPrivateFieldGet", function() { return __classPrivateFieldGet; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "__classPrivateFieldSet", function() { return __classPrivateFieldSet; });
 /*! *****************************************************************************
-Copyright (c) Microsoft Corporation. All rights reserved.
-Licensed under the Apache License, Version 2.0 (the "License"); you may not use
-this file except in compliance with the License. You may obtain a copy of the
-License at http://www.apache.org/licenses/LICENSE-2.0
+Copyright (c) Microsoft Corporation.
 
-THIS CODE IS PROVIDED ON AN *AS IS* BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
-KIND, EITHER EXPRESS OR IMPLIED, INCLUDING WITHOUT LIMITATION ANY IMPLIED
-WARRANTIES OR CONDITIONS OF TITLE, FITNESS FOR A PARTICULAR PURPOSE,
-MERCHANTABLITY OR NON-INFRINGEMENT.
+Permission to use, copy, modify, and/or distribute this software for any
+purpose with or without fee is hereby granted.
 
-See the Apache Version 2.0 License for specific language governing permissions
-and limitations under the License.
+THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES WITH
+REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF MERCHANTABILITY
+AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY SPECIAL, DIRECT,
+INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES WHATSOEVER RESULTING FROM
+LOSS OF USE, DATA OR PROFITS, WHETHER IN AN ACTION OF CONTRACT, NEGLIGENCE OR
+OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
+PERFORMANCE OF THIS SOFTWARE.
 ***************************************************************************** */
 /* global Reflect, Promise */
 
@@ -183,10 +186,11 @@ function __metadata(metadataKey, metadataValue) {
 }
 
 function __awaiter(thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
         function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
         function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : new P(function (resolve) { resolve(result.value); }).then(fulfilled, rejected); }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 }
@@ -219,19 +223,25 @@ function __generator(thisArg, body) {
     }
 }
 
+function __createBinding(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}
+
 function __exportStar(m, exports) {
-    for (var p in m) if (!exports.hasOwnProperty(p)) exports[p] = m[p];
+    for (var p in m) if (p !== "default" && !exports.hasOwnProperty(p)) exports[p] = m[p];
 }
 
 function __values(o) {
-    var m = typeof Symbol === "function" && o[Symbol.iterator], i = 0;
+    var s = typeof Symbol === "function" && Symbol.iterator, m = s && o[s], i = 0;
     if (m) return m.call(o);
-    return {
+    if (o && typeof o.length === "number") return {
         next: function () {
             if (o && i >= o.length) o = void 0;
             return { value: o && o[i++], done: !o };
         }
     };
+    throw new TypeError(s ? "Object is not iterable." : "Symbol.iterator is not defined.");
 }
 
 function __read(o, n) {
@@ -312,6 +322,21 @@ function __importDefault(mod) {
     return (mod && mod.__esModule) ? mod : { default: mod };
 }
 
+function __classPrivateFieldGet(receiver, privateMap) {
+    if (!privateMap.has(receiver)) {
+        throw new TypeError("attempted to get private field on non-instance");
+    }
+    return privateMap.get(receiver);
+}
+
+function __classPrivateFieldSet(receiver, privateMap, value) {
+    if (!privateMap.has(receiver)) {
+        throw new TypeError("attempted to set private field on non-instance");
+    }
+    privateMap.set(receiver, value);
+    return value;
+}
+
 
 /***/ }),
 
@@ -319,15 +344,21 @@ function __importDefault(mod) {
 /*!*****************************!*\
   !*** ./common/constants.ts ***!
   \*****************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
+/*! exports provided: ERROR, WARNING, TERMINATING, SUCCESS, SUCCEEDED, COLOR_YELLOW, COLOR_RED, COLOR_GREEN, PODS_LIMIT, TYPE_PROMETHEUS */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ERROR", function() { return ERROR; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "WARNING", function() { return WARNING; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "TERMINATING", function() { return TERMINATING; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "SUCCESS", function() { return SUCCESS; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "SUCCEEDED", function() { return SUCCEEDED; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "COLOR_YELLOW", function() { return COLOR_YELLOW; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "COLOR_RED", function() { return COLOR_RED; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "COLOR_GREEN", function() { return COLOR_GREEN; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "PODS_LIMIT", function() { return PODS_LIMIT; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "TYPE_PROMETHEUS", function() { return TYPE_PROMETHEUS; });
 var ERROR = 3;
 var WARNING = 2;
 var TERMINATING = 1;
@@ -337,17 +368,8 @@ var COLOR_YELLOW = '#ffff0096';
 var COLOR_RED = '#a52a2a';
 var COLOR_GREEN = '#299c46';
 var PODS_LIMIT = 10;
-var TYPE_PROMETHEUS = "prometheus";
-exports.ERROR = ERROR;
-exports.WARNING = WARNING;
-exports.TERMINATING = TERMINATING;
-exports.SUCCESS = SUCCESS;
-exports.SUCCEEDED = SUCCEEDED;
-exports.COLOR_YELLOW = COLOR_YELLOW;
-exports.COLOR_RED = COLOR_RED;
-exports.COLOR_GREEN = COLOR_GREEN;
-exports.PODS_LIMIT = PODS_LIMIT;
-exports.TYPE_PROMETHEUS = TYPE_PROMETHEUS;
+var TYPE_PROMETHEUS = 'prometheus';
+
 
 /***/ }),
 
@@ -355,18 +377,14 @@ exports.TYPE_PROMETHEUS = TYPE_PROMETHEUS;
 /*!******************************!*\
   !*** ./datasource/config.ts ***!
   \******************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
+/*! exports provided: DOPK8SConfig */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "DOPK8SConfig", function() { return DOPK8SConfig; });
+/* harmony import */ var _common_constants__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../common/constants */ "./common/constants.ts");
 
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.DOPK8SConfig = undefined;
-
-var _constants = __webpack_require__(/*! ../common/constants */ "./common/constants.ts");
 
 var DOPK8SConfig =
 /** @class */
@@ -380,8 +398,14 @@ function () {
     this.pageReady = false;
 
     if (this.current.id) {
-      if (!this.current.jsonData.prom_name) this.current.jsonData.prom_name = '';
-      if (!this.current.jsonData.refresh_pods_rate) this.current.jsonData.refresh_pods_rate = '60';
+      if (!this.current.jsonData.prom_name) {
+        this.current.jsonData.prom_name = '';
+      }
+
+      if (!this.current.jsonData.refresh_pods_rate) {
+        this.current.jsonData.refresh_pods_rate = '60';
+      }
+
       this.current.jsonData.cluster_url = this.current.url;
     } else {
       this.current = {
@@ -428,14 +452,14 @@ function () {
 
     return this.backendSrv.get('/api/datasources').then(function (datasources) {
       _this.prometheusList = datasources.filter(function (item) {
-        return item.type === _constants.TYPE_PROMETHEUS;
+        return item.type === _common_constants__WEBPACK_IMPORTED_MODULE_0__["TYPE_PROMETHEUS"];
       });
 
       var defProm = _this.prometheusList.filter(function (item) {
         return item.isDefault;
       });
 
-      if (defProm.length > 0 && _this.current.jsonData.prom_name == '') {
+      if (defProm.length > 0 && _this.current.jsonData.prom_name === '') {
         _this.current.jsonData.prom_name = defProm[0].name;
       }
     });
@@ -445,7 +469,7 @@ function () {
   return DOPK8SConfig;
 }();
 
-exports.DOPK8SConfig = DOPK8SConfig;
+
 
 /***/ }),
 
@@ -453,26 +477,18 @@ exports.DOPK8SConfig = DOPK8SConfig;
 /*!**********************************!*\
   !*** ./datasource/datasource.ts ***!
   \**********************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
+/*! exports provided: DOPK8SDatasource */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "DOPK8SDatasource", function() { return DOPK8SDatasource; });
+/* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "../node_modules/tslib/tslib.es6.js");
+/* harmony import */ var grafana_app_core_app_events__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! grafana/app/core/app_events */ "grafana/app/core/app_events");
+/* harmony import */ var grafana_app_core_app_events__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(grafana_app_core_app_events__WEBPACK_IMPORTED_MODULE_1__);
 
 
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.DOPK8SDatasource = undefined;
 
-var _tslib = __webpack_require__(/*! tslib */ "../node_modules/tslib/tslib.es6.js");
-
-var _app_events = __webpack_require__(/*! grafana/app/core/app_events */ "grafana/app/core/app_events");
-
-var _app_events2 = _interopRequireDefault(_app_events);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-///<reference path="../../node_modules/grafana-sdk-mocks/app/headers/common.d.ts" />
 var DOPK8SDatasource =
 /** @class */
 function () {
@@ -498,42 +514,46 @@ function () {
 
     var url = '/api/v1/namespaces';
     var _url = this.url;
-    if (this.accessViaToken) _url += '/__proxy';
+
+    if (this.accessViaToken) {
+      _url += '/__proxy';
+    }
+
     _url += url;
     return this.backendSrv.datasourceRequest({
       url: _url,
-      method: "GET",
+      method: 'GET',
       headers: {
-        "Content-Type": 'application/json'
+        'Content-Type': 'application/json'
       },
       silent: silent
     }).then(function (response) {
       if (response && response.status === 200) {
         return {
-          status: "success",
-          message: "Data source is OK",
-          title: "Success"
+          status: 'success',
+          message: 'Data source is OK',
+          title: 'Success'
         };
       }
 
       return {
-        status: "error",
-        message: "Data source is not OK",
-        title: "Error"
+        status: 'error',
+        message: 'Data source is not OK',
+        title: 'Error'
       };
     }, function (error) {
       if (error && error.status && error.statusText) {
         return {
-          status: "error",
+          status: 'error',
           message: error.statusText,
           title: error.status
         };
       }
 
       return {
-        status: "error",
-        message: "Data source is not OK",
-        title: "Error"
+        status: 'error',
+        message: 'Data source is not OK',
+        title: 'Error'
       };
     });
   };
@@ -542,7 +562,7 @@ function () {
     var _this = this;
 
     var interpolated = this.templateSrv.replace(query, {});
-    var queryData = interpolated.split(" ");
+    var queryData = interpolated.split(' ');
 
     switch (queryData[0]) {
       case 'prom':
@@ -563,10 +583,10 @@ function () {
 
       case 'namespace':
         return this.getNamespaces().then(function (namespaces) {
-          return (0, _tslib.__awaiter)(_this, void 0, void 0, function () {
+          return Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__awaiter"])(_this, void 0, void 0, function () {
             var _a, deployments, deploymentsNamespace_1, statefulsets, statefulsetsNamespace_1, daemonsets, daemonsetsNamespace_1;
 
-            return (0, _tslib.__generator)(this, function (_b) {
+            return Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__generator"])(this, function (_b) {
               switch (_b.label) {
                 case 0:
                   _a = queryData[1];
@@ -761,13 +781,17 @@ function () {
 
   DOPK8SDatasource.prototype.__get = function (url) {
     var _url = this.url;
-    if (this.accessViaToken) _url += '/__proxy';
+
+    if (this.accessViaToken) {
+      _url += '/__proxy';
+    }
+
     _url += url;
     return this.backendSrv.datasourceRequest({
       url: _url,
-      method: "GET",
+      method: 'GET',
       headers: {
-        "Content-Type": 'application/json'
+        'Content-Type': 'application/json'
       }
     }).then(function (response) {
       return response.data;
@@ -829,8 +853,7 @@ function () {
   DOPK8SDatasource.prototype.getNamespaces = function () {
     return this.__get('/api/v1/namespaces').then(function (result) {
       if (!result.items) {
-        _app_events2.default.emit('alert-error', ["Namespaces not received"]);
-
+        grafana_app_core_app_events__WEBPACK_IMPORTED_MODULE_1___default.a.emit('alert-error', ["Namespaces not received"]);
         return [];
       }
 
@@ -845,8 +868,7 @@ function () {
 
     return this.__get('/apis/apps/v1/' + this.__addNamespace(namespace) + 'deployments').then(function (result) {
       if (!result.items) {
-        _app_events2.default.emit('alert-error', ["Deployments not received"]);
-
+        grafana_app_core_app_events__WEBPACK_IMPORTED_MODULE_1___default.a.emit('alert-error', ["Deployments not received"]);
         return [];
       }
 
@@ -861,8 +883,7 @@ function () {
 
     return this.__get('/apis/apps/v1/' + this.__addNamespace(namespace) + 'statefulsets').then(function (result) {
       if (!result.items) {
-        _app_events2.default.emit('alert-error', ["Statefulsets not received"]);
-
+        grafana_app_core_app_events__WEBPACK_IMPORTED_MODULE_1___default.a.emit('alert-error', ["Statefulsets not received"]);
         return [];
       }
 
@@ -877,8 +898,7 @@ function () {
 
     return this.__get('/apis/apps/v1/' + this.__addNamespace(namespace) + 'daemonsets').then(function (result) {
       if (!result.items) {
-        _app_events2.default.emit('alert-error', ["Daemonsets not received"]);
-
+        grafana_app_core_app_events__WEBPACK_IMPORTED_MODULE_1___default.a.emit('alert-error', ["Daemonsets not received"]);
         return [];
       }
 
@@ -890,9 +910,7 @@ function () {
     return this.__get('/api/v1/' + this.__addNamespace(namespace) + 'pods').then(function (result) {
       if (!result.items) {
         var message = "Pods not received";
-
-        _app_events2.default.emit('alert-error', [message]);
-
+        grafana_app_core_app_events__WEBPACK_IMPORTED_MODULE_1___default.a.emit('alert-error', [message]);
         return new Error(message);
       }
 
@@ -903,8 +921,7 @@ function () {
   DOPK8SDatasource.prototype.getServices = function (namespace) {
     return this.__get('/api/v1/' + this.__addNamespace(namespace) + 'services').then(function (result) {
       if (!result.items) {
-        _app_events2.default.emit('alert-error', ["Services not received"]);
-
+        grafana_app_core_app_events__WEBPACK_IMPORTED_MODULE_1___default.a.emit('alert-error', ["Services not received"]);
         return [];
       }
 
@@ -916,9 +933,7 @@ function () {
     return this.__get('/api/v1/componentstatuses').then(function (result) {
       if (!result.items) {
         var message = "Component statuses not received";
-
-        _app_events2.default.emit('alert-error', [message]);
-
+        grafana_app_core_app_events__WEBPACK_IMPORTED_MODULE_1___default.a.emit('alert-error', [message]);
         return new Error(message);
       }
 
@@ -930,8 +945,7 @@ function () {
     if (!this.nodesPromise) {
       this.nodesPromise = this.__get('/api/v1/nodes').then(function (result) {
         if (!result.items) {
-          _app_events2.default.emit('alert-error', ["Nodes (singleton) not received"]);
-
+          grafana_app_core_app_events__WEBPACK_IMPORTED_MODULE_1___default.a.emit('alert-error', ["Nodes (singleton) not received"]);
           return [];
         }
 
@@ -950,8 +964,7 @@ function () {
     if (!this.deploymentsPromise) {
       this.deploymentsPromise = this.__get('/apis/apps/v1/' + this.__addNamespace(namespace) + 'deployments').then(function (result) {
         if (!result.items) {
-          _app_events2.default.emit('alert-error', ["Deployments (singleton) not received"]);
-
+          grafana_app_core_app_events__WEBPACK_IMPORTED_MODULE_1___default.a.emit('alert-error', ["Deployments (singleton) not received"]);
           return [];
         }
 
@@ -970,8 +983,7 @@ function () {
     if (!this.daemonsetsPromise) {
       this.daemonsetsPromise = this.__get('/apis/apps/v1/' + this.__addNamespace(namespace) + 'daemonsets').then(function (result) {
         if (!result.items) {
-          _app_events2.default.emit('alert-error', ["Daemonsets (singleton) not received"]);
-
+          grafana_app_core_app_events__WEBPACK_IMPORTED_MODULE_1___default.a.emit('alert-error', ["Daemonsets (singleton) not received"]);
           return [];
         }
 
@@ -990,8 +1002,7 @@ function () {
     if (!this.statefulsetsPromise) {
       this.statefulsetsPromise = this.__get('/apis/apps/v1/' + this.__addNamespace(namespace) + 'statefulsets').then(function (result) {
         if (!result.items) {
-          _app_events2.default.emit('alert-error', ["Statefulsets (singleton) not received"]);
-
+          grafana_app_core_app_events__WEBPACK_IMPORTED_MODULE_1___default.a.emit('alert-error', ["Statefulsets (singleton) not received"]);
           return [];
         }
 
@@ -1010,8 +1021,7 @@ function () {
     if (!this.podsPromise) {
       this.podsPromise = this.__get('/api/v1/' + this.__addNamespace(namespace) + 'pods').then(function (result) {
         if (!result.items) {
-          _app_events2.default.emit('alert-error', ["Pods (singleton) not received"]);
-
+          grafana_app_core_app_events__WEBPACK_IMPORTED_MODULE_1___default.a.emit('alert-error', ["Pods (singleton) not received"]);
           return [];
         }
 
@@ -1026,9 +1036,7 @@ function () {
     return this.__get('/api/v1/nodes').then(function (result) {
       if (!result.items) {
         var message = 'Nodes not received';
-
-        _app_events2.default.emit('alert-error', [message]);
-
+        grafana_app_core_app_events__WEBPACK_IMPORTED_MODULE_1___default.a.emit('alert-error', [message]);
         return new Error(message);
       }
 
@@ -1039,8 +1047,7 @@ function () {
   DOPK8SDatasource.prototype.getJobs = function () {
     return this.__get('/apis/batch/v1/jobs').then(function (result) {
       if (!result.items) {
-        _app_events2.default.emit('alert-error', ["Jobs not received"]);
-
+        grafana_app_core_app_events__WEBPACK_IMPORTED_MODULE_1___default.a.emit('alert-error', ["Jobs not received"]);
         return [];
       }
 
@@ -1051,8 +1058,7 @@ function () {
   DOPK8SDatasource.prototype.getCronJobs = function () {
     return this.__get('/apis/batch/v1beta1/cronjobs').then(function (result) {
       if (!result.items) {
-        _app_events2.default.emit('alert-error', ["CronJobs not received"]);
-
+        grafana_app_core_app_events__WEBPACK_IMPORTED_MODULE_1___default.a.emit('alert-error', ["CronJobs not received"]);
         return [];
       }
 
@@ -1063,14 +1069,12 @@ function () {
   DOPK8SDatasource.prototype.getEvents = function () {
     return this.__get('/api/v1/events').then(function (result) {
       if (result.status === 403) {
-        _app_events2.default.emit('alert-error', [result.status + ' ' + result.statusText, "Please, update ClusterRole to get new permissions"]);
-
+        grafana_app_core_app_events__WEBPACK_IMPORTED_MODULE_1___default.a.emit('alert-error', [result.status + ' ' + result.statusText, "Please, update ClusterRole to get new permissions"]);
         return [];
       }
 
       if (!result.items) {
-        _app_events2.default.emit('alert-error', ["Events not received"]);
-
+        grafana_app_core_app_events__WEBPACK_IMPORTED_MODULE_1___default.a.emit('alert-error', ["Events not received"]);
         return [];
       }
 
@@ -1081,7 +1085,7 @@ function () {
   return DOPK8SDatasource;
 }();
 
-exports.DOPK8SDatasource = DOPK8SDatasource;
+
 
 /***/ }),
 
@@ -1089,23 +1093,20 @@ exports.DOPK8SDatasource = DOPK8SDatasource;
 /*!******************************!*\
   !*** ./datasource/module.ts ***!
   \******************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
+/*! exports provided: Datasource, ConfigCtrl */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _datasource__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./datasource */ "./datasource/datasource.ts");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "Datasource", function() { return _datasource__WEBPACK_IMPORTED_MODULE_0__["DOPK8SDatasource"]; });
+
+/* harmony import */ var _config__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./config */ "./datasource/config.ts");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "ConfigCtrl", function() { return _config__WEBPACK_IMPORTED_MODULE_1__["DOPK8SConfig"]; });
 
 
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.ConfigCtrl = exports.Datasource = undefined;
 
-var _datasource = __webpack_require__(/*! ./datasource */ "./datasource/datasource.ts");
 
-var _config = __webpack_require__(/*! ./config */ "./datasource/config.ts");
-
-exports.Datasource = _datasource.DOPK8SDatasource;
-exports.ConfigCtrl = _config.DOPK8SConfig;
 
 /***/ }),
 
