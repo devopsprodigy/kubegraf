@@ -8,8 +8,8 @@ import { ClusterAlerts } from './components/cluster-alerts/cluster-alerts';
 import { DOPKubeGrafAppConfig } from './config/config';
 
 loadPluginCss({
-  dark: 'plugins/devopsprodigy-kubegraf-app/styles/styles/dark.css',
-  light: 'plugins/devopsprodigy-kubegraf-app/styles/styles/light.css',
+  dark: 'plugins/devopsprodigy-kubegraf-app/styles/dark.css',
+  light: 'plugins/devopsprodigy-kubegraf-app/styles/light.css',
 });
 
 export {

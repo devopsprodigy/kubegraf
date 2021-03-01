@@ -4,6 +4,18 @@ import { K8sPage } from '../k8s-page';
 import { __getGrafanaVersion } from '../../common/helpers';
 
 export class ApplicationsOverview extends K8sPage {
+  static $inject = [
+    '$scope',
+    '$injector',
+    '$q',
+    'backendSrv',
+    'datasourceSrv',
+    'contextSrv',
+    '$location',
+    '$timeout',
+    '$window',
+  ];
+  static templateUrl = 'components/applications-overview/applications-overview.html';
   columnNames: Array<{
     colName: string;
     nsKey: string;
@@ -14,8 +26,6 @@ export class ApplicationsOverview extends K8sPage {
   storageOpenKey = 'application-overview-open';
   showColumn: { [key: string]: { [key: string]: boolean } };
   storageShowColumnKey = 'application-overview-show-column';
-
-  static templateUrl = 'components/applications-overview/applications-overview.html';
 
   constructor(
     $scope,

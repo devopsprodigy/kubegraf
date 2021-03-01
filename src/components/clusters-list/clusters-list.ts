@@ -2,13 +2,13 @@ import appEvents from 'grafana/app/core/app_events';
 import { __getGrafanaVersion } from '../../common/helpers';
 
 export class ClustersList {
+  static $inject = ['$scope', '$injector', 'backendSrv', 'datasourceSrv', 'contextSrv', 'utilSrv', '$window'];
+  static templateUrl = 'components/clusters-list/clusters-list.html';
   isReady: boolean;
   clusters: any[];
   $scope: any;
   isAdmin: boolean;
   version: number;
-
-  static templateUrl = 'components/clusters-list/clusters-list.html';
 
   constructor(
     $scope,

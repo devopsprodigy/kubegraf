@@ -1,4 +1,5 @@
 export class ClusterOverview {
+  static $inject = ['$location'];
   constructor($location) {
     const cluster = $location.search().clusterName;
     if (cluster) {

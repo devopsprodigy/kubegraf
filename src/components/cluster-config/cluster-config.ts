@@ -3,6 +3,8 @@ import { TYPE_PROMETHEUS } from '../../common/constants';
 import { __getGrafanaVersion } from '../../common/helpers';
 
 export class ClusterConfig {
+  static templateUrl = 'components/cluster-config/cluster-config.html';
+  static $inject = ['$scope', '$injector', 'backendSrv', 'datasourceSrv', 'alertSrv', '$q', '$location', '$window'];
   cluster: any;
   prometheusList: any[];
   busy: boolean;
@@ -10,8 +12,6 @@ export class ClusterConfig {
   pageReady: boolean;
   version: number;
   retry = 3;
-
-  static templateUrl = 'components/cluster-config/cluster-config.html';
 
   constructor(
     $scope,

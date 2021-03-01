@@ -1,5 +1,6 @@
 export class DOPKubeGrafAppConfig {
   static templateUrl = 'config/config.html';
+  static $inject = ['$scope', '$injector', '$q'];
   enabled: boolean;
   appModel: any;
   appEditCtrl: any;

@@ -2,7 +2,7 @@ import { TYPE_PROMETHEUS } from '../common/constants';
 
 export class DOPK8SConfig {
   static templateUrl = 'datasource/partials/config.html';
-
+  static $inject = ['$scope', '$injector', 'backendSrv', '$window'];
   current: any;
   prometheusList: any[];
   $scope: any;

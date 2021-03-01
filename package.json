@@ -4,28 +4,23 @@
   "description": "",
   "private": true,
   "scripts": {
-    "build": "webpack",
-    "watch": "webpack --watch",
-    "sign": "grafana-toolkit plugin:sign",
+    "build": "grafana-toolkit plugin:build",
     "test": "grafana-toolkit plugin:test",
-    "release": "npm run build && npm run sign",
     "dev": "grafana-toolkit plugin:dev",
-    "prod": "grafana-toolkit plugin:build"
+    "watch": "grafana-toolkit plugin:dev --watch",
+    "sign": "grafana-toolkit plugin:sign"
   },
   "author": "",
   "license": "ISC",
   "devDependencies": {
-    "@grafana/data": "^7.4.1",
-    "@grafana/runtime": "^7.4.1",
-    "@grafana/toolkit": "^7.4.1",
-    "@grafana/ui": "^7.4.1",
+    "@grafana/data": "^7.4.3",
+    "@grafana/runtime": "^7.4.3",
+    "@grafana/toolkit": "^7.4.3",
+    "@grafana/ui": "^7.4.3",
     "@testing-library/jest-dom": "5.4.0",
     "@testing-library/react": "^10.0.2",
     "@types/grafana": "github:CorpGlory/types-grafana.git",
-    "@types/lodash": "4.14.168",
-    "node-sass": "^4.0.0",
-    "ts-loader": "^8.0.17",
-    "typescript": "4.0.6"
+    "node-sass": "4.14.1"
   },
   "resolutions": {
     "@babel/preset-env": "7.9.0"

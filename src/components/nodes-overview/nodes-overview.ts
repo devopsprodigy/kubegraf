@@ -6,6 +6,17 @@ import { Pod } from '../../common/types/pod';
 
 export class NodesOverview extends K8sPage {
   static templateUrl = 'components/nodes-overview/nodes-overview.html';
+  static $inject = [
+    '$scope',
+    '$injector',
+    '$q',
+    'backendSrv',
+    'datasourceSrv',
+    'contextSrv',
+    '$location',
+    '$timeout',
+    '$window',
+  ];
   version: number;
   open: { [key: string]: boolean };
   storageOpenKey = 'nodes-overview-open';

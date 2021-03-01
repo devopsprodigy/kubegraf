@@ -1,6 +1,7 @@
 import appEvents from 'grafana/app/core/app_events';
 
 export class DOPK8SDatasource {
+  static $inject = ['instanceSettings', 'backendSrv', 'templateSrv'];
   name: string;
   id: number;
   url: string;

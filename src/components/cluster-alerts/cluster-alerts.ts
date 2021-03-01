@@ -4,6 +4,17 @@ import { COLOR_GREEN, COLOR_RED, COLOR_YELLOW, ERROR, WARNING } from '../../comm
 
 export class ClusterAlerts extends K8sPage {
   static templateUrl = 'components/cluster-alerts/cluster-alerts.html';
+  static $inject = [
+    '$scope',
+    '$injector',
+    '$q',
+    'backendSrv',
+    'datasourceSrv',
+    'contextSrv',
+    '$location',
+    '$timeout',
+    '$window',
+  ];
   version: number;
 
   constructor(
