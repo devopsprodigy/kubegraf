@@ -8,8 +8,8 @@ Hash: SHA512
   "signedByOrg": "devopsprodigy",
   "signedByOrgName": "DevOpsProdigy",
   "plugin": "devopsprodigy-kubegraf-app",
-  "version": "1.5.0",
-  "time": 1611225319857,
+  "version": "1.5.1",
+  "time": 1614685577175,
   "keyId": "7e4d0c6a708866e7",
   "files": {
     "common/types/pod.ts": "6808a417dd10e6017a93e2898b63f2fc02b125334148ef61408158b0ac00eaf8",
@@ -28,7 +28,7 @@ Hash: SHA512
     "dashboards/deployment.json": "842b2ef72ba809987dadf3b3212d8b3f1c72bd80a00dac4369e052f13b3e0e45",
     "dashboards/statefulset.json": "59f31c9c47335e17e364c78b3d4d8e93f3d42292f0c1031c9455024a0447a98b",
     "dashboards/daemonset.json": "4070df3e192c660f67b1e9ebd370fa00ab1dec32959eb05e9ff0d312435b8280",
-    "module.js": "999af3c977f5d1c24d39832b5577b6990beeb9a013c6f61d695764d0b97c9ce1",
+    "module.js": "87efe6359a527a52a4b221a7744b1082af88ea4bb8eb103e2aabe8208df32e78",
     "img/loading.gif": "be9413d2f13321c983026c9f6b815ba820c5b1d91c4d2b763a9ef044afe0f187",
     "img/node_dashboard_2.png": "0fed6422877e5c2167a7b97dabe740bb4dd7f9851fdca00cc16c6cbe862bc35a",
     "img/node_dashboard_1.png": "e0ee82f5ce50283c483b166218ea3b29b9ebc622ed44c2a5c015424fa72c92b0",
@@ -63,7 +63,7 @@ Hash: SHA512
     "img/applications_overview_1.png": "a8a816d3d45acbc126febdbe98b29a7852fde7afa2d148f5036a41027c2bbd99",
     "LICENSE": "6446f747cbb3a962079309035085cb6c9c515801653f36299fed6b9aa420958f",
     "README.md": "61229aa97a849a3884eff2457731a4b85f344f08c8fd5b3bba3aa1968e120c6e",
-    "plugin.json": "7304bcaa94c250e902ed3707343f14fea2705667e25d9ac743886d46f5ce7c70",
+    "plugin.json": "097953ff53fa110953ef796d6aa32ed60f6212c14f7780fc560246ed420db18b",
     "css/dark.css.map": "3057121642e6e658d848d0e31f13a7750e6f7130bf72b439561ed637fcf39934",
     "css/core.css.map": "7a717563b0d5115eab1d1d83e1a1226fd186a5d82c8226c89b53663ac25f2f54",
     "css/dark.js.map": "85d25e76e9b078534f424a018296c4c088e2cdbc7363b2cae8a67742f34f0d9f",
@@ -88,9 +88,9 @@ Hash: SHA512
     "components/nodes-overview/nodes-overview.js": "ab6537e84f9a256bda61722f875f1d75258145ff0838b2edd2b60f6754eedc0e",
     "components/cluster-alerts/cluster-alerts.html": "02401eed4dddac0326108be96144cdd8fbb0d13ed0b3a959f3d5a0acf5d66f05",
     "components/k8s-page.js.map": "db822e9996324f1104d1837d5f42ffe18aa510a5ead47e0389ac7744a1d3ca32",
-    "module.js.map": "3beaa05c3685583608c8599e21d438a4462606ac6405b12be0b62e54a0a2a9eb",
+    "module.js.map": "f014b1e1666678c941cac710937834da3e4da9781af77ad162ecce3d3a51a57c",
     "config/config.html": "236c453fb0720a1306b43f44163fdda4af485ac4d302747e2d8c94bbc27d1dd4",
-    "CHANGELOG.md": "a7df999b52964e4758f60245ed79156b09784107f9d69c7b0b9464aae446491d",
+    "CHANGELOG.md": "fc74d6a916a800e940d428f42a8a7a165515c2176acf907f4cd215b8bbb5f29f",
     "datasource/module.js": "cb63617a24090a4ee4cc99935225cb60abdfb8b51615f4961d7459f54dd90662",
     "datasource/img/loading.gif": "be9413d2f13321c983026c9f6b815ba820c5b1d91c4d2b763a9ef044afe0f187",
     "datasource/img/grafanaLogo.png": "93a573bd1bfc6cd7431ccd78f5b1ce3898dd204e410b2c8233c0bb2198436634",
@@ -103,9 +103,9 @@ Hash: SHA512
 Version: OpenPGP.js v4.10.1
 Comment: https://openpgpjs.org
 
-wqAEARMKAAYFAmAJWOgACgkQfk0ManCIZueLWQIDB/xtJXhzJ/ym9HiT9i5f
-W/YvBvsrZp7UczRgfb0qMR9Xt3KtDaEPgd/pkJprjjZ34SJW+hgSxpNmdGyL
-dy8DztICCMUE0ffb8B1yZtDOE9M+BV8etY4xsfKQlApyMy48R80IIj0Lmz15
-tf1g4tBuW82DRiZ7vlM3wyFDQCvwsn0Yd3Iz
-=YlyR
+wqEEARMKAAYFAmA+JYkACgkQfk0ManCIZufoZQIIoVY9/FV9Ujpxvy6FO8xQ
+t7q/gDdYPIyfRLlQVuFyJONliAE7SoVP3aLN54gooCtLn48xteQ4S/Vr55i5
+d+4b+k8CCQGY+bvcBxPNmc0ELq3Nc1ZluKUtAX2dOMWTf9TdsNWX2tlkInmy
+OAk6wfbdyo4oz3s/3604UYbtFMMtRHZaFASWgA==
+=j8ga
 -----END PGP SIGNATURE-----

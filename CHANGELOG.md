@@ -1,3 +1,9 @@
+# 1.5.1 (2021-03-02)
+
+### Bug Fixes
+* Fix the issue about that only Admin can see clusters' list [#54](https://github.com/devopsprodigy/kubegraf/issues/54)
+
+
 # 1.5.0 (2020-12-16)
 
 ### New Features 
