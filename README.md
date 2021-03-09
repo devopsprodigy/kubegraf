@@ -92,13 +92,13 @@ The above three dashboards show the number of available / unavailable applicatio
 
 2. Copy the repository:
 
-	`git clone https://github.com/devopsprodigy/kubegraf  /var/lib/grafana/plugins` and restart grafana-server
+	`git clone https://github.com/devopsprodigy/kubegraf  /var/lib/grafana/plugins/devopsprodigy-kubegraf-app` and restart grafana-server
 
 	or
 
 	`grafana-cli plugins install devopsprodigy-kubegraf-app` and restart grafana-server.
 
-3. Create namespace "kubegraf" and apply Kubernetes manifests from [kubernetes/](kubernetes/) directory to give
+3. Create namespace "kubegraf" and apply Kubernetes manifests from [kubernetes/](https://github.com/devopsprodigy/kubegraf/tree/master/kubernetes) directory to give
      required permissions to the user `grafana-kubegraf`:
       ```
       kubectl create ns kubegraf

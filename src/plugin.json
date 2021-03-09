@@ -2,18 +2,23 @@
   "type": "app",
   "name": "DevOpsProdigy KubeGraf",
   "id"  : "devopsprodigy-kubegraf-app",
-
+  "dependencies": {
+    "grafanaDependency": ">=6.0.0",
+    "plugins": [
+      {
+        "name": "Pie Chart",
+        "id": "grafana-piechart-panel",
+        "type" : "panel",
+        "version": ">=1.3.7"
+      }
+    ]
+  },
   "info"  : {
     "description" : "An updated version of the Grafana App for Kubernetes plugin, this plugin allows you to visualize and analyze your Kubernetes cluster’s performance. It demonstrates in graphics the main service metrics and characteristics of the Kubernetes cluster. It also makes it easier to examine the application’s life cycle and error logs.",
     "author"      : {
       "name"  : "DevOpsProdigy",
-      "url"   : "https://devopsprodigy.com/"
-    },
-    "dependencies": {
-      "grafanaVersion": "5.0+",
-      "plugins": [
-        "grafana-piechart-panel"
-      ]
+      "url"   : "https://devopsprodigy.com/",
+      "email" : "develop@devopsprodigy.com"
     },
     "keywords"  : ["DevOpsProdigy", "kubernetes", "monitoring", "prometheus"],
     "logos": {
@@ -42,8 +47,8 @@
       {"name": "Cluster status", "path": "img/cluster_status_1.png"},
       {"name": "Cluster status", "path": "img/cluster_status_2.png"}
     ],
-    "version": "1.5.0",
-    "updated" : "2020-12-16"
+    "version": "1.5.1",
+    "updated" : "2021-03-02"
   },
 
   "includes"  : [

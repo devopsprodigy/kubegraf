@@ -35,7 +35,7 @@ export class ClustersList {
     }
 
     async getClusters() {
-        const datasources = await this.backendSrv.get('/api/datasources/')
+        const datasources = await this.datasourceSrv.getAll()
         const type = 'devopsprodidy-kubegraf-datasource'
 
         if (Array.isArray(datasources)) {
