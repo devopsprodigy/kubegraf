@@ -62,7 +62,7 @@ export class ApplicationsOverview extends K8sPage {
         nsKey: 'daemonsets',
       },
       {
-        colName: 'Other',
+        colName: 'Other pods',
         nsKey: 'other',
       },
       {
@@ -80,7 +80,10 @@ export class ApplicationsOverview extends K8sPage {
     this.open = openFromStorage ? JSON.parse(openFromStorage) : {};
 
     const showColumnFromStorage = localStorage.getItem(this.storageShowColumnKey);
-    this.showColumn = showColumnFromStorage ? JSON.parse(showColumnFromStorage) : { cronJobs: {}, jobs: {} };
+    this.showColumn = showColumnFromStorage ? JSON.parse(showColumnFromStorage) : { cronJobs: {}, jobs: {}, other: {} };
+    if (typeof this.showColumn.other === 'undefined') {
+      this.showColumn.other = {};
+    }
   }
 
   __showAll() {
@@ -121,7 +124,7 @@ export class ApplicationsOverview extends K8sPage {
   }
 
   namespaceFilterIsDeleted(namespaces) {
-    return namespaces.filter((item) => item.is_deleted === false);
+    return namespaces.filter((item) => item.is_deleted === false || typeof item.is_deleted === 'undefined');
   }
 
   namespaceCount(): number {
@@ -152,7 +155,7 @@ export class ApplicationsOverview extends K8sPage {
 
   showCheck(columnName: string, namespace: string): boolean {
     return (
-      (columnName !== 'jobs' && columnName !== 'cronJobs') ||
+      (columnName !== 'jobs' && columnName !== 'cronJobs' && columnName !== 'other') ||
       (this.showColumn[columnName][namespace] !== undefined && this.showColumn[columnName][namespace] !== false)
     );
   }

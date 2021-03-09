@@ -141,6 +141,11 @@
                               ng-click="ctrl.toggleColumn('jobs', namespace.name)">
                             SHOW Jobs ({{ namespace.jobs ? namespace.jobs.length : 0 }})
                         </span>
+                        <span class="btn btn-grey"
+                              ng-if="ctrl.showColumn['other'][namespace.name] === undefined || ctrl.showColumn['other'][namespace.name] === false"
+                              ng-click="ctrl.toggleColumn('other', namespace.name)">
+                            SHOW Other Pods ({{ namespace.other[0].pods ? namespace.other[0].pods.length : 0 }})
+                        </span>
                         <div class="status">Status: <span ng-bind="namespace.data.status.phase"></span></div>
                     </div>
                 </div>
@@ -149,7 +154,7 @@
                         <div class="column_header">
                             <h3 ng-bind="col.colName"></h3>
                             <span class="btn btn-grey"
-                                  ng-if="(col.nsKey === 'cronJobs' || col.nsKey === 'jobs')"
+                                  ng-if="(col.nsKey === 'cronJobs' || col.nsKey === 'jobs' || col.nsKey === 'other')"
                                   ng-click="ctrl.toggleColumn(col.nsKey, namespace.name)">
                                 Hide
                             </span>
@@ -170,11 +175,18 @@
                             </h4>
                             <div ng-repeat="pod in key.pods | limitTo: key.limit" class="pod"
                                  ng-if="!pod.is_deleted" bs-tooltip="pod.message" data-placement="bottom">
-                                    <span class="status-indicator {{pod.color}}"></span>
-                                    <span class="pod_title">
-                                        {{pod.name}}&nbsp;<a href="{{ctrl.getPodDashboardLink(pod)}}" target="_blank"><i class="fa fa-eye"></i></a>
-                                    </span>
-                                </div>
+                                <span class="status-indicator {{pod.color}}"></span>
+                                <span class="pod_title">
+                                    {{pod.name}}&nbsp;<a href="{{ctrl.getPodDashboardLink(pod)}}" target="_blank"><i class="fa fa-eye"></i></a>
+                                </span>
+                            </div>
+                            <div ng-repeat="pod in key.other[0] | limitTo: key.limit" class="pod"
+                                 ng-if="!pod.is_deleted" bs-tooltip="pod.message" data-placement="bottom">
+                                <span class="status-indicator {{pod.color}}"></span>
+                                <span class="pod_title">
+                                    {{pod.name}}&nbsp;<a href="{{ctrl.getPodDashboardLink(pod)}}" target="_blank"><i class="fa fa-eye"></i></a>
+                                </span>
+                            </div>
                             <div ng-repeat="job in key.jobs | limitTo: key.limit" ng-if="col.nsKey === 'cronJobs'" >
                                 <div class="pod"
                                      ng-repeat="pod in job.pods"
