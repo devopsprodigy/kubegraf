@@ -1,14 +1,14 @@
-import {Pod} from "./pod";
-import {Service} from "./service";
-import {BaseModel} from './traits/baseModel';
+import { Pod } from './pod';
+import { Service } from './service';
+import { BaseModel } from './traits/baseModel';
 
-export class Deployment extends BaseModel{
-    pods: Array<Pod>;
-    services: Array<Service>;
+export class Deployment extends BaseModel {
+  pods: Pod[];
+  services: Service[];
 
-    constructor(data: any){
-        super(data);
-        this.pods = [];
-        this.services = [];
-    }
+  constructor(data: any) {
+    super(data);
+    this.pods = [];
+    this.services = [];
+  }
 }
