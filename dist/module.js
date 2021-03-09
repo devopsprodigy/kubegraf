@@ -24695,7 +24695,7 @@ function () {
   K8sPage.prototype.__getPodsUsedMemory = function () {
     var podsUsedMemory = {
       //expr: 'sum(container_memory_usage_bytes{container_name!="", container_name!="POD"}) by (pod_name)'
-      expr: 'sum(container_memory_usage_bytes{container!="", container!="POD"}) by (pod) or ' + 'sum(label_replace(container_memory_usage_bytes{container_name!="", container_name!="POD"}, "pod", "$1", "pod_name", "(.*)")) by (pod)',
+      expr: 'sum(container_memory_working_set_bytes{container!="", container!="POD"}) by (pod) or ' + 'sum(label_replace(container_memory_working_set_bytes{container_name!="", container_name!="POD"}, "pod", "$1", "pod_name", "(.*)")) by (pod)',
       legend: 'pod'
     };
     return this.prometheusDS.query(podsUsedMemory, false).then(function (res) {
