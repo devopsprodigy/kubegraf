@@ -694,7 +694,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "sum(container_memory_usage_bytes{namespace=\"$namespace\", pod=~\"$pod\", container!=\"\", container!=\"POD\", container=~\"$container\"}) by (pod, container) or sum(label_replace(label_replace(container_memory_usage_bytes{namespace=\"$namespace\", pod_name=~\"$pod\", container_name!=\"\", container_name!=\"POD\", container_name=~\"$container\"}, \"pod\", \"$1\", \"pod_name\", \"(.*)\"), \"container\", \"$1\", \"container_name\", \"(.*)\")) by (pod, container)",
+          "expr": "sum(container_memory_working_set_bytes{namespace=\"$namespace\", pod=~\"$pod\", container!=\"\", container!=\"POD\", container=~\"$container\"}) by (pod, container) or sum(label_replace(label_replace(container_memory_working_set_bytes{namespace=\"$namespace\", pod_name=~\"$pod\", container_name!=\"\", container_name!=\"POD\", container_name=~\"$container\"}, \"pod\", \"$1\", \"pod_name\", \"(.*)\"), \"container\", \"$1\", \"container_name\", \"(.*)\")) by (pod, container)",
           "interval": "",
           "legendFormat": "Used: {{pod}} / {{container}}",
           "refId": "A"
