@@ -711,14 +711,14 @@
           "refId": "A"
         },
         {
-          "expr": "sum(kube_pod_container_resource_requests_memory_bytes{ namespace=\"$namespace\", pod=~\"$pod\", container=~\"$container\"}) by (pod,container)",
+          "expr": "sum(kube_pod_container_resource_requests{resource=\"memory\", unit=\"byte\", namespace=\"$namespace\", pod=~\"$pod\", container=~\"$container\"}) by (pod,container)",
           "hide": false,
           "interval": "",
           "legendFormat": "Requested: {{pod}} / {{container}}",
           "refId": "B"
         },
         {
-          "expr": "sum(kube_pod_container_resource_limits_memory_bytes{ namespace=\"$namespace\", pod=~\"$pod\", container=~\"$container\"}) by (pod,container)",
+          "expr": "sum(kube_pod_container_resource_limits{resource=\"memory\", unit=\"byte\", namespace=\"$namespace\", pod=~\"$pod\", container=~\"$container\"}) by (pod,container)",
           "hide": false,
           "interval": "",
           "legendFormat": "Limited: {{pod}} / {{container}}",
@@ -828,13 +828,13 @@
           "refId": "A"
         },
         {
-          "expr": "sum(kube_pod_container_resource_requests_cpu_cores{namespace=\"$namespace\", pod=~\"$pod\", container_name=~\"$container\"}) by (pod,container)",
+          "expr": "sum(kube_pod_container_resource_requests{resource=\"cpu\", unit=\"core\", namespace=\"$namespace\", pod=~\"$pod\", container_name=~\"$container\"}) by (pod,container)",
           "interval": "",
           "legendFormat": "Requested: {{pod}} / {{container}}",
           "refId": "B"
         },
         {
-          "expr": "sum(kube_pod_container_resource_limits_cpu_cores{namespace=\"$namespace\", pod=~\"$pod\", container_name=~\"$container\"}) by (pod,container)",
+          "expr": "sum(kube_pod_container_resource_limits{resource=\"cpu\", unit=\"core\", namespace=\"$namespace\", pod=~\"$pod\", container_name=~\"$container\"}) by (pod,container)",
           "interval": "",
           "legendFormat": "Limited: {{pod}} / {{container}}",
           "refId": "C"

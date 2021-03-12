@@ -1194,7 +1194,7 @@
       "tableColumn": "",
       "targets": [
         {
-          "expr": "(sum(rate(container_cpu_usage_seconds_total{instance=~'$node|$nodeHost.*', id='/'}[2m])) / sum(kube_node_status_allocatable_cpu_cores{node=~'$node'})) * 100",
+          "expr": "(sum(rate(container_cpu_usage_seconds_total{instance=~'$node|$nodeHost.*', id='/'}[2m])) / sum(kube_node_status_allocatable{resource='cpu',unit='core',node=~'$node'})) * 100",
           "format": "time_series",
           "intervalFactor": 1,
           "refId": "A",
@@ -1278,7 +1278,7 @@
       "tableColumn": "",
       "targets": [
         {
-          "expr": "sum(node_memory_MemTotal_bytes{instance=~\"$node|$nodeHost.*\"} - node_memory_MemFree_bytes{instance=~\"$node|$nodeHost.*\"} - node_memory_Buffers_bytes{instance=~\"$node|$nodeHost.*\"} - node_memory_Cached_bytes{instance=~\"$node|$nodeHost.*\"}) / sum(kube_node_status_allocatable_memory_bytes{node=~\"$node\"}) * 100",
+          "expr": "sum(node_memory_MemTotal_bytes{instance=~\"$node|$nodeHost.*\"} - node_memory_MemFree_bytes{instance=~\"$node|$nodeHost.*\"} - node_memory_Buffers_bytes{instance=~\"$node|$nodeHost.*\"} - node_memory_Cached_bytes{instance=~\"$node|$nodeHost.*\"}) / sum(kube_node_status_allocatable{resource=\"memory\",unit=\"byte\",node=~\"$node\"}) * 100",
           "format": "time_series",
           "intervalFactor": 1,
           "refId": "A",
@@ -1362,7 +1362,7 @@
       "tableColumn": "",
       "targets": [
         {
-          "expr": "(sum(kubelet_running_pod_count{instance=~\"$node|$nodeHost.*\"}) / sum(kube_node_status_allocatable_pods{node=~\"$node\"})) * 100",
+          "expr": "(sum(kubelet_running_pod_count{instance=~\"$node|$nodeHost.*\"}) / sum(kube_node_status_allocatable{resource=\"pods\",node=~\"$node\"})) * 100",
           "format": "time_series",
           "intervalFactor": 1,
           "refId": "A",
@@ -1447,7 +1447,7 @@
       "tableColumn": "",
       "targets": [
         {
-          "expr": "sum(kube_pod_container_resource_requests_cpu_cores{node=~\"$node\"}) / sum(kube_node_status_allocatable_cpu_cores{node=~\"$node\"}) * 100",
+          "expr": "sum(kube_pod_container_resource_requests{resource=\"cpu\",unit=\"core\",node=~\"$node\"}) / sum(kube_node_status_allocatable{resource=\"cpu\",unit=\"core\",node=~\"$node\"}) * 100",
           "format": "time_series",
           "intervalFactor": 1,
           "refId": "A",
@@ -1531,7 +1531,7 @@
       "tableColumn": "",
       "targets": [
         {
-          "expr": "sum(kube_pod_container_resource_requests_memory_bytes{node=~\"$node\"}) / sum(kube_node_status_allocatable_memory_bytes{node=~\"$node\"}) * 100",
+          "expr": "sum(kube_pod_container_resource_requests{resource=\"memory\", unit=\"byte\", node=~\"$node\"}) / sum(kube_node_status_allocatable{resource=\"memory\",unit=\"byte\",node=~\"$node\"}) * 100",
           "format": "time_series",
           "intervalFactor": 1,
           "refId": "A",
@@ -1622,21 +1622,21 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "sum(kube_node_status_capacity_cpu_cores{node=~\"$node\"})",
+              "expr": "sum(kube_node_status_capacity{resource=\"cpu\",unit=\"core\",node=~\"$node\"})",
               "format": "time_series",
               "intervalFactor": 1,
               "legendFormat": "Capacity",
               "refId": "A"
             },
             {
-              "expr": "sum(kube_node_status_allocatable_cpu_cores{node=~\"$node\"})",
+              "expr": "sum(kube_node_status_allocatable{resource=\"cpu\",unit=\"core\",node=~\"$node\"})",
               "format": "time_series",
               "intervalFactor": 1,
               "legendFormat": "Allocatable",
               "refId": "B"
             },
             {
-              "expr": "sum(kube_pod_container_resource_requests_cpu_cores{node=~\"$node\"})",
+              "expr": "sum(kube_pod_container_resource_requests{resource=\"cpu\",unit=\"core\",node=~\"$node\"})",
               "format": "time_series",
               "intervalFactor": 1,
               "legendFormat": "Requested",
@@ -1730,21 +1730,21 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "sum(kube_node_status_capacity_memory_bytes{node=~\"$node\"})",
+              "expr": "sum(kube_node_status_capacity{resource=\"memory\",unit=\"byte\",node=~\"$node\"})",
               "format": "time_series",
               "intervalFactor": 1,
               "legendFormat": "Capacity",
               "refId": "A"
             },
             {
-              "expr": "sum(kube_node_status_allocatable_memory_bytes{node=~\"$node\"})",
+              "expr": "sum(kube_node_status_allocatable{resource=\"memory\",unit=\"byte\",node=~\"$node\"})",
               "format": "time_series",
               "intervalFactor": 1,
               "legendFormat": "Allocatable",
               "refId": "B"
             },
             {
-              "expr": "sum(kube_pod_container_resource_requests_memory_bytes{node=~\"$node\"})",
+              "expr": "sum(kube_pod_container_resource_requests{resource=\"memory\", unit=\"byte\", node=~\"$node\"})",
               "format": "time_series",
               "intervalFactor": 1,
               "legendFormat": "Requested",
@@ -1836,14 +1836,14 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "sum(kube_node_status_capacity_pods{node=~\"$node\"})",
+              "expr": "sum(kube_node_status_capacity{resource=\"pods\",node=~\"$node\"})",
               "format": "time_series",
               "intervalFactor": 1,
               "legendFormat": "Capacity",
               "refId": "A"
             },
             {
-              "expr": "sum(kube_node_status_allocatable_pods{node=~\"$node\"})",
+              "expr": "sum(kube_node_status_allocatable{resource=\"pods\",node=~\"$node\"})",
               "format": "time_series",
               "intervalFactor": 1,
               "legendFormat": "Allocatable",
