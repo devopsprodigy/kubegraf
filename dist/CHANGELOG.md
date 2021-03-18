@@ -1,3 +1,9 @@
+# 1.5.2 (2021-03-18)
+
+### Bug Fixes
+* Fix the memory usage metrics of pods on all dashboards and static pages [#56](https://github.com/devopsprodigy/kubegraf/issues/56)
+* Fix the compatibility with new versions of kube-state-metrics [#55](https://github.com/devopsprodigy/kubegraf/issues/55)
+
 # 1.5.1 (2021-03-02)
 
 ### Bug Fixes
