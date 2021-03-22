@@ -256,7 +256,7 @@
       "dashLength": 10,
       "dashes": false,
       "datasource": "$PromDs",
-      "fill": 1,
+      "fill": 0,
       "gridPos": {
         "h": 5,
         "w": 12,
@@ -363,7 +363,7 @@
       "bars": false,
       "dashLength": 10,
       "dashes": false,
-      "fill": 1,
+      "fill": 0,
       "gridPos": {
         "h": 8,
         "w": 24,
@@ -554,7 +554,7 @@
       "bars": false,
       "dashLength": 10,
       "dashes": false,
-      "fill": 1,
+      "fill": 0,
       "gridPos": {
         "h": 8,
         "w": 18,
