@@ -517,6 +517,31 @@ label.toggle-checkbox
   .page-container--override
     width: 100vw
     left: calc((100% - 100vw)/2)
+  button.scroll-to-top-anchor, button.scroll-to-top-anchor.show
+    display: none
 
 .explore-toolbar-item
   list-style: inside
+
+.scroll-to-top-anchor
+  visibility: hidden
+  display: inline-block
+  opacity: 0
+  height: 60px
+  width: 60px
+  right: 30px
+  bottom: 30px
+  position: fixed
+  z-index: 10
+  border-radius: 50%
+  overflow: hidden
+  text-indent: 100%
+  white-space: nowrap
+  background: #141619 url(data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4NCjwhLS0gR2VuZXJhdG9yOiBBZG9iZSBJbGx1c3RyYXRvciAxNy4xLjAsIFNWRyBFeHBvcnQgUGx1Zy1JbiAuIFNWRyBWZXJzaW9uOiA2LjAwIEJ1aWxkIDApICAtLT4NCjwhRE9DVFlQRSBzdmcgUFVCTElDICItLy9XM0MvL0RURCBTVkcgMS4xLy9FTiIgImh0dHA6Ly93d3cudzMub3JnL0dyYXBoaWNzL1NWRy8xLjEvRFREL3N2ZzExLmR0ZCI+DQo8c3ZnIHZlcnNpb249IjEuMSIgaWQ9IkxheWVyXzEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgeG1sbnM6eGxpbms9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkveGxpbmsiIHg9IjBweCIgeT0iMHB4Ig0KCSB3aWR0aD0iMTZweCIgaGVpZ2h0PSIxNnB4IiB2aWV3Qm94PSIwIDAgMTYgMTYiIGVuYWJsZS1iYWNrZ3JvdW5kPSJuZXcgMCAwIDE2IDE2IiB4bWw6c3BhY2U9InByZXNlcnZlIj4NCjxwb2x5Z29uIGZpbGw9IiNGRkZGRkYiIHBvaW50cz0iOCwyLjggMTYsMTAuNyAxMy42LDEzLjEgOC4xLDcuNiAyLjUsMTMuMiAwLDEwLjcgIi8+DQo8L3N2Zz4NCg==) no-repeat center 50%
+  border: 2px solid #f05a28
+  text-decoration: none
+  transition: visibility 0s, opacity 0.5s linear
+  &.show
+    display: inline-block
+    visibility: visible
+    opacity: 0.7

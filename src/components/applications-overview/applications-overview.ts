@@ -26,6 +26,7 @@ export class ApplicationsOverview extends K8sPage {
   storageOpenKey = 'application-overview-open';
   showColumn: { [key: string]: { [key: string]: boolean } };
   storageShowColumnKey = 'application-overview-show-column';
+  showScrollButton = false;
 
   constructor(
     $scope,
@@ -84,6 +85,12 @@ export class ApplicationsOverview extends K8sPage {
     if (typeof this.showColumn.other === 'undefined') {
       this.showColumn.other = {};
     }
+
+    const elem = document.querySelector('.scroll-canvas');
+    elem.addEventListener('scroll', () => {
+      this.showScrollButton = elem.scrollTop > 64;
+      $scope.$apply();
+    });
   }
 
   __showAll() {

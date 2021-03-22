@@ -16,6 +16,7 @@ export class ClusterAlerts extends K8sPage {
     '$window',
   ];
   version: number;
+  showScrollButton = false;
 
   constructor(
     $scope,
@@ -49,6 +50,12 @@ export class ClusterAlerts extends K8sPage {
       this.$q.all(_promises).then(() => {
         this.pageReady = true;
       });
+    });
+
+    const elem = document.querySelector('.scroll-canvas');
+    elem.addEventListener('scroll', () => {
+      this.showScrollButton = elem.scrollTop > 64;
+      $scope.$apply();
     });
   }
   getAlertsNodesByCPU2(status: 'cpuStatus' | 'cpuStatusRequested' = 'cpuStatus') {}

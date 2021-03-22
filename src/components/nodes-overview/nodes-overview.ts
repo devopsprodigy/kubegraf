@@ -22,6 +22,7 @@ export class NodesOverview extends K8sPage {
   storageOpenKey = 'nodes-overview-open';
   serverInfo: any = null;
   hideAllWarningPods = true;
+  showScrollButton = false;
 
   constructor(
     $scope,
@@ -46,7 +47,6 @@ export class NodesOverview extends K8sPage {
             this.getServerInfo();
           }
           this.pageReady = true;
-          console.log(this.nodesMap[0]);
         })
         .then(() => {
           this.getResourcesMetrics().then(() => {});
@@ -55,6 +55,12 @@ export class NodesOverview extends K8sPage {
 
     const openFromStorage = localStorage.getItem(this.storageOpenKey);
     this.open = openFromStorage ? JSON.parse(openFromStorage) : {};
+
+    const elem = document.querySelector('.scroll-canvas');
+    elem.addEventListener('scroll', () => {
+      this.showScrollButton = elem.scrollTop > 64;
+      $scope.$apply();
+    });
   }
 
   getServerInfo() {

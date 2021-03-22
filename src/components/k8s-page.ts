@@ -33,6 +33,7 @@ export class K8sPage {
   timeout: any;
   refreshRate: number;
   $q: any;
+  scrollToTop: object;
 
   //common store
   storePods: Pod[] = [];
@@ -75,6 +76,15 @@ export class K8sPage {
       return;
     }
     document.title = 'DevOpsProdigy KubeGraf';
+
+    const elem = document.querySelector('.scroll-canvas');
+    this.scrollToTop = () => {
+      elem.scrollTo({
+        top: 0,
+        left: elem.scrollLeft,
+        behavior: 'smooth',
+      });
+    };
   }
 
   async __getServersInfo(nodes: Node[]) {

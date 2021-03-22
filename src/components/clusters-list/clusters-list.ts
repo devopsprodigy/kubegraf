@@ -9,6 +9,7 @@ export class ClustersList {
   $scope: any;
   isAdmin: boolean;
   version: number;
+  showScrollButton = false;
 
   constructor(
     $scope,
@@ -39,6 +40,12 @@ export class ClustersList {
       console.error(e);
       this.isAdmin = false;
     }
+
+    const elem = document.querySelector('.scroll-canvas');
+    elem.addEventListener('scroll', () => {
+      this.showScrollButton = elem.scrollTop > 64;
+      $scope.$apply();
+    });
   }
 
   async getClusters() {
