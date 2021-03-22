@@ -713,20 +713,20 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "sum(container_memory_usage_bytes{namespace=\"$namespace\", pod=~\"$pod\", container!=\"\", container!=\"POD\", container=~\"$container\"}) by (pod,container) or\nsum(label_replace(label_replace(container_memory_usage_bytes{namespace=\"$namespace\", pod_name=~\"$pod\", container_name!=\"\", container_name!=\"POD\", container_name=~\"$container\"},\"pod\", \"$1\", \"pod_name\", \"(.*)\"),\"container\", \"$1\", \"container_name\", \"(.*)\")) by (pod,container)",
+          "expr": "sum(container_memory_working_set_bytes{namespace=\"$namespace\", pod=~\"$pod\", container!=\"\", container!=\"POD\", container=~\"$container\"}) by (pod,container) or\nsum(label_replace(label_replace(container_memory_working_set_bytes{namespace=\"$namespace\", pod_name=~\"$pod\", container_name!=\"\", container_name!=\"POD\", container_name=~\"$container\"},\"pod\", \"$1\", \"pod_name\", \"(.*)\"),\"container\", \"$1\", \"container_name\", \"(.*)\")) by (pod,container)",
           "interval": "",
           "legendFormat": "Used: {{pod}} / {{container}}",
           "refId": "A"
         },
         {
-          "expr": "sum(kube_pod_container_resource_requests_memory_bytes{ namespace=\"$namespace\", pod=~\"$pod\", container=~\"$container\"}) by (pod,container)",
+          "expr": "sum(kube_pod_container_resource_requests{resource=\"memory\", unit=\"byte\", namespace=\"$namespace\", pod=~\"$pod\", container=~\"$container\"}) by (pod,container)",
           "hide": false,
           "interval": "",
           "legendFormat": "Requested: {{pod}} / {{container}}",
           "refId": "B"
         },
         {
-          "expr": "sum(kube_pod_container_resource_limits_memory_bytes{ namespace=\"$namespace\", pod=~\"$pod\", container=~\"$container\"}) by (pod,container)",
+          "expr": "sum(kube_pod_container_resource_limits{resource=\"memory\", unit=\"byte\", namespace=\"$namespace\", pod=~\"$pod\", container=~\"$container\"}) by (pod,container)",
           "hide": false,
           "interval": "",
           "legendFormat": "Limited: {{pod}} / {{container}}",
@@ -844,13 +844,13 @@
           "refId": "A"
         },
         {
-          "expr": "sum(kube_pod_container_resource_requests_cpu_cores{namespace=\"$namespace\", pod=~\"$pod\", container_name=~\"$container\"}) by (pod,container)",
+          "expr": "sum(kube_pod_container_resource_requests{resource=\"cpu\", unit=\"core\", namespace=\"$namespace\", pod=~\"$pod\", container_name=~\"$container\"}) by (pod,container)",
           "interval": "",
           "legendFormat": "Requested: {{pod}} / {{container}}",
           "refId": "B"
         },
         {
-          "expr": "sum(kube_pod_container_resource_limits_cpu_cores{namespace=\"$namespace\", pod=~\"$pod\", container_name=~\"$container\"}) by (pod,container)",
+          "expr": "sum(kube_pod_container_resource_limits{resource=\"cpu\", unit=\"core\", namespace=\"$namespace\", pod=~\"$pod\", container_name=~\"$container\"}) by (pod,container)",
           "interval": "",
           "legendFormat": "Limited: {{pod}} / {{container}}",
           "refId": "C"

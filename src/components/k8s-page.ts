@@ -232,7 +232,7 @@ export class K8sPage {
   __getCpuMetricsRequested() {
     const promQuery = {
       expr:
-        'sum(sum(kube_pod_container_resource_requests_cpu_cores) by (namespace, pod, node) * on (pod, namespace) group_left()  (sum(kube_pod_status_phase{phase="Running"}) by (pod, namespace) == 1)) by (node)',
+        'sum(sum(kube_pod_container_resource_requests{resource="cpu",unit="core"}) by (namespace, pod, node) * on (pod, namespace) group_left()  (sum(kube_pod_status_phase{phase="Running"}) by (pod, namespace) == 1)) by (node)',
       legend: 'node',
     };
 
@@ -242,7 +242,7 @@ export class K8sPage {
   __getCpuLimitMetrics() {
     const promQuery = {
       expr:
-        'sum(sum(kube_pod_container_resource_limits_cpu_cores) by (namespace, pod, node) * on (pod, namespace) group_left()  (sum(kube_pod_status_phase{phase="Running"}) by (pod, namespace) == 1)) by (node)',
+        'sum(sum(kube_pod_container_resource_limits{resource="cpu", unit="core"}) by (namespace, pod, node) * on (pod, namespace) group_left()  (sum(kube_pod_status_phase{phase="Running"}) by (pod, namespace) == 1)) by (node)',
       legend: 'node',
     };
 
@@ -252,7 +252,7 @@ export class K8sPage {
   __getMemoryMetricsRequested() {
     const promQuery = {
       expr:
-        'sum(sum(kube_pod_container_resource_requests_memory_bytes) by (namespace, pod, node) * on (pod, namespace) group_left()  (sum(kube_pod_status_phase{phase="Running"}) by (pod, namespace) == 1)) by (node)',
+        'sum(sum(kube_pod_container_resource_requests{resource="memory", unit="byte"}) by (namespace, pod, node) * on (pod, namespace) group_left() (sum(kube_pod_status_phase{phase="Running"}) by (pod, namespace) == 1)) by (node)',
       legend: 'node',
     };
 
@@ -262,7 +262,7 @@ export class K8sPage {
   __getMemoryLimitMetrics() {
     const promQuery = {
       expr:
-        'sum(sum(kube_pod_container_resource_limits_memory_bytes) by (namespace, pod, node) * on (pod, namespace) group_left()  (sum(kube_pod_status_phase{phase="Running"}) by (pod, namespace) == 1)) by (node)',
+        'sum(sum(kube_pod_container_resource_limits{resource="memory", unit="byte"}) by (namespace, pod, node) * on (pod, namespace) group_left()  (sum(kube_pod_status_phase{phase="Running"}) by (pod, namespace) == 1)) by (node)',
       legend: 'node',
     };
 
@@ -386,8 +386,8 @@ export class K8sPage {
     const podsUsedMemory = {
       //expr: 'sum(container_memory_usage_bytes{container_name!="", container_name!="POD"}) by (pod_name)'
       expr:
-        'sum(container_memory_usage_bytes{container!="", container!="POD"}) by (pod) or ' +
-        'sum(label_replace(container_memory_usage_bytes{container_name!="", container_name!="POD"}, "pod", "$1", "pod_name", "(.*)")) by (pod)',
+        'sum(container_memory_working_set_bytes{container!="", container!="POD"}) by (pod) or ' +
+        'sum(label_replace(container_memory_working_set_bytes{container_name!="", container_name!="POD"}, "pod", "$1", "pod_name", "(.*)")) by (pod)',
       legend: 'pod',
     };
 
@@ -396,7 +396,7 @@ export class K8sPage {
 
   __getPodsRequestedCpu() {
     const podsUsedCpu = {
-      expr: 'sum(kube_pod_container_resource_requests_cpu_cores) by (pod)',
+      expr: 'sum(kube_pod_container_resource_requests{resource="cpu",unit="core"}) by (pod)',
       legend: 'pod',
     };
 
@@ -405,7 +405,7 @@ export class K8sPage {
 
   __getPodsLimitCpu() {
     const podsLimitCpu = {
-      expr: 'sum(kube_pod_container_resource_limits_cpu_cores) by (pod)',
+      expr: 'sum(kube_pod_container_resource_limits{resource="cpu", unit="core"}) by (pod)',
       legend: 'pod',
     };
 
@@ -414,7 +414,7 @@ export class K8sPage {
 
   __getPodsRequestedMemory() {
     const podsUsedMemory = {
-      expr: 'sum(kube_pod_container_resource_requests_memory_bytes) by (pod)',
+      expr: 'sum(kube_pod_container_resource_requests{resource="memory", unit="byte"}) by (pod)',
       legend: 'pod',
     };
 
@@ -423,7 +423,7 @@ export class K8sPage {
 
   __getPodsLimitMemory() {
     const podsLimitMemory = {
-      expr: 'sum(kube_pod_container_resource_limits_memory_bytes) by (pod)',
+      expr: 'sum(kube_pod_container_resource_limits{resource="memory", unit="byte"}) by (pod)',
       legend: 'pod',
     };
 
