@@ -10,8 +10,8 @@ An updated version of the Grafana App for Kubernetes plugin (https://grafana.com
 ## Requirements
 
 1. Grafana > 5.0.0
-2. Prometheus + node-exporter + kube-state-metrics
-1. Grafana-piechart-panel
+2. Prometheus + node-exporter + kube-state-metrics (version >= 1.4.0)
+3. Grafana-piechart-panel
 
 ## Features
 
