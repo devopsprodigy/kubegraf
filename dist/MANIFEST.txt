@@ -8,27 +8,22 @@ Hash: SHA512
   "signedByOrg": "devopsprodigy",
   "signedByOrgName": "DevOpsProdigy",
   "plugin": "devopsprodigy-kubegraf-app",
-  "version": "1.5.2",
-  "time": 1616072278862,
+  "version": "1.6.0",
+  "time": 1617798594792,
   "keyId": "7e4d0c6a708866e7",
   "files": {
-    "common/types/pod.ts": "6808a417dd10e6017a93e2898b63f2fc02b125334148ef61408158b0ac00eaf8",
-    "common/types/pod.d.ts": "0554239f95d1fdf1da228a40bf419f52279ce7f0731def23f7ca6cf48e305da5",
-    "common/types/namespace.ts": "0986bda30c806004063c195145d55e291542c01517af639324b6d049509648f9",
-    "common/types/pod.js.map": "f6280a94dfaeda9e606ce626a09553da9c381f3262e25b5171c3ef4c4a866422",
-    "common/types/node.d.ts": "b34c1cf542fa1ea0be214a6fdae4b453a12cf72a03921db01c71327675fd705c",
-    "common/types/node.ts": "4b91089b6f25d9943f34c0859a7fecc1c14e95aeeea897f75120856acc73fd8f",
-    "common/types/namespace.js": "6b7ba71499f72c50b0505dcd511ce459bb625e6608ca1bb54fb9b531e20a5bdf",
-    "common/types/namespace.js.map": "1395eb262b0bfbf5d11cced0746822269878fa2fd12bd4b4fadc273d1ea02470",
-    "common/types/pod.js": "5db5a317ffa194e049584c7aa6e71eb15296073aa765c6a6ace76e3c3d7a8657",
-    "common/types/namespace.d.ts": "e8dd55a103e4d9a1de53d241d3a72e0f927dc7da169547e30f8a57f0c6095451",
-    "common/types/node.js.map": "92bd248fe39cfa81ba8445d595026ffe6d7306905001356969b4e41271680b89",
     "dashboards/node.json": "6a11d174510d9768f28d3eb772d403e60c5ceb5803199bc0e14bb4bd7f681141",
     "dashboards/pod-resources.json": "b8d4f9ede4fe870d2c9f08478ee78b61926f118c78a20a283b555def74b38be1",
-    "dashboards/deployment.json": "db670d7c789c1b6da80f4d847efad8c396b59a444030987da38c455067b1d6e5",
-    "dashboards/statefulset.json": "7ef2518a51d2f62c459821eea91d42af59353c06925d5eaf1e2545b2ee38c402",
-    "dashboards/daemonset.json": "92280ede559627464ae5545de33ff1fd481f6b2e4536be0ea8e9bc43658a35a7",
-    "module.js": "2b6716815df78ad00734c43d486e6b91a4cabe478b1484901a2f771a94924bcd",
+    "dashboards/deployment.json": "9624742368012b874bc2cc18a27f443833f5ba7a66838c3616c0a5d9f73556a9",
+    "dashboards/statefulset.json": "9c89f8c1ae126f9b12cf930d253fb96c36d334cd45bf0e206ddd225d9cf39669",
+    "dashboards/daemonset.json": "ca285925af3fe489b5092f05d41bad6cd8bc4b265929c62db5e6750f0d37904d",
+    "module.js.LICENSE.txt": "0d8f66cd4afb566cb5b7e1540c68f43b939d3eba12ace290f18abc4f4cb53ed0",
+    "module.js": "27abccc0babbeeeba91c5c5ffb707552a3c7292ec7376518904855b10d0afc0d",
+    "dark.js.map": "1619f3de2f74fefbe9d59b4fb6464bf25970203caf9dd8c1583cc1651e93474c",
+    "styles/dark.css.map": "2b9841a00d652c4b9ccbb1282cbd0fbf0f360c274925336adf72f5653ccb075e",
+    "styles/light.css": "95fbca0a4205a073b0d1279b798604c48947ec27d554d499f1bacac135ba8fc1",
+    "styles/dark.css": "8e8aa1f33e6cfe5f603cf65529b0e0435f44beb4b73bb8a2e934bf0a60a7e7a2",
+    "styles/light.css.map": "fdcab958cd963119871e7aa44329b3de55e90e5188e8b9ca0b572945330a0454",
     "img/loading.gif": "be9413d2f13321c983026c9f6b815ba820c5b1d91c4d2b763a9ef044afe0f187",
     "img/node_dashboard_2.png": "0fed6422877e5c2167a7b97dabe740bb4dd7f9851fdca00cc16c6cbe862bc35a",
     "img/node_dashboard_1.png": "e0ee82f5ce50283c483b166218ea3b29b9ebc622ed44c2a5c015424fa72c92b0",
@@ -41,7 +36,6 @@ Hash: SHA512
     "img/cluster_status.png": "cd2535ea934c401e37ae3841a75db9394cae8fd8f8b819472aac6ffeb6122c2e",
     "img/chevron.svg": "7d583c1eeac643320add875663230497db6edf40ba03aa2d681a4bacfaf7e861",
     "img/deployments_dashboard_1.png": "c0a79e84ac45801419ac13a11717a5e6de5f15b6c2a57f0b180b9c2168b8fe9e",
-    "img/shevron.svg": "7d583c1eeac643320add875663230497db6edf40ba03aa2d681a4bacfaf7e861",
     "img/n5_pods_dashboard.png": "ac47d4b5325fcbf801c4315c612766257c34b4e0dd478206b8ae305ea8320ca5",
     "img/cluster_status_2.png": "1f1463ac2c4dbef1aed537cf98bb753e8a84e8455ef9e4a4b1b4fdb0774e56fa",
     "img/n5_deployments_dashboard_2.png": "084fa3bd040268483d8f99cd85654a7e80c4208c4457888e1e63b7696d0e25e6",
@@ -63,49 +57,34 @@ Hash: SHA512
     "img/applications_overview_1.png": "a8a816d3d45acbc126febdbe98b29a7852fde7afa2d148f5036a41027c2bbd99",
     "LICENSE": "6446f747cbb3a962079309035085cb6c9c515801653f36299fed6b9aa420958f",
     "README.md": "9b089271e90147326a73ce82bec5833cb6c16bb9527f7fb4587971e81e08cf22",
-    "plugin.json": "4455dd3c291e7c39fb7644a4a4e5f2f326f4978f81648875bf79114968b54f5b",
-    "css/dark.css.map": "3057121642e6e658d848d0e31f13a7750e6f7130bf72b439561ed637fcf39934",
-    "css/core.css.map": "7a717563b0d5115eab1d1d83e1a1226fd186a5d82c8226c89b53663ac25f2f54",
-    "css/dark.js.map": "85d25e76e9b078534f424a018296c4c088e2cdbc7363b2cae8a67742f34f0d9f",
-    "css/light.js": "cf9d9cb6f664f486f95e8d211db30e52ac9edf76ff96c0843f67f1011943e7be",
-    "css/core.js": "e1966a14bcd3bf0da6adbf940cb78452edf2345477eee0dcf8d1e51781bb00e9",
-    "css/light.css": "e859972dffdfb41a7181b58cb51d813e56e64a38afd9f49ee60017982d4f6ceb",
-    "css/core.js.map": "e2b70f5357c3b4468922aebcd29657ad01b842d31cc2648afa118d1bfeb610fd",
-    "css/dark.css": "295c54669cc4f9e3155d610b28cfb7f602ae982a8f6ee2f22edeca24383a5324",
-    "css/dark.js": "5090f5405bf9cbd333bb163c84bfb03b13fff2108468945835923140c679236a",
-    "css/light.js.map": "f47440500617c2d56b5a07eea4a290c53b5da31ff2db2233506631c165df3ce6",
-    "css/light.css.map": "908dd6e863afe4cca7a660c0fb41ea78dafae5e6e5a7d8206f6c95298c969deb",
-    "css/core.css": "b5fe59efd0778a22585b6c22c0d4f1c53663a5fe33ed856599d561c0ccf9fed5",
-    "components/k8s-page.ts": "95e6ef209cb3314bd99cb925e6d5c41fef4cebcad3b8afb0a14507874bf3bc8e",
-    "components/k8s-page.js": "958b0f3f1883180744b10aa259dd0861fef6aad0b03b43301db46a7b672d7e63",
-    "components/applications-overview/applications-overview.html": "ddf80e3dc31bd16c0e96476b1aee1a78e86f63c2e5a739359160f82f87a2bad1",
+    "light.js": "74265489e335cdf9a88a6f90cf2471f15cc9b72417e51a29e287f11b37423f13",
+    "plugin.json": "1d99a28142e32cbe79489090cbeaa947735b8ace8494343d3495f19fa5f95803",
+    "components/applications-overview/applications-overview.html": "ad82d24e70abaf0f1f042dac83bb09dabdb947b36e7c7c1c0adf668f00ba4e08",
     "components/cluster-config/cluster-config.html": "b8ba8a9ddb9514e3c32f5188cd12f70f30aa2a7a743b851433281f321ee37477",
-    "components/clusters-list/clusters-list.html": "16e28aa0e68e6b3c2d724c2e01d004d5203d3d0e38507eb1374ab0725647540a",
-    "components/nodes-overview/nodes-overview.js.map": "73e520924e344d2af0888cce9e08522e698584a6cc088f5b487c768281c6d54b",
-    "components/nodes-overview/nodes-overview.d.ts": "ede7d499546e0f5c36162a42e24d20f92a89746294431bcc81cf2ca3822d3ff7",
-    "components/nodes-overview/nodes-overview.ts": "2fce92e21c6609eee343482883d8152cc3bdd123283134bb3d5555691b716b2f",
-    "components/nodes-overview/nodes-overview.html": "b7b77516a612fc380abb3a3b4ca2408d4e237e1a338c38c3a18274b32e353557",
-    "components/nodes-overview/nodes-overview.js": "ab6537e84f9a256bda61722f875f1d75258145ff0838b2edd2b60f6754eedc0e",
-    "components/cluster-alerts/cluster-alerts.html": "02401eed4dddac0326108be96144cdd8fbb0d13ed0b3a959f3d5a0acf5d66f05",
-    "components/k8s-page.js.map": "db822e9996324f1104d1837d5f42ffe18aa510a5ead47e0389ac7744a1d3ca32",
-    "module.js.map": "bb9a60ef120ce98b8af1b81966961fca5b395d0037e49db82bb3c6ce42fae5f1",
+    "components/clusters-list/clusters-list.html": "9802be0b7b1dab7250172674f355d4349d4c3e858041eefdbe951d8cce4137ac",
+    "components/nodes-overview/nodes-overview.html": "f91e92a929d8490e9ea0fd62d904fd3482a719430ab591c442e11a39fcb144a1",
+    "components/cluster-alerts/cluster-alerts.html": "02c9cdec45aaba7ab1555a7a2d602becb1bba305c557820aa0785bfd84e794c1",
+    "module.js.map": "f2f99a346cf51b0dec1895aa9f16693fcb94c86cddede60e49f5bd9720a5c2b8",
     "config/config.html": "236c453fb0720a1306b43f44163fdda4af485ac4d302747e2d8c94bbc27d1dd4",
+    "index.html": "37bf4316628b75c1e805a4791551ce4f54187c2b766234bb72c76932b618f98e",
+    "dark.js": "223c19e025931e3d3376b3ec1206bcb1b68a3b81b6df849137dc6172fcd00f71",
     "CHANGELOG.md": "f772050a2ab6a174c011f0f18ef2358f38e23e0c28be044801d0c7989a53cad9",
-    "datasource/module.js": "cb63617a24090a4ee4cc99935225cb60abdfb8b51615f4961d7459f54dd90662",
-    "datasource/img/loading.gif": "be9413d2f13321c983026c9f6b815ba820c5b1d91c4d2b763a9ef044afe0f187",
+    "datasource/module.js.LICENSE.txt": "0d8f66cd4afb566cb5b7e1540c68f43b939d3eba12ace290f18abc4f4cb53ed0",
+    "datasource/module.js": "58d7c7c2418e822fab9a6fa4daec96b8e8d16f8065b1916ae9fa5fd80c216961",
     "datasource/img/grafanaLogo.png": "93a573bd1bfc6cd7431ccd78f5b1ce3898dd204e410b2c8233c0bb2198436634",
     "datasource/plugin.json": "bdb81a2f80bfbd61fffe4c0aa7dccf4b4468fac5e506e5e9c4ad9cf839d7162a",
-    "datasource/module.js.map": "d64fc083ea6e5f2f79e27a5367678d9e3da6e991aad106ea8d56f03ac03110fc",
-    "datasource/partials/config.html": "9a9afc8bd281613479a6f9049475d0aca5fd8f2b48b5562f95aed3555cd58456"
+    "datasource/module.js.map": "cfea659fe4202c94669463f50b5b75a5380ee025de02f1af269c30231d405b3f",
+    "datasource/partials/config.html": "9a9afc8bd281613479a6f9049475d0aca5fd8f2b48b5562f95aed3555cd58456",
+    "light.js.map": "2e960ca3a18bfe18946ad70ab7078a6ec6c4ac8fa50c4ac42466d3d4d003a3ce"
   }
 }
 -----BEGIN PGP SIGNATURE-----
 Version: OpenPGP.js v4.10.1
 Comment: https://openpgpjs.org
 
-wqEEARMKAAYFAmBTTlcACgkQfk0ManCIZued/QIJAfoVGr/GfTvCAa/aH8A3
-ATYXkpczB95PAXmswDqMvr479wNzKh+iTKdF+oq7l9bDPC9Dv8hvh/qZBtPX
-DI2P0H76AgdA9K8/DYZpDI+2mrWhV7fCffassPhCWrdMOeiOhNcQpb+v/1+z
-L9kmz1zlHCxY98Q9IfJciFYiM4UKepMPJAUtPg==
-=YXIR
+wqEEARMKAAYFAmBtpcMACgkQfk0ManCIZue8OwIFFp3ABJHW965MesJkLCZq
+vMFPLIliJhKqhUElAqWJ+44vsSeQPbi5+YBE8ZgJrQ099q4Ko51SOmaTXRL5
+402HpY8CCQGuaDf+DUWgI4V/HNlQxAdw1voMti7JEwVgUifjlM4jmQavAEeL
+vhcmvISPEmATiRr60JqGoZKHc0RwOoUHjBkfyg==
+=vV/W
 -----END PGP SIGNATURE-----
