@@ -1,5 +1,17 @@
 <section ng-if="ctrl.pageReady" class="page-container--override no-scroll">
     <div class="page-header">
+        <div class="gf-form-select-wrapper width-20 page-header__select-nav">
+            <label class="gf-form-select-icon sitemap" for="page-header-select-nav"></label>
+            <select class="gf-select-nav gf-form-input" id="page-header-select-nav"
+                    onchange="document.location=this.options[this.selectedIndex].value">
+                <option ng-repeat="(key, cluster) in ctrl.clusters"
+                        value="/plugins/devopsprodigy-kubegraf-app/page/cluster-status?clusterName={{cluster.name}}"
+                        ng-bind="cluster.name"
+                        ng-selected="cluster.name === ctrl.cluster.name">
+                </option>
+            </select>
+        </div>
+
         <div class="row">
             <nav class="gf-tabs">
                 <div class="gf-tabs-item"><a class="gf-tabs-link active" href="plugins/devopsprodigy-kubegraf-app/page/cluster-status?clusterName={{ctrl.cluster.name}}">Cluster Status</a></div>

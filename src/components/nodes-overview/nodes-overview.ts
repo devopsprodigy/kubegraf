@@ -3,6 +3,7 @@ import { Node } from '../../common/types/node';
 import store from '../../common/store';
 import { __convertToGB, __roundCpu, __convertToMicro, __getGrafanaVersion } from '../../common/helpers';
 import { Pod } from '../../common/types/pod';
+import { TYPE_DATASOURCE } from "../../common/constants";
 
 export class NodesOverview extends K8sPage {
   static templateUrl = 'components/nodes-overview/nodes-overview.html';
@@ -23,6 +24,7 @@ export class NodesOverview extends K8sPage {
   serverInfo: any = null;
   hideAllWarningPods = true;
   showScrollButton = false;
+  clusters: any[];
 
   constructor(
     $scope,
@@ -41,6 +43,7 @@ export class NodesOverview extends K8sPage {
 
     this.__prepareDS().then(() => {
       this.getEvents();
+      this.getClusters();
       this.getNodeMap()
         .then(() => {
           if (this.nodesMap.length > 0 && this.serverInfo === null) {
@@ -61,6 +64,25 @@ export class NodesOverview extends K8sPage {
       this.showScrollButton = elem.scrollTop > 64;
       $scope.$apply();
     });
+  }
+
+  async getClusters() {
+    const datasources = await this.datasourceSrv.getAll();
+    const type = TYPE_DATASOURCE;
+
+    if (Array.isArray(datasources)) {
+      this.clusters = datasources.filter((item) => {
+        return item.type === type;
+      });
+    } else {
+      let clusters = [];
+      Object.keys(datasources).forEach((key) => {
+        if (datasources[key].type === type) {
+          clusters.push(datasources[key]);
+        }
+      });
+      this.clusters = clusters;
+    }
   }
 
   getServerInfo() {

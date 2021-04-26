@@ -1,5 +1,6 @@
 import appEvents from 'grafana/app/core/app_events';
 import { __getGrafanaVersion } from '../../common/helpers';
+import { TYPE_DATASOURCE } from "../../common/constants";
 
 export class ClustersList {
   static $inject = ['$scope', '$injector', 'backendSrv', 'datasourceSrv', 'contextSrv', 'utilSrv', '$window'];
@@ -50,7 +51,7 @@ export class ClustersList {
 
   async getClusters() {
     const datasources = await this.datasourceSrv.getAll();
-    const type = 'devopsprodidy-kubegraf-datasource';
+    const type = TYPE_DATASOURCE;
 
     if (Array.isArray(datasources)) {
       this.clusters = datasources.filter((item) => {

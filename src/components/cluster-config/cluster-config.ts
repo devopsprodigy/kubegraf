@@ -1,5 +1,5 @@
 import appEvents from 'grafana/app/core/app_events';
-import { TYPE_PROMETHEUS } from '../../common/constants';
+import { TYPE_DATASOURCE, TYPE_PROMETHEUS } from '../../common/constants';
 import { __getGrafanaVersion } from '../../common/helpers';
 
 export class ClusterConfig {
@@ -40,7 +40,7 @@ export class ClusterConfig {
       document.title = 'DevOpsProdigy KubeGraf | Edit cluster';
     } else {
       this.cluster = {
-        type: 'devopsprodidy-kubegraf-datasource',
+        type: TYPE_DATASOURCE,
         access: 'proxy',
         jsonData: {
           refresh_pods_rate: '60',

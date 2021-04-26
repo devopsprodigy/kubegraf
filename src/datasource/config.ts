@@ -1,4 +1,4 @@
-import { TYPE_PROMETHEUS } from '../common/constants';
+import { TYPE_DATASOURCE, TYPE_PROMETHEUS } from '../common/constants';
 
 export class DOPK8SConfig {
   static templateUrl = 'datasource/partials/config.html';
@@ -24,7 +24,7 @@ export class DOPK8SConfig {
       this.current.jsonData.cluster_url = this.current.url;
     } else {
       this.current = {
-        type: 'devopsprodidy-kubegraf-datasource',
+        type: TYPE_DATASOURCE,
         access: 'proxy',
         jsonData: {
           refresh_pods_rate: '60',

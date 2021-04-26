@@ -1,6 +1,6 @@
 import { K8sPage } from '../k8s-page';
 import { __getGrafanaVersion } from '../../common/helpers';
-import { COLOR_GREEN, COLOR_RED, COLOR_YELLOW, ERROR, WARNING } from '../../common/constants';
+import { COLOR_GREEN, COLOR_RED, COLOR_YELLOW, ERROR, TYPE_DATASOURCE, WARNING } from '../../common/constants';
 
 export class ClusterAlerts extends K8sPage {
   static templateUrl = 'components/cluster-alerts/cluster-alerts.html';
@@ -15,6 +15,7 @@ export class ClusterAlerts extends K8sPage {
     '$timeout',
     '$window',
   ];
+  clusters: any[];
   version: number;
   showScrollButton = false;
 
@@ -39,6 +40,7 @@ export class ClusterAlerts extends K8sPage {
       _promises.push(this.getEvents());
       _promises.push(this.getPods());
       _promises.push(this.getClusterComponents());
+      _promises.push(this.getClusters());
       _promises.push(
         this.getNodeMap(true).then(() => {
           this.getResourcesMetrics().then(() => {
@@ -59,6 +61,25 @@ export class ClusterAlerts extends K8sPage {
     });
   }
   getAlertsNodesByCPU2(status: 'cpuStatus' | 'cpuStatusRequested' = 'cpuStatus') {}
+
+  async getClusters() {
+    const datasources = await this.datasourceSrv.getAll();
+    const type = TYPE_DATASOURCE;
+
+    if (Array.isArray(datasources)) {
+      this.clusters = datasources.filter((item) => {
+        return item.type === type;
+      });
+    } else {
+      let clusters = [];
+      Object.keys(datasources).forEach((key) => {
+        if (datasources[key].type === type) {
+          clusters.push(datasources[key]);
+        }
+      });
+      this.clusters = clusters;
+    }
+  }
 
   getAlertsNodesByResources(): any[] {
     return this.nodesMap

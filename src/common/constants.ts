@@ -12,6 +12,7 @@ const PODS_LIMIT = 10;
 
 const TYPE_PROMETHEUS = 'prometheus';
 
+const TYPE_DATASOURCE = 'devopsprodidy-kubegraf-datasource';
 export {
   ERROR,
   WARNING,
@@ -23,4 +24,5 @@ export {
   COLOR_GREEN,
   PODS_LIMIT,
   TYPE_PROMETHEUS,
+  TYPE_DATASOURCE
 };

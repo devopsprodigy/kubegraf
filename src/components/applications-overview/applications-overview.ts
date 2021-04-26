@@ -2,6 +2,7 @@ import store from '../../common/store';
 
 import { K8sPage } from '../k8s-page';
 import { __getGrafanaVersion } from '../../common/helpers';
+import { TYPE_DATASOURCE } from "../../common/constants";
 
 export class ApplicationsOverview extends K8sPage {
   static $inject = [
@@ -27,6 +28,7 @@ export class ApplicationsOverview extends K8sPage {
   showColumn: { [key: string]: { [key: string]: boolean } };
   storageShowColumnKey = 'application-overview-show-column';
   showScrollButton = false;
+  clusters: any[];
 
   constructor(
     $scope,
@@ -45,6 +47,7 @@ export class ApplicationsOverview extends K8sPage {
 
     this.__prepareDS().then(() => {
       this.getEvents();
+      this.getClusters();
       this.getClusterComponents();
       this.getNamespaceMap();
     });
@@ -80,7 +83,8 @@ export class ApplicationsOverview extends K8sPage {
     const openFromStorage = localStorage.getItem(this.storageOpenKey);
     this.open = openFromStorage ? JSON.parse(openFromStorage) : {};
 
-    const showColumnFromStorage = localStorage.getItem(this.storageShowColumnKey);
+    //const showColumnFromStorage = localStorage.getItem(this.storageShowColumnKey);
+    const showColumnFromStorage = false;
     this.showColumn = showColumnFromStorage ? JSON.parse(showColumnFromStorage) : { cronJobs: {}, jobs: {}, other: {} };
     if (typeof this.showColumn.other === 'undefined') {
       this.showColumn.other = {};
@@ -91,6 +95,25 @@ export class ApplicationsOverview extends K8sPage {
       this.showScrollButton = elem.scrollTop > 64;
       $scope.$apply();
     });
+  }
+
+  async getClusters() {
+    const datasources = await this.datasourceSrv.getAll();
+    const type = TYPE_DATASOURCE;
+
+    if (Array.isArray(datasources)) {
+      this.clusters = datasources.filter((item) => {
+        return item.type === type;
+      });
+    } else {
+      let clusters = [];
+      Object.keys(datasources).forEach((key) => {
+        if (datasources[key].type === type) {
+          clusters.push(datasources[key]);
+        }
+      });
+      this.clusters = clusters;
+    }
   }
 
   __showAll() {
@@ -157,7 +180,7 @@ export class ApplicationsOverview extends K8sPage {
     } else {
       this.showColumn[columnName][namespace] = !this.showColumn[columnName][namespace];
     }
-    localStorage.setItem(this.storageShowColumnKey, JSON.stringify(this.showColumn));
+    //localStorage.setItem(this.storageShowColumnKey, JSON.stringify(this.showColumn));
   }
 
   showCheck(columnName: string, namespace: string): boolean {

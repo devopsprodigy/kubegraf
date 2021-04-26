@@ -1,3 +1,1129 @@
-/*! For license information please see module.js.LICENSE.txt */
-define(["app/core/app_events"],(function(t){return function(t){var e={};function n(r){if(e[r])return e[r].exports;var a=e[r]={i:r,l:!1,exports:{}};return t[r].call(a.exports,a,a.exports,n),a.l=!0,a.exports}return n.m=t,n.c=e,n.d=function(t,e,r){n.o(t,e)||Object.defineProperty(t,e,{enumerable:!0,get:r})},n.r=function(t){"undefined"!=typeof Symbol&&Symbol.toStringTag&&Object.defineProperty(t,Symbol.toStringTag,{value:"Module"}),Object.defineProperty(t,"__esModule",{value:!0})},n.t=function(t,e){if(1&e&&(t=n(t)),8&e)return t;if(4&e&&"object"==typeof t&&t&&t.__esModule)return t;var r=Object.create(null);if(n.r(r),Object.defineProperty(r,"default",{enumerable:!0,value:t}),2&e&&"string"!=typeof t)for(var a in t)n.d(r,a,function(e){return t[e]}.bind(null,a));return r},n.n=function(t){var e=t&&t.__esModule?function(){return t.default}:function(){return t};return n.d(e,"a",e),e},n.o=function(t,e){return Object.prototype.hasOwnProperty.call(t,e)},n.p="/",n(n.s=13)}({0:function(t,e,n){"use strict";n.d(e,"d",(function(){return r})),n.d(e,"j",(function(){return a})),n.d(e,"h",(function(){return s})),n.d(e,"g",(function(){return o})),n.d(e,"f",(function(){return i})),n.d(e,"c",(function(){return u})),n.d(e,"b",(function(){return c})),n.d(e,"a",(function(){return l})),n.d(e,"e",(function(){return p})),n.d(e,"i",(function(){return m}));var r=3,a=2,s=1,o=0,i=4,u="#ffff0096",c="#a52a2a",l="#299c46",p=10,m="prometheus"},1:function(t,e,n){"use strict";n.d(e,"b",(function(){return a})),n.d(e,"a",(function(){return s})),n.d(e,"c",(function(){return o})),n.d(e,"e",(function(){return i})),n.d(e,"d",(function(){return c}));var r=function(t,e){return(r=Object.setPrototypeOf||{__proto__:[]}instanceof Array&&function(t,e){t.__proto__=e}||function(t,e){for(var n in e)e.hasOwnProperty(n)&&(t[n]=e[n])})(t,e)};function a(t,e){function n(){this.constructor=t}r(t,e),t.prototype=null===e?Object.create(e):(n.prototype=e.prototype,new n)}function s(t,e,n,r){return new(n||(n=Promise))((function(a,s){function o(t){try{u(r.next(t))}catch(t){s(t)}}function i(t){try{u(r.throw(t))}catch(t){s(t)}}function u(t){var e;t.done?a(t.value):(e=t.value,e instanceof n?e:new n((function(t){t(e)}))).then(o,i)}u((r=r.apply(t,e||[])).next())}))}function o(t,e){var n,r,a,s,o={label:0,sent:function(){if(1&a[0])throw a[1];return a[1]},trys:[],ops:[]};return s={next:i(0),throw:i(1),return:i(2)},"function"==typeof Symbol&&(s[Symbol.iterator]=function(){return this}),s;function i(s){return function(i){return function(s){if(n)throw new TypeError("Generator is already executing.");for(;o;)try{if(n=1,r&&(a=2&s[0]?r.return:s[0]?r.throw||((a=r.return)&&a.call(r),0):r.next)&&!(a=a.call(r,s[1])).done)return a;switch(r=0,a&&(s=[2&s[0],a.value]),s[0]){case 0:case 1:a=s;break;case 4:return o.label++,{value:s[1],done:!1};case 5:o.label++,r=s[1],s=[0];continue;case 7:s=o.ops.pop(),o.trys.pop();continue;default:if(!(a=o.trys,(a=a.length>0&&a[a.length-1])||6!==s[0]&&2!==s[0])){o=0;continue}if(3===s[0]&&(!a||s[1]>a[0]&&s[1]<a[3])){o.label=s[1];break}if(6===s[0]&&o.label<a[1]){o.label=a[1],a=s;break}if(a&&o.label<a[2]){o.label=a[2],o.ops.push(s);break}a[2]&&o.ops.pop(),o.trys.pop();continue}s=e.call(t,o)}catch(t){s=[6,t],r=0}finally{n=a=0}if(5&s[0])throw s[1];return{value:s[0]?s[1]:void 0,done:!0}}([s,i])}}}function i(t){var e="function"==typeof Symbol&&Symbol.iterator,n=e&&t[e],r=0;if(n)return n.call(t);if(t&&"number"==typeof t.length)return{next:function(){return t&&r>=t.length&&(t=void 0),{value:t&&t[r++],done:!t}}};throw new TypeError(e?"Object is not iterable.":"Symbol.iterator is not defined.")}function u(t,e){var n="function"==typeof Symbol&&t[Symbol.iterator];if(!n)return t;var r,a,s=n.call(t),o=[];try{for(;(void 0===e||e-- >0)&&!(r=s.next()).done;)o.push(r.value)}catch(t){a={error:t}}finally{try{r&&!r.done&&(n=s.return)&&n.call(s)}finally{if(a)throw a.error}}return o}function c(){for(var t=[],e=0;e<arguments.length;e++)t=t.concat(u(arguments[e]));return t}},13:function(t,e,n){"use strict";n.r(e);var r=n(1),a=n(2),s=n.n(a),o=function(){function t(t,e,n){this.backendSrv=e,this.templateSrv=n,this.name=t.name,this.url=t.url,this.id=t.id,this.prometheus=t.jsonData.prom_name,this.refreshRate=t.jsonData.refresh_pods_rate,this.nodesPromise=null,this.deploymentsPromise=null,this.daemonsetsPromise=null,this.statefulsetsPromise=null,this.accessViaToken=t.jsonData.access_via_token}return t.prototype.testDatasource=function(t){void 0===t&&(t=!1);var e=this.url;return this.accessViaToken&&(e+="/__proxy"),e+="/api/v1/namespaces",this.backendSrv.datasourceRequest({url:e,method:"GET",headers:{"Content-Type":"application/json"},silent:t}).then((function(t){return t&&200===t.status?{status:"success",message:"Data source is OK",title:"Success"}:{status:"error",message:"Data source is not OK",title:"Error"}}),(function(t){return t&&t.status&&t.statusText?{status:"error",message:t.statusText,title:t.status}:{status:"error",message:"Data source is not OK",title:"Error"}}))},t.prototype.metricFindQuery=function(t){var e=this,n=this.templateSrv.replace(t,{}).split(" ");switch(n[0]){case"prom":return Promise.resolve([{text:this.prometheus,value:this.prometheus}]);case"node":return this.getNodesSingletone().then((function(t){return t.map((function(t){return{text:t.metadata.name,value:t.metadata.name}}))}));case"namespace":return this.getNamespaces().then((function(t){return Object(r.a)(e,void 0,void 0,(function(){var e,a,s,o,i,u;return Object(r.c)(this,(function(r){switch(r.label){case 0:switch(n[1]){case"deployment":return[3,1];case"statefulset":return[3,3];case"daemonset":return[3,5]}return[3,7];case 1:return[4,this.getDeployments()];case 2:return e=r.sent(),a=e.map((function(t){return t.metadata.namespace})),[2,t.filter((function(t){return a.includes(t.metadata.name)})).map((function(t){return{text:t.metadata.name,value:t.metadata.name}}))];case 3:return[4,this.getStatefulsets()];case 4:return s=r.sent(),o=s.map((function(t){return t.metadata.namespace})),[2,t.filter((function(t){return o.includes(t.metadata.name)})).map((function(t){return{text:t.metadata.name,value:t.metadata.name}}))];case 5:return[4,this.getDaemonsets()];case 6:return i=r.sent(),u=i.map((function(t){return t.metadata.namespace})),[2,t.filter((function(t){return u.includes(t.metadata.name)})).map((function(t){return{text:t.metadata.name,value:t.metadata.name}}))];case 7:return[2,t.map((function(t){return{text:t.metadata.name,value:t.metadata.name}}))]}}))}))}));case"pod":return this.getPods(n[1]).then((function(t){return t.map((function(t){return{text:t.metadata.name,value:t.metadata.name}}))}));case"deployment":return this.getDeploymentsSingletone().then((function(t){return t.filter((function(t){return t.metadata.namespace===n[1]})).map((function(t){return{text:t.metadata.name,value:t.metadata.name}}))}));case"daemonset":return this.getDaemonsetsSingletone().then((function(t){return t.filter((function(t){return t.metadata.namespace===n[1]})).map((function(t){return{text:t.metadata.name,value:t.metadata.name}}))}));case"statefulset":return this.getStateFulSetsSingletone().then((function(t){return t.filter((function(t){return t.metadata.namespace===n[1]})).map((function(t){return{text:t.metadata.name,value:t.metadata.name}}))}));case"containers":var a=null;switch(n[2]){case"deployment":a=this.getDeploymentsSingletone();break;case"daemonset":a=this.getDaemonsetsSingletone();break;case"statefulset":a=this.getStateFulSetsSingletone();break;case"pod":a=this.getPodsSingleton()}return a.then((function(t){return e.__parseContainers(t,n)}));case"nodeHost":return this.getNodesSingletone().then((function(t){var e=t.filter((function(t){return t.metadata.name===n[1]}))[0].status.addresses.filter((function(t){return"InternalIP"===t.type}))[0].address;return[{text:e,value:e}]}));default:return[]}},t.prototype.__get=function(t){var e=this.url;return this.accessViaToken&&(e+="/__proxy"),e+=t,this.backendSrv.datasourceRequest({url:e,method:"GET",headers:{"Content-Type":"application/json"}}).then((function(t){return t.data}),(function(t){return t}))},t.prototype.__parseContainers=function(t,e){var n=t.filter((function(t){return t.metadata.namespace===e[1]})).filter((function(t){return t.metadata.name===e[3]}));if(!n.length)return[{text:"",value:""}];var r=[];(n=n[0]).spec.template?r=n.spec.template.spec.containers.map((function(t){return t.name})):n.spec.containers&&(r=n.spec.containers.map((function(t){return t.name})));var a=[];if(r.length>1){var s=r.join("|");a.push({text:"All",value:s})}return r.forEach((function(t){a.push({text:t,value:t})})),a},t.prototype.__addNamespace=function(t){return t?"namespaces/"+t+"/":""},t.prototype.getNamespaces=function(){return this.__get("/api/v1/namespaces").then((function(t){return t.items?t.items:(s.a.emit("alert-error",["Namespaces not received"]),[])}))},t.prototype.getDeployments=function(t){return void 0===t&&(t=null),this.__get("/apis/apps/v1/"+this.__addNamespace(t)+"deployments").then((function(t){return t.items?t.items:(s.a.emit("alert-error",["Deployments not received"]),[])}))},t.prototype.getStatefulsets=function(t){return void 0===t&&(t=null),this.__get("/apis/apps/v1/"+this.__addNamespace(t)+"statefulsets").then((function(t){return t.items?t.items:(s.a.emit("alert-error",["Statefulsets not received"]),[])}))},t.prototype.getDaemonsets=function(t){return void 0===t&&(t=null),this.__get("/apis/apps/v1/"+this.__addNamespace(t)+"daemonsets").then((function(t){return t.items?t.items:(s.a.emit("alert-error",["Daemonsets not received"]),[])}))},t.prototype.getPods=function(t){return this.__get("/api/v1/"+this.__addNamespace(t)+"pods").then((function(t){if(!t.items){return s.a.emit("alert-error",["Pods not received"]),new Error("Pods not received")}return t.items}))},t.prototype.getServices=function(t){return this.__get("/api/v1/"+this.__addNamespace(t)+"services").then((function(t){return t.items?t.items:(s.a.emit("alert-error",["Services not received"]),[])}))},t.prototype.getComponents=function(){return this.__get("/api/v1/componentstatuses").then((function(t){if(!t.items){var e="Component statuses not received";return s.a.emit("alert-error",[e]),new Error(e)}return t.items}))},t.prototype.getNodesSingletone=function(){return this.nodesPromise||(this.nodesPromise=this.__get("/api/v1/nodes").then((function(t){return t.items?t.items:(s.a.emit("alert-error",["Nodes (singleton) not received"]),[])}))),this.nodesPromise},t.prototype.getDeploymentsSingletone=function(t){return void 0===t&&(t=null),this.deploymentsPromise||(this.deploymentsPromise=this.__get("/apis/apps/v1/"+this.__addNamespace(t)+"deployments").then((function(t){return t.items?t.items:(s.a.emit("alert-error",["Deployments (singleton) not received"]),[])}))),this.deploymentsPromise},t.prototype.getDaemonsetsSingletone=function(t){return void 0===t&&(t=null),this.daemonsetsPromise||(this.daemonsetsPromise=this.__get("/apis/apps/v1/"+this.__addNamespace(t)+"daemonsets").then((function(t){return t.items?t.items:(s.a.emit("alert-error",["Daemonsets (singleton) not received"]),[])}))),this.daemonsetsPromise},t.prototype.getStateFulSetsSingletone=function(t){return void 0===t&&(t=null),this.statefulsetsPromise||(this.statefulsetsPromise=this.__get("/apis/apps/v1/"+this.__addNamespace(t)+"statefulsets").then((function(t){return t.items?t.items:(s.a.emit("alert-error",["Statefulsets (singleton) not received"]),[])}))),this.statefulsetsPromise},t.prototype.getPodsSingleton=function(t){return void 0===t&&(t=null),this.podsPromise||(this.podsPromise=this.__get("/api/v1/"+this.__addNamespace(t)+"pods").then((function(t){return t.items?t.items:(s.a.emit("alert-error",["Pods (singleton) not received"]),[])}))),this.podsPromise},t.prototype.getNodes=function(){return this.__get("/api/v1/nodes").then((function(t){if(!t.items){return s.a.emit("alert-error",["Nodes not received"]),new Error("Nodes not received")}return t.items}))},t.prototype.getJobs=function(){return this.__get("/apis/batch/v1/jobs").then((function(t){return t.items?t.items:(s.a.emit("alert-error",["Jobs not received"]),[])}))},t.prototype.getCronJobs=function(){return this.__get("/apis/batch/v1beta1/cronjobs").then((function(t){return t.items?t.items:(s.a.emit("alert-error",["CronJobs not received"]),[])}))},t.prototype.getEvents=function(){return this.__get("/api/v1/events").then((function(t){return 403===t.status?(s.a.emit("alert-error",[t.status+" "+t.statusText,"Please, update ClusterRole to get new permissions"]),[]):t.items?t.items:(s.a.emit("alert-error",["Events not received"]),[])}))},t.$inject=["instanceSettings","backendSrv","templateSrv"],t}(),i=n(0),u=function(){function t(t,e,n,r){var a=this;this.backendSrv=n,this.$window=r,this.$scope=t,this.pageReady=!1,this.current.id?(this.current.jsonData.prom_name||(this.current.jsonData.prom_name=""),this.current.jsonData.refresh_pods_rate||(this.current.jsonData.refresh_pods_rate="60"),this.current.jsonData.cluster_url=this.current.url):this.current={type:"devopsprodidy-kubegraf-datasource",access:"proxy",jsonData:{refresh_pods_rate:"60",access_via_token:!1,prom_name:""}},this.setGrafanaVersion(r),this.getPrometheusList().then((function(){a.pageReady=!0,a.$scope.$apply()})),t.$watch("ctrl.current",(function(){a.setUrl()}))}return t.prototype.setGrafanaVersion=function(t){var e;try{e=t.grafanaBootData.settings.buildInfo.version.split(".")[0]}catch(t){e=5}this.version=e},t.prototype.setUrl=function(){this.current.jsonData.cluster_url=this.current.url},t.prototype.getPrometheusList=function(){var t=this;return this.backendSrv.get("/api/datasources").then((function(e){t.prometheusList=e.filter((function(t){return t.type===i.i}));var n=t.prometheusList.filter((function(t){return t.isDefault}));n.length>0&&""===t.current.jsonData.prom_name&&(t.current.jsonData.prom_name=n[0].name)}))},t.templateUrl="datasource/partials/config.html",t.$inject=["$scope","$injector","backendSrv","$window"],t}();n.d(e,"Datasource",(function(){return o})),n.d(e,"ConfigCtrl",(function(){return u}))},2:function(e,n){e.exports=t}})}));
+define(["app/core/app_events"], function(__WEBPACK_EXTERNAL_MODULE_grafana_app_core_app_events__) { return /******/ (function(modules) { // webpackBootstrap
+/******/ 	// The module cache
+/******/ 	var installedModules = {};
+/******/
+/******/ 	// The require function
+/******/ 	function __webpack_require__(moduleId) {
+/******/
+/******/ 		// Check if module is in cache
+/******/ 		if(installedModules[moduleId]) {
+/******/ 			return installedModules[moduleId].exports;
+/******/ 		}
+/******/ 		// Create a new module (and put it into the cache)
+/******/ 		var module = installedModules[moduleId] = {
+/******/ 			i: moduleId,
+/******/ 			l: false,
+/******/ 			exports: {}
+/******/ 		};
+/******/
+/******/ 		// Execute the module function
+/******/ 		modules[moduleId].call(module.exports, module, module.exports, __webpack_require__);
+/******/
+/******/ 		// Flag the module as loaded
+/******/ 		module.l = true;
+/******/
+/******/ 		// Return the exports of the module
+/******/ 		return module.exports;
+/******/ 	}
+/******/
+/******/
+/******/ 	// expose the modules object (__webpack_modules__)
+/******/ 	__webpack_require__.m = modules;
+/******/
+/******/ 	// expose the module cache
+/******/ 	__webpack_require__.c = installedModules;
+/******/
+/******/ 	// define getter function for harmony exports
+/******/ 	__webpack_require__.d = function(exports, name, getter) {
+/******/ 		if(!__webpack_require__.o(exports, name)) {
+/******/ 			Object.defineProperty(exports, name, { enumerable: true, get: getter });
+/******/ 		}
+/******/ 	};
+/******/
+/******/ 	// define __esModule on exports
+/******/ 	__webpack_require__.r = function(exports) {
+/******/ 		if(typeof Symbol !== 'undefined' && Symbol.toStringTag) {
+/******/ 			Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
+/******/ 		}
+/******/ 		Object.defineProperty(exports, '__esModule', { value: true });
+/******/ 	};
+/******/
+/******/ 	// create a fake namespace object
+/******/ 	// mode & 1: value is a module id, require it
+/******/ 	// mode & 2: merge all properties of value into the ns
+/******/ 	// mode & 4: return value when already ns object
+/******/ 	// mode & 8|1: behave like require
+/******/ 	__webpack_require__.t = function(value, mode) {
+/******/ 		if(mode & 1) value = __webpack_require__(value);
+/******/ 		if(mode & 8) return value;
+/******/ 		if((mode & 4) && typeof value === 'object' && value && value.__esModule) return value;
+/******/ 		var ns = Object.create(null);
+/******/ 		__webpack_require__.r(ns);
+/******/ 		Object.defineProperty(ns, 'default', { enumerable: true, value: value });
+/******/ 		if(mode & 2 && typeof value != 'string') for(var key in value) __webpack_require__.d(ns, key, function(key) { return value[key]; }.bind(null, key));
+/******/ 		return ns;
+/******/ 	};
+/******/
+/******/ 	// getDefaultExport function for compatibility with non-harmony modules
+/******/ 	__webpack_require__.n = function(module) {
+/******/ 		var getter = module && module.__esModule ?
+/******/ 			function getDefault() { return module['default']; } :
+/******/ 			function getModuleExports() { return module; };
+/******/ 		__webpack_require__.d(getter, 'a', getter);
+/******/ 		return getter;
+/******/ 	};
+/******/
+/******/ 	// Object.prototype.hasOwnProperty.call
+/******/ 	__webpack_require__.o = function(object, property) { return Object.prototype.hasOwnProperty.call(object, property); };
+/******/
+/******/ 	// __webpack_public_path__
+/******/ 	__webpack_require__.p = "/";
+/******/
+/******/
+/******/ 	// Load entry module and return exports
+/******/ 	return __webpack_require__(__webpack_require__.s = "./datasource/module.ts");
+/******/ })
+/************************************************************************/
+/******/ ({
+
+/***/ "../node_modules/tslib/tslib.es6.js":
+/*!******************************************!*\
+  !*** ../node_modules/tslib/tslib.es6.js ***!
+  \******************************************/
+/*! exports provided: __extends, __assign, __rest, __decorate, __param, __metadata, __awaiter, __generator, __createBinding, __exportStar, __values, __read, __spread, __spreadArrays, __await, __asyncGenerator, __asyncDelegator, __asyncValues, __makeTemplateObject, __importStar, __importDefault, __classPrivateFieldGet, __classPrivateFieldSet */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "__extends", function() { return __extends; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "__assign", function() { return __assign; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "__rest", function() { return __rest; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "__decorate", function() { return __decorate; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "__param", function() { return __param; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "__metadata", function() { return __metadata; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "__awaiter", function() { return __awaiter; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "__generator", function() { return __generator; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "__createBinding", function() { return __createBinding; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "__exportStar", function() { return __exportStar; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "__values", function() { return __values; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "__read", function() { return __read; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "__spread", function() { return __spread; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "__spreadArrays", function() { return __spreadArrays; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "__await", function() { return __await; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "__asyncGenerator", function() { return __asyncGenerator; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "__asyncDelegator", function() { return __asyncDelegator; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "__asyncValues", function() { return __asyncValues; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "__makeTemplateObject", function() { return __makeTemplateObject; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "__importStar", function() { return __importStar; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "__importDefault", function() { return __importDefault; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "__classPrivateFieldGet", function() { return __classPrivateFieldGet; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "__classPrivateFieldSet", function() { return __classPrivateFieldSet; });
+/*! *****************************************************************************
+Copyright (c) Microsoft Corporation.
+
+Permission to use, copy, modify, and/or distribute this software for any
+purpose with or without fee is hereby granted.
+
+THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES WITH
+REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF MERCHANTABILITY
+AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY SPECIAL, DIRECT,
+INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES WHATSOEVER RESULTING FROM
+LOSS OF USE, DATA OR PROFITS, WHETHER IN AN ACTION OF CONTRACT, NEGLIGENCE OR
+OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
+PERFORMANCE OF THIS SOFTWARE.
+***************************************************************************** */
+/* global Reflect, Promise */
+
+var extendStatics = function(d, b) {
+    extendStatics = Object.setPrototypeOf ||
+        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+    return extendStatics(d, b);
+};
+
+function __extends(d, b) {
+    extendStatics(d, b);
+    function __() { this.constructor = d; }
+    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+}
+
+var __assign = function() {
+    __assign = Object.assign || function __assign(t) {
+        for (var s, i = 1, n = arguments.length; i < n; i++) {
+            s = arguments[i];
+            for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p)) t[p] = s[p];
+        }
+        return t;
+    }
+    return __assign.apply(this, arguments);
+}
+
+function __rest(s, e) {
+    var t = {};
+    for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p) && e.indexOf(p) < 0)
+        t[p] = s[p];
+    if (s != null && typeof Object.getOwnPropertySymbols === "function")
+        for (var i = 0, p = Object.getOwnPropertySymbols(s); i < p.length; i++) {
+            if (e.indexOf(p[i]) < 0 && Object.prototype.propertyIsEnumerable.call(s, p[i]))
+                t[p[i]] = s[p[i]];
+        }
+    return t;
+}
+
+function __decorate(decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+}
+
+function __param(paramIndex, decorator) {
+    return function (target, key) { decorator(target, key, paramIndex); }
+}
+
+function __metadata(metadataKey, metadataValue) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(metadataKey, metadataValue);
+}
+
+function __awaiter(thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+}
+
+function __generator(thisArg, body) {
+    var _ = { label: 0, sent: function() { if (t[0] & 1) throw t[1]; return t[1]; }, trys: [], ops: [] }, f, y, t, g;
+    return g = { next: verb(0), "throw": verb(1), "return": verb(2) }, typeof Symbol === "function" && (g[Symbol.iterator] = function() { return this; }), g;
+    function verb(n) { return function (v) { return step([n, v]); }; }
+    function step(op) {
+        if (f) throw new TypeError("Generator is already executing.");
+        while (_) try {
+            if (f = 1, y && (t = op[0] & 2 ? y["return"] : op[0] ? y["throw"] || ((t = y["return"]) && t.call(y), 0) : y.next) && !(t = t.call(y, op[1])).done) return t;
+            if (y = 0, t) op = [op[0] & 2, t.value];
+            switch (op[0]) {
+                case 0: case 1: t = op; break;
+                case 4: _.label++; return { value: op[1], done: false };
+                case 5: _.label++; y = op[1]; op = [0]; continue;
+                case 7: op = _.ops.pop(); _.trys.pop(); continue;
+                default:
+                    if (!(t = _.trys, t = t.length > 0 && t[t.length - 1]) && (op[0] === 6 || op[0] === 2)) { _ = 0; continue; }
+                    if (op[0] === 3 && (!t || (op[1] > t[0] && op[1] < t[3]))) { _.label = op[1]; break; }
+                    if (op[0] === 6 && _.label < t[1]) { _.label = t[1]; t = op; break; }
+                    if (t && _.label < t[2]) { _.label = t[2]; _.ops.push(op); break; }
+                    if (t[2]) _.ops.pop();
+                    _.trys.pop(); continue;
+            }
+            op = body.call(thisArg, _);
+        } catch (e) { op = [6, e]; y = 0; } finally { f = t = 0; }
+        if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
+    }
+}
+
+function __createBinding(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}
+
+function __exportStar(m, exports) {
+    for (var p in m) if (p !== "default" && !exports.hasOwnProperty(p)) exports[p] = m[p];
+}
+
+function __values(o) {
+    var s = typeof Symbol === "function" && Symbol.iterator, m = s && o[s], i = 0;
+    if (m) return m.call(o);
+    if (o && typeof o.length === "number") return {
+        next: function () {
+            if (o && i >= o.length) o = void 0;
+            return { value: o && o[i++], done: !o };
+        }
+    };
+    throw new TypeError(s ? "Object is not iterable." : "Symbol.iterator is not defined.");
+}
+
+function __read(o, n) {
+    var m = typeof Symbol === "function" && o[Symbol.iterator];
+    if (!m) return o;
+    var i = m.call(o), r, ar = [], e;
+    try {
+        while ((n === void 0 || n-- > 0) && !(r = i.next()).done) ar.push(r.value);
+    }
+    catch (error) { e = { error: error }; }
+    finally {
+        try {
+            if (r && !r.done && (m = i["return"])) m.call(i);
+        }
+        finally { if (e) throw e.error; }
+    }
+    return ar;
+}
+
+function __spread() {
+    for (var ar = [], i = 0; i < arguments.length; i++)
+        ar = ar.concat(__read(arguments[i]));
+    return ar;
+}
+
+function __spreadArrays() {
+    for (var s = 0, i = 0, il = arguments.length; i < il; i++) s += arguments[i].length;
+    for (var r = Array(s), k = 0, i = 0; i < il; i++)
+        for (var a = arguments[i], j = 0, jl = a.length; j < jl; j++, k++)
+            r[k] = a[j];
+    return r;
+};
+
+function __await(v) {
+    return this instanceof __await ? (this.v = v, this) : new __await(v);
+}
+
+function __asyncGenerator(thisArg, _arguments, generator) {
+    if (!Symbol.asyncIterator) throw new TypeError("Symbol.asyncIterator is not defined.");
+    var g = generator.apply(thisArg, _arguments || []), i, q = [];
+    return i = {}, verb("next"), verb("throw"), verb("return"), i[Symbol.asyncIterator] = function () { return this; }, i;
+    function verb(n) { if (g[n]) i[n] = function (v) { return new Promise(function (a, b) { q.push([n, v, a, b]) > 1 || resume(n, v); }); }; }
+    function resume(n, v) { try { step(g[n](v)); } catch (e) { settle(q[0][3], e); } }
+    function step(r) { r.value instanceof __await ? Promise.resolve(r.value.v).then(fulfill, reject) : settle(q[0][2], r); }
+    function fulfill(value) { resume("next", value); }
+    function reject(value) { resume("throw", value); }
+    function settle(f, v) { if (f(v), q.shift(), q.length) resume(q[0][0], q[0][1]); }
+}
+
+function __asyncDelegator(o) {
+    var i, p;
+    return i = {}, verb("next"), verb("throw", function (e) { throw e; }), verb("return"), i[Symbol.iterator] = function () { return this; }, i;
+    function verb(n, f) { i[n] = o[n] ? function (v) { return (p = !p) ? { value: __await(o[n](v)), done: n === "return" } : f ? f(v) : v; } : f; }
+}
+
+function __asyncValues(o) {
+    if (!Symbol.asyncIterator) throw new TypeError("Symbol.asyncIterator is not defined.");
+    var m = o[Symbol.asyncIterator], i;
+    return m ? m.call(o) : (o = typeof __values === "function" ? __values(o) : o[Symbol.iterator](), i = {}, verb("next"), verb("throw"), verb("return"), i[Symbol.asyncIterator] = function () { return this; }, i);
+    function verb(n) { i[n] = o[n] && function (v) { return new Promise(function (resolve, reject) { v = o[n](v), settle(resolve, reject, v.done, v.value); }); }; }
+    function settle(resolve, reject, d, v) { Promise.resolve(v).then(function(v) { resolve({ value: v, done: d }); }, reject); }
+}
+
+function __makeTemplateObject(cooked, raw) {
+    if (Object.defineProperty) { Object.defineProperty(cooked, "raw", { value: raw }); } else { cooked.raw = raw; }
+    return cooked;
+};
+
+function __importStar(mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (Object.hasOwnProperty.call(mod, k)) result[k] = mod[k];
+    result.default = mod;
+    return result;
+}
+
+function __importDefault(mod) {
+    return (mod && mod.__esModule) ? mod : { default: mod };
+}
+
+function __classPrivateFieldGet(receiver, privateMap) {
+    if (!privateMap.has(receiver)) {
+        throw new TypeError("attempted to get private field on non-instance");
+    }
+    return privateMap.get(receiver);
+}
+
+function __classPrivateFieldSet(receiver, privateMap, value) {
+    if (!privateMap.has(receiver)) {
+        throw new TypeError("attempted to set private field on non-instance");
+    }
+    privateMap.set(receiver, value);
+    return value;
+}
+
+
+/***/ }),
+
+/***/ "./common/constants.ts":
+/*!*****************************!*\
+  !*** ./common/constants.ts ***!
+  \*****************************/
+/*! exports provided: ERROR, WARNING, TERMINATING, SUCCESS, SUCCEEDED, COLOR_YELLOW, COLOR_RED, COLOR_GREEN, PODS_LIMIT, TYPE_PROMETHEUS, TYPE_DATASOURCE */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ERROR", function() { return ERROR; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "WARNING", function() { return WARNING; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "TERMINATING", function() { return TERMINATING; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "SUCCESS", function() { return SUCCESS; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "SUCCEEDED", function() { return SUCCEEDED; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "COLOR_YELLOW", function() { return COLOR_YELLOW; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "COLOR_RED", function() { return COLOR_RED; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "COLOR_GREEN", function() { return COLOR_GREEN; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "PODS_LIMIT", function() { return PODS_LIMIT; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "TYPE_PROMETHEUS", function() { return TYPE_PROMETHEUS; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "TYPE_DATASOURCE", function() { return TYPE_DATASOURCE; });
+var ERROR = 3;
+var WARNING = 2;
+var TERMINATING = 1;
+var SUCCESS = 0;
+var SUCCEEDED = 4;
+var COLOR_YELLOW = '#ffff0096';
+var COLOR_RED = '#a52a2a';
+var COLOR_GREEN = '#299c46';
+var PODS_LIMIT = 10;
+var TYPE_PROMETHEUS = 'prometheus';
+var TYPE_DATASOURCE = 'devopsprodidy-kubegraf-datasource';
+
+
+/***/ }),
+
+/***/ "./datasource/config.ts":
+/*!******************************!*\
+  !*** ./datasource/config.ts ***!
+  \******************************/
+/*! exports provided: DOPK8SConfig */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "DOPK8SConfig", function() { return DOPK8SConfig; });
+/* harmony import */ var _common_constants__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../common/constants */ "./common/constants.ts");
+
+
+var DOPK8SConfig =
+/** @class */
+function () {
+  function DOPK8SConfig($scope, $injector, backendSrv, $window) {
+    var _this = this;
+
+    this.backendSrv = backendSrv;
+    this.$window = $window;
+    this.$scope = $scope;
+    this.pageReady = false;
+
+    if (this.current.id) {
+      if (!this.current.jsonData.prom_name) {
+        this.current.jsonData.prom_name = '';
+      }
+
+      if (!this.current.jsonData.refresh_pods_rate) {
+        this.current.jsonData.refresh_pods_rate = '60';
+      }
+
+      this.current.jsonData.cluster_url = this.current.url;
+    } else {
+      this.current = {
+        type: _common_constants__WEBPACK_IMPORTED_MODULE_0__["TYPE_DATASOURCE"],
+        access: 'proxy',
+        jsonData: {
+          refresh_pods_rate: '60',
+          access_via_token: false,
+          prom_name: ''
+        }
+      };
+    }
+
+    this.setGrafanaVersion($window);
+    this.getPrometheusList().then(function () {
+      _this.pageReady = true;
+
+      _this.$scope.$apply();
+    });
+    $scope.$watch('ctrl.current', function () {
+      _this.setUrl();
+    });
+  }
+
+  DOPK8SConfig.prototype.setGrafanaVersion = function (window) {
+    var _v;
+
+    try {
+      _v = window.grafanaBootData.settings.buildInfo.version.split('.')[0];
+    } catch (e) {
+      console.error(e);
+      _v = 5;
+    }
+
+    this.version = _v;
+  };
+
+  DOPK8SConfig.prototype.setUrl = function () {
+    this.current.jsonData.cluster_url = this.current.url;
+  };
+
+  DOPK8SConfig.prototype.getPrometheusList = function () {
+    var _this = this;
+
+    return this.backendSrv.get('/api/datasources').then(function (datasources) {
+      _this.prometheusList = datasources.filter(function (item) {
+        return item.type === _common_constants__WEBPACK_IMPORTED_MODULE_0__["TYPE_PROMETHEUS"];
+      });
+
+      var defProm = _this.prometheusList.filter(function (item) {
+        return item.isDefault;
+      });
+
+      if (defProm.length > 0 && _this.current.jsonData.prom_name === '') {
+        _this.current.jsonData.prom_name = defProm[0].name;
+      }
+    });
+  };
+
+  DOPK8SConfig.templateUrl = 'datasource/partials/config.html';
+  DOPK8SConfig.$inject = ['$scope', '$injector', 'backendSrv', '$window'];
+  return DOPK8SConfig;
+}();
+
+
+
+/***/ }),
+
+/***/ "./datasource/datasource.ts":
+/*!**********************************!*\
+  !*** ./datasource/datasource.ts ***!
+  \**********************************/
+/*! exports provided: DOPK8SDatasource */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "DOPK8SDatasource", function() { return DOPK8SDatasource; });
+/* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "../node_modules/tslib/tslib.es6.js");
+/* harmony import */ var grafana_app_core_app_events__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! grafana/app/core/app_events */ "grafana/app/core/app_events");
+/* harmony import */ var grafana_app_core_app_events__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(grafana_app_core_app_events__WEBPACK_IMPORTED_MODULE_1__);
+
+
+
+var DOPK8SDatasource =
+/** @class */
+function () {
+  function DOPK8SDatasource(instanceSettings, backendSrv, templateSrv) {
+    this.backendSrv = backendSrv;
+    this.templateSrv = templateSrv;
+    this.name = instanceSettings.name;
+    this.url = instanceSettings.url;
+    this.id = instanceSettings.id;
+    this.prometheus = instanceSettings.jsonData.prom_name;
+    this.refreshRate = instanceSettings.jsonData.refresh_pods_rate;
+    this.nodesPromise = null;
+    this.deploymentsPromise = null;
+    this.daemonsetsPromise = null;
+    this.statefulsetsPromise = null;
+    this.accessViaToken = instanceSettings.jsonData.access_via_token;
+  }
+
+  DOPK8SDatasource.prototype.testDatasource = function (silent) {
+    if (silent === void 0) {
+      silent = false;
+    }
+
+    var url = '/api/v1/namespaces';
+    var _url = this.url;
+
+    if (this.accessViaToken) {
+      _url += '/__proxy';
+    }
+
+    _url += url;
+    return this.backendSrv.datasourceRequest({
+      url: _url,
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      silent: silent
+    }).then(function (response) {
+      if (response && response.status === 200) {
+        return {
+          status: 'success',
+          message: 'Data source is OK',
+          title: 'Success'
+        };
+      }
+
+      return {
+        status: 'error',
+        message: 'Data source is not OK',
+        title: 'Error'
+      };
+    }, function (error) {
+      if (error && error.status && error.statusText) {
+        return {
+          status: 'error',
+          message: error.statusText,
+          title: error.status
+        };
+      }
+
+      return {
+        status: 'error',
+        message: 'Data source is not OK',
+        title: 'Error'
+      };
+    });
+  };
+
+  DOPK8SDatasource.prototype.metricFindQuery = function (query) {
+    var _this = this;
+
+    var interpolated = this.templateSrv.replace(query, {});
+    var queryData = interpolated.split(' ');
+
+    switch (queryData[0]) {
+      case 'prom':
+        return Promise.resolve([{
+          text: this.prometheus,
+          value: this.prometheus
+        }]);
+
+      case 'node':
+        return this.getNodesSingletone().then(function (nodes) {
+          return nodes.map(function (node) {
+            return {
+              text: node.metadata.name,
+              value: node.metadata.name
+            };
+          });
+        });
+
+      case 'namespace':
+        return this.getNamespaces().then(function (namespaces) {
+          return Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__awaiter"])(_this, void 0, void 0, function () {
+            var _a, deployments, deploymentsNamespace_1, statefulsets, statefulsetsNamespace_1, daemonsets, daemonsetsNamespace_1;
+
+            return Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__generator"])(this, function (_b) {
+              switch (_b.label) {
+                case 0:
+                  _a = queryData[1];
+
+                  switch (_a) {
+                    case 'deployment':
+                      return [3
+                      /*break*/
+                      , 1];
+
+                    case 'statefulset':
+                      return [3
+                      /*break*/
+                      , 3];
+
+                    case 'daemonset':
+                      return [3
+                      /*break*/
+                      , 5];
+                  }
+
+                  return [3
+                  /*break*/
+                  , 7];
+
+                case 1:
+                  return [4
+                  /*yield*/
+                  , this.getDeployments()];
+
+                case 2:
+                  deployments = _b.sent();
+                  deploymentsNamespace_1 = deployments.map(function (deployment) {
+                    return deployment.metadata.namespace;
+                  });
+                  return [2
+                  /*return*/
+                  , namespaces.filter(function (ns) {
+                    return deploymentsNamespace_1.includes(ns.metadata.name);
+                  }).map(function (ns) {
+                    return {
+                      text: ns.metadata.name,
+                      value: ns.metadata.name
+                    };
+                  })];
+
+                case 3:
+                  return [4
+                  /*yield*/
+                  , this.getStatefulsets()];
+
+                case 4:
+                  statefulsets = _b.sent();
+                  statefulsetsNamespace_1 = statefulsets.map(function (statefulset) {
+                    return statefulset.metadata.namespace;
+                  });
+                  return [2
+                  /*return*/
+                  , namespaces.filter(function (ns) {
+                    return statefulsetsNamespace_1.includes(ns.metadata.name);
+                  }).map(function (ns) {
+                    return {
+                      text: ns.metadata.name,
+                      value: ns.metadata.name
+                    };
+                  })];
+
+                case 5:
+                  return [4
+                  /*yield*/
+                  , this.getDaemonsets()];
+
+                case 6:
+                  daemonsets = _b.sent();
+                  daemonsetsNamespace_1 = daemonsets.map(function (daemonset) {
+                    return daemonset.metadata.namespace;
+                  });
+                  return [2
+                  /*return*/
+                  , namespaces.filter(function (ns) {
+                    return daemonsetsNamespace_1.includes(ns.metadata.name);
+                  }).map(function (ns) {
+                    return {
+                      text: ns.metadata.name,
+                      value: ns.metadata.name
+                    };
+                  })];
+
+                case 7:
+                  return [2
+                  /*return*/
+                  , namespaces.map(function (ns) {
+                    return {
+                      text: ns.metadata.name,
+                      value: ns.metadata.name
+                    };
+                  })];
+              }
+            });
+          });
+        });
+
+      case 'pod':
+        return this.getPods(queryData[1]).then(function (pods) {
+          return pods.map(function (pod) {
+            return {
+              text: pod.metadata.name,
+              value: pod.metadata.name
+            };
+          });
+        });
+
+      case 'deployment':
+        return this.getDeploymentsSingletone().then(function (deployments) {
+          return deployments.filter(function (deployment) {
+            return deployment.metadata.namespace === queryData[1];
+          }).map(function (deployment) {
+            return {
+              text: deployment.metadata.name,
+              value: deployment.metadata.name
+            };
+          });
+        });
+
+      case 'daemonset':
+        return this.getDaemonsetsSingletone().then(function (daemonsets) {
+          return daemonsets.filter(function (daemonset) {
+            return daemonset.metadata.namespace === queryData[1];
+          }).map(function (daemonset) {
+            return {
+              text: daemonset.metadata.name,
+              value: daemonset.metadata.name
+            };
+          });
+        });
+
+      case 'statefulset':
+        return this.getStateFulSetsSingletone().then(function (statefulsets) {
+          return statefulsets.filter(function (statefulset) {
+            return statefulset.metadata.namespace === queryData[1];
+          }).map(function (statefulset) {
+            return {
+              text: statefulset.metadata.name,
+              value: statefulset.metadata.name
+            };
+          });
+        });
+
+      case 'containers':
+        var promise = null;
+
+        switch (queryData[2]) {
+          case 'deployment':
+            promise = this.getDeploymentsSingletone();
+            break;
+
+          case 'daemonset':
+            promise = this.getDaemonsetsSingletone();
+            break;
+
+          case 'statefulset':
+            promise = this.getStateFulSetsSingletone();
+            break;
+
+          case 'pod':
+            promise = this.getPodsSingleton();
+            break;
+        }
+
+        return promise.then(function (items) {
+          return _this.__parseContainers(items, queryData);
+        });
+
+      case 'nodeHost':
+        return this.getNodesSingletone().then(function (nodes) {
+          var node = nodes.filter(function (item) {
+            return item.metadata.name === queryData[1];
+          })[0];
+          var ip = node.status.addresses.filter(function (item) {
+            return item.type === 'InternalIP';
+          })[0].address;
+          return [{
+            text: ip,
+            value: ip
+          }];
+        });
+
+      default:
+        return [];
+    }
+  };
+
+  DOPK8SDatasource.prototype.__get = function (url) {
+    var _url = this.url;
+
+    if (this.accessViaToken) {
+      _url += '/__proxy';
+    }
+
+    _url += url;
+    return this.backendSrv.datasourceRequest({
+      url: _url,
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    }).then(function (response) {
+      return response.data;
+    }, function (error) {
+      return error;
+    });
+  };
+
+  DOPK8SDatasource.prototype.__parseContainers = function (items, queryData) {
+    var _item = items.filter(function (item) {
+      return item.metadata.namespace === queryData[1];
+    }).filter(function (item) {
+      return item.metadata.name === queryData[3];
+    });
+
+    if (!_item.length) {
+      return [{
+        text: '',
+        value: ''
+      }];
+    }
+
+    _item = _item[0];
+    var containers = [];
+
+    if (_item.spec.template) {
+      containers = _item.spec.template.spec.containers.map(function (cont) {
+        return cont.name;
+      });
+    } else if (_item.spec.containers) {
+      containers = _item.spec.containers.map(function (cont) {
+        return cont.name;
+      });
+    }
+
+    var result = [];
+
+    if (containers.length > 1) {
+      var names = containers.join('|');
+      result.push({
+        text: 'All',
+        value: names
+      });
+    }
+
+    containers.forEach(function (cont) {
+      result.push({
+        text: cont,
+        value: cont
+      });
+    });
+    return result;
+  };
+
+  DOPK8SDatasource.prototype.__addNamespace = function (namespace) {
+    return namespace ? 'namespaces/' + namespace + '/' : '';
+  };
+
+  DOPK8SDatasource.prototype.getNamespaces = function () {
+    return this.__get('/api/v1/namespaces').then(function (result) {
+      if (!result.items) {
+        grafana_app_core_app_events__WEBPACK_IMPORTED_MODULE_1___default.a.emit('alert-error', ["Namespaces not received"]);
+        return [];
+      }
+
+      return result.items;
+    });
+  };
+
+  DOPK8SDatasource.prototype.getDeployments = function (namespace) {
+    if (namespace === void 0) {
+      namespace = null;
+    }
+
+    return this.__get('/apis/apps/v1/' + this.__addNamespace(namespace) + 'deployments').then(function (result) {
+      if (!result.items) {
+        grafana_app_core_app_events__WEBPACK_IMPORTED_MODULE_1___default.a.emit('alert-error', ["Deployments not received"]);
+        return [];
+      }
+
+      return result.items;
+    });
+  };
+
+  DOPK8SDatasource.prototype.getStatefulsets = function (namespace) {
+    if (namespace === void 0) {
+      namespace = null;
+    }
+
+    return this.__get('/apis/apps/v1/' + this.__addNamespace(namespace) + 'statefulsets').then(function (result) {
+      if (!result.items) {
+        grafana_app_core_app_events__WEBPACK_IMPORTED_MODULE_1___default.a.emit('alert-error', ["Statefulsets not received"]);
+        return [];
+      }
+
+      return result.items;
+    });
+  };
+
+  DOPK8SDatasource.prototype.getDaemonsets = function (namespace) {
+    if (namespace === void 0) {
+      namespace = null;
+    }
+
+    return this.__get('/apis/apps/v1/' + this.__addNamespace(namespace) + 'daemonsets').then(function (result) {
+      if (!result.items) {
+        grafana_app_core_app_events__WEBPACK_IMPORTED_MODULE_1___default.a.emit('alert-error', ["Daemonsets not received"]);
+        return [];
+      }
+
+      return result.items;
+    });
+  };
+
+  DOPK8SDatasource.prototype.getPods = function (namespace) {
+    return this.__get('/api/v1/' + this.__addNamespace(namespace) + 'pods').then(function (result) {
+      if (!result.items) {
+        var message = "Pods not received";
+        grafana_app_core_app_events__WEBPACK_IMPORTED_MODULE_1___default.a.emit('alert-error', [message]);
+        return new Error(message);
+      }
+
+      return result.items;
+    });
+  };
+
+  DOPK8SDatasource.prototype.getServices = function (namespace) {
+    return this.__get('/api/v1/' + this.__addNamespace(namespace) + 'services').then(function (result) {
+      if (!result.items) {
+        grafana_app_core_app_events__WEBPACK_IMPORTED_MODULE_1___default.a.emit('alert-error', ["Services not received"]);
+        return [];
+      }
+
+      return result.items;
+    });
+  };
+
+  DOPK8SDatasource.prototype.getComponents = function () {
+    return this.__get('/api/v1/componentstatuses').then(function (result) {
+      if (!result.items) {
+        var message = "Component statuses not received";
+        grafana_app_core_app_events__WEBPACK_IMPORTED_MODULE_1___default.a.emit('alert-error', [message]);
+        return new Error(message);
+      }
+
+      return result.items;
+    });
+  };
+
+  DOPK8SDatasource.prototype.getNodesSingletone = function () {
+    if (!this.nodesPromise) {
+      this.nodesPromise = this.__get('/api/v1/nodes').then(function (result) {
+        if (!result.items) {
+          grafana_app_core_app_events__WEBPACK_IMPORTED_MODULE_1___default.a.emit('alert-error', ["Nodes (singleton) not received"]);
+          return [];
+        }
+
+        return result.items;
+      });
+    }
+
+    return this.nodesPromise;
+  };
+
+  DOPK8SDatasource.prototype.getDeploymentsSingletone = function (namespace) {
+    if (namespace === void 0) {
+      namespace = null;
+    }
+
+    if (!this.deploymentsPromise) {
+      this.deploymentsPromise = this.__get('/apis/apps/v1/' + this.__addNamespace(namespace) + 'deployments').then(function (result) {
+        if (!result.items) {
+          grafana_app_core_app_events__WEBPACK_IMPORTED_MODULE_1___default.a.emit('alert-error', ["Deployments (singleton) not received"]);
+          return [];
+        }
+
+        return result.items;
+      });
+    }
+
+    return this.deploymentsPromise;
+  };
+
+  DOPK8SDatasource.prototype.getDaemonsetsSingletone = function (namespace) {
+    if (namespace === void 0) {
+      namespace = null;
+    }
+
+    if (!this.daemonsetsPromise) {
+      this.daemonsetsPromise = this.__get('/apis/apps/v1/' + this.__addNamespace(namespace) + 'daemonsets').then(function (result) {
+        if (!result.items) {
+          grafana_app_core_app_events__WEBPACK_IMPORTED_MODULE_1___default.a.emit('alert-error', ["Daemonsets (singleton) not received"]);
+          return [];
+        }
+
+        return result.items;
+      });
+    }
+
+    return this.daemonsetsPromise;
+  };
+
+  DOPK8SDatasource.prototype.getStateFulSetsSingletone = function (namespace) {
+    if (namespace === void 0) {
+      namespace = null;
+    }
+
+    if (!this.statefulsetsPromise) {
+      this.statefulsetsPromise = this.__get('/apis/apps/v1/' + this.__addNamespace(namespace) + 'statefulsets').then(function (result) {
+        if (!result.items) {
+          grafana_app_core_app_events__WEBPACK_IMPORTED_MODULE_1___default.a.emit('alert-error', ["Statefulsets (singleton) not received"]);
+          return [];
+        }
+
+        return result.items;
+      });
+    }
+
+    return this.statefulsetsPromise;
+  };
+
+  DOPK8SDatasource.prototype.getPodsSingleton = function (namespace) {
+    if (namespace === void 0) {
+      namespace = null;
+    }
+
+    if (!this.podsPromise) {
+      this.podsPromise = this.__get('/api/v1/' + this.__addNamespace(namespace) + 'pods').then(function (result) {
+        if (!result.items) {
+          grafana_app_core_app_events__WEBPACK_IMPORTED_MODULE_1___default.a.emit('alert-error', ["Pods (singleton) not received"]);
+          return [];
+        }
+
+        return result.items;
+      });
+    }
+
+    return this.podsPromise;
+  };
+
+  DOPK8SDatasource.prototype.getNodes = function () {
+    return this.__get('/api/v1/nodes').then(function (result) {
+      if (!result.items) {
+        var message = 'Nodes not received';
+        grafana_app_core_app_events__WEBPACK_IMPORTED_MODULE_1___default.a.emit('alert-error', [message]);
+        return new Error(message);
+      }
+
+      return result.items;
+    });
+  };
+
+  DOPK8SDatasource.prototype.getJobs = function () {
+    return this.__get('/apis/batch/v1/jobs').then(function (result) {
+      if (!result.items) {
+        grafana_app_core_app_events__WEBPACK_IMPORTED_MODULE_1___default.a.emit('alert-error', ["Jobs not received"]);
+        return [];
+      }
+
+      return result.items;
+    });
+  };
+
+  DOPK8SDatasource.prototype.getCronJobs = function () {
+    return this.__get('/apis/batch/v1beta1/cronjobs').then(function (result) {
+      if (!result.items) {
+        grafana_app_core_app_events__WEBPACK_IMPORTED_MODULE_1___default.a.emit('alert-error', ["CronJobs not received"]);
+        return [];
+      }
+
+      return result.items;
+    });
+  };
+
+  DOPK8SDatasource.prototype.getEvents = function () {
+    return this.__get('/api/v1/events').then(function (result) {
+      if (result.status === 403) {
+        grafana_app_core_app_events__WEBPACK_IMPORTED_MODULE_1___default.a.emit('alert-error', [result.status + ' ' + result.statusText, "Please, update ClusterRole to get new permissions"]);
+        return [];
+      }
+
+      if (!result.items) {
+        grafana_app_core_app_events__WEBPACK_IMPORTED_MODULE_1___default.a.emit('alert-error', ["Events not received"]);
+        return [];
+      }
+
+      return result.items;
+    });
+  };
+
+  DOPK8SDatasource.$inject = ['instanceSettings', 'backendSrv', 'templateSrv'];
+  return DOPK8SDatasource;
+}();
+
+
+
+/***/ }),
+
+/***/ "./datasource/module.ts":
+/*!******************************!*\
+  !*** ./datasource/module.ts ***!
+  \******************************/
+/*! exports provided: Datasource, ConfigCtrl */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _datasource__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./datasource */ "./datasource/datasource.ts");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "Datasource", function() { return _datasource__WEBPACK_IMPORTED_MODULE_0__["DOPK8SDatasource"]; });
+
+/* harmony import */ var _config__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./config */ "./datasource/config.ts");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "ConfigCtrl", function() { return _config__WEBPACK_IMPORTED_MODULE_1__["DOPK8SConfig"]; });
+
+
+
+
+
+/***/ }),
+
+/***/ "grafana/app/core/app_events":
+/*!**************************************!*\
+  !*** external "app/core/app_events" ***!
+  \**************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = __WEBPACK_EXTERNAL_MODULE_grafana_app_core_app_events__;
+
+/***/ })
+
+/******/ })});;
 //# sourceMappingURL=module.js.map
