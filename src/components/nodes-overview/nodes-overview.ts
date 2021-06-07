@@ -3,7 +3,7 @@ import { Node } from '../../common/types/node';
 import store from '../../common/store';
 import { __convertToGB, __roundCpu, __convertToMicro, __getGrafanaVersion } from '../../common/helpers';
 import { Pod } from '../../common/types/pod';
-import { TYPE_DATASOURCE } from "../../common/constants";
+import { TYPE_DATASOURCE } from '../../common/constants';
 
 export class NodesOverview extends K8sPage {
   static templateUrl = 'components/nodes-overview/nodes-overview.html';

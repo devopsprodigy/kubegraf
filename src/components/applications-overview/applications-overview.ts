@@ -2,7 +2,7 @@ import store from '../../common/store';
 
 import { K8sPage } from '../k8s-page';
 import { __getGrafanaVersion } from '../../common/helpers';
-import { TYPE_DATASOURCE } from "../../common/constants";
+import { TYPE_DATASOURCE } from '../../common/constants';
 
 export class ApplicationsOverview extends K8sPage {
   static $inject = [

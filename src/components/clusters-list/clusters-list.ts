@@ -1,6 +1,6 @@
 import appEvents from 'grafana/app/core/app_events';
 import { __getGrafanaVersion } from '../../common/helpers';
-import { TYPE_DATASOURCE } from "../../common/constants";
+import { TYPE_DATASOURCE } from '../../common/constants';
 
 export class ClustersList {
   static $inject = ['$scope', '$injector', 'backendSrv', 'datasourceSrv', 'contextSrv', 'utilSrv', '$window'];
